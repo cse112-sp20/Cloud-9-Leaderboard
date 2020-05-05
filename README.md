@@ -3,6 +3,98 @@
 This is the README for your extension "cloud9". After writing up a brief
 description, we recommend including the following sections.
 
+
+# Developer guide
+
+### Things to remember:
+- __Never create a branch off of `dev`!__ <br/>
+  __Never merge `dev` into any branch!__
+    - `dev` contains many changes that, in nearly all cases, do not belong on any other branch.
+- Create small and specific branches.
+- Constantly pull your branch's base branch to stay up to date with other people's changes.
+    - You can do this by:
+        1. Checking out your branch's base branch: <br/>
+           `git checkout [your branch's base branch]`
+        2. Pulling any new changes from the remote: <br/>
+           `git pull`
+        3. Returning to your branch (checkout your branch again): <br/>
+           `git checkout [your branch]`
+        4. Merging your branch's base branch _into_ your branch: <br/>
+           `git merge [your branch's base branch]`
+- Test your code on the `dev` branch before creating a pull request to merge your code into your branch's base branch.
+    - `dev` will constantly be pulling from `master`, so testing your code on `dev` should prevent bugs from getting on `master`.
+    - Once you have tested your code on the `dev` branch, create a pull request (PR) to merge your branch into its base branch.
+        - Who and how many people you send it to should depend on the significance of your code.
+        - Write a short (1-4 sentences) description of your PR.
+        - You can send your PRs to other people through Slack.
+
+---------------------------------------------------------------------------------------------------------
+
+### Branches:
+- What is a branch in git?
+    - A branch is _like_ a copy of the repository from a specific moment in time (a specific commit).
+    - Learn more: https://git-scm.com/book/en/v1/Git-Branching-What-a-Branch-Is
+- What is the purpose of a branch?
+    - Branches make collaboration organized and simple. By using branches, multiple people can work independently on related code.
+    - Branches allow us to easily keep track of changes that we make.
+- When should I create a branch?
+    - Create a branch for any change that you want to make.
+    - Create branches that will have a short lifespan that are used for a single particular feature or specific focus.
+        - Small and specific branches are much easier to maintain, easier to merge, and easier to review.
+        - Learn more: https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows
+            - Read the "Topic Branches" section.
+
+### Development workflow and branch lifecycle:
+1. You want to make a change to the codebase.
+2. Decide which branch you want to contribute to. This branch is going to be the base branch of the branch that you are about to create.
+    - The base branch is the branch that you want to create your branch off of.
+    - The base branch is the branch that you will later merge (or create a PR to merge) your branch into.
+    - If the code you are writing is only dependent on the code in `master`, then `master` is your base branch. Otherwise, if the code you are writing is dependent on code that is not in `master`, then your branch's base branch is going to be the branch that contains the code that your branch depends on.
+    - `dev` should never be your base branch. `dev` contains many changes that, in nearly all cases, do not belong on any other branch.
+3. Create a new branch off of the base branch.
+4. Make changes to your branch.
+5. Finish making changes to your branch.
+6. If possible, merge your branch into `dev` and ensure that everything works.
+    - You do not need to create a PR to do this.
+    - If you run into merge conflicts, _carefully_ resolve them. If you are unsure how to resolve them, ask someone else for help. Do not resolve merge conflicts if you do not understand how to resolve merge conflicts or if you do not understand the code that you are deleting.
+7. Merge your branch into your branch's base branch.
+    - Depending on what your branch's base branch is, you may or may not need to create a PR to merge your branch into its base branch.
+        - If you want to merge your branch into `master`, you must create a PR to do this.
+    - Make sure that you merge your branch _into_ its base branch:
+        - Merge \<your branch> into \<your branch's base branch> <br/>
+          Merge \<your branch> → \<your branch's base branch>
+8. Your branch has served its purpose and it has been merged into another branch. Your branch should not be used anymore.
+    - To enforce this, after branches are merged, they are deleted from the remote repository.
+
+---------------------------------------------------------------------------------------------------------
+
+### Git commands:
+| Command                                              | Description                                             |
+| ---                                                  | ---                                                     |
+| `git status`                                         | Check status                                            |
+| `git add [file-name.txt]`                            | Add a file to the staging area                          |
+| `git add -A`                                         | Add all new and changed files to the staging area       |
+| `git commit`                                         | Commit changes - must enter message in prompt           |
+| `git commit -m "[commit message]"`                   | Commit changes with inline message                      |
+| `git rm -r [file-name.txt]`                          | Remove a file (or folder)                               |
+| `git branch`                                         | List branches (the asterisk denotes the current branch) |
+| `git branch -a`                                      | List all branches (local and remote)                    |
+| `git branch [branch name]`                           | Create a new branch                                     |
+| `git branch -d [branch name]`                        | Delete a branch                                         |
+| `git checkout -b [branch name]`                      | Create a new branch and switch to it                    |
+| `git checkout [branch name]`                         | Checkout a branch (local or remote branch)              |
+| `git checkout -b [branch name] origin/[branch name]` | Clone a remote branch and switch to it                  |
+| `git checkout [branch name]`                         | Switch to a branch                                      |
+| `git merge [branch name]`                            | Merge a branch into the active branch                   |
+| `git merge [source branch] [target branch]`          | Merge a branch into a target branch                     |
+| `git stash`                                          | Stash changes in a dirty working directory              |
+| `git push`                                           | Push changes to remote repository                       |
+| `git pull`                                           | Update local repository to the newest commit            |
+| `git log`                                            | View commit history                                     |
+| `git log --summary`                                  | View detailed commit history                            |
+| `git diff [source branch] [target branch]`           | Show diff of two branches                               |
+
+
 ## Features
 
 Describe specific features of your extension including screenshots of your
