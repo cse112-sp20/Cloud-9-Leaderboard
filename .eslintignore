@@ -1,0 +1,6 @@
+package.*
+package-lock.json
+CHANGELOG.md
+README.md
+jsconfig.json
+vsc-extension-quickstart.md
