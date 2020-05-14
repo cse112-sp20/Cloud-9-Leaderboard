@@ -27,7 +27,7 @@ const SessionSummaryData_1 = require("./lib/storage/SessionSummaryData");
 const WallClockManager_1 = require("./lib/managers/WallClockManager");
 const EventManager_1 = require("./lib/managers/EventManager");
 const FileManager_1 = require("./lib/managers/FileManager");
-const Authentication_1 = require("./cloud9/util/Authentication");
+const Authentication_1 = require("./src/util/Authentication");
 let TELEMETRY_ON = true;
 let statusBarItem = null;
 let _ls = null;
@@ -54,15 +54,15 @@ function getStatusBarItem() {
 exports.getStatusBarItem = getStatusBarItem;
 function deactivate(ctx) {
     // store the deactivate event
-    EventManager_1.EventManager.getInstance().createCodeTimeEvent("resource", "unload", "EditorDeactivate");
+    EventManager_1.EventManager.getInstance().createCodeTimeEvent('resource', 'unload', 'EditorDeactivate');
     if (_ls && _ls.id) {
         // the IDE is closing, send this off
         let nowSec = Util_1.nowInSecs();
         let offsetSec = Util_1.getOffsetSeconds();
         let localNow = nowSec - offsetSec;
         // close the session on our end
-        _ls["end"] = nowSec;
-        _ls["local_end"] = localNow;
+        _ls['end'] = nowSec;
+        _ls['local_end'] = localNow;
         LiveshareManager_1.manageLiveshareSession(_ls);
         _ls = null;
     }
@@ -90,14 +90,14 @@ exports.deactivate = deactivate;
 function activate(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         //console.log("CLOUD9 ACTIVATED");
-        vscode_1.window.showInformationMessage("Cloud9 Activated!");
+        vscode_1.window.showInformationMessage('Cloud9 Activated!');
         // add the code time commands
         ctx.subscriptions.push(command_helper_1.createCommands(kpmController));
         const workspace_name = Util_1.getWorkspaceName();
         const eventName = `onboard-${workspace_name}`;
         // onboard the user as anonymous if it's being installed
         if (vscode_1.window.state.focused) {
-            EventManager_1.EventManager.getInstance().createCodeTimeEvent("focused_onboard", eventName, "onboarding");
+            EventManager_1.EventManager.getInstance().createCodeTimeEvent('focused_onboard', eventName, 'onboarding');
             OnboardManager_1.onboardInit(ctx, intializePlugin /*successFunction*/);
         }
         else {
@@ -106,7 +106,7 @@ function activate(ctx) {
             const nonFocusedEventType = `nonfocused_onboard-${secondDelay}`;
             // initialize in 5 seconds if this is the secondary window
             setTimeout(() => {
-                EventManager_1.EventManager.getInstance().createCodeTimeEvent(nonFocusedEventType, eventName, "onboarding");
+                EventManager_1.EventManager.getInstance().createCodeTimeEvent(nonFocusedEventType, eventName, 'onboarding');
                 OnboardManager_1.onboardInit(ctx, intializePlugin /*successFunction*/);
             }, 1000 * secondDelay);
         }
@@ -123,7 +123,7 @@ function intializePlugin(ctx, createdAnonUser) {
     return __awaiter(this, void 0, void 0, function* () {
         Util_1.logIt(`Loaded ${Util_1.getPluginName()} v${Util_1.getVersion()}`);
         // store the activate event
-        EventManager_1.EventManager.getInstance().createCodeTimeEvent("resource", "load", "EditorActivate");
+        EventManager_1.EventManager.getInstance().createCodeTimeEvent('resource', 'load', 'EditorActivate');
         // initialize the wall clock timer
         WallClockManager_1.WallClockManager.getInstance();
         // load the last payload into memory
@@ -136,7 +136,7 @@ function intializePlugin(ctx, createdAnonUser) {
         initializeIntervalJobs();
         // in 30 seconds
         setTimeout(() => {
-            vscode_1.commands.executeCommand("codetime.sendOfflineData");
+            vscode_1.commands.executeCommand('codetime.sendOfflineData');
         }, 1000 * 30);
         // in 2 minutes task
         setTimeout(() => {
@@ -150,16 +150,16 @@ function intializePlugin(ctx, createdAnonUser) {
         // get the login status
         // {loggedIn: true|false}
         yield DataController_1.isLoggedIn();
-        const initializedVscodePlugin = Util_1.getItem("vscode_CtInit");
+        const initializedVscodePlugin = Util_1.getItem('vscode_CtInit');
         if (!initializedVscodePlugin) {
-            Util_1.setItem("vscode_CtInit", true);
+            Util_1.setItem('vscode_CtInit', true);
             // send a bootstrap kpm payload
             kpmController.buildBootstrapKpmPayload();
             // send a heartbeat that the plugin as been installed
             // (or the user has deleted the session.json and restarted the IDE)
-            DataController_1.sendHeartbeat("INSTALLED", serverIsOnline);
+            DataController_1.sendHeartbeat('INSTALLED', serverIsOnline);
             setTimeout(() => {
-                vscode_1.commands.executeCommand("codetime.displayTree");
+                vscode_1.commands.executeCommand('codetime.displayTree');
             }, 1200);
         }
         // initialize the day check timer
@@ -170,14 +170,14 @@ function intializePlugin(ctx, createdAnonUser) {
         setTimeout(() => {
             statusBarItem = vscode_1.window.createStatusBarItem(vscode_1.StatusBarAlignment.Right, 10);
             // add the name to the tooltip if we have it
-            const name = Util_1.getItem("name");
-            let tooltip = "Click to see more from Code Time";
+            const name = Util_1.getItem('name');
+            let tooltip = 'Click to see more from Code Time';
             if (name) {
                 tooltip = `${tooltip} (${name})`;
             }
             statusBarItem.tooltip = tooltip;
             // statusBarItem.command = "codetime.softwarePaletteMenu";
-            statusBarItem.command = "codetime.displayTree";
+            statusBarItem.command = 'codetime.displayTree';
             statusBarItem.show();
             // update the status bar
             SessionSummaryData_1.updateStatusBarWithSummaryData();
@@ -189,7 +189,7 @@ exports.intializePlugin = intializePlugin;
 function initializeIntervalJobs() {
     hourly_interval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
         const isonline = yield HttpClient_1.serverIsAvailable();
-        DataController_1.sendHeartbeat("HOURLY", isonline);
+        DataController_1.sendHeartbeat('HOURLY', isonline);
     }), one_hour_millis);
     thirty_minute_interval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
         const isonline = yield HttpClient_1.serverIsAvailable();
@@ -200,7 +200,7 @@ function initializeIntervalJobs() {
         // this will get the login status if the window is focused
         // and they're currently not a logged in
         if (vscode_1.window.state.focused) {
-            const name = Util_1.getItem("name");
+            const name = Util_1.getItem('name');
             // but only if checkStatus is true
             if (!name) {
                 DataController_1.isLoggedIn();
@@ -209,7 +209,7 @@ function initializeIntervalJobs() {
     }), one_min_millis * 20);
     // every 15 minute tasks
     fifteen_minute_interval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
-        vscode_1.commands.executeCommand("codetime.sendOfflineData");
+        vscode_1.commands.executeCommand('codetime.sendOfflineData');
     }), one_min_millis * 15);
     // update liveshare in the offline kpm data if it has been initiated
     liveshare_update_interval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
@@ -220,16 +220,16 @@ function initializeIntervalJobs() {
 }
 function handlePauseMetricsEvent() {
     TELEMETRY_ON = false;
-    Util_1.showStatus("Code Time Paused", "Enable metrics to resume");
+    Util_1.showStatus('Code Time Paused', 'Enable metrics to resume');
 }
 function handleEnableMetricsEvent() {
     TELEMETRY_ON = true;
-    Util_1.showStatus("Code Time", null);
+    Util_1.showStatus('Code Time', null);
 }
 function updateLiveshareTime() {
     if (_ls) {
         let nowSec = Util_1.nowInSecs();
-        let diffSeconds = nowSec - parseInt(_ls["start"], 10);
+        let diffSeconds = nowSec - parseInt(_ls['start'], 10);
         SessionSummaryData_1.setSessionSummaryLiveshareMinutes(diffSeconds * 60);
     }
 }
@@ -238,24 +238,24 @@ function initializeLiveshare() {
         const liveshare = yield vsls.getApi();
         if (liveshare) {
             // {access: number, id: string, peerNumber: number, role: number, user: json}
-            Util_1.logIt(`liveshare version - ${liveshare["apiVersion"]}`);
+            Util_1.logIt(`liveshare version - ${liveshare['apiVersion']}`);
             liveshare.onDidChangeSession((event) => __awaiter(this, void 0, void 0, function* () {
                 let nowSec = Util_1.nowInSecs();
                 let offsetSec = Util_1.getOffsetSeconds();
                 let localNow = nowSec - offsetSec;
                 if (!_ls) {
                     _ls = Object.assign({}, event.session);
-                    _ls["apiVesion"] = liveshare["apiVersion"];
-                    _ls["start"] = nowSec;
-                    _ls["local_start"] = localNow;
-                    _ls["end"] = 0;
+                    _ls['apiVesion'] = liveshare['apiVersion'];
+                    _ls['start'] = nowSec;
+                    _ls['local_start'] = localNow;
+                    _ls['end'] = 0;
                     yield LiveshareManager_1.manageLiveshareSession(_ls);
                 }
-                else if (_ls && (!event || !event["id"])) {
+                else if (_ls && (!event || !event['id'])) {
                     updateLiveshareTime();
                     // close the session on our end
-                    _ls["end"] = nowSec;
-                    _ls["local_end"] = localNow;
+                    _ls['end'] = nowSec;
+                    _ls['local_end'] = localNow;
                     yield LiveshareManager_1.manageLiveshareSession(_ls);
                     _ls = null;
                 }

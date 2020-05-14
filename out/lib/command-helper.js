@@ -20,30 +20,30 @@ const ProjectCommitManager_1 = require("./menu/ProjectCommitManager");
 const CodeTimeTeamProvider_1 = require("./tree/CodeTimeTeamProvider");
 const ReportManager_1 = require("./menu/ReportManager");
 const FileManager_1 = require("./managers/FileManager");
-const Leaderboard_1 = require("../cloud9/util/Leaderboard");
-const Authentication_1 = require("./../cloud9/util/Authentication");
+const Leaderboard_1 = require("../src/util/Leaderboard");
+const Authentication_1 = require("../src/util/Authentication");
 function createCommands(kpmController) {
     let cmds = [];
     cmds.push(kpmController);
     // MENU TREE: INIT
     const codetimeMenuTreeProvider = new CodeTimeMenuProvider_1.CodeTimeMenuProvider();
-    const codetimeMenuTreeView = vscode_1.window.createTreeView("ct-menu-tree", {
+    const codetimeMenuTreeView = vscode_1.window.createTreeView('ct-menu-tree', {
         treeDataProvider: codetimeMenuTreeProvider,
         showCollapseAll: false,
     });
     codetimeMenuTreeProvider.bindView(codetimeMenuTreeView);
     cmds.push(CodeTimeMenuProvider_1.connectCodeTimeMenuTreeView(codetimeMenuTreeView));
     // MENU TREE: REVEAL
-    cmds.push(vscode_1.commands.registerCommand("codetime.displayTree", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.displayTree', () => {
         codetimeMenuTreeProvider.revealTree();
     }));
     // MENU TREE: REFRESH
-    cmds.push(vscode_1.commands.registerCommand("codetime.refreshCodetimeMenuTree", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.refreshCodetimeMenuTree', () => {
         codetimeMenuTreeProvider.refresh();
     }));
     // DAILY METRICS TREE: INIT
     const kpmTreeProvider = new KpmProvider_1.KpmProvider();
-    const kpmTreeView = vscode_1.window.createTreeView("ct-metrics-tree", {
+    const kpmTreeView = vscode_1.window.createTreeView('ct-metrics-tree', {
         treeDataProvider: kpmTreeProvider,
         showCollapseAll: false,
     });
@@ -51,177 +51,124 @@ function createCommands(kpmController) {
     cmds.push(KpmProvider_1.connectKpmTreeView(kpmTreeView));
     // TEAM TREE: INIT
     const codetimeTeamTreeProvider = new CodeTimeTeamProvider_1.CodeTimeTeamProvider();
-    const codetimeTeamTreeView = vscode_1.window.createTreeView("ct-team-tree", {
+    const codetimeTeamTreeView = vscode_1.window.createTreeView('ct-team-tree', {
         treeDataProvider: codetimeTeamTreeProvider,
         showCollapseAll: false,
     });
     codetimeTeamTreeProvider.bindView(codetimeTeamTreeView);
     cmds.push(CodeTimeTeamProvider_1.connectCodeTimeTeamTreeView(codetimeTeamTreeView));
     // TEAM TREE: REFRESH
-    cmds.push(vscode_1.commands.registerCommand("codetime.refreshCodetimeTeamTree", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.refreshCodetimeTeamTree', () => {
         codetimeTeamTreeProvider.refresh();
     }));
-    cmds.push(vscode_1.commands.registerCommand("codetime.refreshTreeViews", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.refreshTreeViews', () => {
         codetimeMenuTreeProvider.refresh();
         kpmTreeProvider.refresh();
         codetimeTeamTreeProvider.refresh();
     }));
     // TEAM TREE: INVITE MEMBER
-    cmds.push(vscode_1.commands.registerCommand("codetime.inviteTeamMember", (item) => __awaiter(this, void 0, void 0, function* () {
+    cmds.push(vscode_1.commands.registerCommand('codetime.inviteTeamMember', (item) => __awaiter(this, void 0, void 0, function* () {
         // the identifier will be in the value
         const identifier = item.value;
         // email will be the description
         const email = item.description;
         const name = item.label;
         const msg = `Send invitation to ${email}?`;
-        const selection = yield vscode_1.window.showInformationMessage(msg, { modal: true }, ...["YES"]);
-        if (selection && selection === "YES") {
+        const selection = yield vscode_1.window.showInformationMessage(msg, { modal: true }, ...['YES']);
+        if (selection && selection === 'YES') {
             DataController_1.sendTeamInvite(identifier, [email]);
         }
     })));
     // SEND OFFLINE DATA
-    cmds.push(vscode_1.commands.registerCommand("codetime.sendOfflineData", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.sendOfflineData', () => {
         FileManager_1.sendOfflineData();
     }));
     // SHOW ASCII DASHBOARD
-    cmds.push(vscode_1.commands.registerCommand("codetime.softwareKpmDashboard", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.softwareKpmDashboard', () => {
         DataController_1.handleKpmClickedEvent();
     }));
     // OPEN SPECIFIED FILE IN EDITOR
-    cmds.push(vscode_1.commands.registerCommand("codetime.openFileInEditor", (file) => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.openFileInEditor', (file) => {
         Util_1.openFileInEditor(file);
     }));
     // REFRESH MENU
-    cmds.push(vscode_1.commands.registerCommand("codetime.toggleStatusBar", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.toggleStatusBar', () => {
         Util_1.toggleStatusBar();
         setTimeout(() => {
-            vscode_1.commands.executeCommand("codetime.refreshCodetimeMenuTree");
+            vscode_1.commands.executeCommand('codetime.refreshCodetimeMenuTree');
         }, 500);
     }));
     // LAUNCH EMAIL LOGIN
-    cmds.push(vscode_1.commands.registerCommand("codetime.codeTimeLogin", () => {
-        Util_1.launchLogin("software");
+    cmds.push(vscode_1.commands.registerCommand('codetime.codeTimeLogin', () => {
+        Util_1.launchLogin('software');
     }));
     // LAUNCH GOOGLE LOGIN
-    cmds.push(vscode_1.commands.registerCommand("codetime.googleLogin", () => {
-        Util_1.launchLogin("google");
+    cmds.push(vscode_1.commands.registerCommand('codetime.googleLogin', () => {
+        Util_1.launchLogin('google');
     }));
     // LAUNCH GITHUB LOGIN
-    cmds.push(vscode_1.commands.registerCommand("codetime.githubLogin", () => {
-        Util_1.launchLogin("github");
+    cmds.push(vscode_1.commands.registerCommand('codetime.githubLogin', () => {
+        Util_1.launchLogin('github');
     }));
     // REFRESH DAILY METRICS
-    cmds.push(vscode_1.commands.registerCommand("codetime.refreshKpmTree", (keystrokeStats) => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.refreshKpmTree', (keystrokeStats) => {
         if (keystrokeStats) {
             KpmProviderManager_1.KpmProviderManager.getInstance().setCurrentKeystrokeStats(keystrokeStats);
         }
         kpmTreeProvider.refresh();
     }));
     // DISPLAY README MD
-    cmds.push(vscode_1.commands.registerCommand("codetime.displayReadme", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.displayReadme', () => {
         Util_1.displayReadmeIfNotExists(true /*override*/);
     }));
     // DISPLAY CODE TIME METRICS REPORT
-    cmds.push(vscode_1.commands.registerCommand("codetime.codeTimeMetrics", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.codeTimeMetrics', () => {
         MenuManager_1.displayCodeTimeMetricsDashboard();
     }));
     /*
      * CLOUD 9 LEADERBOARD COMMAND
      */
-    cmds.push(vscode_1.commands.registerCommand("codetime.cloud9Leaderboard", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.cloud9Leaderboard', () => {
         Leaderboard_1.displayLeaderboard();
     }));
     // Cloud9: command used to create a new team
-    cmds.push(vscode_1.commands.registerCommand("cloud9.createTeam", () => {
-        console.log("Cloud9: CREATE A NEW TEAM");
+    cmds.push(vscode_1.commands.registerCommand('cloud9.createTeam', () => {
+        console.log('Cloud9: CREATE A NEW TEAM');
     }));
     // Cloud9: command used to join a new team
-    cmds.push(vscode_1.commands.registerCommand("cloud9.joinTeam", () => {
-        console.log("Cloud9: JOIN A TEAM");
+    cmds.push(vscode_1.commands.registerCommand('cloud9.joinTeam', () => {
+        console.log('Cloud9: JOIN A TEAM');
     }));
     // Cloud9: command used to clear the cached id (for debugging and testing only)
-    cmds.push(vscode_1.commands.registerCommand("cloud9.debugClearUserId", () => {
-        console.log("Cloud9: CLEAR CACHED ID");
+    cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearUserId', () => {
+        console.log('Cloud9: CLEAR CACHED ID');
         Authentication_1.clearCachedUserId();
     }));
     // DISPLAY PROJECT METRICS REPORT
-    cmds.push(vscode_1.commands.registerCommand("codetime.generateProjectSummary", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.generateProjectSummary', () => {
         ProjectCommitManager_1.ProjectCommitManager.getInstance().launchProjectCommitMenuFlow();
     }));
     // DISPLAY REPO COMMIT CONTRIBUTOR REPORT
-    cmds.push(vscode_1.commands.registerCommand("codetime.generateContributorSummary", (identifier) => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.generateContributorSummary', (identifier) => {
         ReportManager_1.displayProjectContributorCommitsDashboard(identifier);
     }));
     // LAUNCH COMMIT URL
-    cmds.push(vscode_1.commands.registerCommand("codetime.launchCommitUrl", (commitLink) => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.launchCommitUrl', (commitLink) => {
         Util_1.launchWebUrl(commitLink);
     }));
     // DISPLAY PALETTE MENU
-    cmds.push(vscode_1.commands.registerCommand("codetime.softwarePaletteMenu", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.softwarePaletteMenu', () => {
         MenuManager_1.showMenuOptions();
     }));
-    cmds.push(vscode_1.commands.registerCommand("codetime.viewSoftwareTop40", () => {
-        Util_1.launchWebUrl("https://api.software.com/music/top40");
+    cmds.push(vscode_1.commands.registerCommand('codetime.viewSoftwareTop40', () => {
+        Util_1.launchWebUrl('https://api.software.com/music/top40');
     }));
-    cmds.push(vscode_1.commands.registerCommand("codetime.codeTimeStatusToggle", () => {
+    cmds.push(vscode_1.commands.registerCommand('codetime.codeTimeStatusToggle', () => {
         Util_1.handleCodeTimeStatusToggle();
     }));
-    cmds.push(vscode_1.commands.registerCommand("codetime.sendFeedback", () => {
-        Util_1.launchWebUrl("mailto:cody@software.com");
+    cmds.push(vscode_1.commands.registerCommand('codetime.sendFeedback', () => {
+        Util_1.launchWebUrl('mailto:cody@software.com');
     }));
-    // // CONNECT SLACK
-    // cmds.push(
-    //     commands.registerCommand("codetime.connectSlack", () => {
-    //         connectSlack();
-    //     })
-    // );
-    // // DISCONNECT SLACK
-    // cmds.push(
-    //     commands.registerCommand("codetime.disconnectSlack", () => {
-    //         disconnectSlack();
-    //     })
-    // );
-    // // SLACK CONTRIBUTOR
-    // cmds.push(
-    //     commands.registerCommand("musictime.slackContributor", () => {
-    //         slackContributor();
-    //     })
-    // );
-    // // GENERATE SLACK REPORT
-    // cmds.push(
-    //     commands.registerCommand("codetime.generateSlackReport", () => {
-    //         generateSlackReport();
-    //     })
-    // );
-    // const addProjectNoteCmd = commands.registerCommand(
-    //     "codetime.addProjectNote",
-    //     () => {
-    //         ProjectNoteManager.getInstance().addNote();
-    //     }
-    // );
-    // cmds.push(addProjectNoteCmd);
-    // const connectAtlassianCmd = commands.registerCommand(
-    //     "codetime.connectAtlassian",
-    //     () => {
-    //         connectAtlassian();
-    //     }
-    // );
-    // cmds.push(connectAtlassianCmd);
-    // const copyToJiraCmd = commands.registerCommand(
-    //     "codetime.copyToJira",
-    //     doc => {
-    //         /**
-    //         authority:""
-    //         fragment:""
-    //         fsPath:"/Users/xavierluiz/software/swdc-job-service/app/jobs/songStats.job.js"
-    //         path:"/Users/xavierluiz/software/swdc-job-service/app/jobs/songStats.job.js"
-    //         query:""
-    //         scheme:"file"
-    //          */
-    //         KpmController.getInstance().processSelectedTextForJira();
-    //     }
-    // );
-    // cmds.push(copyToJiraCmd);
     cmds.push(vscode_1.workspace.onDidChangeConfiguration((e) => DataController_1.updatePreferences()));
     return vscode_1.Disposable.from(...cmds);
 }
