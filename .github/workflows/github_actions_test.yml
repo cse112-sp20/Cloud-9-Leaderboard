@@ -1,4 +1,4 @@
-name: Github Actions Testing
+name: Github Actions Test
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ on:
       - Teams
 
 jobs:
-  testing:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
