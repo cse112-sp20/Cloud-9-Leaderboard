@@ -3,11 +3,8 @@ name: Github Actions Test
 on:
   pull_request:
   push:
-    branches:
-      - master
-      - dev
-      - automate-publish
-      - Teams
+    branches-ignore:
+      - 'release/'
 
 jobs:
   test:
