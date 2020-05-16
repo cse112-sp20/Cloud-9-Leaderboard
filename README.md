@@ -1,7 +1,7 @@
 # cloud9 README
 
-This is the README for your extension "cloud9". After writing up a brief
-description, we recommend including the following sections.
+This is the README for "cloud9", an extension building on top of open source of
+code time extension which aim to track developers productivity.
 
 # Developer guide
 
