@@ -71,7 +71,7 @@
         "title": "Code Time: View summary"
       },
       {
-        "command": "codetime.cloud9Leaderboard",
+        "command": "cloud9.cloud9Leaderboard",
         "title": "Cloud9: Leaderboard"
       },
       {
