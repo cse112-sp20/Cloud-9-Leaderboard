@@ -129,6 +129,14 @@
     "@types/mocha": "5.2.6",
     "@types/node": "^13.13.5",
     "@types/vscode": "^1.35.0",
+    "eslint": "^7.0.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.20.2",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.2",
+    "pre-commit": "^1.2.2",
+    "prettier": "^2.0.5",
     "ts-loader": "^6.2.1",
     "typescript": "^3.5.1",
     "webpack": "^4.41.5",
@@ -148,5 +156,10 @@
     "rxjs": "^6.5.5",
     "vscode": "^1.1.37",
     "vsls": "0.3.1291"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
