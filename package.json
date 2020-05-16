@@ -137,6 +137,7 @@
     "lint-staged": "^10.2.2",
     "pre-commit": "^1.2.2",
     "prettier": "^2.0.5",
+    "vscode": "^1.1.37",
     "ts-loader": "^6.2.1",
     "typescript": "^3.5.1",
     "webpack": "^4.41.5",
@@ -154,7 +155,6 @@
     "open": "^6.4.0",
     "require": "^2.4.20",
     "rxjs": "^6.5.5",
-    "vscode": "^1.1.37",
     "vsls": "0.3.1291"
   },
   "husky": {
