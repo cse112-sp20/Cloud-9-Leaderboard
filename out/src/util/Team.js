@@ -11,6 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
+/**
+ * prompts the user to enter a team name and updates the firebase 2
+ */
 function createAndJoinTeam() {
     return __awaiter(this, void 0, void 0, function* () {
         const newTeamName = yield vscode_1.window

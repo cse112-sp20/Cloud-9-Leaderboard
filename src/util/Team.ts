@@ -1,6 +1,9 @@
 import { window } from "vscode";
 import { addNewTeamToDb } from "./Firestore";
 
+/**
+ * prompts the user to enter a team name and updates the firebase 2
+ */
 export async function createAndJoinTeam() {
   const newTeamName = await window
     .showInputBox({ placeHolder: "Enter a new team name" })

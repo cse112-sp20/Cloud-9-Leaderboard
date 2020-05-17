@@ -9,6 +9,10 @@ import {
   firebaseConfig,
   DEFAULT_PASSWORD,
   DEFAULT_USER_DOC,
+  DEFAULT_TEAM_DOC,
+  COLLECTION_ID_USERS,
+  COLLECTION_ID_TEAMS,
+  GLOBAL_STATE_USER_ID
 } from "./Constants";
 import { getExtensionContext } from "./Authentication";
 import { generateRandomEmail } from "./Utility";
@@ -32,21 +36,20 @@ export function updateStats(payload) {
   console.log(metricObj);
 
   const ctx: ExtensionContext = getExtensionContext();
-  const cachedUserId = ctx.globalState.get("cachedUserId");
-  // TODO : Store ID somewhere in persistent storage
+  const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
-  let id = JSON.stringify(cachedUserId); //"Howard2";
+  let id = cachedUserId; //"Howard2";
 
   console.log("cached id is " + id);
   window.showInformationMessage("Updated Stats!");
 
-  db.collection("users")
+  db.collection(COLLECTION_ID_USERS)
     .doc(id)
     .get()
     .then((doc) => {
       if (doc.exists) {
         //Update existing stats
-        db.collection("users")
+        db.collection(COLLECTION_ID_USERS)
           .doc(id)
           .update({
             keystrokes: firebase.firestore.FieldValue.increment(
@@ -67,7 +70,7 @@ export function updateStats(payload) {
           });
       } else {
         //Update to firebase if no stats found
-        db.collection("users")
+        db.collection(COLLECTION_ID_USERS)
           .doc(id)
           .set({
             keystrokes: metricObj["keystrokes"],
@@ -86,7 +89,7 @@ export function updateStats(payload) {
 
 export async function retrieveAllUserStats(callback) {
   let db = firebase.firestore();
-  let users = db.collection("users");
+  let users = db.collection(COLLECTION_ID_USERS);
 
   let userMap = [];
 
@@ -116,23 +119,35 @@ export async function retrieveAllUserStats(callback) {
     });
 }
 
+
+
 /**
  * Create new user credential and add new doc to db
  */
-export function createNewUser(ctx: ExtensionContext) {
+export async function createNewUserInFirebase(ctx: ExtensionContext, email, password) {
   console.log("From Authentication: createNewUser");
 
-  const email = generateRandomEmail(); // ...do we need this?
+  //const email = generateRandomEmail(); // ...do we need this?
 
-  auth
-    .createUserWithEmailAndPassword(email, DEFAULT_PASSWORD)
+  if(email == null){
+    console.log("email is null");
+    return;
+  }
+  if(password == null){
+    console.log('password is null');
+    return;
+  }
+
+  await auth
+    .createUserWithEmailAndPassword(email, password)
     .then(() => {
       // add new uid to persistent storage
       const currentUserId = auth.currentUser.uid;
-      ctx.globalState.update("cachedUserId", currentUserId);
-
-      console.log("Successfully created new user");
-      console.log("cachedUserId is: " + ctx.globalState.get("cachedUserId"));
+      ctx.globalState.update(GLOBAL_STATE_USER_ID, currentUserId);
+      // ctx.globalState.update("email", email);
+      // ctx.globalState.update("password", password);
+      // console.log("Successfully created new user");
+      // console.log("cachedUserId is: " + ctx.globalState.get("cachedUserId"));
 
       addNewUserDocToDb(currentUserId);
       return true;
@@ -147,16 +162,16 @@ export function createNewUser(ctx: ExtensionContext) {
  * Add a new user doc to database
  * @param userId
  */
-function addNewUserDocToDb(userId: String) {
-  console.log("Adding doc to db for new user.");
+function addNewUserDocToDb(userId) {
+  console.log("Adding doc to db for new user...");
 
   if (userId === undefined) {
     console.log("userId undefined.");
     return;
   }
 
-  db.collection("users")
-    .doc(JSON.stringify(userId))
+  db.collection(COLLECTION_ID_USERS)
+    .doc(userId)
     .set(DEFAULT_USER_DOC)
     .then(() => {
       console.log("Added new user: (" + userId + ") doc to db.");
@@ -171,12 +186,12 @@ function addNewUserDocToDb(userId: String) {
  * Retrieve the user doc from database
  * @param userId
  */
-export function getUserDocWithId(userId: String) {
+export async function getUserDocWithId(userId) {
   console.log("Getting user doc from db...");
 
-  var userDoc = db
-    .collection("users")
-    .doc(JSON.stringify(userId))
+  var userDoc = await db
+    .collection(COLLECTION_ID_USERS)
+    .doc(userId)
     .get()
     .then((doc) => {
       console.log("Retrieved user: (" + userId + ") doc from db.");
@@ -185,34 +200,35 @@ export function getUserDocWithId(userId: String) {
     .catch(() => {
       console.log("Error getting user: (" + userId + ") doc from db.");
     });
+
+    return userDoc;
 }
 
 /**
  * creates a new team (if not in db already)
  * @param input the new team's name
  */
-export function addNewTeamToDb(input: String) {
+export function addNewTeamToDb(teamName) {
   //check if already in database
-  const cachedUserId = getExtensionContext().globalState.get("cachedUserId");
-  const teamName = JSON.stringify(input);
-  var teamDoc = db.collection("teams").doc(teamName);
+  const cachedUserId = getExtensionContext().globalState.get(GLOBAL_STATE_USER_ID);
+  var teamDoc = db.collection(COLLECTION_ID_TEAMS).doc(teamName);
 
   teamDoc.get().then((doc) => {
     if (doc.exists) {
       console.log("Name already in use!");
     } else {
       //create this team and add user as a member
-      db.collection("teams").doc(teamName).set({
+      db.collection(COLLECTION_ID_TEAMS).doc(teamName).set({
         members: { cachedUserId },
       });
 
       //update user's doc
-      db.collection("users")
+      db.collection(COLLECTION_ID_USERS)
         .doc(cachedUserId)
-        .get("teams")
+        .get(COLLECTION_ID_TEAMS)
         .then((teamMap) => {
           teamMap[teamName] = "";
-          db.collection("users").doc(cachedUserId).set({
+          db.collection(COLLECTION_ID_USERS).doc(GLOBAL_STATE_USER_ID).set({
             teams: teamMap,
           });
         });

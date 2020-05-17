@@ -1,7 +1,18 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
+const Utility_1 = require("./Utility");
+const Constants_1 = require("./Constants");
 //export let cachedUserId = undefined;
 let extensionContext = undefined;
 /**
@@ -12,6 +23,7 @@ function getExtensionContext() {
 }
 exports.getExtensionContext = getExtensionContext;
 /**
+ * *****for debugging purpose only******
  * removes the userId stored in extensionContext
  */
 function clearCachedUserId() {
@@ -21,7 +33,7 @@ function clearCachedUserId() {
 }
 exports.clearCachedUserId = clearCachedUserId;
 /**
- *
+ * authentication entry point
  * @param ctx
  */
 function authenticateUser(ctx) {
@@ -31,8 +43,9 @@ function authenticateUser(ctx) {
     if (cachedUserId === undefined) {
         // case1: new user, create an account for them
         vscode_1.window.showInformationMessage("Cloud9: Welcome new user!");
-        console.log("No cachedUserId found.");
-        Firestore_1.createNewUser(ctx);
+        console.log("No cachedUserId found. Need to create a new user account.");
+        //registerNewUserWithUserInput(ctx); 
+        registerNewUserWithGeneratedCredential(ctx);
     }
     else {
         // case2: existing user
@@ -42,4 +55,38 @@ function authenticateUser(ctx) {
     }
 }
 exports.authenticateUser = authenticateUser;
+/**
+ * prompts the user to enter an email and password and creates a new account for them
+ * @param ctx
+ */
+function registerNewUserWithUserInput(ctx) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let email = null;
+        let password = null;
+        //prompt for email and password 
+        yield vscode_1.window.showInputBox({ placeHolder: 'Enter your email' })
+            .then((inputEmail) => {
+            email = inputEmail;
+            console.log('user input email: ' + email);
+        })
+            .then(() => __awaiter(this, void 0, void 0, function* () {
+            yield vscode_1.window.showInputBox({ placeHolder: 'Enter your password' })
+                .then((inputPassword) => {
+                password = inputPassword;
+                console.log('user input password: ' + password);
+            });
+        }))
+            .then(() => __awaiter(this, void 0, void 0, function* () {
+            yield Firestore_1.createNewUserInFirebase(ctx, email, password);
+        }));
+    });
+}
+exports.registerNewUserWithUserInput = registerNewUserWithUserInput;
+function registerNewUserWithGeneratedCredential(ctx) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const email = Utility_1.generateRandomEmail();
+        yield Firestore_1.createNewUserInFirebase(ctx, email, Constants_1.DEFAULT_PASSWORD);
+    });
+}
+exports.registerNewUserWithGeneratedCredential = registerNewUserWithGeneratedCredential;
 //# sourceMappingURL=Authentication.js.map
