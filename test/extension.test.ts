@@ -3,18 +3,40 @@
 // Please refer to their documentation on https://mochajs.org/ for help.
 //
 
+import { generateRandomName, getRandomInt } from "../src/util/Utility";
+import { Leaderboard } from "../src/util/Leaderboard";
+
 // The module 'assert' provides assertion methods from node
-import * as assert from "assert";
 
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-import * as vscode from "vscode";
+const sinon = require('sinon');
+const assert = require('chai').assert;
 
-// Defines a Mocha test suite to group tests of similar kind together
-suite("Extension Tests", () => {
-    // Defines a Mocha unit test
-    test("Hello commands can be executed", async () => {
-        await vscode.commands.executeCommand("extension.sayHello");
-        assert(true);
-    });
+var stub = sinon.stub()
+
+describe('utilities.js', () => {
+    const result = generateRandomName();
+    it('generating random name', () => {
+      assert.typeOf(result, 'string');
+    })
+
+    it('generating random int, ceiling 1', () => {
+        assert.equal(getRandomInt(1), 0);
+    })
+
+    it('generating random int, ceiling 0', () => {
+        assert.equal(getRandomInt(0), 0);
+    })
+
+    it('generating random int, ceiling 100', () => {
+        assert.equal(getRandomInt(100) <= 100, true);
+    })
+});
+
+describe('leaderboard.ts', () => {
+    it('adding user to empty leaderboard', () => {
+        const id : Number = 654;
+        const userObj = null;
+        Leaderboard.addUser(id, userObj);
+        assert.equal(Leaderboard.getUsers().length, 1);
+    })
 });
