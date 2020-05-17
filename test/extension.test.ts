@@ -5,6 +5,8 @@
 
 import { generateRandomName, getRandomInt } from "../src/util/Utility";
 import { Leaderboard } from "../src/util/Leaderboard";
+import {window, ExtensionContext} from 'vscode';
+
 
 // The module 'assert' provides assertion methods from node
 

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DEFAULT_USER_DOC = exports.DEFAULT_PASSWORD = exports.firebaseConfig = void 0;
 exports.firebaseConfig = {
     apiKey: 'AIzaSyAYFnH7eJUdUxaN2xiEh1aaympsZIBuRaE',
     authDomain: 'leaderboard-1fbc8.firebaseapp.com',

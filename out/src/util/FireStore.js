@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.joinTeam = exports.addNewTeamToDb = exports.getUserDocWithId = exports.createNewUser = exports.retrieveAllUserStats = exports.updateStats = void 0;
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');

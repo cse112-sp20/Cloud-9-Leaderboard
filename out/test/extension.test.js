@@ -3,27 +3,34 @@
 // Note: This example test is leveraging the Mocha test framework.
 // Please refer to their documentation on https://mochajs.org/ for help.
 //
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const Utility_1 = require("../src/util/Utility");
+const Leaderboard_1 = require("../src/util/Leaderboard");
 // The module 'assert' provides assertion methods from node
-const assert = require("assert");
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-const vscode = require("vscode");
-// Defines a Mocha test suite to group tests of similar kind together
-suite("Extension Tests", () => {
-    // Defines a Mocha unit test
-    test("Hello commands can be executed", () => __awaiter(void 0, void 0, void 0, function* () {
-        yield vscode.commands.executeCommand("extension.sayHello");
-        assert(true);
-    }));
+const sinon = require('sinon');
+const assert = require('chai').assert;
+var stub = sinon.stub();
+describe('utilities.js', () => {
+    const result = Utility_1.generateRandomName();
+    it('generating random name', () => {
+        assert.typeOf(result, 'string');
+    });
+    it('generating random int, ceiling 1', () => {
+        assert.equal(Utility_1.getRandomInt(1), 0);
+    });
+    it('generating random int, ceiling 0', () => {
+        assert.equal(Utility_1.getRandomInt(0), 0);
+    });
+    it('generating random int, ceiling 100', () => {
+        assert.equal(Utility_1.getRandomInt(100) <= 100, true);
+    });
+});
+describe('leaderboard.ts', () => {
+    it('adding user to empty leaderboard', () => {
+        const id = 654;
+        const userObj = null;
+        Leaderboard_1.Leaderboard.addUser(id, userObj);
+        assert.equal(Leaderboard_1.Leaderboard.getUsers().length, 1);
+    });
 });
 //# sourceMappingURL=extension.test.js.map

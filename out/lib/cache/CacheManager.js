@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CacheManager = void 0;
 const NodeCache = require("node-cache");
 class CacheManager {
     constructor() {

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SummaryManager = void 0;
 const Util_1 = require("../Util");
 const FileChangeInfoSummaryData_1 = require("../storage/FileChangeInfoSummaryData");
 const SessionSummaryData_1 = require("../storage/SessionSummaryData");

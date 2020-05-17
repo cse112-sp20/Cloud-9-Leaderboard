@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.authenticateUser = exports.clearCachedUserId = exports.getExtensionContext = void 0;
 const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
 //export let cachedUserId = undefined;
