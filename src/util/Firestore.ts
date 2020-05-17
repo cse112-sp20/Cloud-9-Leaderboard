@@ -354,11 +354,13 @@ export async function joinTeamWithTeamId(teamId) {
           //store in context
           //ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
           ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamId);
-          console.log('Successfully added user to team.');
+
           //console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
           console.log(
             'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID),
           );
+          console.log('Successfully added user to team.');
+          window.showInformationMessage('Welcome to your new team!');
         });
     })
     .catch((e) => {
