@@ -60,4 +60,19 @@ function getTeamNameAndTeamId() {
     }
 }
 exports.getTeamNameAndTeamId = getTeamNameAndTeamId;
+function joinTeam() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const ctx = Authentication_1.getExtensionContext();
+        yield vscode_1.window
+            .showInputBox({ placeHolder: "Enter a team code" })
+            .then((teamCode) => __awaiter(this, void 0, void 0, function* () {
+            if (teamCode == undefined) {
+                vscode_1.window.showInformationMessage('Please enter a valid team name!');
+                return;
+            }
+            Firestore_1.joinTeamWithTeamId(teamCode);
+        }));
+    });
+}
+exports.joinTeam = joinTeam;
 //# sourceMappingURL=Team.js.map

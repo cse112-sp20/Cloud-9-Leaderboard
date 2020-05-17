@@ -320,7 +320,7 @@ export async function addNewTeamToDbAndJoin(teamName) {
           //link user with team 
         })
         .then(() => {
-          joinTeam(teamId);
+          joinTeamWithTeamId(teamId);
         });
       //console.log('Successfully created new team!')
     }
@@ -331,7 +331,7 @@ export async function addNewTeamToDbAndJoin(teamName) {
  * finds the team and adds user as a member
  * @param input name of the team to join
  */
-export async function joinTeam(teamId) {
+export async function joinTeamWithTeamId(teamId) {
   console.log('Adding new member to team...');
 
   const ctx = getExtensionContext();

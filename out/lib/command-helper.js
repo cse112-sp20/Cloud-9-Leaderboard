@@ -149,6 +149,7 @@ function createCommands(kpmController) {
     // Cloud9: command used to join a new team
     cmds.push(vscode_1.commands.registerCommand('cloud9.joinTeam', () => {
         console.log('Cloud9: JOIN A TEAM');
+        Team_1.joinTeam();
     }));
     // Cloud9: command used to clear the cached id (for debugging and testing only)
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearUserId', () => {

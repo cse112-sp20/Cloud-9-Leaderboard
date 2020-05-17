@@ -281,7 +281,7 @@ function addNewTeamToDbAndJoin(teamName) {
                     //link user with team 
                 })
                     .then(() => {
-                    joinTeam(teamId);
+                    joinTeamWithTeamId(teamId);
                 });
                 //console.log('Successfully created new team!')
             }
@@ -293,7 +293,7 @@ exports.addNewTeamToDbAndJoin = addNewTeamToDbAndJoin;
  * finds the team and adds user as a member
  * @param input name of the team to join
  */
-function joinTeam(teamId) {
+function joinTeamWithTeamId(teamId) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Adding new member to team...');
         const ctx = Authentication_1.getExtensionContext();
@@ -323,5 +323,5 @@ function joinTeam(teamId) {
         });
     });
 }
-exports.joinTeam = joinTeam;
+exports.joinTeamWithTeamId = joinTeamWithTeamId;
 //# sourceMappingURL=FireStore.js.map

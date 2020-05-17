@@ -1,5 +1,5 @@
 import { window, ExtensionContext } from "vscode";
-import { addNewTeamToDbAndJoin } from "./Firestore";
+import { addNewTeamToDbAndJoin, joinTeamWithTeamId } from "./Firestore";
 import { getExtensionContext } from './Authentication';
 import {
   firebaseConfig,
@@ -39,7 +39,6 @@ export function removeTeamNameAndId(){
               ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
   console.log('team id: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID));
 }
-
 /**
  * returns the cached team name and id 
  */
@@ -56,6 +55,21 @@ export function getTeamNameAndTeamId(){
     window.showInformationMessage('Your team name: ' + teamName + '\nYour team id: ' + teamId);
     console.log('Your team name: ' + teamName + '\nYour team id: ' + teamId);
   }
+  
+}
+
+export async function joinTeam(){
+  const ctx = getExtensionContext();
+
+  await window
+    .showInputBox({ placeHolder: "Enter a team code" })
+    .then(async (teamCode) => {
+      if (teamCode == undefined) {
+        window.showInformationMessage('Please enter a valid team name!');
+        return;
+      }
+      joinTeamWithTeamId(teamCode);
+    });
   
 }
 
