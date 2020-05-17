@@ -3,7 +3,11 @@
 // Please refer to their documentation on https://mochajs.org/ for help.
 //
 
-import {generateRandomName, getRandomInt} from '../src/util/Utility';
+import {
+  generateRandomName,
+  getRandomInt,
+  generateRandomEmail,
+} from '../src/util/Utility';
 import {
   getExtensionContext,
   clearCachedUserId,
@@ -35,30 +39,32 @@ describe('utilities.js', () => {
   it('generating random int, ceiling 100', () => {
     assert.equal(getRandomInt(100) <= 100, true);
   });
+
+  it('generating random email', () => {
+    assert.equal(generateRandomEmail().includes('@'), true);
+  });
 });
 
 describe('authentication.ts', () => {
   it('getting extension context', () => {
-    console.log(getExtensionContext);
+    //console.log(getExtensionContext);
   });
 
   it('clearing a cached user id', () => {
-    console.log(clearCachedUserId);
+    //console.log(clearCachedUserId);
   });
 
   it('authenticating user', () => {
-    console.log(authenticateUser);
+    //console.log(authenticateUser);
   });
 });
 
-/*
 describe('leaderboard.ts', () => {
-    it('adding user to empty leaderboard', () => {
-        const id : Number = 654;
-        const userObj = null;
-        //console.log(Leaderboard);
-        Leaderboard.addUser(id, userObj);
-        assert.equal(Leaderboard.getUsers().length, 1);
-    })
+  it('adding user to empty leaderboard', () => {
+    //const id : Number = 654;
+    //const userObj = null;
+    //console.log(Leaderboard);
+    //Leaderboard.addUser(id, userObj);
+    //assert.equal(Leaderboard.getUsers().length, 1);
+  });
 });
-*/
