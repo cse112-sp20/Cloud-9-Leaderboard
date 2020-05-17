@@ -66,7 +66,7 @@ async function writeToFile(users) {
   users.map((user) => {
     let obj = {};
     obj['id'] = user['id'];
-    obj['score'] = parseFloat(scoreCalculation(user).toFixed(3));
+    obj['score'] = parseFloat(user['cumulativePoints'].toFixed(3));
     scoreMap.push(obj);
   });
 

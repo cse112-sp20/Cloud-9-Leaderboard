@@ -3,7 +3,7 @@ require('firebase/firestore');
 require('firebase/auth');
 
 import {window, ExtensionContext} from 'vscode';
-import {processMetric} from './Metric';
+import {processMetric, scoreCalculation} from './Metric';
 import {Leaderboard} from './Leaderboard';
 import {firebaseConfig, DEFAULT_PASSWORD, DEFAULT_USER_DOC} from './Constants';
 import {getExtensionContext} from './Authentication';
@@ -34,45 +34,97 @@ export function updateStats(payload) {
   console.log('cached id is ' + id);
   window.showInformationMessage('Updated Stats!');
 
+  let today = new Date().toISOString().split('T')[0];
+
   db.collection('users')
     .doc(id)
     .get()
     .then((doc) => {
       if (doc.exists) {
-        //Update existing stats
         db.collection('users')
           .doc(id)
-          .update({
-            keystrokes: firebase.firestore.FieldValue.increment(
-              parseInt(metricObj['keystrokes']),
-            ),
-            linesChanged: firebase.firestore.FieldValue.increment(
-              parseInt(metricObj['linesChanged']),
-            ),
-            timeInterval: firebase.firestore.FieldValue.increment(
-              parseInt(metricObj['timeInterval']),
-            ),
-          })
-          .then(() => {
-            console.log('Successfully update stats');
-          })
-          .catch(() => {
-            console.log('Error updating stats');
+          .collection('dates')
+          .doc(today)
+          .get()
+          .then((doc2) => {
+            if (doc2.exists) {
+              //Update existing stats
+              db.collection('users')
+                .doc(id)
+                .collection('dates')
+                .doc(today)
+                .update({
+                  keystrokes: firebase.firestore.FieldValue.increment(
+                    parseInt(metricObj['keystrokes']),
+                  ),
+                  linesChanged: firebase.firestore.FieldValue.increment(
+                    parseInt(metricObj['linesChanged']),
+                  ),
+                  timeInterval: firebase.firestore.FieldValue.increment(
+                    parseInt(metricObj['timeInterval']),
+                  ),
+                  points: firebase.firestore.FieldValue.increment(
+                    scoreCalculation(metricObj),
+                  ),
+                })
+                .then(() => {
+                  console.log('Successfully update stats');
+                })
+                .catch(() => {
+                  console.log('Error updating stats');
+                });
+            } else {
+              db.collection('users')
+                .doc(id)
+                .collection('dates')
+                .doc(today)
+                .set({
+                  keystrokes: metricObj['keystrokes'],
+                  linesChanged: metricObj['linesChanged'],
+                  timeInterval: metricObj['timeInterval'],
+                  points: scoreCalculation(metricObj),
+                })
+                .then(() => {
+                  console.log('Added new entry');
+                })
+                .catch(() => {
+                  console.log('ERRRRR');
+                });
+            }
+
+            db.collection('users')
+              .doc(id)
+              .update({
+                cumulativePoints: firebase.firestore.FieldValue.increment(
+                  scoreCalculation(metricObj),
+                ),
+              });
           });
       } else {
         //Update to firebase if no stats found
         db.collection('users')
           .doc(id)
+          .collection('dates')
+          .doc(today)
           .set({
             keystrokes: metricObj['keystrokes'],
             linesChanged: metricObj['linesChanged'],
             timeInterval: metricObj['timeInterval'],
+            points: scoreCalculation(metricObj),
           })
           .then(() => {
             console.log('Added new entry');
           })
           .catch(() => {
             console.log('ERRRRR');
+          });
+
+        db.collection('users')
+          .doc(id)
+          .update({
+            cumulativePoints: firebase.firestore.FieldValue.increment(
+              scoreCalculation(metricObj),
+            ),
           });
       }
     });
@@ -84,9 +136,7 @@ export async function retrieveAllUserStats(callback) {
 
   let userMap = [];
 
-  let content = '';
-
-  let allUser = users
+  users
     .get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
@@ -149,8 +199,22 @@ function addNewUserDocToDb(userId: String) {
     return;
   }
 
+  let today = new Date().toISOString().split('T')[0];
+
   db.collection('users')
     .doc(userId)
+    .set({name: 'placeholder', teamCode: '', cumulativePoints: 0})
+    .then(() => {
+      console.log('Added name');
+    })
+    .catch(() => {
+      console.log('Error creating new entry');
+    });
+
+  db.collection('users')
+    .doc(userId)
+    .collection('dates')
+    .doc(today)
     .set(DEFAULT_USER_DOC)
     .then(() => {
       console.log('Added new user: ' + userId + ' doc to db.');

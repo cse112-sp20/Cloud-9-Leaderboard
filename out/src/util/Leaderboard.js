@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const vscode_1 = require("vscode");
 const Util_1 = require("../../lib/Util");
 const Firestore_1 = require("./Firestore");
-const Metric_1 = require("./Metric");
 const fs = require('fs');
 class Leaderboard {
     constructor() { }
@@ -71,7 +70,7 @@ function writeToFile(users) {
         users.map((user) => {
             let obj = {};
             obj['id'] = user['id'];
-            obj['score'] = parseFloat(Metric_1.scoreCalculation(user).toFixed(3));
+            obj['score'] = parseFloat(user['cumulativePoints'].toFixed(3));
             scoreMap.push(obj);
         });
         scoreMap = scoreMap.sort((a, b) => (a.score < b.score ? 1 : -1));
