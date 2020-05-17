@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.saveFileChangeInfoToDisk = exports.getFileChangeSummaryAsJson = exports.clearFileChangeInfoSummaryData = exports.getFileChangeSummaryFile = void 0;
 const Util_1 = require("../Util");
 const CacheManager_1 = require("../cache/CacheManager");
 const fs = require("fs");

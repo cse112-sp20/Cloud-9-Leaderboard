@@ -65,7 +65,7 @@ async function writeToFile(users) {
 
   users.map((user) => {
     let obj = {};
-    obj['id'] = user['id'];
+    obj['name'] = user['name'];
     obj['score'] = parseFloat(user['cumulativePoints'].toFixed(3));
     scoreMap.push(obj);
   });
@@ -74,7 +74,7 @@ async function writeToFile(users) {
 
   scoreMap.map((user, i) => {
     leaderBoardContent +=
-      i + 1 + '\t\t\t\t' + user.id + '\t - \t' + user.score + '\n';
+      i + 1 + '\t\t\t\t' + user.name + '\t - \t' + user.score + '\n';
   });
 
   console.log(scoreMap);

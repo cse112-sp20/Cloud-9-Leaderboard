@@ -15,8 +15,8 @@ import {
   GLOBAL_STATE_USER_TEAM_ID,
 } from './Constants';
 import {getExtensionContext} from './Authentication';
-
 import {processMetric, scoreCalculation} from './Metric';
+import {generateRandomEmail, generateRandomName} from './Utility';
 
 // Initialize Firebase
 if (!firebase.apps.length) {
@@ -243,7 +243,7 @@ async function addNewUserDocToDb(userId) {
 
   db.collection(COLLECTION_ID_USERS)
     .doc(userId)
-    .set({name: 'placeholder', teamCode: '', cumulativePoints: 0})
+    .set({name: generateRandomName(), teamCode: '', cumulativePoints: 0})
     .then(() => {
       console.log('Added name');
     })

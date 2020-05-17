@@ -42,7 +42,8 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "lint": "tslint -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "tests": "mocha --require ts-node/register test/**/*.ts"
   },
   "contributes": {
     "commands": [
@@ -134,19 +135,23 @@
     }
   },
   "devDependencies": {
-    "@types/mocha": "5.2.6",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^5.2.6",
     "@types/node": "^13.13.5",
     "@types/vscode": "^1.35.0",
+    "chai": "^4.2.0",
     "eslint": "^7.0.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.2",
+    "mocha": "^7.1.2",
     "pre-commit": "^1.2.2",
     "prettier": "^2.0.5",
     "ts-loader": "^6.2.1",
-    "typescript": "^3.5.1",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.2",
     "vsce": "^1.75.0",
     "vscode": "^1.1.37",
     "webpack": "^4.41.5",
@@ -164,6 +169,7 @@
     "open": "^6.4.0",
     "require": "^2.4.20",
     "rxjs": "^6.5.5",
+    "unique-names-generator": "^4.2.0",
     "vsls": "0.3.1291"
   },
   "husky": {

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getHistoricalCommits = exports.postRepoContributors = exports.processRepoUsersForWorkspace = exports.getResourceInfo = exports.getRepoContributorInfo = exports.getRepoContributors = exports.getRepoFileCount = exports.getFileContributorCount = exports.getMyRepoInfo = void 0;
 const HttpClient_1 = require("../http/HttpClient");
 const Util_1 = require("../Util");
 const HttpClient_2 = require("../http/HttpClient");

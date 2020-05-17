@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.displayLeaderboard = exports.getLeaderboardFile = exports.Leaderboard = void 0;
 const vscode_1 = require("vscode");
 const Util_1 = require("../../lib/Util");
 const Firestore_1 = require("./Firestore");
@@ -69,14 +70,14 @@ function writeToFile(users) {
         let scoreMap = [];
         users.map((user) => {
             let obj = {};
-            obj['id'] = user['id'];
+            obj['name'] = user['name'];
             obj['score'] = parseFloat(user['cumulativePoints'].toFixed(3));
             scoreMap.push(obj);
         });
         scoreMap = scoreMap.sort((a, b) => (a.score < b.score ? 1 : -1));
         scoreMap.map((user, i) => {
             leaderBoardContent +=
-                i + 1 + '\t\t\t\t' + user.id + '\t - \t' + user.score + '\n';
+                i + 1 + '\t\t\t\t' + user.name + '\t - \t' + user.score + '\n';
         });
         console.log(scoreMap);
         leaderBoardContent += '-------------------------------------- \n';

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.JiraClient = exports.ROOT_API = void 0;
 const axios_1 = require("axios");
 const Util_1 = require("../Util");
 exports.ROOT_API = "https://sftwco.atlassian.net";

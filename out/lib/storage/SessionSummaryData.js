@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateStatusBarWithSummaryData = exports.incrementSessionSummaryData = exports.getTimeBetweenLastPayload = exports.setSessionSummaryLiveshareMinutes = exports.saveSessionSummaryToDisk = exports.getSessionSummaryFileAsJson = exports.sessionSummaryExists = exports.getSessionSummaryData = exports.getSessionSummaryFile = exports.clearSessionSummaryData = exports.getSessionThresholdSeconds = void 0;
 const models_1 = require("../model/models");
 const Util_1 = require("../Util");
 const Constants_1 = require("../Constants");

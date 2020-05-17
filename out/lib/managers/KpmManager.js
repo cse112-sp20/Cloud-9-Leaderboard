@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.KpmManager = void 0;
 const vscode_1 = require("vscode");
 const KeystrokeStats_1 = require("../model/KeystrokeStats");
 const Constants_1 = require("../Constants");
