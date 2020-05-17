@@ -29,6 +29,18 @@ export async function createAndJoinTeam() {
 }
 
 /**
+ * DEBUG: REMOVE CACHED TEAM NAME AND ID
+ */
+export function removeTeamNameAndId(){
+  const ctx = getExtensionContext();
+  ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
+  ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
+  console.log('Removed cached Team name and ID, team name: '+ 
+              ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
+  console.log('team id: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID));
+}
+
+/**
  * returns the cached team name and id 
  */
 export function getTeamNameAndTeamId(){
@@ -38,10 +50,11 @@ export function getTeamNameAndTeamId(){
   const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
-  if(teamName == undefined || teamId == undefined){
+  if(teamName == undefined && teamId == undefined){
     window.showInformationMessage('No team info found.');
   }else{
     window.showInformationMessage('Your team name: ' + teamName + '\nYour team id: ' + teamId);
+    console.log('Your team name: ' + teamName + '\nYour team id: ' + teamId);
   }
   
 }

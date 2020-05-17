@@ -142,6 +142,10 @@ function createCommands(kpmController) {
         console.log('Cloud9: GET TEAM NAME AND ID');
         Team_1.getTeamNameAndTeamId();
     }));
+    cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
+        console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
+        Team_1.removeTeamNameAndId();
+    }));
     // Cloud9: command used to join a new team
     cmds.push(vscode_1.commands.registerCommand('cloud9.joinTeam', () => {
         console.log('Cloud9: JOIN A TEAM');

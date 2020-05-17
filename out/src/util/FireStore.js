@@ -30,7 +30,11 @@ const db = firebase.firestore();
  */
 function loginUserWithEmailAndPassword(email, password) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield auth.signInWithEmailAndPassword(email, password).catch((e) => {
+        yield auth.signInWithEmailAndPassword(email, password)
+            .then(() => {
+            console.log('signed in');
+        })
+            .catch((e) => {
             console.log(e.message);
         });
     });
@@ -264,8 +268,7 @@ function addNewTeamToDbAndJoin(teamName) {
         newTeamDoc['teamName'] = teamName;
         yield db.collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamName).get().then((doc) => {
             if (doc.exists) {
-                console.log('Name already in use!');
-                console.log(doc.data);
+                console.log('Team already exists!');
             }
             else {
                 //create this team and add user as a member
@@ -276,7 +279,9 @@ function addNewTeamToDbAndJoin(teamName) {
                     teamId = ref.id;
                     console.log('Added team document with ID: ', teamId);
                     //link user with team 
-                    joinTeam(teamId, teamName);
+                })
+                    .then(() => {
+                    joinTeam(teamId);
                 });
                 //console.log('Successfully created new team!')
             }
@@ -288,23 +293,28 @@ exports.addNewTeamToDbAndJoin = addNewTeamToDbAndJoin;
  * finds the team and adds user as a member
  * @param input name of the team to join
  */
-function joinTeam(teamId, teamName) {
+function joinTeam(teamId) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Adding new member to team...');
         const ctx = Authentication_1.getExtensionContext();
         const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        console.log('userid: ' + userId);
         yield db.collection(Constants_1.COLLECTION_ID_TEAMS)
             .doc(teamId)
             .collection(Constants_1.COLLECTION_ID_TEAM_MEMBERS)
             .doc(userId)
             .set({})
             .then(() => __awaiter(this, void 0, void 0, function* () {
-            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, teamName);
             yield db.collection(Constants_1.COLLECTION_ID_USERS)
                 .doc(userId)
-                .update({ teamId: teamId })
+                .update({ teamCode: teamId })
                 .then(() => {
+                //store in context
+                //ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
+                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, teamId);
                 console.log('Successfully added user to team.');
+                //console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
+                console.log('cachedTeamId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID));
             });
         }))
             .catch((e) => {

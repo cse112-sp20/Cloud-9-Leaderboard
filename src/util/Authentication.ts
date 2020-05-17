@@ -42,9 +42,11 @@ export function authenticateUser(ctx: ExtensionContext) {
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   const cachedUserEmail = ctx.globalState.get(GLOBAL_STATE_USER_EMAIL);
   const cachedUserPassword = ctx.globalState.get(GLOBAL_STATE_USER_PASSWORD);
+
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
+  console.log('AUTHENTICATION USERID IS: ' + cachedUserId);
   if (cachedUserId === undefined) {
     // case1: new user, create an account for them
     window.showInformationMessage("Cloud9: Welcome new user!");
@@ -59,7 +61,7 @@ export function authenticateUser(ctx: ExtensionContext) {
     console.log('Found cachedTeamName: ' + cachedTeamName);
     console.log('Found cachedTeamId: ' + cachedTeamId);
     
-    loginUserWithEmailAndPassword(cachedUserEmail, cachedUserPassword);
+    //loginUserWithEmailAndPassword(cachedUserEmail, cachedUserPassword);
   }
 }
 

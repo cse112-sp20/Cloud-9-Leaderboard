@@ -44,6 +44,7 @@ function authenticateUser(ctx) {
     const cachedUserPassword = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_PASSWORD);
     const cachedTeamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
     const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
+    console.log('AUTHENTICATION USERID IS: ' + cachedUserId);
     if (cachedUserId === undefined) {
         // case1: new user, create an account for them
         vscode_1.window.showInformationMessage("Cloud9: Welcome new user!");
@@ -58,7 +59,7 @@ function authenticateUser(ctx) {
         console.log("Found cachedUserId: " + cachedUserId);
         console.log('Found cachedTeamName: ' + cachedTeamName);
         console.log('Found cachedTeamId: ' + cachedTeamId);
-        Firestore_1.loginUserWithEmailAndPassword(cachedUserEmail, cachedUserPassword);
+        //loginUserWithEmailAndPassword(cachedUserEmail, cachedUserPassword);
     }
 }
 exports.authenticateUser = authenticateUser;

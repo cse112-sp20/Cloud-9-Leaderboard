@@ -31,6 +31,18 @@ function createAndJoinTeam() {
 }
 exports.createAndJoinTeam = createAndJoinTeam;
 /**
+ * DEBUG: REMOVE CACHED TEAM NAME AND ID
+ */
+function removeTeamNameAndId() {
+    const ctx = Authentication_1.getExtensionContext();
+    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, undefined);
+    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, undefined);
+    console.log('Removed cached Team name and ID, team name: ' +
+        ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
+    console.log('team id: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID));
+}
+exports.removeTeamNameAndId = removeTeamNameAndId;
+/**
  * returns the cached team name and id
  */
 function getTeamNameAndTeamId() {
@@ -39,11 +51,12 @@ function getTeamNameAndTeamId() {
         return;
     const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
     const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-    if (teamName == undefined || teamId == undefined) {
+    if (teamName == undefined && teamId == undefined) {
         vscode_1.window.showInformationMessage('No team info found.');
     }
     else {
         vscode_1.window.showInformationMessage('Your team name: ' + teamName + '\nYour team id: ' + teamId);
+        console.log('Your team name: ' + teamName + '\nYour team id: ' + teamId);
     }
 }
 exports.getTeamNameAndTeamId = getTeamNameAndTeamId;

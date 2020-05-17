@@ -35,9 +35,13 @@ const db = firebase.firestore();
  * @param password 
  */
 export async function loginUserWithEmailAndPassword(email, password){
-  await auth.signInWithEmailAndPassword(email, password).catch((e) => {
-     console.log(e.message);
-  });
+  await auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('signed in');
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
 }
 
 /*
@@ -302,8 +306,7 @@ export async function addNewTeamToDbAndJoin(teamName) {
 
   await db.collection(COLLECTION_ID_TEAMS).doc(teamName).get().then((doc) => {
     if (doc.exists) {
-      console.log('Name already in use!');
-      console.log(doc.data);
+      console.log('Team already exists!');
     } else {
       //create this team and add user as a member
       
@@ -315,7 +318,9 @@ export async function addNewTeamToDbAndJoin(teamName) {
           console.log('Added team document with ID: ', teamId);
           
           //link user with team 
-          joinTeam(teamId, teamName);
+        })
+        .then(() => {
+          joinTeam(teamId);
         });
       //console.log('Successfully created new team!')
     }
@@ -326,11 +331,13 @@ export async function addNewTeamToDbAndJoin(teamName) {
  * finds the team and adds user as a member
  * @param input name of the team to join
  */
-export async function joinTeam(teamId, teamName) {
+export async function joinTeam(teamId) {
   console.log('Adding new member to team...');
 
   const ctx = getExtensionContext();
   const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
+  console.log('userid: ' + userId);
 
   await db.collection(COLLECTION_ID_TEAMS)
           .doc(teamId)
@@ -338,16 +345,15 @@ export async function joinTeam(teamId, teamName) {
           .doc(userId)
           .set({})
           .then(async () => {
-            
             await db.collection(COLLECTION_ID_USERS)
               .doc(userId)
-              .update({teamId: teamId})
+              .update({teamCode: teamId})
               .then(() => {
                 //store in context
-                ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
+                //ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
                 ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamId);
                 console.log('Successfully added user to team.');
-                console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
+                //console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
                 console.log('cachedTeamId: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID));
               })
             
