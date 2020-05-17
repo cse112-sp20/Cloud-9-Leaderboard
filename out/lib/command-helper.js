@@ -128,7 +128,7 @@ function createCommands(kpmController) {
     /*
      * CLOUD 9 LEADERBOARD COMMAND
      */
-    cmds.push(vscode_1.commands.registerCommand('cloud9.cloud9Leaderboard', () => {
+    cmds.push(vscode_1.commands.registerCommand('cloud9.leaderboard', () => {
         Leaderboard_1.displayLeaderboard();
     }));
     // Cloud9: command used to create a new team

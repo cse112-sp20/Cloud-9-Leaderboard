@@ -35,8 +35,6 @@ function updateStats(payload) {
     const ctx = Authentication_1.getExtensionContext();
     const cachedUserId = ctx.globalState.get('cachedUserId');
     let id = cachedUserId;
-    console.log('Type is');
-    console.log(typeof cachedUserId);
     console.log('cached id is ' + id);
     vscode_1.window.showInformationMessage('Updated Stats!');
     db.collection('users')
