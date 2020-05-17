@@ -214,7 +214,7 @@ export function createCommands(
    * CLOUD 9 LEADERBOARD COMMAND
    */
   cmds.push(
-    commands.registerCommand('codetime.cloud9Leaderboard', () => {
+    commands.registerCommand('cloud9.leaderboard', () => {
       displayLeaderboard();
     }),
   );
