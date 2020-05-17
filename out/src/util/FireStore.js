@@ -140,7 +140,7 @@ function addNewUserDocToDb(userId) {
         return;
     }
     db.collection('users')
-        .doc(JSON.stringify(userId))
+        .doc(userId)
         .set(Constants_1.DEFAULT_USER_DOC)
         .then(() => {
         console.log('Added new user: (' + userId + ') doc to db.');
@@ -158,7 +158,7 @@ function getUserDocWithId(userId) {
     console.log('Getting user doc from db...');
     var userDoc = db
         .collection('users')
-        .doc(JSON.stringify(userId))
+        .doc(userId)
         .get()
         .then((doc) => {
         console.log('Retrieved user: (' + userId + ') doc from db.');

@@ -150,14 +150,14 @@ function addNewUserDocToDb(userId: String) {
   }
 
   db.collection('users')
-    .doc(JSON.stringify(userId))
+    .doc(userId)
     .set(DEFAULT_USER_DOC)
     .then(() => {
-      console.log('Added new user: (' + userId + ') doc to db.');
+      console.log('Added new user: ' + userId + ' doc to db.');
       getUserDocWithId(userId);
     })
     .catch(() => {
-      console.log('Error adding new user: (' + userId + ') doc to db.');
+      console.log('Error adding new user: ' + userId + ' doc to db.');
     });
 }
 
@@ -170,7 +170,7 @@ export function getUserDocWithId(userId: String) {
 
   var userDoc = db
     .collection('users')
-    .doc(JSON.stringify(userId))
+    .doc(userId)
     .get()
     .then((doc) => {
       console.log('Retrieved user: (' + userId + ') doc from db.');
