@@ -69,14 +69,14 @@ function writeToFile(users) {
         let scoreMap = [];
         users.map((user) => {
             let obj = {};
-            obj['id'] = user['id'];
+            obj['name'] = user['name'];
             obj['score'] = parseFloat(user['cumulativePoints'].toFixed(3));
             scoreMap.push(obj);
         });
         scoreMap = scoreMap.sort((a, b) => (a.score < b.score ? 1 : -1));
         scoreMap.map((user, i) => {
             leaderBoardContent +=
-                i + 1 + '\t\t\t\t' + user.id + '\t - \t' + user.score + '\n';
+                i + 1 + '\t\t\t\t' + user.name + '\t - \t' + user.score + '\n';
         });
         console.log(scoreMap);
         leaderBoardContent += '-------------------------------------- \n';

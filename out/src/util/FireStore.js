@@ -185,7 +185,7 @@ function addNewUserDocToDb(userId) {
     let today = new Date().toISOString().split('T')[0];
     db.collection('users')
         .doc(userId)
-        .set({ name: 'placeholder', teamCode: '', cumulativePoints: 0 })
+        .set({ name: Utility_1.generateRandomName(), teamCode: '', cumulativePoints: 0 })
         .then(() => {
         console.log('Added name');
     })
