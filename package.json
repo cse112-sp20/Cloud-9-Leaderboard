@@ -64,7 +64,7 @@
       },
       {
         "command": "cloud9.debugClearUserId",
-        "title": "Cloud9: Debug clear User Id"
+        "title": "Cloud9 DEBUG: Clear User Id"
       },
       {
         "command": "cloud9.getTeamNameAndId",
@@ -72,7 +72,7 @@
       },
       {
         "command": "cloud9.debugClearTeamNameAndId",
-        "title": "Cloud9: Debug clear Team name and ID"
+        "title": "Cloud9 DEBUG: Clear Team name and ID"
       },
       {
         "command": "codetime.howardPush",
@@ -158,7 +158,6 @@
     "axios": "^0.19.0",
     "clipboardy": "^2.1.0",
     "firebase": "^7.14.3",
-    "husky": "^4.2.5",
     "moment-timezone": "^0.5.25",
     "node-cache": "^5.1.0",
     "numeral": "^2.0.6",

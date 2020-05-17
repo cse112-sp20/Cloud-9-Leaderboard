@@ -1,22 +1,20 @@
-const firebase = require("firebase/app");
-require("firebase/firestore");
-require("firebase/auth");
+const firebase = require('firebase/app');
+require('firebase/firestore');
+require('firebase/auth');
 
-import { window, ExtensionContext } from "vscode";
-import { Leaderboard } from "./Leaderboard";
+import {window} from 'vscode';
+import {Leaderboard} from './Leaderboard';
 import {
   firebaseConfig,
-  DEFAULT_PASSWORD,
   DEFAULT_USER_DOC,
   DEFAULT_TEAM_DOC,
   COLLECTION_ID_USERS,
   COLLECTION_ID_TEAMS,
   GLOBAL_STATE_USER_ID,
   COLLECTION_ID_TEAM_MEMBERS,
-  GLOBAL_STATE_USER_TEAM_NAME,
-  GLOBAL_STATE_USER_TEAM_ID
-} from "./Constants";
-import { getExtensionContext } from "./Authentication";
+  GLOBAL_STATE_USER_TEAM_ID,
+} from './Constants';
+import {getExtensionContext} from './Authentication';
 
 import {processMetric, scoreCalculation} from './Metric';
 
@@ -28,20 +26,20 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-
 /**
- * 
- * @param email login user with email and password 
- * @param password 
+ *
+ * @param email login user with email and password
+ * @param password
  */
-export async function loginUserWithEmailAndPassword(email, password){
-  await auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('signed in');
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
+export async function loginUserWithEmailAndPassword(email, password) {
+  await auth
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      console.log('signed in');
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
 }
 
 /*
@@ -54,7 +52,7 @@ export function updateStats(payload) {
   let metricObj = processMetric(payload);
   console.log(metricObj);
 
-  const ctx: ExtensionContext = getExtensionContext();
+  const ctx = getExtensionContext();
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
   let id = cachedUserId;
@@ -195,16 +193,16 @@ export async function retrieveAllUserStats(callback) {
  * Create new user credential and add new doc to db
  */
 
-export async function createNewUserInFirebase(ctx: ExtensionContext, email, password) {
-  console.log("From Authentication: createNewUser");
+export async function createNewUserInFirebase(ctx, email, password) {
+  console.log('From Authentication: createNewUser');
 
   //const email = generateRandomEmail(); // ...do we need this?
 
-  if(email == null){
-    console.log("email is null");
+  if (email == null) {
+    console.log('email is null');
     return;
   }
-  if(password == null){
+  if (password == null) {
     console.log('password is null');
     return;
   }
@@ -216,7 +214,7 @@ export async function createNewUserInFirebase(ctx: ExtensionContext, email, pass
       const currentUserId = auth.currentUser.uid;
 
       ctx.globalState.update(GLOBAL_STATE_USER_ID, currentUserId);
-      
+
       console.log('cachedUserId: ' + ctx.globalState.get(GLOBAL_STATE_USER_ID));
 
       addNewUserDocToDb(currentUserId);
@@ -234,13 +232,12 @@ export async function createNewUserInFirebase(ctx: ExtensionContext, email, pass
  */
 
 async function addNewUserDocToDb(userId) {
-  console.log("Adding doc to db for new user...");
+  console.log('Adding doc to db for new user...');
 
   if (userId === undefined) {
     console.log('userId undefined.');
     return;
   }
-
 
   let today = new Date().toISOString().split('T')[0];
 
@@ -274,7 +271,7 @@ async function addNewUserDocToDb(userId) {
  */
 
 export async function getUserDocWithId(userId) {
-  console.log("Getting user doc from db...");
+  console.log('Getting user doc from db...');
 
   var userDoc = await db
     .collection(COLLECTION_ID_USERS)
@@ -288,9 +285,8 @@ export async function getUserDocWithId(userId) {
       console.log('Error getting user: (' + userId + ') doc from db.');
     });
 
-    return userDoc;
+  return userDoc;
 }
-
 
 /**
  * creates a new team (if not in db already)
@@ -299,32 +295,36 @@ export async function getUserDocWithId(userId) {
 export async function addNewTeamToDbAndJoin(teamName) {
   //check if already in database
   //const cachedUserId = getExtensionContext().globalState.get(GLOBAL_STATE_USER_ID);
-  
+
   var teamId = undefined;
-  var newTeamDoc = DEFAULT_TEAM_DOC
+  var newTeamDoc = DEFAULT_TEAM_DOC;
   newTeamDoc['teamName'] = teamName;
 
-  await db.collection(COLLECTION_ID_TEAMS).doc(teamName).get().then((doc) => {
-    if (doc.exists) {
-      console.log('Team already exists!');
-    } else {
-      //create this team and add user as a member
-      
-      // Add a new document with a generated id.
-      db.collection(COLLECTION_ID_TEAMS)
-        .add(newTeamDoc)
-        .then((ref) => {
-          teamId = ref.id;
-          console.log('Added team document with ID: ', teamId);
-          
-          //link user with team 
-        })
-        .then(() => {
-          joinTeamWithTeamId(teamId);
-        });
-      //console.log('Successfully created new team!')
-    }
-  });
+  await db
+    .collection(COLLECTION_ID_TEAMS)
+    .doc(teamName)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log('Team already exists!');
+      } else {
+        //create this team and add user as a member
+
+        // Add a new document with a generated id.
+        db.collection(COLLECTION_ID_TEAMS)
+          .add(newTeamDoc)
+          .then((ref) => {
+            teamId = ref.id;
+            console.log('Added team document with ID: ', teamId);
+
+            //link user with team
+          })
+          .then(() => {
+            joinTeamWithTeamId(teamId);
+          });
+        //console.log('Successfully created new team!')
+      }
+    });
 }
 
 /**
@@ -339,27 +339,61 @@ export async function joinTeamWithTeamId(teamId) {
 
   console.log('userid: ' + userId);
 
-  await db.collection(COLLECTION_ID_TEAMS)
-          .doc(teamId)
-          .collection(COLLECTION_ID_TEAM_MEMBERS)
-          .doc(userId)
-          .set({})
-          .then(async () => {
-            await db.collection(COLLECTION_ID_USERS)
-              .doc(userId)
-              .update({teamCode: teamId})
-              .then(() => {
-                //store in context
-                //ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
-                ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamId);
-                console.log('Successfully added user to team.');
-                //console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
-                console.log('cachedTeamId: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID));
-              })
-            
-          })
-          .catch((e) => {
-            console.log(e.message);
-            console.log('Error adding user to team!');
-          });
+  await db
+    .collection(COLLECTION_ID_TEAMS)
+    .doc(teamId)
+    .collection(COLLECTION_ID_TEAM_MEMBERS)
+    .doc(userId)
+    .set({})
+    .then(async () => {
+      await db
+        .collection(COLLECTION_ID_USERS)
+        .doc(userId)
+        .update({teamCode: teamId})
+        .then(() => {
+          //store in context
+          //ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
+          ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamId);
+          console.log('Successfully added user to team.');
+          //console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
+          console.log(
+            'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID),
+          );
+        });
+    })
+    .catch((e) => {
+      console.log(e.message);
+      console.log('Error adding user to team!');
+    });
+}
+
+/**
+ * checks if the user has already joined a team
+ */
+export async function checkIfInTeam() {
+  const ctx = getExtensionContext();
+  const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
+  let inTeam = false;
+  await db
+    .collection(COLLECTION_ID_USERS)
+    .doc(userId)
+    .get()
+    .then((userDoc) => {
+      if (userDoc.exists) {
+        const data = userDoc.data();
+        const teamField = data.teamCode;
+        if (teamField == '') {
+          console.log('No team code in db');
+          inTeam = false;
+        } else {
+          console.log('Team code in db: ' + teamField);
+          inTeam = true;
+        }
+      }
+    })
+    .then(() => {
+      return inTeam;
+    });
+  return inTeam;
 }
