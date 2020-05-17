@@ -42,7 +42,8 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "lint": "tslint -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "tests": "mocha --require ts-node/register test/**/*.ts"
   },
   "contributes": {
     "commands": [
