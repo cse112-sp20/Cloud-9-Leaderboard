@@ -41,6 +41,14 @@ describe('authentication.ts', () => {
   it('getting extension context', () => {
     console.log(getExtensionContext);
   });
+
+  it('clearing a cached user id', () => {
+    console.log(clearCachedUserId);
+  });
+
+  it('authenticating user', () => {
+    console.log(authenticateUser);
+  });
 });
 
 /*
