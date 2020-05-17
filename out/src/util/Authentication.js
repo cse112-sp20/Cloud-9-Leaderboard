@@ -27,9 +27,9 @@ exports.getExtensionContext = getExtensionContext;
  * removes the userId stored in extensionContext
  */
 function clearCachedUserId() {
-    extensionContext.globalState.update("cachedUserId", undefined);
+    extensionContext.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, undefined);
     console.log("After clearing cached id: " +
-        extensionContext.globalState.get("cachedUserId"));
+        extensionContext.globalState.get(Constants_1.GLOBAL_STATE_USER_ID));
 }
 exports.clearCachedUserId = clearCachedUserId;
 /**
@@ -39,7 +39,11 @@ exports.clearCachedUserId = clearCachedUserId;
 function authenticateUser(ctx) {
     //stores the extension context
     extensionContext = ctx;
-    let cachedUserId = ctx.globalState.get("cachedUserId");
+    const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+    const cachedUserEmail = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_EMAIL);
+    const cachedUserPassword = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_PASSWORD);
+    const cachedTeamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
+    const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
     if (cachedUserId === undefined) {
         // case1: new user, create an account for them
         vscode_1.window.showInformationMessage("Cloud9: Welcome new user!");
@@ -52,6 +56,9 @@ function authenticateUser(ctx) {
         // do we need to actually sign the user in again??
         vscode_1.window.showInformationMessage("Cloud9: Welcome back!");
         console.log("Found cachedUserId: " + cachedUserId);
+        console.log('Found cachedTeamName: ' + cachedTeamName);
+        console.log('Found cachedTeamId: ' + cachedTeamId);
+        Firestore_1.loginUserWithEmailAndPassword(cachedUserEmail, cachedUserPassword);
     }
 }
 exports.authenticateUser = authenticateUser;

@@ -67,6 +67,10 @@
         "title": "Cloud9: Debug clear User Id"
       },
       {
+        "command": "cloud9.getTeamNameAndId",
+        "title": "Cloud9: Get Team Name and ID"
+      },
+      {
         "command": "codetime.howardPush",
         "title": "push me"
       },

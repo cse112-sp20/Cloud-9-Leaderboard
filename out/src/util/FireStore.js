@@ -23,19 +23,32 @@ if (!firebase.apps.length) {
 }
 const auth = firebase.auth();
 const db = firebase.firestore();
+/**
+ *
+ * @param email login user with email and password
+ * @param password
+ */
+function loginUserWithEmailAndPassword(email, password) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield auth.signInWithEmailAndPassword(email, password).catch((e) => {
+            console.log(e.message);
+        });
+    });
+}
+exports.loginUserWithEmailAndPassword = loginUserWithEmailAndPassword;
 /*
  * Whenever new payload from codetime is posted to their api,
  * we will update our database
  */
 function updateStats(payload) {
-    console.log("Firestore.ts, updateStats");
+    console.log('Firestore.ts, updateStats');
     let metricObj = Metric_1.processMetric(payload);
     console.log(metricObj);
     const ctx = Authentication_1.getExtensionContext();
     const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-    let id = cachedUserId; //"Howard2";
-    console.log("cached id is " + id);
-    vscode_1.window.showInformationMessage("Updated Stats!");
+    let id = cachedUserId;
+    console.log('cached id is ' + id);
+    vscode_1.window.showInformationMessage('Updated Stats!');
     db.collection(Constants_1.COLLECTION_ID_USERS)
         .doc(id)
         .get()
@@ -45,15 +58,15 @@ function updateStats(payload) {
             db.collection(Constants_1.COLLECTION_ID_USERS)
                 .doc(id)
                 .update({
-                keystrokes: firebase.firestore.FieldValue.increment(parseInt(metricObj["keystrokes"])),
-                linesChanged: firebase.firestore.FieldValue.increment(parseInt(metricObj["linesChanged"])),
-                timeInterval: firebase.firestore.FieldValue.increment(parseInt(metricObj["timeInterval"])),
+                keystrokes: firebase.firestore.FieldValue.increment(parseInt(metricObj['keystrokes'])),
+                linesChanged: firebase.firestore.FieldValue.increment(parseInt(metricObj['linesChanged'])),
+                timeInterval: firebase.firestore.FieldValue.increment(parseInt(metricObj['timeInterval'])),
             })
                 .then(() => {
-                console.log("Successfully update stats");
+                console.log('Successfully update stats');
             })
                 .catch(() => {
-                console.log("Error updating stats");
+                console.log('Error updating stats');
             });
         }
         else {
@@ -61,15 +74,15 @@ function updateStats(payload) {
             db.collection(Constants_1.COLLECTION_ID_USERS)
                 .doc(id)
                 .set({
-                keystrokes: metricObj["keystrokes"],
-                linesChanged: metricObj["linesChanged"],
-                timeInterval: metricObj["timeInterval"],
+                keystrokes: metricObj['keystrokes'],
+                linesChanged: metricObj['linesChanged'],
+                timeInterval: metricObj['timeInterval'],
             })
                 .then(() => {
-                console.log("Added new entry");
+                console.log('Added new entry');
             })
                 .catch(() => {
-                console.log("ERRRRR");
+                console.log('ERRRRR');
             });
         }
     });
@@ -80,14 +93,14 @@ function retrieveAllUserStats(callback) {
         let db = firebase.firestore();
         let users = db.collection(Constants_1.COLLECTION_ID_USERS);
         let userMap = [];
-        let content = "";
+        let content = '';
         let allUser = users
             .get()
             .then((snapshot) => {
             snapshot.forEach((doc) => {
                 Leaderboard_1.Leaderboard.addUser(doc.id, doc.data());
                 let currUser = {};
-                currUser["id"] = doc.id;
+                currUser['id'] = doc.id;
                 for (let key in doc.data()) {
                     currUser[key] = doc.data()[key];
                 }
@@ -100,7 +113,7 @@ function retrieveAllUserStats(callback) {
             callback(userMap);
         })
             .catch((err) => {
-            console.log("Error getting documents", err);
+            console.log('Error getting documents', err);
         });
     });
 }
@@ -126,10 +139,7 @@ function createNewUserInFirebase(ctx, email, password) {
             // add new uid to persistent storage
             const currentUserId = auth.currentUser.uid;
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, currentUserId);
-            // ctx.globalState.update("email", email);
-            // ctx.globalState.update("password", password);
-            // console.log("Successfully created new user");
-            // console.log("cachedUserId is: " + ctx.globalState.get("cachedUserId"));
+            console.log('cachedUserId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID));
             addNewUserDocToDb(currentUserId);
             return true;
         })
@@ -145,20 +155,20 @@ exports.createNewUserInFirebase = createNewUserInFirebase;
  * @param userId
  */
 function addNewUserDocToDb(userId) {
-    console.log("Adding doc to db for new user.");
+    console.log("Adding doc to db for new user...");
     if (userId === undefined) {
-        console.log("userId undefined.");
+        console.log('userId undefined.');
         return;
     }
     db.collection(Constants_1.COLLECTION_ID_USERS)
         .doc(userId)
         .set(Constants_1.DEFAULT_USER_DOC)
         .then(() => {
-        console.log("Added new user: (" + userId + ") doc to db.");
+        console.log('Added new user: ' + userId + ' doc to db.');
         getUserDocWithId(userId);
     })
         .catch(() => {
-        console.log("Error adding new user: (" + userId + ") doc to db.");
+        console.log('Error adding new user: ' + userId + ' doc to db.');
     });
 }
 /**
@@ -173,11 +183,11 @@ function getUserDocWithId(userId) {
             .doc(userId)
             .get()
             .then((doc) => {
-            console.log("Retrieved user: (" + userId + ") doc from db.");
+            console.log('Retrieved user: (' + userId + ') doc from db.');
             console.log(doc.data());
         })
             .catch(() => {
-            console.log("Error getting user: (" + userId + ") doc from db.");
+            console.log('Error getting user: (' + userId + ') doc from db.');
         });
         return userDoc;
     });
@@ -187,37 +197,63 @@ exports.getUserDocWithId = getUserDocWithId;
  * creates a new team (if not in db already)
  * @param input the new team's name
  */
-function addNewTeamToDb(teamName) {
-    //check if already in database
-    const cachedUserId = Authentication_1.getExtensionContext().globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-    var teamDoc = db.collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamName);
-    teamDoc.get().then((doc) => {
-        if (doc.exists) {
-            console.log("Name already in use!");
-        }
-        else {
-            //create this team and add user as a member
-            db.collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamName).set({
-                members: { cachedUserId },
-            });
-            //update user's doc
-            db.collection(Constants_1.COLLECTION_ID_USERS)
-                .doc(cachedUserId)
-                .get(Constants_1.COLLECTION_ID_TEAMS)
-                .then((teamMap) => {
-                teamMap[teamName] = "";
-                db.collection(Constants_1.COLLECTION_ID_USERS).doc(Constants_1.GLOBAL_STATE_USER_ID).set({
-                    teams: teamMap,
+function addNewTeamToDbAndJoin(teamName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        //check if already in database
+        //const cachedUserId = getExtensionContext().globalState.get(GLOBAL_STATE_USER_ID);
+        var teamId = undefined;
+        var newTeamDoc = Constants_1.DEFAULT_TEAM_DOC;
+        newTeamDoc['teamName'] = teamName;
+        yield db.collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamName).get().then((doc) => {
+            if (doc.exists) {
+                console.log('Name already in use!');
+                console.log(doc.data);
+            }
+            else {
+                //create this team and add user as a member
+                // Add a new document with a generated id.
+                db.collection(Constants_1.COLLECTION_ID_TEAMS)
+                    .add(newTeamDoc)
+                    .then((ref) => {
+                    teamId = ref.id;
+                    console.log('Added team document with ID: ', teamId);
+                    //link user with team 
+                    joinTeam(teamId, teamName);
                 });
-            });
-        }
+                //console.log('Successfully created new team!')
+            }
+        });
     });
 }
-exports.addNewTeamToDb = addNewTeamToDb;
+exports.addNewTeamToDbAndJoin = addNewTeamToDbAndJoin;
 /**
  * finds the team and adds user as a member
  * @param input name of the team to join
  */
-function joinTeam(input) { }
+function joinTeam(teamId, teamName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log('Adding new member to team...');
+        const ctx = Authentication_1.getExtensionContext();
+        const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        yield db.collection(Constants_1.COLLECTION_ID_TEAMS)
+            .doc(teamId)
+            .collection(Constants_1.COLLECTION_ID_TEAM_MEMBERS)
+            .doc(userId)
+            .set({})
+            .then(() => __awaiter(this, void 0, void 0, function* () {
+            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, teamName);
+            yield db.collection(Constants_1.COLLECTION_ID_USERS)
+                .doc(userId)
+                .update({ teamId: teamId })
+                .then(() => {
+                console.log('Successfully added user to team.');
+            });
+        }))
+            .catch((e) => {
+            console.log(e.message);
+            console.log('Error adding user to team!');
+        });
+    });
+}
 exports.joinTeam = joinTeam;
 //# sourceMappingURL=FireStore.js.map

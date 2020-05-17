@@ -12,7 +12,9 @@ import {
   DEFAULT_TEAM_DOC,
   COLLECTION_ID_USERS,
   COLLECTION_ID_TEAMS,
-  GLOBAL_STATE_USER_ID
+  GLOBAL_STATE_USER_ID,
+  COLLECTION_ID_TEAM_MEMBERS,
+  GLOBAL_STATE_USER_TEAM_NAME
 } from "./Constants";
 import { getExtensionContext } from "./Authentication";
 
@@ -23,6 +25,18 @@ if (!firebase.apps.length) {
 
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+
+/**
+ * 
+ * @param email login user with email and password 
+ * @param password 
+ */
+export async function loginUserWithEmailAndPassword(email, password){
+  await auth.signInWithEmailAndPassword(email, password).catch((e) => {
+     console.log(e.message);
+  });
+}
 
 /*
  * Whenever new payload from codetime is posted to their api,
@@ -120,8 +134,6 @@ export async function retrieveAllUserStats(callback) {
     });
 }
 
-
-
 /**
  * Create new user credential and add new doc to db
  */
@@ -207,35 +219,37 @@ export async function getUserDocWithId(userId) {
     return userDoc;
 }
 
+
 /**
  * creates a new team (if not in db already)
  * @param input the new team's name
  */
-export function addNewTeamToDb(teamName) {
+export async function addNewTeamToDbAndJoin(teamName) {
   //check if already in database
-  const cachedUserId = getExtensionContext().globalState.get(GLOBAL_STATE_USER_ID);
-  var teamDoc = db.collection(COLLECTION_ID_TEAMS).doc(teamName);
+  //const cachedUserId = getExtensionContext().globalState.get(GLOBAL_STATE_USER_ID);
+  
+  var teamId = undefined;
+  var newTeamDoc = DEFAULT_TEAM_DOC
+  newTeamDoc['teamName'] = teamName;
 
-  teamDoc.get().then((doc) => {
+  await db.collection(COLLECTION_ID_TEAMS).doc(teamName).get().then((doc) => {
     if (doc.exists) {
       console.log('Name already in use!');
+      console.log(doc.data);
     } else {
       //create this team and add user as a member
-      db.collection(COLLECTION_ID_TEAMS).doc(teamName).set({
-        members: { cachedUserId },
-      });
-
-      //update user's doc
-      db.collection(COLLECTION_ID_USERS)
-        .doc(cachedUserId)
-        .get(COLLECTION_ID_TEAMS)
-        .then((teamMap) => {
-          teamMap[teamName] = "";
-          db.collection(COLLECTION_ID_USERS).doc(GLOBAL_STATE_USER_ID).set({
-
-            teams: teamMap,
-          });
+      
+      // Add a new document with a generated id.
+      db.collection(COLLECTION_ID_TEAMS)
+        .add(newTeamDoc)
+        .then((ref) => {
+          teamId = ref.id;
+          console.log('Added team document with ID: ', teamId);
+          
+          //link user with team 
+          joinTeam(teamId, teamName);
         });
+      //console.log('Successfully created new team!')
     }
   });
 }
@@ -244,4 +258,29 @@ export function addNewTeamToDb(teamName) {
  * finds the team and adds user as a member
  * @param input name of the team to join
  */
-export function joinTeam(input: String) {}
+export async function joinTeam(teamId, teamName) {
+  console.log('Adding new member to team...');
+
+  const ctx = getExtensionContext();
+  const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
+  await db.collection(COLLECTION_ID_TEAMS)
+          .doc(teamId)
+          .collection(COLLECTION_ID_TEAM_MEMBERS)
+          .doc(userId)
+          .set({})
+          .then(async () => {
+            ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
+            await db.collection(COLLECTION_ID_USERS)
+              .doc(userId)
+              .update({teamId: teamId})
+              .then(() => {
+                console.log('Successfully added user to team.');
+              })
+            
+          })
+          .catch((e) => {
+            console.log(e.message);
+            console.log('Error adding user to team!');
+          });
+}
