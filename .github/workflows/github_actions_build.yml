@@ -1,0 +1,37 @@
+name: Github Actions Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: npm ci
+        env:
+          CI: 'true'
+# on:
+#   push:
+#     branches:
+#       - master
+# name: Deploy Extension
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - run: npm install
+#       - uses: lannonbr/vsce-action@master
+#         with:
+#           args: "publish -p $VSCE_TOKEN"
+#         env:
+#           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
