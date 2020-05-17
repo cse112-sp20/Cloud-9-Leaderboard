@@ -157,6 +157,7 @@
     "open": "^6.4.0",
     "require": "^2.4.20",
     "rxjs": "^6.5.5",
+    "unique-names-generator": "^4.2.0",
     "vsls": "0.3.1291"
   },
   "husky": {

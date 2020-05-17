@@ -7,7 +7,7 @@ import {processMetric, scoreCalculation} from './Metric';
 import {Leaderboard} from './Leaderboard';
 import {firebaseConfig, DEFAULT_PASSWORD, DEFAULT_USER_DOC} from './Constants';
 import {getExtensionContext} from './Authentication';
-import {generateRandomEmail} from './Utility';
+import {generateRandomEmail, generateRandomName} from './Utility';
 
 // Initialize Firebase
 if (!firebase.apps.length) {
@@ -203,7 +203,7 @@ function addNewUserDocToDb(userId: String) {
 
   db.collection('users')
     .doc(userId)
-    .set({name: 'placeholder', teamCode: '', cumulativePoints: 0})
+    .set({name: generateRandomName(), teamCode: '', cumulativePoints: 0})
     .then(() => {
       console.log('Added name');
     })
