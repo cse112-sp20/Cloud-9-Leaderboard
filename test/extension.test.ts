@@ -9,7 +9,7 @@ import {
   clearCachedUserId,
   authenticateUser,
 } from '../src/util/Authentication';
-import {Leaderboard} from '../src/util/Leaderboard';
+import {Leaderboard, getLeaderboardFile} from '../src/util/Leaderboard';
 
 // The module 'assert' provides assertion methods from node
 
@@ -62,7 +62,11 @@ describe('leaderboard.ts', () => {
     });
 
     it('getting leaderboard file', () => {
-        
+        console.log(getLeaderboardFile);
+    });
+
+    it('getting leaderboard file', () => {
+        console.log(getLeaderboardFile);
     });
 });
 
