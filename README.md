@@ -20,25 +20,26 @@ on top of the open source <a href="https://www.software.com/code-time">Code time
 
 ### Things to remember:
 
-- **Never create a branch off of `dev`!** <br/> **Never merge `dev` into any
-  branch!**
-  - `dev` contains many changes that, in nearly all cases, do not belong on any
-    other branch.
+- **Create your own feature branch based off `dev`** (if the code you are writing is only dependent on the code in `dev`)<br/> 
+  - And make a pull request for **your branch to be merged into `dev`**.
+  - `Master` is not updated until a major version is done, such as MVP done
+
 - Create small and specific branches.
-- Constantly pull your branch's base branch to stay up to date with other
+- Constantly pull your branch's base branch (e.g. your branch's base branch might in most cases be `dev`) to stay up to date with other
   people's changes.
   - You can do this by:
     1. Checking out your branch's base branch: <br/>
-       `git checkout [your branch's base branch]`
+       `git checkout [your branch's base branch]`<br/>
+
     2. Pulling any new changes from the remote: <br/> `git pull`
     3. Returning to your branch (checkout your branch again): <br/>
        `git checkout [your branch]`
     4. Merging your branch's base branch _into_ your branch: <br/>
        `git merge [your branch's base branch]`
+
 - Test your code on the `dev` branch before creating a pull request to merge
   your code into your branch's base branch.
-  - `dev` will constantly be pulling from `master`, so testing your code on
-    `dev` should prevent bugs from getting on `master`.
+  - `dev` is the main branch that we collectively work on during development phase.
   - Once you have tested your code on the `dev` branch, create a pull request
     (PR) to merge your branch into its base branch.
     - Who and how many people you send it to should depend on the significance
@@ -76,12 +77,11 @@ on top of the open source <a href="https://www.software.com/code-time">Code time
    - The base branch is the branch that you want to create your branch off of.
    - The base branch is the branch that you will later merge (or create a PR to
      merge) your branch into.
-   - If the code you are writing is only dependent on the code in `master`, then
-     `master` is your base branch. Otherwise, if the code you are writing is
-     dependent on code that is not in `master`, then your branch's base branch
+   - If the code you are writing is only dependent on the code in `dev`, then
+     `dev` is your base branch. Otherwise, if the code you are writing is
+     dependent on code that is not in `dev`, then your branch's base branch
      is going to be the branch that contains the code that your branch depends
      on.
-   - `dev` should never be your base branch. `dev` contains many changes that,
      in nearly all cases, do not belong on any other branch.
 3. Create a new branch off of the base branch.
 4. Make changes to your branch.
@@ -95,7 +95,7 @@ on top of the open source <a href="https://www.software.com/code-time">Code time
 7. Merge your branch into your branch's base branch.
    - Depending on what your branch's base branch is, you may or may not need to
      create a PR to merge your branch into its base branch.
-     - If you want to merge your branch into `master`, you must create a PR to
+     - If you want to merge your branch into `dev` (or `master` in the future when MVP is done, etc), you must create a PR to
        do this.
    - Make sure that you merge your branch _into_ its base branch:
      - Merge \<your branch> into \<your branch's base branch> <br/> Merge \<your
