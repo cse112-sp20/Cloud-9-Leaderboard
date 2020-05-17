@@ -59,6 +59,10 @@
         "title": "Cloud9: Join a team"
       },
       {
+        "command": "cloud9.leaderboard",
+        "title": "Cloud9: Leaderboard"
+      },
+      {
         "command": "cloud9.debugClearUserId",
         "title": "Cloud9: Debug clear User Id"
       },
@@ -69,10 +73,6 @@
       {
         "command": "codetime.codeTimeMetrics",
         "title": "Code Time: View summary"
-      },
-      {
-        "command": "codetime.cloud9Leaderboard",
-        "title": "Cloud9: Leaderboard"
       },
       {
         "command": "codetime.softwareKpmDashboard",

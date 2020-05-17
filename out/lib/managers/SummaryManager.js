@@ -31,7 +31,7 @@ class SummaryManager {
     }
     init() {
         // fetch the current day from the sessions.json
-        this._currentDay = Util_1.getItem("currentDay");
+        this._currentDay = Util_1.getItem('currentDay');
         // start timer to check if it's a new day or not
         this._dayCheckTimer = setInterval(() => __awaiter(this, void 0, void 0, function* () {
             SummaryManager.getInstance().newDayChecker();
@@ -60,15 +60,15 @@ class SummaryManager {
                 // send the offline TimeData payloads
                 yield FileManager_1.sendOfflineTimeData();
                 // clear the wctime for other plugins that still rely on it
-                Util_1.setItem("wctime", 0);
+                Util_1.setItem('wctime', 0);
                 FileChangeInfoSummaryData_1.clearFileChangeInfoSummaryData();
                 // set the current day
                 const nowTime = Util_1.getNowTimes();
                 this._currentDay = nowTime.day;
                 // update the current day
-                Util_1.setItem("currentDay", this._currentDay);
+                Util_1.setItem('currentDay', this._currentDay);
                 // update the last payload timestamp
-                Util_1.setItem("latestPayloadTimestampEndUtc", 0);
+                Util_1.setItem('latestPayloadTimestampEndUtc', 0);
                 setTimeout(() => {
                     this.updateSessionSummaryFromServer();
                 }, 5000);
@@ -80,12 +80,12 @@ class SummaryManager {
      */
     updateSessionSummaryFromServer() {
         return __awaiter(this, void 0, void 0, function* () {
-            const jwt = Util_1.getItem("jwt");
+            const jwt = Util_1.getItem('jwt');
             const result = yield HttpClient_1.softwareGet(`/sessions/summary?refresh=true`, jwt);
             if (HttpClient_1.isResponseOk(result) && result.data) {
                 const data = result.data;
-                console.log("Session DATA:");
-                console.log(data);
+                // console.log("Session DATA:");
+                // console.log(data);
                 // update the session summary data
                 const summary = SessionSummaryData_1.getSessionSummaryData();
                 Object.keys(data).forEach((key) => {

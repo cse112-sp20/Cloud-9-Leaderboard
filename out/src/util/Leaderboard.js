@@ -13,7 +13,7 @@ const vscode_1 = require("vscode");
 const Util_1 = require("../../lib/Util");
 const Firestore_1 = require("./Firestore");
 const Metric_1 = require("./Metric");
-const fs = require("fs");
+const fs = require('fs');
 class Leaderboard {
     constructor() { }
     static addUser(userId, userObj) {
@@ -21,7 +21,7 @@ class Leaderboard {
             Leaderboard.users = [];
         }
         let user = new Object();
-        user["id"] = userId;
+        user['id'] = userId;
         for (let key in userObj) {
             user[key] = userObj;
         }
@@ -35,10 +35,10 @@ exports.Leaderboard = Leaderboard;
 function getLeaderboardFile() {
     let filePath = Util_1.getSoftwareDir();
     if (Util_1.isWindows()) {
-        filePath += "\\leaderboard.txt";
+        filePath += '\\leaderboard.txt';
     }
     else {
-        filePath += "/leaderboard.txt";
+        filePath += '/leaderboard.txt';
     }
     return filePath;
 }
@@ -61,32 +61,32 @@ exports.displayLeaderboard = displayLeaderboard;
 function writeToFile(users) {
     return __awaiter(this, void 0, void 0, function* () {
         const leaderboardFile = getLeaderboardFile();
-        let leaderBoardContent = "";
-        leaderBoardContent += "  L  E  A  D  E  R  B  O  A  R  D  \n";
-        leaderBoardContent += "-------------------------------------- \n";
+        let leaderBoardContent = '';
+        leaderBoardContent += '  L  E  A  D  E  R  B  O  A  R  D  \n';
+        leaderBoardContent += '-------------------------------------- \n';
         leaderBoardContent +=
-            "RANK" + "\t\t" + "NAME" + "\t\t\t\t\t\t" + "SCORE   \n";
-        leaderBoardContent += "-------------------------------------- \n";
+            'RANK' + '\t\t' + 'NAME' + '\t\t\t\t\t\t' + 'SCORE   \n';
+        leaderBoardContent += '-------------------------------------- \n';
         let scoreMap = [];
         users.map((user) => {
             let obj = {};
-            obj["id"] = user["id"];
-            obj["score"] = parseFloat(Metric_1.scoreCalculation(user).toFixed(3));
+            obj['id'] = user['id'];
+            obj['score'] = parseFloat(Metric_1.scoreCalculation(user).toFixed(3));
             scoreMap.push(obj);
         });
         scoreMap = scoreMap.sort((a, b) => (a.score < b.score ? 1 : -1));
         scoreMap.map((user, i) => {
             leaderBoardContent +=
-                i + 1 + "\t\t\t\t" + user.id + "\t - \t" + user.score + "\n";
+                i + 1 + '\t\t\t\t' + user.id + '\t - \t' + user.score + '\n';
         });
         console.log(scoreMap);
-        leaderBoardContent += "-------------------------------------- \n";
-        leaderBoardContent += "Each second spent coding         +0.01 \n";
-        leaderBoardContent += "Each keystroke                   +   1 \n";
-        leaderBoardContent += "Each modified line               +  10 \n";
+        leaderBoardContent += '-------------------------------------- \n';
+        leaderBoardContent += 'Each second spent coding        + 0.01 \n';
+        leaderBoardContent += 'Each keystroke                  +    1 \n';
+        leaderBoardContent += 'Each modified line              +   10 \n';
         fs.writeFileSync(leaderboardFile, leaderBoardContent, (err) => {
             if (err) {
-                console.error("Error writing leaderboard");
+                console.error('Error writing leaderboard');
             }
         });
     });

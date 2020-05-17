@@ -1,9 +1,9 @@
-import { workspace, window, ViewColumn } from "vscode";
-import { getSoftwareDir, isWindows } from "../../lib/Util";
-import { retrieveAllUserStats } from "./Firestore";
-import { scoreCalculation } from "./Metric";
-import { stat } from "fs";
-const fs = require("fs");
+import {workspace, window, ViewColumn} from 'vscode';
+import {getSoftwareDir, isWindows} from '../../lib/Util';
+import {retrieveAllUserStats} from './Firestore';
+import {scoreCalculation} from './Metric';
+import {stat} from 'fs';
+const fs = require('fs');
 
 export class Leaderboard {
   private static users: Array<Object>;
@@ -15,7 +15,7 @@ export class Leaderboard {
       Leaderboard.users = [];
     }
     let user = new Object();
-    user["id"] = userId;
+    user['id'] = userId;
     for (let key in userObj) {
       user[key] = userObj;
     }
@@ -30,9 +30,9 @@ export class Leaderboard {
 export function getLeaderboardFile() {
   let filePath = getSoftwareDir();
   if (isWindows()) {
-    filePath += "\\leaderboard.txt";
+    filePath += '\\leaderboard.txt';
   } else {
-    filePath += "/leaderboard.txt";
+    filePath += '/leaderboard.txt';
   }
   return filePath;
 }
@@ -53,20 +53,20 @@ export async function displayLeaderboard() {
 
 async function writeToFile(users) {
   const leaderboardFile = getLeaderboardFile();
-  let leaderBoardContent = "";
+  let leaderBoardContent = '';
 
-  leaderBoardContent += "  L  E  A  D  E  R  B  O  A  R  D  \n";
-  leaderBoardContent += "-------------------------------------- \n";
+  leaderBoardContent += '  L  E  A  D  E  R  B  O  A  R  D  \n';
+  leaderBoardContent += '-------------------------------------- \n';
   leaderBoardContent +=
-    "RANK" + "\t\t" + "NAME" + "\t\t\t\t\t\t" + "SCORE   \n";
-  leaderBoardContent += "-------------------------------------- \n";
+    'RANK' + '\t\t' + 'NAME' + '\t\t\t\t\t\t' + 'SCORE   \n';
+  leaderBoardContent += '-------------------------------------- \n';
 
   let scoreMap = [];
 
   users.map((user) => {
     let obj = {};
-    obj["id"] = user["id"];
-    obj["score"] = parseFloat(scoreCalculation(user).toFixed(3));
+    obj['id'] = user['id'];
+    obj['score'] = parseFloat(scoreCalculation(user).toFixed(3));
     scoreMap.push(obj);
   });
 
@@ -74,19 +74,19 @@ async function writeToFile(users) {
 
   scoreMap.map((user, i) => {
     leaderBoardContent +=
-      i + 1 + "\t\t\t\t" + user.id + "\t - \t" + user.score + "\n";
+      i + 1 + '\t\t\t\t' + user.id + '\t - \t' + user.score + '\n';
   });
 
   console.log(scoreMap);
 
-  leaderBoardContent += "-------------------------------------- \n";
-  leaderBoardContent += "Each second spent coding         +0.01 \n";
-  leaderBoardContent += "Each keystroke                   +   1 \n";
-  leaderBoardContent += "Each modified line               +  10 \n";
+  leaderBoardContent += '-------------------------------------- \n';
+  leaderBoardContent += 'Each second spent coding        + 0.01 \n';
+  leaderBoardContent += 'Each keystroke                  +    1 \n';
+  leaderBoardContent += 'Each modified line              +   10 \n';
 
   fs.writeFileSync(leaderboardFile, leaderBoardContent, (err) => {
     if (err) {
-      console.error("Error writing leaderboard");
+      console.error('Error writing leaderboard');
     }
   });
 }
