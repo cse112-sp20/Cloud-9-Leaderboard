@@ -29,7 +29,7 @@ on top of the open source <a href="https://www.software.com/code-time">Code time
   people's changes.
   - You can do this by:
     1. Checking out your branch's base branch: <br/>
-       `git checkout [your branch's base branch]`<br/>
+       `git checkout [your branch's base branch]`
 
     2. Pulling any new changes from the remote: <br/> `git pull`
     3. Returning to your branch (checkout your branch again): <br/>
@@ -82,7 +82,6 @@ on top of the open source <a href="https://www.software.com/code-time">Code time
      dependent on code that is not in `dev`, then your branch's base branch
      is going to be the branch that contains the code that your branch depends
      on.
-     in nearly all cases, do not belong on any other branch.
 3. Create a new branch off of the base branch.
 4. Make changes to your branch.
 5. Finish making changes to your branch.
