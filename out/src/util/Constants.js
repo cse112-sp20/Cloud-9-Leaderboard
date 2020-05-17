@@ -10,12 +10,13 @@ exports.firebaseConfig = {
     appId: "1:423584327013:web:7f5f11495b4e0c0c196d8c",
     measurementId: "G-XHTKV8VR6F"
 };
-exports.DEFAULT_PASSWORD = "PASSWORD";
+exports.DEFAULT_PASSWORD = 'PASSWORD';
 exports.DEFAULT_USER_DOC = {
     keystrokes: 0,
     linesChanged: 0,
     timeInterval: 0,
     teamId: '',
+    points: 0,
 };
 exports.DEFAULT_TEAM_DOC = {
 // teamName: '',

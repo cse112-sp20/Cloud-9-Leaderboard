@@ -3,7 +3,6 @@ require("firebase/firestore");
 require("firebase/auth");
 
 import { window, ExtensionContext } from "vscode";
-import { processMetric } from "./Metric";
 import { Leaderboard } from "./Leaderboard";
 import {
   firebaseConfig,
@@ -14,9 +13,12 @@ import {
   COLLECTION_ID_TEAMS,
   GLOBAL_STATE_USER_ID,
   COLLECTION_ID_TEAM_MEMBERS,
-  GLOBAL_STATE_USER_TEAM_NAME
+  GLOBAL_STATE_USER_TEAM_NAME,
+  GLOBAL_STATE_USER_TEAM_ID
 } from "./Constants";
 import { getExtensionContext } from "./Authentication";
+
+import {processMetric, scoreCalculation} from './Metric';
 
 // Initialize Firebase
 if (!firebase.apps.length) {
@@ -55,6 +57,7 @@ export function updateStats(payload) {
   console.log('cached id is ' + id);
   window.showInformationMessage('Updated Stats!');
 
+  let today = new Date().toISOString().split('T')[0];
 
   db.collection(COLLECTION_ID_USERS)
     .doc(id)
@@ -64,38 +67,90 @@ export function updateStats(payload) {
         //Update existing stats
 
         db.collection(COLLECTION_ID_USERS)
+
           .doc(id)
-          .update({
-            keystrokes: firebase.firestore.FieldValue.increment(
-              parseInt(metricObj['keystrokes']),
-            ),
-            linesChanged: firebase.firestore.FieldValue.increment(
-              parseInt(metricObj['linesChanged']),
-            ),
-            timeInterval: firebase.firestore.FieldValue.increment(
-              parseInt(metricObj['timeInterval']),
-            ),
-          })
-          .then(() => {
-            console.log('Successfully update stats');
-          })
-          .catch(() => {
-            console.log('Error updating stats');
+          .collection('dates')
+          .doc(today)
+          .get()
+          .then((doc2) => {
+            if (doc2.exists) {
+              //Update existing stats
+              db.collection('users')
+                .doc(id)
+                .collection('dates')
+                .doc(today)
+                .update({
+                  keystrokes: firebase.firestore.FieldValue.increment(
+                    parseInt(metricObj['keystrokes']),
+                  ),
+                  linesChanged: firebase.firestore.FieldValue.increment(
+                    parseInt(metricObj['linesChanged']),
+                  ),
+                  timeInterval: firebase.firestore.FieldValue.increment(
+                    parseInt(metricObj['timeInterval']),
+                  ),
+                  points: firebase.firestore.FieldValue.increment(
+                    scoreCalculation(metricObj),
+                  ),
+                })
+                .then(() => {
+                  console.log('Successfully update stats');
+                })
+                .catch(() => {
+                  console.log('Error updating stats');
+                });
+            } else {
+              db.collection('users')
+                .doc(id)
+                .collection('dates')
+                .doc(today)
+                .set({
+                  keystrokes: metricObj['keystrokes'],
+                  linesChanged: metricObj['linesChanged'],
+                  timeInterval: metricObj['timeInterval'],
+                  points: scoreCalculation(metricObj),
+                })
+                .then(() => {
+                  console.log('Added new entry');
+                })
+                .catch(() => {
+                  console.log('ERRRRR');
+                });
+            }
+
+            db.collection('users')
+              .doc(id)
+              .update({
+                cumulativePoints: firebase.firestore.FieldValue.increment(
+                  scoreCalculation(metricObj),
+                ),
+              });
           });
       } else {
         //Update to firebase if no stats found
         db.collection(COLLECTION_ID_USERS)
           .doc(id)
+          .collection('dates')
+          .doc(today)
           .set({
             keystrokes: metricObj['keystrokes'],
             linesChanged: metricObj['linesChanged'],
             timeInterval: metricObj['timeInterval'],
+            points: scoreCalculation(metricObj),
           })
           .then(() => {
             console.log('Added new entry');
           })
           .catch(() => {
             console.log('ERRRRR');
+          });
+
+        db.collection('users')
+          .doc(id)
+          .update({
+            cumulativePoints: firebase.firestore.FieldValue.increment(
+              scoreCalculation(metricObj),
+            ),
           });
       }
     });
@@ -108,9 +163,7 @@ export async function retrieveAllUserStats(callback) {
 
   let userMap = [];
 
-  let content = '';
-
-  let allUser = users
+  users
     .get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
@@ -176,7 +229,7 @@ export async function createNewUserInFirebase(ctx: ExtensionContext, email, pass
  * @param userId
  */
 
-function addNewUserDocToDb(userId) {
+async function addNewUserDocToDb(userId) {
   console.log("Adding doc to db for new user...");
 
   if (userId === undefined) {
@@ -184,8 +237,23 @@ function addNewUserDocToDb(userId) {
     return;
   }
 
+
+  let today = new Date().toISOString().split('T')[0];
+
   db.collection(COLLECTION_ID_USERS)
     .doc(userId)
+    .set({name: 'placeholder', teamCode: '', cumulativePoints: 0})
+    .then(() => {
+      console.log('Added name');
+    })
+    .catch(() => {
+      console.log('Error creating new entry');
+    });
+
+  db.collection(COLLECTION_ID_USERS)
+    .doc(userId)
+    .collection('dates')
+    .doc(today)
     .set(DEFAULT_USER_DOC)
     .then(() => {
       console.log('Added new user: ' + userId + ' doc to db.');
@@ -270,12 +338,17 @@ export async function joinTeam(teamId, teamName) {
           .doc(userId)
           .set({})
           .then(async () => {
-            ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
+            
             await db.collection(COLLECTION_ID_USERS)
               .doc(userId)
               .update({teamId: teamId})
               .then(() => {
+                //store in context
+                ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
+                ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamId);
                 console.log('Successfully added user to team.');
+                console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
+                console.log('cachedTeamId: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID));
               })
             
           })

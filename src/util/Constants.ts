@@ -9,13 +9,14 @@ export const firebaseConfig = {
   measurementId: "G-XHTKV8VR6F"
 };
 
-export const DEFAULT_PASSWORD = "PASSWORD";
+export const DEFAULT_PASSWORD = 'PASSWORD';
 
 export const DEFAULT_USER_DOC = {
   keystrokes: 0,
   linesChanged: 0,
   timeInterval: 0,
   teamId: '',
+  points: 0,
 };
 
 

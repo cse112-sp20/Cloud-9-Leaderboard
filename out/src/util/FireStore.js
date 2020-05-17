@@ -13,10 +13,10 @@ const firebase = require("firebase/app");
 require("firebase/firestore");
 require("firebase/auth");
 const vscode_1 = require("vscode");
-const Metric_1 = require("./Metric");
 const Leaderboard_1 = require("./Leaderboard");
 const Constants_1 = require("./Constants");
 const Authentication_1 = require("./Authentication");
+const Metric_1 = require("./Metric");
 // Initialize Firebase
 if (!firebase.apps.length) {
     firebase.initializeApp(Constants_1.firebaseConfig);
@@ -49,6 +49,7 @@ function updateStats(payload) {
     let id = cachedUserId;
     console.log('cached id is ' + id);
     vscode_1.window.showInformationMessage('Updated Stats!');
+    let today = new Date().toISOString().split('T')[0];
     db.collection(Constants_1.COLLECTION_ID_USERS)
         .doc(id)
         .get()
@@ -57,32 +58,76 @@ function updateStats(payload) {
             //Update existing stats
             db.collection(Constants_1.COLLECTION_ID_USERS)
                 .doc(id)
-                .update({
-                keystrokes: firebase.firestore.FieldValue.increment(parseInt(metricObj['keystrokes'])),
-                linesChanged: firebase.firestore.FieldValue.increment(parseInt(metricObj['linesChanged'])),
-                timeInterval: firebase.firestore.FieldValue.increment(parseInt(metricObj['timeInterval'])),
-            })
-                .then(() => {
-                console.log('Successfully update stats');
-            })
-                .catch(() => {
-                console.log('Error updating stats');
+                .collection('dates')
+                .doc(today)
+                .get()
+                .then((doc2) => {
+                if (doc2.exists) {
+                    //Update existing stats
+                    db.collection('users')
+                        .doc(id)
+                        .collection('dates')
+                        .doc(today)
+                        .update({
+                        keystrokes: firebase.firestore.FieldValue.increment(parseInt(metricObj['keystrokes'])),
+                        linesChanged: firebase.firestore.FieldValue.increment(parseInt(metricObj['linesChanged'])),
+                        timeInterval: firebase.firestore.FieldValue.increment(parseInt(metricObj['timeInterval'])),
+                        points: firebase.firestore.FieldValue.increment(Metric_1.scoreCalculation(metricObj)),
+                    })
+                        .then(() => {
+                        console.log('Successfully update stats');
+                    })
+                        .catch(() => {
+                        console.log('Error updating stats');
+                    });
+                }
+                else {
+                    db.collection('users')
+                        .doc(id)
+                        .collection('dates')
+                        .doc(today)
+                        .set({
+                        keystrokes: metricObj['keystrokes'],
+                        linesChanged: metricObj['linesChanged'],
+                        timeInterval: metricObj['timeInterval'],
+                        points: Metric_1.scoreCalculation(metricObj),
+                    })
+                        .then(() => {
+                        console.log('Added new entry');
+                    })
+                        .catch(() => {
+                        console.log('ERRRRR');
+                    });
+                }
+                db.collection('users')
+                    .doc(id)
+                    .update({
+                    cumulativePoints: firebase.firestore.FieldValue.increment(Metric_1.scoreCalculation(metricObj)),
+                });
             });
         }
         else {
             //Update to firebase if no stats found
             db.collection(Constants_1.COLLECTION_ID_USERS)
                 .doc(id)
+                .collection('dates')
+                .doc(today)
                 .set({
                 keystrokes: metricObj['keystrokes'],
                 linesChanged: metricObj['linesChanged'],
                 timeInterval: metricObj['timeInterval'],
+                points: Metric_1.scoreCalculation(metricObj),
             })
                 .then(() => {
                 console.log('Added new entry');
             })
                 .catch(() => {
                 console.log('ERRRRR');
+            });
+            db.collection('users')
+                .doc(id)
+                .update({
+                cumulativePoints: firebase.firestore.FieldValue.increment(Metric_1.scoreCalculation(metricObj)),
             });
         }
     });
@@ -93,8 +138,7 @@ function retrieveAllUserStats(callback) {
         let db = firebase.firestore();
         let users = db.collection(Constants_1.COLLECTION_ID_USERS);
         let userMap = [];
-        let content = '';
-        let allUser = users
+        users
             .get()
             .then((snapshot) => {
             snapshot.forEach((doc) => {
@@ -155,20 +199,34 @@ exports.createNewUserInFirebase = createNewUserInFirebase;
  * @param userId
  */
 function addNewUserDocToDb(userId) {
-    console.log("Adding doc to db for new user...");
-    if (userId === undefined) {
-        console.log('userId undefined.');
-        return;
-    }
-    db.collection(Constants_1.COLLECTION_ID_USERS)
-        .doc(userId)
-        .set(Constants_1.DEFAULT_USER_DOC)
-        .then(() => {
-        console.log('Added new user: ' + userId + ' doc to db.');
-        getUserDocWithId(userId);
-    })
-        .catch(() => {
-        console.log('Error adding new user: ' + userId + ' doc to db.');
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log("Adding doc to db for new user...");
+        if (userId === undefined) {
+            console.log('userId undefined.');
+            return;
+        }
+        let today = new Date().toISOString().split('T')[0];
+        db.collection(Constants_1.COLLECTION_ID_USERS)
+            .doc(userId)
+            .set({ name: 'placeholder', teamCode: '', cumulativePoints: 0 })
+            .then(() => {
+            console.log('Added name');
+        })
+            .catch(() => {
+            console.log('Error creating new entry');
+        });
+        db.collection(Constants_1.COLLECTION_ID_USERS)
+            .doc(userId)
+            .collection('dates')
+            .doc(today)
+            .set(Constants_1.DEFAULT_USER_DOC)
+            .then(() => {
+            console.log('Added new user: ' + userId + ' doc to db.');
+            getUserDocWithId(userId);
+        })
+            .catch(() => {
+            console.log('Error adding new user: ' + userId + ' doc to db.');
+        });
     });
 }
 /**
