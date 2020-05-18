@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createCommands = void 0;
 const vscode_1 = require("vscode");
 const DataController_1 = require("./DataController");
 const MenuManager_1 = require("./menu/MenuManager");
@@ -22,6 +23,7 @@ const ReportManager_1 = require("./menu/ReportManager");
 const FileManager_1 = require("./managers/FileManager");
 const Leaderboard_1 = require("../src/util/Leaderboard");
 const Authentication_1 = require("../src/util/Authentication");
+const Team_1 = require("../src/util/Team");
 function createCommands(kpmController) {
     let cmds = [];
     cmds.push(kpmController);
@@ -134,10 +136,21 @@ function createCommands(kpmController) {
     // Cloud9: command used to create a new team
     cmds.push(vscode_1.commands.registerCommand('cloud9.createTeam', () => {
         console.log('Cloud9: CREATE A NEW TEAM');
+        Team_1.createAndJoinTeam();
+    }));
+    // Cloud9: command used to retrieve team code
+    cmds.push(vscode_1.commands.registerCommand('cloud9.getTeamNameAndId', () => {
+        console.log('Cloud9: GET TEAM NAME AND ID');
+        Team_1.getTeamNameAndTeamId();
+    }));
+    cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
+        console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
+        Team_1.removeTeamNameAndId();
     }));
     // Cloud9: command used to join a new team
     cmds.push(vscode_1.commands.registerCommand('cloud9.joinTeam', () => {
         console.log('Cloud9: JOIN A TEAM');
+        Team_1.joinTeam();
     }));
     // Cloud9: command used to clear the cached id (for debugging and testing only)
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearUserId', () => {

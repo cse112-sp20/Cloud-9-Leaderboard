@@ -34,6 +34,7 @@ import {sendOfflineData} from './managers/FileManager';
 import {displayLeaderboard} from '../src/util/Leaderboard';
 
 import {clearCachedUserId} from '../src/util/Authentication';
+import { createAndJoinTeam, getTeamNameAndTeamId, removeTeamNameAndId, joinTeam } from '../src/util/Team';
 
 export function createCommands(
   kpmController: KpmManager,
@@ -223,15 +224,34 @@ export function createCommands(
   cmds.push(
     commands.registerCommand('cloud9.createTeam', () => {
       console.log('Cloud9: CREATE A NEW TEAM');
+      createAndJoinTeam();
     }),
+  );
+
+  // Cloud9: command used to retrieve team code
+  cmds.push(
+    commands.registerCommand('cloud9.getTeamNameAndId', () => {
+      console.log('Cloud9: GET TEAM NAME AND ID');
+      getTeamNameAndTeamId();
+    }),
+  );
+
+  cmds.push(
+    commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
+      console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
+      removeTeamNameAndId();
+    })
   );
 
   // Cloud9: command used to join a new team
   cmds.push(
     commands.registerCommand('cloud9.joinTeam', () => {
       console.log('Cloud9: JOIN A TEAM');
+      joinTeam();
     }),
   );
+
+
 
   // Cloud9: command used to clear the cached id (for debugging and testing only)
   cmds.push(

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.storeCurrentPayload = exports.getCurrentPayloadFile = exports.sendBatchPayload = exports.batchSendPayloadData = exports.getLastSavedKeystrokesStats = exports.batchSendData = exports.batchSendArrayData = exports.sendOfflineData = exports.sendOfflineEvents = exports.sendOfflineTimeData = exports.clearLastSavedKeystrokeStats = void 0;
 const HttpClient_1 = require("../http/HttpClient");
 const Util_1 = require("../Util");
 const TimeSummaryData_1 = require("../storage/TimeSummaryData");

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.KpmProvider = exports.connectKpmTreeView = void 0;
 const vscode_1 = require("vscode");
 const KpmProviderManager_1 = require("./KpmProviderManager");
 const EventManager_1 = require("../managers/EventManager");

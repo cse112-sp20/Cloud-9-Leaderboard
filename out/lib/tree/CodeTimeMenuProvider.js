@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CodeTimeMenuProvider = exports.connectCodeTimeMenuTreeView = void 0;
 const vscode_1 = require("vscode");
 const KpmProviderManager_1 = require("./KpmProviderManager");
 const Util_1 = require("../Util");

@@ -65,7 +65,15 @@
       },
       {
         "command": "cloud9.debugClearUserId",
-        "title": "Cloud9: Debug clear User Id"
+        "title": "Cloud9 DEBUG: Clear User Id"
+      },
+      {
+        "command": "cloud9.getTeamNameAndId",
+        "title": "Cloud9: Get Team Name and ID"
+      },
+      {
+        "command": "cloud9.debugClearTeamNameAndId",
+        "title": "Cloud9 DEBUG: Clear Team name and ID"
       },
       {
         "command": "codetime.howardPush",

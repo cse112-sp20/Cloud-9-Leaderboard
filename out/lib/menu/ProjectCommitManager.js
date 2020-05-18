@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProjectCommitManager = void 0;
 const vscode_1 = require("vscode");
 const HttpClient_1 = require("../http/HttpClient");
 const Util_1 = require("../Util");

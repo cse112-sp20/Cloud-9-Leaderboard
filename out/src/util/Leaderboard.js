@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.displayLeaderboard = exports.getLeaderboardFile = exports.Leaderboard = void 0;
 const vscode_1 = require("vscode");
 const Util_1 = require("../../lib/Util");
 const Firestore_1 = require("./Firestore");

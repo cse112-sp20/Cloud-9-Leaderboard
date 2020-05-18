@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.scoreCalculation = exports.processMetric = void 0;
 /*
  * Function for extract codetime payload for leaderboard metric
  */

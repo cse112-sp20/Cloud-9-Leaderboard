@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.WallClockManager = void 0;
 const Util_1 = require("../Util");
 const vscode_1 = require("vscode");
 const SessionSummaryData_1 = require("../storage/SessionSummaryData");
