@@ -3,6 +3,8 @@ import {getSoftwareDir, isWindows} from '../../lib/Util';
 import {retrieveAllUserStats, retrieveTeamMemberStats} from './Firestore';
 import {scoreCalculation} from './Metric';
 import {stat} from 'fs';
+import {getExtensionContext} from './Authentication';
+import {GLOBAL_STATE_USER_ID} from './Constants';
 const fs = require('fs');
 
 export class Leaderboard {
@@ -83,9 +85,17 @@ async function writeToFile(users, isTeam) {
   } else {
     leaderboardFile = getLeaderboardFile();
   }
+  const ctx = getExtensionContext();
+  let cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   let leaderBoardContent = '';
 
-  leaderBoardContent += '  L  E  A  D  E  R  B  O  A  R  D  \n';
+  if (isTeam) {
+    leaderBoardContent += '            T  E  A  M \n';
+  } else {
+    leaderBoardContent += '         G  L  O  B  A  L\n';
+  }
+
+  leaderBoardContent += '   L  E  A  D  E  R  B  O  A  R  D  \n';
   leaderBoardContent += '-------------------------------------- \n';
   leaderBoardContent +=
     'RANK' + '\t\t' + 'NAME' + '\t\t\t\t\t\t' + 'SCORE   \n';
@@ -95,6 +105,7 @@ async function writeToFile(users, isTeam) {
 
   users.map((user) => {
     let obj = {};
+    obj['id'] = user.id;
     obj['name'] = user['name'];
     obj['score'] = parseFloat(user['cumulativePoints']).toFixed(3);
     scoreMap.push(obj);
@@ -103,8 +114,20 @@ async function writeToFile(users, isTeam) {
   scoreMap = scoreMap.sort((a, b) => (a.score < b.score ? 1 : -1));
 
   scoreMap.map((user, i) => {
-    leaderBoardContent +=
-      i + 1 + '\t\t\t\t' + user.name + '\t - \t' + user.score + '\n';
+    if (i == 0) {
+      leaderBoardContent += '\uD83E\uDD47 ';
+    } else if (i == 1) {
+      leaderBoardContent += '\uD83E\uDD48 ';
+    } else if (i == 2) {
+      leaderBoardContent += '\uD83E\uDD49 ';
+    }
+    if (cachedUserId == user.id) {
+      leaderBoardContent +=
+        i + 1 + '\t\t' + user.name + ' (YOU) \t - \t' + user.score + '\n';
+    } else {
+      leaderBoardContent +=
+        i + 1 + '\t\t' + user.name + '\t - \t' + user.score + '\n';
+    }
   });
 
   console.log(scoreMap);

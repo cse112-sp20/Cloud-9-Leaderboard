@@ -13,6 +13,7 @@ import {
   GLOBAL_STATE_USER_ID,
   COLLECTION_ID_TEAM_MEMBERS,
   GLOBAL_STATE_USER_TEAM_ID,
+  GLOBAL_STATE_USER_TEAM_NAME,
 } from './Constants';
 import {getExtensionContext} from './Authentication';
 import {processMetric, scoreCalculation} from './Metric';
@@ -389,7 +390,7 @@ export async function joinTeamWithTeamId(teamId) {
         .update({teamCode: teamId})
         .then(() => {
           //store in context
-          //ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
+          // ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
           ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamId);
 
           //console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
@@ -428,6 +429,10 @@ export async function checkIfInTeam() {
         } else {
           console.log('Team code in db: ' + teamField);
           inTeam = true;
+          ctx.globalState.update(GLOBAL_STATE_USER_ID, teamField);
+          console.log(
+            'cachedUserId: ' + ctx.globalState.get(GLOBAL_STATE_USER_ID),
+          );
         }
       }
     })

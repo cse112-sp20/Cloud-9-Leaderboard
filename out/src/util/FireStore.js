@@ -355,7 +355,7 @@ function joinTeamWithTeamId(teamId) {
                 .update({ teamCode: teamId })
                 .then(() => {
                 //store in context
-                //ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
+                // ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, teamId);
                 //console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
                 console.log('cachedTeamId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID));
@@ -393,6 +393,8 @@ function checkIfInTeam() {
                 else {
                     console.log('Team code in db: ' + teamField);
                     inTeam = true;
+                    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, teamField);
+                    console.log('cachedUserId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID));
                 }
             }
         })

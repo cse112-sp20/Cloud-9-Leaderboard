@@ -13,6 +13,8 @@ exports.displayTeamLeaderboard = exports.displayLeaderboard = exports.getTeamLea
 const vscode_1 = require("vscode");
 const Util_1 = require("../../lib/Util");
 const Firestore_1 = require("./Firestore");
+const Authentication_1 = require("./Authentication");
+const Constants_1 = require("./Constants");
 const fs = require('fs');
 class Leaderboard {
     constructor() { }
@@ -93,8 +95,16 @@ function writeToFile(users, isTeam) {
         else {
             leaderboardFile = getLeaderboardFile();
         }
+        const ctx = Authentication_1.getExtensionContext();
+        let cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         let leaderBoardContent = '';
-        leaderBoardContent += '  L  E  A  D  E  R  B  O  A  R  D  \n';
+        if (isTeam) {
+            leaderBoardContent += '            T  E  A  M \n';
+        }
+        else {
+            leaderBoardContent += '         G  L  O  B  A  L\n';
+        }
+        leaderBoardContent += '   L  E  A  D  E  R  B  O  A  R  D  \n';
         leaderBoardContent += '-------------------------------------- \n';
         leaderBoardContent +=
             'RANK' + '\t\t' + 'NAME' + '\t\t\t\t\t\t' + 'SCORE   \n';
@@ -102,14 +112,30 @@ function writeToFile(users, isTeam) {
         let scoreMap = [];
         users.map((user) => {
             let obj = {};
+            obj['id'] = user.id;
             obj['name'] = user['name'];
             obj['score'] = parseFloat(user['cumulativePoints']).toFixed(3);
             scoreMap.push(obj);
         });
         scoreMap = scoreMap.sort((a, b) => (a.score < b.score ? 1 : -1));
         scoreMap.map((user, i) => {
-            leaderBoardContent +=
-                i + 1 + '\t\t\t\t' + user.name + '\t - \t' + user.score + '\n';
+            if (i == 0) {
+                leaderBoardContent += '\uD83E\uDD47 ';
+            }
+            else if (i == 1) {
+                leaderBoardContent += '\uD83E\uDD48 ';
+            }
+            else if (i == 2) {
+                leaderBoardContent += '\uD83E\uDD49 ';
+            }
+            if (cachedUserId == user.id) {
+                leaderBoardContent +=
+                    i + 1 + '\t\t' + user.name + ' (YOU) \t - \t' + user.score + '\n';
+            }
+            else {
+                leaderBoardContent +=
+                    i + 1 + '\t\t' + user.name + '\t - \t' + user.score + '\n';
+            }
         });
         console.log(scoreMap);
         leaderBoardContent += '-------------------------------------- \n';
