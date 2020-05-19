@@ -451,7 +451,7 @@ export async function checkIfInTeam() {
         } else {
           console.log('Team code in db: ' + teamField);
           inTeam = true;
-          ctx.globalState.update(GLOBAL_STATE_USER_ID, teamField);
+          ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamField);
           console.log(
             'cachedUserId: ' + ctx.globalState.get(GLOBAL_STATE_USER_ID),
           );
