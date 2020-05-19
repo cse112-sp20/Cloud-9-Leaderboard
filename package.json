@@ -84,8 +84,8 @@
       "activitybar": [
         {
           "id": "code-time",
-          "title": "Code Time",
-          "icon": "resources/dark/paw-outlined.svg"
+          "title": "Cloud9",
+          "icon": "images/cloud9-vscode-icon.svg"
         }
       ]
     },
