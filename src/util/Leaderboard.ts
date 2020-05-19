@@ -88,18 +88,11 @@ async function writeToFile(users, isTeam) {
   const ctx = getExtensionContext();
   let cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   let leaderBoardContent = '';
-
   if (isTeam) {
-    leaderBoardContent += '            T  E  A  M \n';
+    leaderBoardContent += 'LEADERBOARD \t (Private)\n\n';
   } else {
-    leaderBoardContent += '         G  L  O  B  A  L\n';
+    leaderBoardContent += 'LEADERBOARD \t (Global)\n\n';
   }
-
-  leaderBoardContent += '   L  E  A  D  E  R  B  O  A  R  D  \n';
-  leaderBoardContent += '-------------------------------------- \n';
-  leaderBoardContent +=
-    'RANK' + '\t\t' + 'NAME' + '\t\t\t\t\t\t' + 'SCORE   \n';
-  leaderBoardContent += '-------------------------------------- \n';
 
   let scoreMap = [];
 
@@ -115,26 +108,50 @@ async function writeToFile(users, isTeam) {
     return b.score - a.score;
   });
 
+  let rankSection = '';
+  let username = '';
+
   scoreMap.map((user, i) => {
     if (i == 0) {
-      leaderBoardContent += '\uD83E\uDD47 ';
+      rankSection += '\uD83E\uDD47 ';
     } else if (i == 1) {
-      leaderBoardContent += '\uD83E\uDD48 ';
+      rankSection += '\uD83E\uDD48 ';
     } else if (i == 2) {
-      leaderBoardContent += '\uD83E\uDD49 ';
+      rankSection += '\uD83E\uDD49 ';
+    } else {
+      rankSection += '   ';
     }
     if (cachedUserId == user.id) {
-      leaderBoardContent +=
-        i + 1 + '\t\t' + user.name + ' (YOU) \t - \t' + user.score + '\n';
+      username = user.name;
+      rankSection +=
+        i + 1 + '\t\t' + user.name + ' (YOU) \t\t' + user.score + '\n';
     } else {
-      leaderBoardContent +=
-        i + 1 + '\t\t' + user.name + '\t - \t' + user.score + '\n';
+      rankSection += i + 1 + '\t\t' + user.name + '\t\t' + user.score + '\n';
     }
   });
 
-  console.log(scoreMap);
+  leaderBoardContent += 'Username \t : \t ' + username + '\n';
+  leaderBoardContent += 'Teamname \t : \t ' + '______' + '\n\n';
 
-  leaderBoardContent += '-------------------------------------- \n';
+  leaderBoardContent +=
+    '============================================================\n';
+  leaderBoardContent += 'LEADERBOARD RANKING \n';
+  leaderBoardContent +=
+    '============================================================\n\n';
+
+  leaderBoardContent += 'RANK     NAME                         SCORE\n';
+  leaderBoardContent += '----     ----                         -----\n';
+  leaderBoardContent += rankSection + '\n';
+
+  //STATS HERE, TODO
+
+  leaderBoardContent +=
+    '============================================================\n';
+  leaderBoardContent += 'Metric \n';
+  leaderBoardContent +=
+    '============================================================\n\n';
+
+  console.log(scoreMap);
   leaderBoardContent += 'Each second spent coding        + 0.01 \n';
   leaderBoardContent += 'Each keystroke                  +    1 \n';
   leaderBoardContent += 'Each modified line              +   10 \n';
