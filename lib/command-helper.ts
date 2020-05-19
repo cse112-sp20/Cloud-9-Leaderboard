@@ -238,8 +238,8 @@ export function createCommands(
 
   cmds.push(
     commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
-      console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
-      removeTeamNameAndId();
+      console.log('cloud9: DEBUG CLEAR CACHED TEAM NAME AND ID');
+      //removeTeamNameAndId();
     })
   );
 
@@ -256,8 +256,8 @@ export function createCommands(
   // Cloud9: command used to clear the cached id (for debugging and testing only)
   cmds.push(
     commands.registerCommand('cloud9.debugClearUserId', () => {
-      console.log('Cloud9: CLEAR CACHED ID');
-      clearCachedUserId();
+      console.log('Cloud9: DEBUG CLEAR CACHED ID');
+      //clearCachedUserId();
     }),
   );
 
