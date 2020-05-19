@@ -62,6 +62,26 @@ function displayLeaderboard() {
         // await writeLeaderboard();
         yield Firestore_1.retrieveAllUserStats(writeToFile);
         let filePath = getLeaderboardFile();
+        try {
+            if (!fs.existsSync(filePath)) {
+                console.log('File not exist');
+                fs.writeFileSync(filePath, '', (err) => {
+                    // throws an error, you could also catch it here
+                    if (err) {
+                        console.log('Error writing intially');
+                        throw err;
+                    }
+                    // success case, the file was saved
+                    console.log('Written empty string');
+                });
+            }
+            else {
+                console.log('File exist');
+            }
+        }
+        catch (err) {
+            console.error(err);
+        }
         vscode_1.workspace.openTextDocument(filePath).then((doc) => {
             // only focus if it's not already open
             vscode_1.window.showTextDocument(doc, vscode_1.ViewColumn.One, false).then((e) => {
@@ -77,6 +97,26 @@ function displayTeamLeaderboard() {
         // await writeLeaderboard();
         yield Firestore_1.retrieveTeamMemberStats(writeToFile);
         let filePath = getTeamLeaderboardFile();
+        try {
+            if (!fs.existsSync(filePath)) {
+                console.log('File not exist');
+                fs.writeFileSync(filePath, '', (err) => {
+                    // throws an error, you could also catch it here
+                    if (err) {
+                        console.log('Error writing intially');
+                        throw err;
+                    }
+                    // success case, the file was saved
+                    console.log('Written empty string');
+                });
+            }
+            else {
+                console.log('File exist');
+            }
+        }
+        catch (err) {
+            console.error(err);
+        }
         vscode_1.workspace.openTextDocument(filePath).then((doc) => {
             // only focus if it's not already open
             vscode_1.window.showTextDocument(doc, vscode_1.ViewColumn.One, false).then((e) => {

@@ -270,7 +270,7 @@ export function createCommands(
   cmds.push(
     commands.registerCommand('cloud9.debugClearUserId', () => {
       console.log('Cloud9: DEBUG CLEAR CACHED ID');
-      //clearCachedUserId();
+      clearCachedUserId();
     }),
   );
 

@@ -56,6 +56,14 @@
         "title": "Cloud9: Join a team"
       },
       {
+        "command": "cloud9.debugClearUserId",
+        "title": "Cloud9 DEBUG: Clear User Id"
+      },
+      {
+        "command": "cloud9.debugClearTeamNameAndId",
+        "title": "Cloud9 DEBUG: Clear Team name and ID"
+      },
+      {
         "command": "cloud9.leaderboard",
         "title": "Cloud9: Leaderboard"
       },
@@ -88,8 +96,8 @@
       "activitybar": [
         {
           "id": "code-time",
-          "title": "Code Time",
-          "icon": "resources/dark/paw-outlined.svg"
+          "title": "Cloud9",
+          "icon": "images/cloud9-vscode-icon.svg"
         }
       ]
     },
@@ -147,10 +155,5 @@
     "rxjs": "^6.5.5",
     "unique-names-generator": "^4.2.0",
     "vsls": "0.3.1291"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   }
 }

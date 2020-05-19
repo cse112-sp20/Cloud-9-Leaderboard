@@ -55,6 +55,26 @@ export async function displayLeaderboard() {
   await retrieveAllUserStats(writeToFile);
 
   let filePath = getLeaderboardFile();
+
+  try {
+    if (!fs.existsSync(filePath)) {
+      console.log('File not exist');
+      fs.writeFileSync(filePath, '', (err) => {
+        // throws an error, you could also catch it here
+        if (err) {
+          console.log('Error writing intially');
+          throw err;
+        }
+        // success case, the file was saved
+        console.log('Written empty string');
+      });
+    } else {
+      console.log('File exist');
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
   workspace.openTextDocument(filePath).then((doc) => {
     // only focus if it's not already open
     window.showTextDocument(doc, ViewColumn.One, false).then((e) => {
@@ -69,6 +89,26 @@ export async function displayTeamLeaderboard() {
   await retrieveTeamMemberStats(writeToFile);
 
   let filePath = getTeamLeaderboardFile();
+
+  try {
+    if (!fs.existsSync(filePath)) {
+      console.log('File not exist');
+      fs.writeFileSync(filePath, '', (err) => {
+        // throws an error, you could also catch it here
+        if (err) {
+          console.log('Error writing intially');
+          throw err;
+        }
+        // success case, the file was saved
+        console.log('Written empty string');
+      });
+    } else {
+      console.log('File exist');
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
   workspace.openTextDocument(filePath).then((doc) => {
     // only focus if it's not already open
     window.showTextDocument(doc, ViewColumn.One, false).then((e) => {

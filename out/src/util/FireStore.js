@@ -399,7 +399,7 @@ function checkIfInTeam() {
                 else {
                     console.log('Team code in db: ' + teamField);
                     inTeam = true;
-                    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, teamField);
+                    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, teamField);
                     console.log('cachedUserId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID));
                 }
             }
