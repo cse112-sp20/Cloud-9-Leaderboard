@@ -149,6 +149,7 @@ function writeToFile(users, isTeam) {
         leaderBoardContent += 'RANK     NAME                         SCORE\n';
         leaderBoardContent += '----     ----                         -----\n';
         leaderBoardContent += rankSection + '\n';
+        //STATS HERE, TODO
         leaderBoardContent +=
             '============================================================\n';
         leaderBoardContent += 'Metric \n';

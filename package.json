@@ -48,10 +48,6 @@
   "contributes": {
     "commands": [
       {
-        "command": "codetime.softwarePaletteMenu",
-        "title": "Code Time: Menu options"
-      },
-      {
         "command": "cloud9.createTeam",
         "title": "Cloud9: Create a team"
       },
@@ -68,32 +64,8 @@
         "title": "Cloud9: Team Leaderboard"
       },
       {
-        "command": "cloud9.debugClearUserId",
-        "title": "Cloud9 DEBUG: Clear User Id"
-      },
-      {
         "command": "cloud9.getTeamNameAndId",
-        "title": "Cloud9: Get Team Name and ID"
-      },
-      {
-        "command": "cloud9.debugClearTeamNameAndId",
-        "title": "Cloud9 DEBUG: Clear Team name and ID"
-      },
-      {
-        "command": "codetime.howardPush",
-        "title": "push me"
-      },
-      {
-        "command": "codetime.codeTimeMetrics",
-        "title": "Code Time: View summary"
-      },
-      {
-        "command": "codetime.softwareKpmDashboard",
-        "title": "Code Time: See advanced metrics"
-      },
-      {
-        "command": "codetime.displayReadme",
-        "title": "Code Time: Learn more"
+        "title": "Cloud9: Get Team ID"
       }
     ],
     "configuration": {

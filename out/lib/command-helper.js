@@ -22,7 +22,6 @@ const CodeTimeTeamProvider_1 = require("./tree/CodeTimeTeamProvider");
 const ReportManager_1 = require("./menu/ReportManager");
 const FileManager_1 = require("./managers/FileManager");
 const Leaderboard_1 = require("../src/util/Leaderboard");
-const Authentication_1 = require("../src/util/Authentication");
 const Team_1 = require("../src/util/Team");
 function createCommands(kpmController) {
     let cmds = [];
@@ -158,8 +157,8 @@ function createCommands(kpmController) {
     }));
     // Cloud9: command used to clear the cached id (for debugging and testing only)
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearUserId', () => {
-        console.log('Cloud9: CLEAR CACHED ID');
-        Authentication_1.clearCachedUserId();
+        console.log('Cloud9: DEBUG CLEAR CACHED ID');
+        //clearCachedUserId();
     }));
     // DISPLAY PROJECT METRICS REPORT
     cmds.push(vscode_1.commands.registerCommand('codetime.generateProjectSummary', () => {
