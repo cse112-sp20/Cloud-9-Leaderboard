@@ -7,12 +7,14 @@ import {Leaderboard} from './Leaderboard';
 import {
   firebaseConfig,
   DEFAULT_USER_DOC,
+  DEFAULT_USER_DOC_TOP,
   DEFAULT_TEAM_DOC,
   COLLECTION_ID_USERS,
   COLLECTION_ID_TEAMS,
   GLOBAL_STATE_USER_ID,
   COLLECTION_ID_TEAM_MEMBERS,
   GLOBAL_STATE_USER_TEAM_ID,
+  GLOBAL_STATE_USER_TEAM_NAME,
 } from './Constants';
 import {getExtensionContext} from './Authentication';
 import {processMetric, scoreCalculation} from './Metric';
@@ -77,7 +79,7 @@ export function updateStats(payload) {
           .then((doc2) => {
             if (doc2.exists) {
               //Update existing stats
-              db.collection('users')
+              db.collection(COLLECTION_ID_USERS)
                 .doc(id)
                 .collection('dates')
                 .doc(today)
@@ -102,7 +104,7 @@ export function updateStats(payload) {
                   console.log('Error updating stats');
                 });
             } else {
-              db.collection('users')
+              db.collection(COLLECTION_ID_USERS)
                 .doc(id)
                 .collection('dates')
                 .doc(today)
@@ -120,11 +122,20 @@ export function updateStats(payload) {
                 });
             }
 
-            db.collection('users')
+            db.collection(COLLECTION_ID_USERS)
               .doc(id)
               .update({
                 cumulativePoints: firebase.firestore.FieldValue.increment(
                   scoreCalculation(metricObj),
+                ),
+                keystrokes: firebase.firestore.FieldValue.increment(
+                  parseInt(metricObj['keystrokes']),
+                ),
+                linesChanged: firebase.firestore.FieldValue.increment(
+                  parseInt(metricObj['linesChanged']),
+                ),
+                timeInterval: firebase.firestore.FieldValue.increment(
+                  parseInt(metricObj['timeInterval']),
                 ),
               });
           });
@@ -147,14 +158,60 @@ export function updateStats(payload) {
             console.log('ERRRRR');
           });
 
-        db.collection('users')
+        db.collection(COLLECTION_ID_USERS)
           .doc(id)
           .update({
             cumulativePoints: firebase.firestore.FieldValue.increment(
               scoreCalculation(metricObj),
             ),
+            keystrokes: firebase.firestore.FieldValue.increment(
+              parseInt(metricObj['keystrokes']),
+            ),
+            linesChanged: firebase.firestore.FieldValue.increment(
+              parseInt(metricObj['linesChanged']),
+            ),
+            timeInterval: firebase.firestore.FieldValue.increment(
+              parseInt(metricObj['timeInterval']),
+            ),
           });
       }
+    });
+}
+
+export async function retrieveTeamMemberStats(callback) {
+  let db = firebase.firestore();
+
+  let users = db.collection(COLLECTION_ID_USERS);
+  const ctx = getExtensionContext();
+  let cachedTeamID = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+  let userMap = [];
+  users
+    .where('teamCode', '==', cachedTeamID)
+    .get()
+    .then((snapshot) => {
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+        return userMap;
+      }
+
+      snapshot.forEach((doc) => {
+        Leaderboard.addUser(doc.id, doc.data());
+        let currUser = {};
+        currUser['id'] = doc.id;
+        for (let key in doc.data()) {
+          currUser[key] = doc.data()[key];
+        }
+        userMap.push(currUser);
+        // console.log(doc.id + "=>" + doc.data());
+      });
+
+      return userMap;
+    })
+    .then((userMap) => {
+      callback(userMap, true);
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
     });
 }
 
@@ -182,7 +239,7 @@ export async function retrieveAllUserStats(callback) {
       return userMap;
     })
     .then((userMap) => {
-      callback(userMap);
+      callback(userMap, false);
     })
     .catch((err) => {
       console.log('Error getting documents', err);
@@ -243,7 +300,10 @@ async function addNewUserDocToDb(userId) {
 
   db.collection(COLLECTION_ID_USERS)
     .doc(userId)
-    .set({name: generateRandomName(), teamCode: '', cumulativePoints: 0})
+    .set({
+      name: generateRandomName(),
+      ...DEFAULT_USER_DOC_TOP,
+    })
     .then(() => {
       console.log('Added name');
     })
@@ -352,7 +412,7 @@ export async function joinTeamWithTeamId(teamId) {
         .update({teamCode: teamId})
         .then(() => {
           //store in context
-          //ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
+          // ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
           ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamId);
 
           //console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
@@ -391,6 +451,10 @@ export async function checkIfInTeam() {
         } else {
           console.log('Team code in db: ' + teamField);
           inTeam = true;
+          ctx.globalState.update(GLOBAL_STATE_USER_ID, teamField);
+          console.log(
+            'cachedUserId: ' + ctx.globalState.get(GLOBAL_STATE_USER_ID),
+          );
         }
       }
     })

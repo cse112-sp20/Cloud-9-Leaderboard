@@ -132,6 +132,10 @@ function createCommands(kpmController) {
     cmds.push(vscode_1.commands.registerCommand('cloud9.leaderboard', () => {
         Leaderboard_1.displayLeaderboard();
     }));
+    // Cloud9: command used to view private team leaderboard
+    cmds.push(vscode_1.commands.registerCommand('cloud9.teamLeaderboard', () => {
+        Leaderboard_1.displayTeamLeaderboard();
+    }));
     // Cloud9: command used to create a new team
     cmds.push(vscode_1.commands.registerCommand('cloud9.createTeam', () => {
         console.log('Cloud9: CREATE A NEW TEAM');
@@ -143,8 +147,8 @@ function createCommands(kpmController) {
         Team_1.getTeamNameAndTeamId();
     }));
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
-        console.log('cloud9: DEBUG CLEAR CACHED TEAM NAME AND ID');
-        //removeTeamNameAndId();
+        console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
+        Team_1.removeTeamNameAndId();
     }));
     // Cloud9: command used to join a new team
     cmds.push(vscode_1.commands.registerCommand('cloud9.joinTeam', () => {

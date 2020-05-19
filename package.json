@@ -60,6 +60,10 @@
         "title": "Cloud9: Leaderboard"
       },
       {
+        "command": "cloud9.teamLeaderboard",
+        "title": "Cloud9: Team Leaderboard"
+      },
+      {
         "command": "cloud9.getTeamNameAndId",
         "title": "Cloud9: Get Team ID"
       }
