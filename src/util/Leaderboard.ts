@@ -111,7 +111,9 @@ async function writeToFile(users, isTeam) {
     scoreMap.push(obj);
   });
 
-  scoreMap = scoreMap.sort((a, b) => (a.score < b.score ? 1 : -1));
+  scoreMap.sort(function (a, b) {
+    return b.score - a.score;
+  });
 
   scoreMap.map((user, i) => {
     if (i == 0) {

@@ -117,7 +117,11 @@ function writeToFile(users, isTeam) {
             obj['score'] = parseFloat(user['cumulativePoints']).toFixed(3);
             scoreMap.push(obj);
         });
-        scoreMap = scoreMap.sort((a, b) => (a.score < b.score ? 1 : -1));
+        // TODO : Sometimes objects are not sorted correctly
+        // scoreMap = scoreMap.sort((a, b) => (a.score < b.score ? 1 : -1));
+        scoreMap.sort(function (a, b) {
+            return b.score - a.score;
+        });
         scoreMap.map((user, i) => {
             if (i == 0) {
                 leaderBoardContent += '\uD83E\uDD47 ';

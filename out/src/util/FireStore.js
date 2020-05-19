@@ -110,6 +110,9 @@ function updateStats(payload) {
                     .doc(id)
                     .update({
                     cumulativePoints: firebase.firestore.FieldValue.increment(Metric_1.scoreCalculation(metricObj)),
+                    keystrokes: firebase.firestore.FieldValue.increment(parseInt(metricObj['keystrokes'])),
+                    linesChanged: firebase.firestore.FieldValue.increment(parseInt(metricObj['linesChanged'])),
+                    timeInterval: firebase.firestore.FieldValue.increment(parseInt(metricObj['timeInterval'])),
                 });
             });
         }
@@ -135,6 +138,9 @@ function updateStats(payload) {
                 .doc(id)
                 .update({
                 cumulativePoints: firebase.firestore.FieldValue.increment(Metric_1.scoreCalculation(metricObj)),
+                keystrokes: firebase.firestore.FieldValue.increment(parseInt(metricObj['keystrokes'])),
+                linesChanged: firebase.firestore.FieldValue.increment(parseInt(metricObj['linesChanged'])),
+                timeInterval: firebase.firestore.FieldValue.increment(parseInt(metricObj['timeInterval'])),
             });
         }
     });
@@ -251,7 +257,7 @@ function addNewUserDocToDb(userId) {
         let today = new Date().toISOString().split('T')[0];
         db.collection(Constants_1.COLLECTION_ID_USERS)
             .doc(userId)
-            .set({ name: Utility_1.generateRandomName(), teamCode: '', cumulativePoints: 0 })
+            .set(Object.assign({ name: Utility_1.generateRandomName() }, Constants_1.DEFAULT_USER_DOC_TOP))
             .then(() => {
             console.log('Added name');
         })

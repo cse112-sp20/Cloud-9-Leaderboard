@@ -7,6 +7,7 @@ import {Leaderboard} from './Leaderboard';
 import {
   firebaseConfig,
   DEFAULT_USER_DOC,
+  DEFAULT_USER_DOC_TOP,
   DEFAULT_TEAM_DOC,
   COLLECTION_ID_USERS,
   COLLECTION_ID_TEAMS,
@@ -127,6 +128,15 @@ export function updateStats(payload) {
                 cumulativePoints: firebase.firestore.FieldValue.increment(
                   scoreCalculation(metricObj),
                 ),
+                keystrokes: firebase.firestore.FieldValue.increment(
+                  parseInt(metricObj['keystrokes']),
+                ),
+                linesChanged: firebase.firestore.FieldValue.increment(
+                  parseInt(metricObj['linesChanged']),
+                ),
+                timeInterval: firebase.firestore.FieldValue.increment(
+                  parseInt(metricObj['timeInterval']),
+                ),
               });
           });
       } else {
@@ -153,6 +163,15 @@ export function updateStats(payload) {
           .update({
             cumulativePoints: firebase.firestore.FieldValue.increment(
               scoreCalculation(metricObj),
+            ),
+            keystrokes: firebase.firestore.FieldValue.increment(
+              parseInt(metricObj['keystrokes']),
+            ),
+            linesChanged: firebase.firestore.FieldValue.increment(
+              parseInt(metricObj['linesChanged']),
+            ),
+            timeInterval: firebase.firestore.FieldValue.increment(
+              parseInt(metricObj['timeInterval']),
             ),
           });
       }
@@ -281,7 +300,10 @@ async function addNewUserDocToDb(userId) {
 
   db.collection(COLLECTION_ID_USERS)
     .doc(userId)
-    .set({name: generateRandomName(), teamCode: '', cumulativePoints: 0})
+    .set({
+      name: generateRandomName(),
+      ...DEFAULT_USER_DOC_TOP,
+    })
     .then(() => {
       console.log('Added name');
     })
