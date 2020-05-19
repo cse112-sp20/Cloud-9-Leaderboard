@@ -1,6 +1,6 @@
 import {workspace, window, ViewColumn} from 'vscode';
 import {getSoftwareDir, isWindows} from '../../lib/Util';
-import {retrieveAllUserStats} from './Firestore';
+import {retrieveAllUserStats, retrieveTeamMemberStats} from './Firestore';
 import {scoreCalculation} from './Metric';
 import {stat} from 'fs';
 const fs = require('fs');
@@ -37,6 +37,16 @@ export function getLeaderboardFile() {
   return filePath;
 }
 
+export function getTeamLeaderboardFile() {
+  let filePath = getSoftwareDir();
+  if (isWindows()) {
+    filePath += '\\team_leaderboard.txt';
+  } else {
+    filePath += '/team_leaderboard.txt';
+  }
+  return filePath;
+}
+
 export async function displayLeaderboard() {
   // 1st write the code time metrics dashboard file
   // await writeLeaderboard();
@@ -51,8 +61,28 @@ export async function displayLeaderboard() {
   });
 }
 
-async function writeToFile(users) {
-  const leaderboardFile = getLeaderboardFile();
+export async function displayTeamLeaderboard() {
+  // 1st write the code time metrics dashboard file
+  // await writeLeaderboard();
+  await retrieveTeamMemberStats(writeToFile);
+
+  let filePath = getTeamLeaderboardFile();
+  workspace.openTextDocument(filePath).then((doc) => {
+    // only focus if it's not already open
+    window.showTextDocument(doc, ViewColumn.One, false).then((e) => {
+      // done
+    });
+  });
+}
+
+async function writeToFile(users, isTeam) {
+  let leaderboardFile;
+
+  if (isTeam) {
+    leaderboardFile = getTeamLeaderboardFile();
+  } else {
+    leaderboardFile = getLeaderboardFile();
+  }
   let leaderBoardContent = '';
 
   leaderBoardContent += '  L  E  A  D  E  R  B  O  A  R  D  \n';
@@ -66,7 +96,7 @@ async function writeToFile(users) {
   users.map((user) => {
     let obj = {};
     obj['name'] = user['name'];
-    obj['score'] = parseFloat(user['cumulativePoints'].toFixed(3));
+    obj['score'] = parseFloat(user['cumulativePoints']).toFixed(3);
     scoreMap.push(obj);
   });
 

@@ -64,6 +64,10 @@
         "title": "Cloud9: Leaderboard"
       },
       {
+        "command": "cloud9.teamLeaderboard",
+        "title": "Cloud9: Team Leaderboard"
+      },
+      {
         "command": "cloud9.debugClearUserId",
         "title": "Cloud9 DEBUG: Clear User Id"
       },

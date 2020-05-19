@@ -77,7 +77,7 @@ export function updateStats(payload) {
           .then((doc2) => {
             if (doc2.exists) {
               //Update existing stats
-              db.collection('users')
+              db.collection(COLLECTION_ID_USERS)
                 .doc(id)
                 .collection('dates')
                 .doc(today)
@@ -102,7 +102,7 @@ export function updateStats(payload) {
                   console.log('Error updating stats');
                 });
             } else {
-              db.collection('users')
+              db.collection(COLLECTION_ID_USERS)
                 .doc(id)
                 .collection('dates')
                 .doc(today)
@@ -120,7 +120,7 @@ export function updateStats(payload) {
                 });
             }
 
-            db.collection('users')
+            db.collection(COLLECTION_ID_USERS)
               .doc(id)
               .update({
                 cumulativePoints: firebase.firestore.FieldValue.increment(
@@ -147,7 +147,7 @@ export function updateStats(payload) {
             console.log('ERRRRR');
           });
 
-        db.collection('users')
+        db.collection(COLLECTION_ID_USERS)
           .doc(id)
           .update({
             cumulativePoints: firebase.firestore.FieldValue.increment(
@@ -155,6 +155,43 @@ export function updateStats(payload) {
             ),
           });
       }
+    });
+}
+
+export async function retrieveTeamMemberStats(callback) {
+  let db = firebase.firestore();
+
+  let users = db.collection(COLLECTION_ID_USERS);
+  const ctx = getExtensionContext();
+  let cachedTeamID = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+  let userMap = [];
+  users
+    .where('teamCode', '==', cachedTeamID)
+    .get()
+    .then((snapshot) => {
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+        return userMap;
+      }
+
+      snapshot.forEach((doc) => {
+        Leaderboard.addUser(doc.id, doc.data());
+        let currUser = {};
+        currUser['id'] = doc.id;
+        for (let key in doc.data()) {
+          currUser[key] = doc.data()[key];
+        }
+        userMap.push(currUser);
+        // console.log(doc.id + "=>" + doc.data());
+      });
+
+      return userMap;
+    })
+    .then((userMap) => {
+      callback(userMap, true);
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
     });
 }
 
@@ -182,7 +219,7 @@ export async function retrieveAllUserStats(callback) {
       return userMap;
     })
     .then((userMap) => {
-      callback(userMap);
+      callback(userMap, false);
     })
     .catch((err) => {
       console.log('Error getting documents', err);

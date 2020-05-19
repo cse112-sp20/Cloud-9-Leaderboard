@@ -31,10 +31,18 @@ import {
 } from './tree/CodeTimeTeamProvider';
 import {displayProjectContributorCommitsDashboard} from './menu/ReportManager';
 import {sendOfflineData} from './managers/FileManager';
-import {displayLeaderboard} from '../src/util/Leaderboard';
+import {
+  displayLeaderboard,
+  displayTeamLeaderboard,
+} from '../src/util/Leaderboard';
 
 import {clearCachedUserId} from '../src/util/Authentication';
-import { createAndJoinTeam, getTeamNameAndTeamId, removeTeamNameAndId, joinTeam } from '../src/util/Team';
+import {
+  createAndJoinTeam,
+  getTeamNameAndTeamId,
+  removeTeamNameAndId,
+  joinTeam,
+} from '../src/util/Team';
 
 export function createCommands(
   kpmController: KpmManager,
@@ -220,6 +228,13 @@ export function createCommands(
     }),
   );
 
+  // Cloud9: command used to view private team leaderboard
+  cmds.push(
+    commands.registerCommand('cloud9.teamLeaderboard', () => {
+      displayTeamLeaderboard();
+    }),
+  );
+
   // Cloud9: command used to create a new team
   cmds.push(
     commands.registerCommand('cloud9.createTeam', () => {
@@ -240,7 +255,7 @@ export function createCommands(
     commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
       console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
       removeTeamNameAndId();
-    })
+    }),
   );
 
   // Cloud9: command used to join a new team
@@ -250,8 +265,6 @@ export function createCommands(
       joinTeam();
     }),
   );
-
-
 
   // Cloud9: command used to clear the cached id (for debugging and testing only)
   cmds.push(
