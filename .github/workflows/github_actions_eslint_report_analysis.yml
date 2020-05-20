@@ -1,0 +1,2 @@
+- name: ESLint Annotate from Report JSON
+  uses: ataylorme/eslint-annotate-action@1.0.4
