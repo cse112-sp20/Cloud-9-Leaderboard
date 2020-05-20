@@ -1,4 +1,4 @@
-name: Example NodeJS Workflow
+name: TypeScript Workflow
 
 on: [pull_request]
 
