@@ -120,7 +120,7 @@ export async function showMenuOptions() {
   kpmMenuOptions.items.push({
     label: 'Submit an issue on GitHub',
     detail: 'Encounter a bug? Submit an issue on our GitHub page',
-    url: 'https://github.com/swdotcom/swdc-vscode/issues',
+    url: 'https://github.com/swdotcom/cloud9/issues',
     cb: null,
   });
 

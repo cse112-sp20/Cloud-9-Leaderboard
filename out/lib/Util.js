@@ -639,7 +639,7 @@ function getExtensionName() {
         }
     }
     if (!extensionName) {
-        extensionName = 'swdc-vscode';
+        extensionName = 'cloud9';
     }
     return extensionName;
 }

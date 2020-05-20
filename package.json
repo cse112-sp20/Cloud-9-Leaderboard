@@ -1,5 +1,5 @@
 {
-  "name": "swdc-vscode",
+  "name": "cloud9",
   "displayName": "Code Time",
   "version": "2.2.3",
   "publisher": "softwaredotcom",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/swdotcom/swdc-vscode"
+    "url": "https://github.com/swdotcom/cloud9"
   },
   "categories": [
     "Other"

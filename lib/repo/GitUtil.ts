@@ -98,7 +98,7 @@ async function getChangeStats(
 
   /**
 	 * example:
-     * -mbp-2:swdc-vscode xavierluiz$ git diff --stat
+     * -mbp-2:cloud9 xavierluiz$ git diff --stat
         lib/KpmProviderManager.ts | 22 ++++++++++++++++++++--
         1 file changed, 20 insertions(+), 2 deletions(-)
 
