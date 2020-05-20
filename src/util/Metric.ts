@@ -1,4 +1,4 @@
-import { window } from "vscode";
+import {window} from 'vscode';
 
 /*
  * Function for extract codetime payload for leaderboard metric
@@ -10,18 +10,18 @@ export function processMetric(obj) {
 
   // aggregator from codeTime Payload
   const metric = {};
-  metric["keystrokes"] = obj.keystrokes;
-  metric["linesChanged"] = 0;
-  metric["timeInterval"] = obj.elapsed_seconds;
+  metric['keystrokes'] = obj.keystrokes;
+  metric['linesChanged'] = 0;
+  metric['timeInterval'] = obj.elapsed_seconds;
 
   for (let filename in obj.source) {
     let file = obj.source[filename];
     if (file) {
-      if ("linesAdded" in file) {
-        metric["linesChanged"] += file["linesAdded"];
+      if ('linesAdded' in file) {
+        metric['linesChanged'] += file['linesAdded'];
       }
-      if ("linesRemoved" in file) {
-        metric["linesChanged"] += file["linesRemoved"];
+      if ('linesRemoved' in file) {
+        metric['linesChanged'] += file['linesRemoved'];
       }
     }
   }
@@ -35,8 +35,8 @@ export function processMetric(obj) {
 export function scoreCalculation(userStats) {
   // TODO : user stats to score
   let score = 0;
-  score += userStats["timeInterval"] * 0.01;
-  score += userStats["keystrokes"] * 1;
-  score += userStats["linesChanged"] + 10;
+  score += userStats['timeInterval'] * 0.01;
+  score += userStats['keystrokes'] * 1;
+  score += userStats['linesChanged'] + 10;
   return score;
 }

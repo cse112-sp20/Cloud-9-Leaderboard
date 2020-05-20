@@ -29,7 +29,7 @@ exports.getExtensionContext = getExtensionContext;
  */
 function clearCachedUserId() {
     extensionContext.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, undefined);
-    console.log("After clearing cached id: " +
+    console.log('After clearing cached id: ' +
         extensionContext.globalState.get(Constants_1.GLOBAL_STATE_USER_ID));
 }
 exports.clearCachedUserId = clearCachedUserId;
@@ -48,16 +48,16 @@ function authenticateUser(ctx) {
     console.log('AUTHENTICATION USERID IS: ' + cachedUserId);
     if (cachedUserId === undefined) {
         // case1: new user, create an account for them
-        vscode_1.window.showInformationMessage("Cloud9: Welcome new user!");
-        console.log("No cachedUserId found. Need to create a new user account.");
-        //registerNewUserWithUserInput(ctx); 
+        vscode_1.window.showInformationMessage('Cloud9: Welcome new user!');
+        console.log('No cachedUserId found. Need to create a new user account.');
+        //registerNewUserWithUserInput(ctx);
         registerNewUserWithGeneratedCredential(ctx);
     }
     else {
         // case2: existing user
         // do we need to actually sign the user in again??
-        vscode_1.window.showInformationMessage("Cloud9: Welcome back!");
-        console.log("Found cachedUserId: " + cachedUserId);
+        vscode_1.window.showInformationMessage('Cloud9: Welcome back!');
+        console.log('Found cachedUserId: ' + cachedUserId);
         console.log('Found cachedTeamName: ' + cachedTeamName);
         console.log('Found cachedTeamId: ' + cachedTeamId);
         //loginUserWithEmailAndPassword(cachedUserEmail, cachedUserPassword);
@@ -72,14 +72,16 @@ function registerNewUserWithUserInput(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         let email = null;
         let password = null;
-        //prompt for email and password 
-        yield vscode_1.window.showInputBox({ placeHolder: 'Enter your email' })
+        //prompt for email and password
+        yield vscode_1.window
+            .showInputBox({ placeHolder: 'Enter your email' })
             .then((inputEmail) => {
             email = inputEmail;
             console.log('user input email: ' + email);
         })
             .then(() => __awaiter(this, void 0, void 0, function* () {
-            yield vscode_1.window.showInputBox({ placeHolder: 'Enter your password' })
+            yield vscode_1.window
+                .showInputBox({ placeHolder: 'Enter your password' })
                 .then((inputPassword) => {
                 password = inputPassword;
                 console.log('user input password: ' + password);

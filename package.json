@@ -1,8 +1,8 @@
 {
-  "name": "swdc-vscode",
+  "name": "cloud9",
   "displayName": "Code Time",
-  "version": "2.2.3",
-  "publisher": "softwaredotcom",
+  "version": "0.0.1",
+  "publisher": "cse112team9",
   "description": "Code Time is an open source plugin that provides programming metrics right in Visual Studio Code.",
   "author": {
     "name": "Software.com"
@@ -15,13 +15,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/swdotcom/swdc-vscode"
+    "url": "https://github.com/cse112-sp20/Cloud-9-Leaderboard"
   },
   "categories": [
     "Other"
   ],
   "keywords": [
-    "time tracking",
     "productivity",
     "timer",
     "git",
@@ -35,7 +34,7 @@
     "workspace"
   ],
   "engines": {
-    "vscode": "^1.35.0"
+    "vscode": "^1.45.0"
   },
   "main": "./out/extension",
   "scripts": {
@@ -43,7 +42,7 @@
     "compile": "tsc -p ./",
     "lint": "tslint -p ./",
     "watch": "tsc -watch -p ./",
-    "tests": "mocha --require ts-node/register test/**/*.ts"
+    "test": "mocha ./out/test/runTest.js"
   },
   "contributes": {
     "commands": [
@@ -122,12 +121,13 @@
     "@types/chai": "^4.2.11",
     "@types/mocha": "^5.2.6",
     "@types/node": "^13.13.5",
-    "@types/vscode": "^1.35.0",
+    "@types/vscode": "^1.45.0",
     "chai": "^4.2.0",
     "eslint": "^7.0.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
+    "glob": "^7.1.6",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.2",
     "mocha": "^7.1.2",
@@ -135,9 +135,10 @@
     "prettier": "^2.0.5",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.10.1",
+    "tslint": "^6.1.2",
     "typescript": "^3.9.2",
     "vsce": "^1.75.0",
-    "vscode": "^1.1.37",
+    "vscode-test": "^1.3.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   },

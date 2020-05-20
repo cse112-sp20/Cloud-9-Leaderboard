@@ -2,7 +2,7 @@ import {
   serverIsAvailable,
   softwarePost,
   isResponseOk,
-} from "../http/HttpClient";
+} from '../http/HttpClient';
 import {
   getSoftwareDataStoreFile,
   deleteFile,
@@ -14,14 +14,14 @@ import {
   getItem,
   getSoftwareDir,
   isWindows,
-} from "../Util";
+} from '../Util';
 import {
   getTimeDataSummaryFile,
   clearTimeDataSummary,
-} from "../storage/TimeSummaryData";
-import KeystrokeStats from "../model/KeystrokeStats";
+} from '../storage/TimeSummaryData';
+import KeystrokeStats from '../model/KeystrokeStats';
 
-const fs = require("fs");
+const fs = require('fs');
 
 // batch offline payloads in 8. sqs has a 256k body limit
 const batch_limit = 8;
@@ -36,7 +36,7 @@ export function clearLastSavedKeystrokeStats() {
  * send the offline TimeData payloads
  */
 export async function sendOfflineTimeData() {
-  batchSendArrayData("/data/time", getTimeDataSummaryFile());
+  batchSendArrayData('/data/time', getTimeDataSummaryFile());
 
   // clear time data data. this will also clear the
   // code time and active code time numbers
@@ -47,14 +47,14 @@ export async function sendOfflineTimeData() {
  * send the offline Event payloads
  */
 export async function sendOfflineEvents() {
-  batchSendData("/data/event", getPluginEventsFile());
+  batchSendData('/data/event', getPluginEventsFile());
 }
 
 /**
  * send the offline data.
  */
 export async function sendOfflineData(isNewDay = false) {
-  batchSendData("/data/batch", getSoftwareDataStoreFile());
+  batchSendData('/data/batch', getSoftwareDataStoreFile());
 }
 
 /**
@@ -101,7 +101,7 @@ export async function getLastSavedKeystrokesStats() {
       if (currentPayloads && currentPayloads.length) {
         // sort in descending order
         currentPayloads.sort(
-          (a: KeystrokeStats, b: KeystrokeStats) => b.start - a.start
+          (a: KeystrokeStats, b: KeystrokeStats) => b.start - a.start,
         );
         // get the 1st element
         latestPayload = currentPayloads[0];
@@ -151,7 +151,7 @@ export async function batchSendPayloadData(api, file, payloads) {
 export function sendBatchPayload(api, batch) {
   // console.log("SEND BATCH LOOK HERE");
   // console.log(batch);
-  return softwarePost(api, batch, getItem("jwt")).catch((e) => {
+  return softwarePost(api, batch, getItem('jwt')).catch((e) => {
     logIt(`Unable to send plugin data batch, error: ${e.message}`);
   });
 }
@@ -159,9 +159,9 @@ export function sendBatchPayload(api, batch) {
 export function getCurrentPayloadFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += "\\latestKeystrokes.json";
+    file += '\\latestKeystrokes.json';
   } else {
-    file += "/latestKeystrokes.json";
+    file += '/latestKeystrokes.json';
   }
   return file;
 }

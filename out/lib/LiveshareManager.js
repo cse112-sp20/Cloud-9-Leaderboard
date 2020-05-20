@@ -14,16 +14,16 @@ const HttpClient_1 = require("./http/HttpClient");
 const Util_1 = require("./Util");
 function manageLiveshareSession(session) {
     return __awaiter(this, void 0, void 0, function* () {
-        HttpClient_1.softwarePost("/data/liveshare", session, Util_1.getItem("jwt"))
+        HttpClient_1.softwarePost('/data/liveshare', session, Util_1.getItem('jwt'))
             .then((resp) => __awaiter(this, void 0, void 0, function* () {
             if (HttpClient_1.isResponseOk(resp)) {
-                Util_1.logIt("completed liveshare sync");
+                Util_1.logIt('completed liveshare sync');
             }
             else {
                 Util_1.logIt(`unable to sync liveshare metrics: ${resp.message}`);
             }
         }))
-            .catch(err => {
+            .catch((err) => {
             Util_1.logIt(`unable to sync liveshare metrics: ${err.message}`);
         });
     });

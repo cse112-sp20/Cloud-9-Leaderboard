@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.JiraClient = exports.ROOT_API = void 0;
 const axios_1 = require("axios");
 const Util_1 = require("../Util");
-exports.ROOT_API = "https://sftwco.atlassian.net";
+exports.ROOT_API = 'https://sftwco.atlassian.net';
 const jiraClient = axios_1.default.create({
-    baseURL: exports.ROOT_API
+    baseURL: exports.ROOT_API,
 });
 class JiraClient {
     constructor() {
@@ -28,8 +28,8 @@ class JiraClient {
     }
     apiGet(api, accessToken) {
         return __awaiter(this, void 0, void 0, function* () {
-            jiraClient.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-            const resp = yield jiraClient.get(api).catch(err => {
+            jiraClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+            const resp = yield jiraClient.get(api).catch((err) => {
                 Util_1.logIt(`error fetching data for ${api}, message: ${err.message}`);
                 return err;
             });
@@ -38,8 +38,8 @@ class JiraClient {
     }
     fetchIssues() {
         return __awaiter(this, void 0, void 0, function* () {
-            const accessToken = Util_1.getItem("atlassian_access_token");
-            return this.apiGet("/rest/api/3/issuetype", accessToken);
+            const accessToken = Util_1.getItem('atlassian_access_token');
+            return this.apiGet('/rest/api/3/issuetype', accessToken);
         });
     }
 }

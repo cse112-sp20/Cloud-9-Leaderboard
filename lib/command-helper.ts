@@ -17,18 +17,11 @@ import {
   toggleStatusBar,
 } from './Util';
 import {KpmManager} from './managers/KpmManager';
-import {KpmProvider, connectKpmTreeView} from './tree/KpmProvider';
-import {
-  CodeTimeMenuProvider,
-  connectCodeTimeMenuTreeView,
-} from './tree/CodeTimeMenuProvider';
+
 import {KpmItem} from './model/models';
-import {KpmProviderManager} from './tree/KpmProviderManager';
+
 import {ProjectCommitManager} from './menu/ProjectCommitManager';
-import {
-  CodeTimeTeamProvider,
-  connectCodeTimeTeamTreeView,
-} from './tree/CodeTimeTeamProvider';
+
 import {displayProjectContributorCommitsDashboard} from './menu/ReportManager';
 import {sendOfflineData} from './managers/FileManager';
 import {
@@ -54,69 +47,6 @@ export function createCommands(
   cmds.push(kpmController);
 
   // MENU TREE: INIT
-  const codetimeMenuTreeProvider = new CodeTimeMenuProvider();
-  const codetimeMenuTreeView: TreeView<KpmItem> = window.createTreeView(
-    'ct-menu-tree',
-    {
-      treeDataProvider: codetimeMenuTreeProvider,
-      showCollapseAll: false,
-    },
-  );
-  codetimeMenuTreeProvider.bindView(codetimeMenuTreeView);
-  cmds.push(connectCodeTimeMenuTreeView(codetimeMenuTreeView));
-
-  // MENU TREE: REVEAL
-  cmds.push(
-    commands.registerCommand('codetime.displayTree', () => {
-      codetimeMenuTreeProvider.revealTree();
-    }),
-  );
-
-  // MENU TREE: REFRESH
-  cmds.push(
-    commands.registerCommand('codetime.refreshCodetimeMenuTree', () => {
-      codetimeMenuTreeProvider.refresh();
-    }),
-  );
-
-  // DAILY METRICS TREE: INIT
-  const kpmTreeProvider = new KpmProvider();
-  const kpmTreeView: TreeView<KpmItem> = window.createTreeView(
-    'ct-metrics-tree',
-    {
-      treeDataProvider: kpmTreeProvider,
-      showCollapseAll: false,
-    },
-  );
-  kpmTreeProvider.bindView(kpmTreeView);
-  cmds.push(connectKpmTreeView(kpmTreeView));
-
-  // TEAM TREE: INIT
-  const codetimeTeamTreeProvider = new CodeTimeTeamProvider();
-  const codetimeTeamTreeView: TreeView<KpmItem> = window.createTreeView(
-    'ct-team-tree',
-    {
-      treeDataProvider: codetimeTeamTreeProvider,
-      showCollapseAll: false,
-    },
-  );
-  codetimeTeamTreeProvider.bindView(codetimeTeamTreeView);
-  cmds.push(connectCodeTimeTeamTreeView(codetimeTeamTreeView));
-
-  // TEAM TREE: REFRESH
-  cmds.push(
-    commands.registerCommand('codetime.refreshCodetimeTeamTree', () => {
-      codetimeTeamTreeProvider.refresh();
-    }),
-  );
-
-  cmds.push(
-    commands.registerCommand('codetime.refreshTreeViews', () => {
-      codetimeMenuTreeProvider.refresh();
-      kpmTreeProvider.refresh();
-      codetimeTeamTreeProvider.refresh();
-    }),
-  );
 
   // TEAM TREE: INVITE MEMBER
   cmds.push(
@@ -190,18 +120,6 @@ export function createCommands(
   cmds.push(
     commands.registerCommand('codetime.githubLogin', () => {
       launchLogin('github');
-    }),
-  );
-
-  // REFRESH DAILY METRICS
-  cmds.push(
-    commands.registerCommand('codetime.refreshKpmTree', (keystrokeStats) => {
-      if (keystrokeStats) {
-        KpmProviderManager.getInstance().setCurrentKeystrokeStats(
-          keystrokeStats,
-        );
-      }
-      kpmTreeProvider.refresh();
     }),
   );
 

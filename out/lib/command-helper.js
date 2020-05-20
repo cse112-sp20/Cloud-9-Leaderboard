@@ -14,11 +14,7 @@ const vscode_1 = require("vscode");
 const DataController_1 = require("./DataController");
 const MenuManager_1 = require("./menu/MenuManager");
 const Util_1 = require("./Util");
-const KpmProvider_1 = require("./tree/KpmProvider");
-const CodeTimeMenuProvider_1 = require("./tree/CodeTimeMenuProvider");
-const KpmProviderManager_1 = require("./tree/KpmProviderManager");
 const ProjectCommitManager_1 = require("./menu/ProjectCommitManager");
-const CodeTimeTeamProvider_1 = require("./tree/CodeTimeTeamProvider");
 const ReportManager_1 = require("./menu/ReportManager");
 const FileManager_1 = require("./managers/FileManager");
 const Leaderboard_1 = require("../src/util/Leaderboard");
@@ -28,46 +24,6 @@ function createCommands(kpmController) {
     let cmds = [];
     cmds.push(kpmController);
     // MENU TREE: INIT
-    const codetimeMenuTreeProvider = new CodeTimeMenuProvider_1.CodeTimeMenuProvider();
-    const codetimeMenuTreeView = vscode_1.window.createTreeView('ct-menu-tree', {
-        treeDataProvider: codetimeMenuTreeProvider,
-        showCollapseAll: false,
-    });
-    codetimeMenuTreeProvider.bindView(codetimeMenuTreeView);
-    cmds.push(CodeTimeMenuProvider_1.connectCodeTimeMenuTreeView(codetimeMenuTreeView));
-    // MENU TREE: REVEAL
-    cmds.push(vscode_1.commands.registerCommand('codetime.displayTree', () => {
-        codetimeMenuTreeProvider.revealTree();
-    }));
-    // MENU TREE: REFRESH
-    cmds.push(vscode_1.commands.registerCommand('codetime.refreshCodetimeMenuTree', () => {
-        codetimeMenuTreeProvider.refresh();
-    }));
-    // DAILY METRICS TREE: INIT
-    const kpmTreeProvider = new KpmProvider_1.KpmProvider();
-    const kpmTreeView = vscode_1.window.createTreeView('ct-metrics-tree', {
-        treeDataProvider: kpmTreeProvider,
-        showCollapseAll: false,
-    });
-    kpmTreeProvider.bindView(kpmTreeView);
-    cmds.push(KpmProvider_1.connectKpmTreeView(kpmTreeView));
-    // TEAM TREE: INIT
-    const codetimeTeamTreeProvider = new CodeTimeTeamProvider_1.CodeTimeTeamProvider();
-    const codetimeTeamTreeView = vscode_1.window.createTreeView('ct-team-tree', {
-        treeDataProvider: codetimeTeamTreeProvider,
-        showCollapseAll: false,
-    });
-    codetimeTeamTreeProvider.bindView(codetimeTeamTreeView);
-    cmds.push(CodeTimeTeamProvider_1.connectCodeTimeTeamTreeView(codetimeTeamTreeView));
-    // TEAM TREE: REFRESH
-    cmds.push(vscode_1.commands.registerCommand('codetime.refreshCodetimeTeamTree', () => {
-        codetimeTeamTreeProvider.refresh();
-    }));
-    cmds.push(vscode_1.commands.registerCommand('codetime.refreshTreeViews', () => {
-        codetimeMenuTreeProvider.refresh();
-        kpmTreeProvider.refresh();
-        codetimeTeamTreeProvider.refresh();
-    }));
     // TEAM TREE: INVITE MEMBER
     cmds.push(vscode_1.commands.registerCommand('codetime.inviteTeamMember', (item) => __awaiter(this, void 0, void 0, function* () {
         // the identifier will be in the value
@@ -111,13 +67,6 @@ function createCommands(kpmController) {
     // LAUNCH GITHUB LOGIN
     cmds.push(vscode_1.commands.registerCommand('codetime.githubLogin', () => {
         Util_1.launchLogin('github');
-    }));
-    // REFRESH DAILY METRICS
-    cmds.push(vscode_1.commands.registerCommand('codetime.refreshKpmTree', (keystrokeStats) => {
-        if (keystrokeStats) {
-            KpmProviderManager_1.KpmProviderManager.getInstance().setCurrentKeystrokeStats(keystrokeStats);
-        }
-        kpmTreeProvider.refresh();
     }));
     // DISPLAY README MD
     cmds.push(vscode_1.commands.registerCommand('codetime.displayReadme', () => {
