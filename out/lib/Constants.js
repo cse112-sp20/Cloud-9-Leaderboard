@@ -9,7 +9,7 @@ exports.DEFAULT_DURATION = 60;
 exports.DEFAULT_DURATION_MILLIS = exports.DEFAULT_DURATION * 1000;
 exports.CODE_TIME_PLUGIN_ID = 2;
 exports.DEFAULT_SESSION_THRESHOLD_SECONDS = 60 * 15;
-exports.CODE_TIME_EXT_ID = 'softwaredotcom.cloud9';
+exports.CODE_TIME_EXT_ID = 'cse112team9.cloud9';
 exports.CODE_TIME_TYPE = 'codetime';
 // API ENDPOINT
 //

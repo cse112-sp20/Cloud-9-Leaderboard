@@ -26,7 +26,7 @@ npm manifest:
       "name": "cloud9",
       "displayName": "Code Time",
       "version": "2.0.7",
-      "publisher": "softwaredotcom",
+      "publisher": "cse112team9",
       "description": "Code Time is an open source plugin that provides programming metrics right in Visual Studio Code.",
       "author": {
           "name": "Software.com"
@@ -42,7 +42,7 @@ npm manifest:
           "url": "https://github.com/swdotcom/cloud9"
       },
       "remote.extensionKind": {
-          "softwaredotcom.cloud9": "ui"
+          "cse112team9.cloud9": "ui"
       },
       "categories": [
           "Other"
