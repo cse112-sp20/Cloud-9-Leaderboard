@@ -10,10 +10,11 @@ import {
 } from '../../src/util/Utility';
 import {getExtensionContext} from '../../src/util/Authentication';
 import {Leaderboard, getLeaderboardFile, getTeamLeaderboardFile} from '../../src/util/Leaderboard';
+import { scoreCalculation } from '../../src/util/Metric';
 
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
-suite('utilities.js', () => {
+suite('utilities.ts', () => {
   test('generating random name', () => {
     const result = generateRandomName();
     assert.typeOf(result, 'string');
@@ -32,7 +33,7 @@ suite('utilities.js', () => {
   });  
 });
 
-suite('leaderboard.js', () => {
+suite('leaderboard.ts', () => {
   test('adding user to empty leaderboard', () => {
     const id : Number = 654;
     const userObj = null;
@@ -52,4 +53,42 @@ suite('leaderboard.js', () => {
   });
 
   //integration test of leaderboard displaying
+});
+
+suite('metric.ts', () => {
+  test('score calculations with small metrics', () => {
+    const userStats = {};
+    userStats['timeInterval'] = 0;
+    userStats['keystrokes'] = 0;
+    userStats['linesChanged'] = 0;
+
+    var score = scoreCalculation(userStats);
+    assert.equal(score, 10)
+
+    userStats['timeInterval'] = -1;
+    userStats['keystrokes'] = -1;
+    userStats['linesChanged'] = -1;    
+
+    score = scoreCalculation(userStats);
+    assert.equal(score, 7.99)
+  });
+
+  test('score calculations with large metrics', () => {
+    const userStats = {};
+    userStats['timeInterval'] = 100000;
+    userStats['keystrokes'] = 100000;
+    userStats['linesChanged'] = 100000;
+
+    var score = scoreCalculation(userStats);
+    assert.equal(score, 201010)
+
+    userStats['timeInterval'] = 100000;
+    userStats['keystrokes'] = 100000;
+    userStats['linesChanged'] = -100000;    
+
+    score = scoreCalculation(userStats);
+    assert.equal(score, 1010)
+  });
+
+  //process metric test needed (don't know what payload looks like yet)
 });

@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.scoreCalculation = exports.processMetric = void 0;
+const timeMultiplier = 0.01;
+const keystrokeMultplier = 1;
+const linesMultiplier = 10;
 /*
  * Function for extract codetime payload for leaderboard metric
  */
@@ -33,9 +36,9 @@ exports.processMetric = processMetric;
 function scoreCalculation(userStats) {
     // TODO : user stats to score
     let score = 0;
-    score += userStats['timeInterval'] * 0.01;
-    score += userStats['keystrokes'] * 1;
-    score += userStats['linesChanged'] + 10;
+    score += userStats['timeInterval'] * timeMultiplier;
+    score += userStats['keystrokes'] * keystrokeMultplier;
+    score += userStats['linesChanged'] + linesMultiplier;
     return score;
 }
 exports.scoreCalculation = scoreCalculation;

@@ -6,9 +6,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Utility_1 = require("../../src/util/Utility");
 const Leaderboard_1 = require("../../src/util/Leaderboard");
+const Metric_1 = require("../../src/util/Metric");
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
-suite('utilities.js', () => {
+suite('utilities.ts', () => {
     test('generating random name', () => {
         const result = Utility_1.generateRandomName();
         assert.typeOf(result, 'string');
@@ -22,7 +23,7 @@ suite('utilities.js', () => {
         assert.equal(Utility_1.generateRandomEmail().includes('@'), true);
     });
 });
-suite('leaderboard.js', () => {
+suite('leaderboard.ts', () => {
     test('adding user to empty leaderboard', () => {
         const id = 654;
         const userObj = null;
@@ -39,5 +40,33 @@ suite('leaderboard.js', () => {
         assert.equal(leaderboardPath.includes("\\team_leaderboard.txt") || leaderboardPath.includes("/team_leaderboard.txt"), true);
     });
     //integration test of leaderboard displaying
+});
+suite('metric.ts', () => {
+    test('score calculations with small metrics', () => {
+        const userStats = {};
+        userStats['timeInterval'] = 0;
+        userStats['keystrokes'] = 0;
+        userStats['linesChanged'] = 0;
+        var score = Metric_1.scoreCalculation(userStats);
+        assert.equal(score, 10);
+        userStats['timeInterval'] = -1;
+        userStats['keystrokes'] = -1;
+        userStats['linesChanged'] = -1;
+        score = Metric_1.scoreCalculation(userStats);
+        assert.equal(score, 7.99);
+    });
+    test('score calculations with large metrics', () => {
+        const userStats = {};
+        userStats['timeInterval'] = 100000;
+        userStats['keystrokes'] = 100000;
+        userStats['linesChanged'] = 100000;
+        var score = Metric_1.scoreCalculation(userStats);
+        assert.equal(score, 201010);
+        userStats['timeInterval'] = 100000;
+        userStats['keystrokes'] = 100000;
+        userStats['linesChanged'] = -100000;
+        score = Metric_1.scoreCalculation(userStats);
+        assert.equal(score, 101010);
+    });
 });
 //# sourceMappingURL=extension.test.js.map

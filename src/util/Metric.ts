@@ -1,4 +1,5 @@
 import {window} from 'vscode';
+import { timeMultiplier, keystrokeMultplier, linesMultiplier } from './Constants';
 
 /*
  * Function for extract codetime payload for leaderboard metric
@@ -35,8 +36,8 @@ export function processMetric(obj) {
 export function scoreCalculation(userStats) {
   // TODO : user stats to score
   let score = 0;
-  score += userStats['timeInterval'] * 0.01;
-  score += userStats['keystrokes'] * 1;
-  score += userStats['linesChanged'] + 10;
+  score += userStats['timeInterval'] * timeMultiplier;
+  score += userStats['keystrokes'] * keystrokeMultplier;
+  score += userStats['linesChanged'] + linesMultiplier;
   return score;
 }

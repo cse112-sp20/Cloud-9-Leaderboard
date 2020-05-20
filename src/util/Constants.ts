@@ -42,3 +42,7 @@ export const GLOBAL_STATE_USER_EMAIL = 'cachedUserEmail';
 export const GLOBAL_STATE_USER_PASSWORD = 'cachedUserPassword';
 export const GLOBAL_STATE_USER_TEAM_NAME = 'cachedUserTeamName';
 export const GLOBAL_STATE_USER_TEAM_ID = 'cachedUserTeamId';
+
+export const timeMultiplier = 0.01;
+export const keystrokeMultplier = 1;
+export const linesMultiplier = 10; 
