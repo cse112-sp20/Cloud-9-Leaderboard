@@ -2,11 +2,22 @@ const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
 
-import {window, ExtensionContext} from 'vscode';
-import {processMetric, scoreCalculation} from './Metric';
+import {window} from 'vscode';
 import {Leaderboard} from './Leaderboard';
-import {firebaseConfig, DEFAULT_PASSWORD, DEFAULT_USER_DOC} from './Constants';
+import {
+  firebaseConfig,
+  DEFAULT_USER_DOC,
+  DEFAULT_USER_DOC_TOP,
+  DEFAULT_TEAM_DOC,
+  COLLECTION_ID_USERS,
+  COLLECTION_ID_TEAMS,
+  GLOBAL_STATE_USER_ID,
+  COLLECTION_ID_TEAM_MEMBERS,
+  GLOBAL_STATE_USER_TEAM_ID,
+  GLOBAL_STATE_USER_TEAM_NAME,
+} from './Constants';
 import {getExtensionContext} from './Authentication';
+import {processMetric, scoreCalculation} from './Metric';
 import {generateRandomEmail, generateRandomName} from './Utility';
 
 // Initialize Firebase
@@ -16,6 +27,22 @@ if (!firebase.apps.length) {
 
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+/**
+ *
+ * @param email login user with email and password
+ * @param password
+ */
+export async function loginUserWithEmailAndPassword(email, password) {
+  await auth
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      console.log('signed in');
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+}
 
 /*
  * Whenever new payload from codetime is posted to their api,
@@ -27,8 +54,8 @@ export function updateStats(payload) {
   let metricObj = processMetric(payload);
   console.log(metricObj);
 
-  const ctx: ExtensionContext = getExtensionContext();
-  const cachedUserId = ctx.globalState.get('cachedUserId');
+  const ctx = getExtensionContext();
+  const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
   let id = cachedUserId;
   console.log('cached id is ' + id);
@@ -36,12 +63,15 @@ export function updateStats(payload) {
 
   let today = new Date().toISOString().split('T')[0];
 
-  db.collection('users')
+  db.collection(COLLECTION_ID_USERS)
     .doc(id)
     .get()
     .then((doc) => {
       if (doc.exists) {
-        db.collection('users')
+        //Update existing stats
+
+        db.collection(COLLECTION_ID_USERS)
+
           .doc(id)
           .collection('dates')
           .doc(today)
@@ -49,7 +79,7 @@ export function updateStats(payload) {
           .then((doc2) => {
             if (doc2.exists) {
               //Update existing stats
-              db.collection('users')
+              db.collection(COLLECTION_ID_USERS)
                 .doc(id)
                 .collection('dates')
                 .doc(today)
@@ -74,7 +104,7 @@ export function updateStats(payload) {
                   console.log('Error updating stats');
                 });
             } else {
-              db.collection('users')
+              db.collection(COLLECTION_ID_USERS)
                 .doc(id)
                 .collection('dates')
                 .doc(today)
@@ -92,17 +122,26 @@ export function updateStats(payload) {
                 });
             }
 
-            db.collection('users')
+            db.collection(COLLECTION_ID_USERS)
               .doc(id)
               .update({
                 cumulativePoints: firebase.firestore.FieldValue.increment(
                   scoreCalculation(metricObj),
                 ),
+                keystrokes: firebase.firestore.FieldValue.increment(
+                  parseInt(metricObj['keystrokes']),
+                ),
+                linesChanged: firebase.firestore.FieldValue.increment(
+                  parseInt(metricObj['linesChanged']),
+                ),
+                timeInterval: firebase.firestore.FieldValue.increment(
+                  parseInt(metricObj['timeInterval']),
+                ),
               });
           });
       } else {
         //Update to firebase if no stats found
-        db.collection('users')
+        db.collection(COLLECTION_ID_USERS)
           .doc(id)
           .collection('dates')
           .doc(today)
@@ -119,20 +158,67 @@ export function updateStats(payload) {
             console.log('ERRRRR');
           });
 
-        db.collection('users')
+        db.collection(COLLECTION_ID_USERS)
           .doc(id)
           .update({
             cumulativePoints: firebase.firestore.FieldValue.increment(
               scoreCalculation(metricObj),
+            ),
+            keystrokes: firebase.firestore.FieldValue.increment(
+              parseInt(metricObj['keystrokes']),
+            ),
+            linesChanged: firebase.firestore.FieldValue.increment(
+              parseInt(metricObj['linesChanged']),
+            ),
+            timeInterval: firebase.firestore.FieldValue.increment(
+              parseInt(metricObj['timeInterval']),
             ),
           });
       }
     });
 }
 
+export async function retrieveTeamMemberStats(callback) {
+  let db = firebase.firestore();
+
+  let users = db.collection(COLLECTION_ID_USERS);
+  const ctx = getExtensionContext();
+  let cachedTeamID = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+  let userMap = [];
+  users
+    .where('teamCode', '==', cachedTeamID)
+    .get()
+    .then((snapshot) => {
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+        return userMap;
+      }
+
+      snapshot.forEach((doc) => {
+        Leaderboard.addUser(doc.id, doc.data());
+        let currUser = {};
+        currUser['id'] = doc.id;
+        for (let key in doc.data()) {
+          currUser[key] = doc.data()[key];
+        }
+        userMap.push(currUser);
+        // console.log(doc.id + "=>" + doc.data());
+      });
+
+      return userMap;
+    })
+    .then((userMap) => {
+      callback(userMap, true);
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
+}
+
 export async function retrieveAllUserStats(callback) {
   let db = firebase.firestore();
-  let users = db.collection('users');
+
+  let users = db.collection(COLLECTION_ID_USERS);
 
   let userMap = [];
 
@@ -153,7 +239,7 @@ export async function retrieveAllUserStats(callback) {
       return userMap;
     })
     .then((userMap) => {
-      callback(userMap);
+      callback(userMap, false);
     })
     .catch((err) => {
       console.log('Error getting documents', err);
@@ -163,20 +249,30 @@ export async function retrieveAllUserStats(callback) {
 /**
  * Create new user credential and add new doc to db
  */
-export function createNewUser(ctx: ExtensionContext) {
+
+export async function createNewUserInFirebase(ctx, email, password) {
   console.log('From Authentication: createNewUser');
 
-  const email = generateRandomEmail(); // ...do we need this?
+  //const email = generateRandomEmail(); // ...do we need this?
 
-  auth
-    .createUserWithEmailAndPassword(email, DEFAULT_PASSWORD)
+  if (email == null) {
+    console.log('email is null');
+    return;
+  }
+  if (password == null) {
+    console.log('password is null');
+    return;
+  }
+
+  await auth
+    .createUserWithEmailAndPassword(email, password)
     .then(() => {
       // add new uid to persistent storage
       const currentUserId = auth.currentUser.uid;
-      ctx.globalState.update('cachedUserId', currentUserId);
 
-      console.log('Successfully created new user');
-      console.log('cachedUserId is: ' + ctx.globalState.get('cachedUserId'));
+      ctx.globalState.update(GLOBAL_STATE_USER_ID, currentUserId);
+
+      console.log('cachedUserId: ' + ctx.globalState.get(GLOBAL_STATE_USER_ID));
 
       addNewUserDocToDb(currentUserId);
       return true;
@@ -191,8 +287,9 @@ export function createNewUser(ctx: ExtensionContext) {
  * Add a new user doc to database
  * @param userId
  */
-function addNewUserDocToDb(userId: String) {
-  console.log('Adding doc to db for new user.');
+
+async function addNewUserDocToDb(userId) {
+  console.log('Adding doc to db for new user...');
 
   if (userId === undefined) {
     console.log('userId undefined.');
@@ -201,9 +298,12 @@ function addNewUserDocToDb(userId: String) {
 
   let today = new Date().toISOString().split('T')[0];
 
-  db.collection('users')
+  db.collection(COLLECTION_ID_USERS)
     .doc(userId)
-    .set({name: generateRandomName(), teamCode: '', cumulativePoints: 0})
+    .set({
+      name: generateRandomName(),
+      ...DEFAULT_USER_DOC_TOP,
+    })
     .then(() => {
       console.log('Added name');
     })
@@ -211,7 +311,7 @@ function addNewUserDocToDb(userId: String) {
       console.log('Error creating new entry');
     });
 
-  db.collection('users')
+  db.collection(COLLECTION_ID_USERS)
     .doc(userId)
     .collection('dates')
     .doc(today)
@@ -229,11 +329,12 @@ function addNewUserDocToDb(userId: String) {
  * Retrieve the user doc from database
  * @param userId
  */
-export function getUserDocWithId(userId: String) {
+
+export async function getUserDocWithId(userId) {
   console.log('Getting user doc from db...');
 
-  var userDoc = db
-    .collection('users')
+  var userDoc = await db
+    .collection(COLLECTION_ID_USERS)
     .doc(userId)
     .get()
     .then((doc) => {
@@ -243,43 +344,122 @@ export function getUserDocWithId(userId: String) {
     .catch(() => {
       console.log('Error getting user: (' + userId + ') doc from db.');
     });
+
+  return userDoc;
 }
 
 /**
  * creates a new team (if not in db already)
  * @param input the new team's name
  */
-export function addNewTeamToDb(input: String) {
+export async function addNewTeamToDbAndJoin(teamName) {
   //check if already in database
-  const cachedUserId = getExtensionContext().globalState.get('cachedUserId');
-  const teamName = JSON.stringify(input);
-  var teamDoc = db.collection('teams').doc(teamName);
+  //const cachedUserId = getExtensionContext().globalState.get(GLOBAL_STATE_USER_ID);
 
-  teamDoc.get().then((doc) => {
-    if (doc.exists) {
-      console.log('Name already in use!');
-    } else {
-      //create this team and add user as a member
-      db.collection('teams').doc(teamName).set({
-        members: {cachedUserId},
-      });
+  var teamId = undefined;
+  var newTeamDoc = DEFAULT_TEAM_DOC;
+  newTeamDoc['teamName'] = teamName;
 
-      //update user's doc
-      db.collection('users')
-        .doc(cachedUserId)
-        .get('teams')
-        .then((teamMap) => {
-          teamMap[teamName] = '';
-          db.collection('users').doc(cachedUserId).set({
-            teams: teamMap,
+  await db
+    .collection(COLLECTION_ID_TEAMS)
+    .doc(teamName)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log('Team already exists!');
+      } else {
+        //create this team and add user as a member
+
+        // Add a new document with a generated id.
+        db.collection(COLLECTION_ID_TEAMS)
+          .add(newTeamDoc)
+          .then((ref) => {
+            teamId = ref.id;
+            console.log('Added team document with ID: ', teamId);
+
+            //link user with team
+          })
+          .then(() => {
+            joinTeamWithTeamId(teamId);
           });
-        });
-    }
-  });
+        //console.log('Successfully created new team!')
+      }
+    });
 }
 
 /**
  * finds the team and adds user as a member
  * @param input name of the team to join
  */
-export function joinTeam(input: String) {}
+export async function joinTeamWithTeamId(teamId) {
+  console.log('Adding new member to team...');
+
+  const ctx = getExtensionContext();
+  const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
+  console.log('userid: ' + userId);
+
+  await db
+    .collection(COLLECTION_ID_TEAMS)
+    .doc(teamId)
+    .collection(COLLECTION_ID_TEAM_MEMBERS)
+    .doc(userId)
+    .set({})
+    .then(async () => {
+      await db
+        .collection(COLLECTION_ID_USERS)
+        .doc(userId)
+        .update({teamCode: teamId})
+        .then(() => {
+          //store in context
+          // ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
+          ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamId);
+
+          //console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
+          console.log(
+            'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID),
+          );
+          console.log('Successfully added user to team.');
+          window.showInformationMessage('Welcome to your new team!');
+        });
+    })
+    .catch((e) => {
+      console.log(e.message);
+      console.log('Error adding user to team!');
+    });
+}
+
+/**
+ * checks if the user has already joined a team
+ */
+export async function checkIfInTeam() {
+  const ctx = getExtensionContext();
+  const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
+  let inTeam = false;
+  await db
+    .collection(COLLECTION_ID_USERS)
+    .doc(userId)
+    .get()
+    .then((userDoc) => {
+      if (userDoc.exists) {
+        const data = userDoc.data();
+        const teamField = data.teamCode;
+        if (teamField == '') {
+          console.log('No team code in db');
+          inTeam = false;
+        } else {
+          console.log('Team code in db: ' + teamField);
+          inTeam = true;
+          ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamField);
+          console.log(
+            'cachedUserId: ' + ctx.globalState.get(GLOBAL_STATE_USER_ID),
+          );
+        }
+      }
+    })
+    .then(() => {
+      return inTeam;
+    });
+  return inTeam;
+}

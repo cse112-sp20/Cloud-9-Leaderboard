@@ -17,23 +17,25 @@ import {
   toggleStatusBar,
 } from './Util';
 import {KpmManager} from './managers/KpmManager';
-import {KpmProvider, connectKpmTreeView} from './tree/KpmProvider';
-import {
-  CodeTimeMenuProvider,
-  connectCodeTimeMenuTreeView,
-} from './tree/CodeTimeMenuProvider';
+
 import {KpmItem} from './model/models';
-import {KpmProviderManager} from './tree/KpmProviderManager';
+
 import {ProjectCommitManager} from './menu/ProjectCommitManager';
-import {
-  CodeTimeTeamProvider,
-  connectCodeTimeTeamTreeView,
-} from './tree/CodeTimeTeamProvider';
+
 import {displayProjectContributorCommitsDashboard} from './menu/ReportManager';
 import {sendOfflineData} from './managers/FileManager';
-import {displayLeaderboard} from '../src/util/Leaderboard';
+import {
+  displayLeaderboard,
+  displayTeamLeaderboard,
+} from '../src/util/Leaderboard';
 
 import {clearCachedUserId} from '../src/util/Authentication';
+import {
+  createAndJoinTeam,
+  getTeamNameAndTeamId,
+  removeTeamNameAndId,
+  joinTeam,
+} from '../src/util/Team';
 
 export function createCommands(
   kpmController: KpmManager,
@@ -45,69 +47,6 @@ export function createCommands(
   cmds.push(kpmController);
 
   // MENU TREE: INIT
-  const codetimeMenuTreeProvider = new CodeTimeMenuProvider();
-  const codetimeMenuTreeView: TreeView<KpmItem> = window.createTreeView(
-    'ct-menu-tree',
-    {
-      treeDataProvider: codetimeMenuTreeProvider,
-      showCollapseAll: false,
-    },
-  );
-  codetimeMenuTreeProvider.bindView(codetimeMenuTreeView);
-  cmds.push(connectCodeTimeMenuTreeView(codetimeMenuTreeView));
-
-  // MENU TREE: REVEAL
-  cmds.push(
-    commands.registerCommand('codetime.displayTree', () => {
-      codetimeMenuTreeProvider.revealTree();
-    }),
-  );
-
-  // MENU TREE: REFRESH
-  cmds.push(
-    commands.registerCommand('codetime.refreshCodetimeMenuTree', () => {
-      codetimeMenuTreeProvider.refresh();
-    }),
-  );
-
-  // DAILY METRICS TREE: INIT
-  const kpmTreeProvider = new KpmProvider();
-  const kpmTreeView: TreeView<KpmItem> = window.createTreeView(
-    'ct-metrics-tree',
-    {
-      treeDataProvider: kpmTreeProvider,
-      showCollapseAll: false,
-    },
-  );
-  kpmTreeProvider.bindView(kpmTreeView);
-  cmds.push(connectKpmTreeView(kpmTreeView));
-
-  // TEAM TREE: INIT
-  const codetimeTeamTreeProvider = new CodeTimeTeamProvider();
-  const codetimeTeamTreeView: TreeView<KpmItem> = window.createTreeView(
-    'ct-team-tree',
-    {
-      treeDataProvider: codetimeTeamTreeProvider,
-      showCollapseAll: false,
-    },
-  );
-  codetimeTeamTreeProvider.bindView(codetimeTeamTreeView);
-  cmds.push(connectCodeTimeTeamTreeView(codetimeTeamTreeView));
-
-  // TEAM TREE: REFRESH
-  cmds.push(
-    commands.registerCommand('codetime.refreshCodetimeTeamTree', () => {
-      codetimeTeamTreeProvider.refresh();
-    }),
-  );
-
-  cmds.push(
-    commands.registerCommand('codetime.refreshTreeViews', () => {
-      codetimeMenuTreeProvider.refresh();
-      kpmTreeProvider.refresh();
-      codetimeTeamTreeProvider.refresh();
-    }),
-  );
 
   // TEAM TREE: INVITE MEMBER
   cmds.push(
@@ -184,18 +123,6 @@ export function createCommands(
     }),
   );
 
-  // REFRESH DAILY METRICS
-  cmds.push(
-    commands.registerCommand('codetime.refreshKpmTree', (keystrokeStats) => {
-      if (keystrokeStats) {
-        KpmProviderManager.getInstance().setCurrentKeystrokeStats(
-          keystrokeStats,
-        );
-      }
-      kpmTreeProvider.refresh();
-    }),
-  );
-
   // DISPLAY README MD
   cmds.push(
     commands.registerCommand('codetime.displayReadme', () => {
@@ -219,10 +146,33 @@ export function createCommands(
     }),
   );
 
+  // Cloud9: command used to view private team leaderboard
+  cmds.push(
+    commands.registerCommand('cloud9.teamLeaderboard', () => {
+      displayTeamLeaderboard();
+    }),
+  );
+
   // Cloud9: command used to create a new team
   cmds.push(
     commands.registerCommand('cloud9.createTeam', () => {
       console.log('Cloud9: CREATE A NEW TEAM');
+      createAndJoinTeam();
+    }),
+  );
+
+  // Cloud9: command used to retrieve team code
+  cmds.push(
+    commands.registerCommand('cloud9.getTeamNameAndId', () => {
+      console.log('Cloud9: GET TEAM NAME AND ID');
+      getTeamNameAndTeamId();
+    }),
+  );
+
+  cmds.push(
+    commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
+      console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
+      removeTeamNameAndId();
     }),
   );
 
@@ -230,13 +180,14 @@ export function createCommands(
   cmds.push(
     commands.registerCommand('cloud9.joinTeam', () => {
       console.log('Cloud9: JOIN A TEAM');
+      joinTeam();
     }),
   );
 
   // Cloud9: command used to clear the cached id (for debugging and testing only)
   cmds.push(
     commands.registerCommand('cloud9.debugClearUserId', () => {
-      console.log('Cloud9: CLEAR CACHED ID');
+      console.log('Cloud9: DEBUG CLEAR CACHED ID');
       clearCachedUserId();
     }),
   );

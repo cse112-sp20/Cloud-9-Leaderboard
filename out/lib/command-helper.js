@@ -14,59 +14,16 @@ const vscode_1 = require("vscode");
 const DataController_1 = require("./DataController");
 const MenuManager_1 = require("./menu/MenuManager");
 const Util_1 = require("./Util");
-const KpmProvider_1 = require("./tree/KpmProvider");
-const CodeTimeMenuProvider_1 = require("./tree/CodeTimeMenuProvider");
-const KpmProviderManager_1 = require("./tree/KpmProviderManager");
 const ProjectCommitManager_1 = require("./menu/ProjectCommitManager");
-const CodeTimeTeamProvider_1 = require("./tree/CodeTimeTeamProvider");
 const ReportManager_1 = require("./menu/ReportManager");
 const FileManager_1 = require("./managers/FileManager");
 const Leaderboard_1 = require("../src/util/Leaderboard");
 const Authentication_1 = require("../src/util/Authentication");
+const Team_1 = require("../src/util/Team");
 function createCommands(kpmController) {
     let cmds = [];
     cmds.push(kpmController);
     // MENU TREE: INIT
-    const codetimeMenuTreeProvider = new CodeTimeMenuProvider_1.CodeTimeMenuProvider();
-    const codetimeMenuTreeView = vscode_1.window.createTreeView('ct-menu-tree', {
-        treeDataProvider: codetimeMenuTreeProvider,
-        showCollapseAll: false,
-    });
-    codetimeMenuTreeProvider.bindView(codetimeMenuTreeView);
-    cmds.push(CodeTimeMenuProvider_1.connectCodeTimeMenuTreeView(codetimeMenuTreeView));
-    // MENU TREE: REVEAL
-    cmds.push(vscode_1.commands.registerCommand('codetime.displayTree', () => {
-        codetimeMenuTreeProvider.revealTree();
-    }));
-    // MENU TREE: REFRESH
-    cmds.push(vscode_1.commands.registerCommand('codetime.refreshCodetimeMenuTree', () => {
-        codetimeMenuTreeProvider.refresh();
-    }));
-    // DAILY METRICS TREE: INIT
-    const kpmTreeProvider = new KpmProvider_1.KpmProvider();
-    const kpmTreeView = vscode_1.window.createTreeView('ct-metrics-tree', {
-        treeDataProvider: kpmTreeProvider,
-        showCollapseAll: false,
-    });
-    kpmTreeProvider.bindView(kpmTreeView);
-    cmds.push(KpmProvider_1.connectKpmTreeView(kpmTreeView));
-    // TEAM TREE: INIT
-    const codetimeTeamTreeProvider = new CodeTimeTeamProvider_1.CodeTimeTeamProvider();
-    const codetimeTeamTreeView = vscode_1.window.createTreeView('ct-team-tree', {
-        treeDataProvider: codetimeTeamTreeProvider,
-        showCollapseAll: false,
-    });
-    codetimeTeamTreeProvider.bindView(codetimeTeamTreeView);
-    cmds.push(CodeTimeTeamProvider_1.connectCodeTimeTeamTreeView(codetimeTeamTreeView));
-    // TEAM TREE: REFRESH
-    cmds.push(vscode_1.commands.registerCommand('codetime.refreshCodetimeTeamTree', () => {
-        codetimeTeamTreeProvider.refresh();
-    }));
-    cmds.push(vscode_1.commands.registerCommand('codetime.refreshTreeViews', () => {
-        codetimeMenuTreeProvider.refresh();
-        kpmTreeProvider.refresh();
-        codetimeTeamTreeProvider.refresh();
-    }));
     // TEAM TREE: INVITE MEMBER
     cmds.push(vscode_1.commands.registerCommand('codetime.inviteTeamMember', (item) => __awaiter(this, void 0, void 0, function* () {
         // the identifier will be in the value
@@ -111,13 +68,6 @@ function createCommands(kpmController) {
     cmds.push(vscode_1.commands.registerCommand('codetime.githubLogin', () => {
         Util_1.launchLogin('github');
     }));
-    // REFRESH DAILY METRICS
-    cmds.push(vscode_1.commands.registerCommand('codetime.refreshKpmTree', (keystrokeStats) => {
-        if (keystrokeStats) {
-            KpmProviderManager_1.KpmProviderManager.getInstance().setCurrentKeystrokeStats(keystrokeStats);
-        }
-        kpmTreeProvider.refresh();
-    }));
     // DISPLAY README MD
     cmds.push(vscode_1.commands.registerCommand('codetime.displayReadme', () => {
         Util_1.displayReadmeIfNotExists(true /*override*/);
@@ -132,17 +82,32 @@ function createCommands(kpmController) {
     cmds.push(vscode_1.commands.registerCommand('cloud9.leaderboard', () => {
         Leaderboard_1.displayLeaderboard();
     }));
+    // Cloud9: command used to view private team leaderboard
+    cmds.push(vscode_1.commands.registerCommand('cloud9.teamLeaderboard', () => {
+        Leaderboard_1.displayTeamLeaderboard();
+    }));
     // Cloud9: command used to create a new team
     cmds.push(vscode_1.commands.registerCommand('cloud9.createTeam', () => {
         console.log('Cloud9: CREATE A NEW TEAM');
+        Team_1.createAndJoinTeam();
+    }));
+    // Cloud9: command used to retrieve team code
+    cmds.push(vscode_1.commands.registerCommand('cloud9.getTeamNameAndId', () => {
+        console.log('Cloud9: GET TEAM NAME AND ID');
+        Team_1.getTeamNameAndTeamId();
+    }));
+    cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
+        console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
+        Team_1.removeTeamNameAndId();
     }));
     // Cloud9: command used to join a new team
     cmds.push(vscode_1.commands.registerCommand('cloud9.joinTeam', () => {
         console.log('Cloud9: JOIN A TEAM');
+        Team_1.joinTeam();
     }));
     // Cloud9: command used to clear the cached id (for debugging and testing only)
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearUserId', () => {
-        console.log('Cloud9: CLEAR CACHED ID');
+        console.log('Cloud9: DEBUG CLEAR CACHED ID');
         Authentication_1.clearCachedUserId();
     }));
     // DISPLAY PROJECT METRICS REPORT

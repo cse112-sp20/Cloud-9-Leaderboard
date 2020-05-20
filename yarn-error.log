@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/xavierluiz/software/swdc-vscode/package.json: Unexpected string in JSON at position 1283
+  SyntaxError: /Users/xavierluiz/software/cloud9/package.json: Unexpected string in JSON at position 1283
       at JSON.parse (<anonymous>)
       at /Users/xavierluiz/.yarn/lib/cli.js:1625:59
       at Generator.next (<anonymous>)
@@ -23,10 +23,10 @@ Trace:
 
 npm manifest: 
   {
-      "name": "swdc-vscode",
+      "name": "cloud9",
       "displayName": "Code Time",
       "version": "2.0.7",
-      "publisher": "softwaredotcom",
+      "publisher": "cse112team9",
       "description": "Code Time is an open source plugin that provides programming metrics right in Visual Studio Code.",
       "author": {
           "name": "Software.com"
@@ -39,10 +39,10 @@ npm manifest:
       },
       "repository": {
           "type": "git",
-          "url": "https://github.com/swdotcom/swdc-vscode"
+          "url": "https://github.com/swdotcom/cloud9"
       },
       "remote.extensionKind": {
-          "softwaredotcom.swdc-vscode": "ui"
+          "cse112team9.cloud9": "ui"
       },
       "categories": [
           "Other"

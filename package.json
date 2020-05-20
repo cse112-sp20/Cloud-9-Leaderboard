@@ -1,8 +1,8 @@
 {
-  "name": "swdc-vscode",
+  "name": "cloud9",
   "displayName": "Code Time",
-  "version": "2.2.3",
-  "publisher": "softwaredotcom",
+  "version": "0.0.1",
+  "publisher": "cse112team9",
   "description": "Code Time is an open source plugin that provides programming metrics right in Visual Studio Code.",
   "author": {
     "name": "Software.com"
@@ -15,13 +15,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/swdotcom/swdc-vscode"
+    "url": "https://github.com/cse112-sp20/Cloud-9-Leaderboard"
   },
   "categories": [
     "Other"
   ],
   "keywords": [
-    "time tracking",
     "productivity",
     "timer",
     "git",
@@ -35,7 +34,7 @@
     "workspace"
   ],
   "engines": {
-    "vscode": "^1.35.0"
+    "vscode": "^1.45.0"
   },
   "main": "./out/extension",
   "scripts": {
@@ -43,14 +42,10 @@
     "compile": "tsc -p ./",
     "lint": "tslint -p ./",
     "watch": "tsc -watch -p ./",
-    "tests": "mocha --require ts-node/register test/runTest.ts"
+    "test": "mocha ./out/test/runTest.js"
   },
   "contributes": {
     "commands": [
-      {
-        "command": "codetime.softwarePaletteMenu",
-        "title": "Code Time: Menu options"
-      },
       {
         "command": "cloud9.createTeam",
         "title": "Cloud9: Create a team"
@@ -60,28 +55,24 @@
         "title": "Cloud9: Join a team"
       },
       {
+        "command": "cloud9.debugClearUserId",
+        "title": "Cloud9 DEBUG: Clear User Id"
+      },
+      {
+        "command": "cloud9.debugClearTeamNameAndId",
+        "title": "Cloud9 DEBUG: Clear Team name and ID"
+      },
+      {
         "command": "cloud9.leaderboard",
         "title": "Cloud9: Leaderboard"
       },
       {
-        "command": "cloud9.debugClearUserId",
-        "title": "Cloud9: Debug clear User Id"
+        "command": "cloud9.teamLeaderboard",
+        "title": "Cloud9: Team Leaderboard"
       },
       {
-        "command": "codetime.howardPush",
-        "title": "push me"
-      },
-      {
-        "command": "codetime.codeTimeMetrics",
-        "title": "Code Time: View summary"
-      },
-      {
-        "command": "codetime.softwareKpmDashboard",
-        "title": "Code Time: See advanced metrics"
-      },
-      {
-        "command": "codetime.displayReadme",
-        "title": "Code Time: Learn more"
+        "command": "cloud9.getTeamNameAndId",
+        "title": "Cloud9: Get Team ID"
       }
     ],
     "configuration": {
@@ -104,8 +95,8 @@
       "activitybar": [
         {
           "id": "code-time",
-          "title": "Code Time",
-          "icon": "resources/dark/paw-outlined.svg"
+          "title": "Cloud9",
+          "icon": "images/cloud9-vscode-icon.svg"
         }
       ]
     },
@@ -130,13 +121,13 @@
     "@types/chai": "^4.2.11",
     "@types/mocha": "^5.2.6",
     "@types/node": "^13.13.5",
-    "@types/vscode": "^1.45.1",
-    "vscode-test": "^1.3.0",
+    "@types/vscode": "^1.45.0",
     "chai": "^4.2.0",
     "eslint": "^7.0.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
+    "glob": "^7.1.6",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.2",
     "mocha": "^7.1.2",
@@ -145,8 +136,10 @@
     "sinon": "^9.0.2",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.10.1",
+    "tslint": "^6.1.2",
     "typescript": "^3.9.2",
     "vsce": "^1.75.0",
+    "vscode-test": "^1.3.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   },
@@ -156,7 +149,6 @@
     "axios": "^0.19.0",
     "clipboardy": "^2.1.0",
     "firebase": "^7.14.3",
-    "husky": "^4.2.5",
     "moment-timezone": "^0.5.25",
     "node-cache": "^5.1.0",
     "numeral": "^2.0.6",
@@ -164,12 +156,6 @@
     "require": "^2.4.20",
     "rxjs": "^6.5.5",
     "unique-names-generator": "^4.2.0",
-    "vsls": "0.3.1291",
-    "yarn": "^1.22.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "vsls": "0.3.1291"
   }
 }

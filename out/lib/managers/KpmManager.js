@@ -156,7 +156,7 @@ class KpmManager {
             let hasNonNewLineData = false;
             let textChangeLen = 0;
             let rangeChangeLen = 0;
-            let contentText = "";
+            let contentText = '';
             let isCharDelete = false;
             if (event.contentChanges && event.contentChanges.length) {
                 for (let i = 0; i < event.contentChanges.length; i++) {
@@ -170,7 +170,7 @@ class KpmManager {
                         if (contentText) {
                             textChangeLen += contentText.length;
                         }
-                        contentText = "";
+                        contentText = '';
                     }
                     else if (contentText.length > 0) {
                         // has text changes
@@ -185,7 +185,7 @@ class KpmManager {
                             linesDeleted = 1;
                         }
                     }
-                    else if (rangeChangeLen && rangeChangeLen > 0 && contentText === "") {
+                    else if (rangeChangeLen && rangeChangeLen > 0 && contentText === '') {
                         isCharDelete = true;
                     }
                 }
@@ -207,18 +207,18 @@ class KpmManager {
                 // it's a copy and paste event
                 //
                 sourceObj.paste += 1;
-                Util_1.logEvent("Copy+Paste Incremented");
+                Util_1.logEvent('Copy+Paste Incremented');
             }
             else if (textChangeLen < 0) {
                 sourceObj.delete += 1;
                 // update the overall count
-                Util_1.logEvent("Delete Incremented");
+                Util_1.logEvent('Delete Incremented');
             }
             else if (hasNonNewLineData) {
                 // update the data for this fileInfo keys count
                 sourceObj.add += 1;
                 // update the overall count
-                Util_1.logEvent("KPM incremented");
+                Util_1.logEvent('KPM incremented');
             }
             // increment keystrokes by 1
             rootObj.keystrokes += 1;
@@ -245,7 +245,7 @@ class KpmManager {
             this._currentPayloadTimeout = null;
         }
         this._currentPayloadTimeout = setTimeout(() => {
-            console.log("Update Lazily Payload");
+            console.log('Update Lazily Payload');
             console.log(payload);
             this.updateLatestPayload(payload);
         }, 2000);
@@ -272,7 +272,7 @@ class KpmManager {
         sourceObj.length = staticInfo.length;
     }
     getFileName(event) {
-        let filename = "";
+        let filename = '';
         if (event.fileName) {
             filename = event.fileName;
         }
@@ -283,7 +283,7 @@ class KpmManager {
     }
     getStaticEventInfo(event, filename) {
         return __awaiter(this, void 0, void 0, function* () {
-            let languageId = "";
+            let languageId = '';
             let length = 0;
             let lineCount = 0;
             // get the filename, length of the file, and the languageId
@@ -316,7 +316,7 @@ class KpmManager {
             // get the age of this file
             const fileAgeDays = Util_1.getFileAgeInDays(filename);
             // if the languageId is not assigned, use the file type
-            if (!languageId && filename.indexOf(".") !== -1) {
+            if (!languageId && filename.indexOf('.') !== -1) {
                 let fileType = Util_1.getFileType(filename);
                 if (fileType) {
                     languageId = fileType;
@@ -343,7 +343,7 @@ class KpmManager {
                 const issues = yield JiraClient_1.JiraClient.getInstance().fetchIssues();
             }
             else {
-                Util_1.showInformationMessage("Please select text to copy to your Jira project");
+                Util_1.showInformationMessage('Please select text to copy to your Jira project');
             }
         });
     }
@@ -358,7 +358,7 @@ class KpmManager {
         }
         // if it's the dashboard file or a liveshare tmp file then
         // skip event tracking
-        let scheme = "";
+        let scheme = '';
         if (event.uri && event.uri.scheme) {
             scheme = event.uri.scheme;
         }
@@ -370,7 +370,7 @@ class KpmManager {
         const isLiveshareTmpFile = filename.match(/.*\.code-workspace.*vsliveshare.*tmp-.*/);
         const isInternalFile = filename.match(/.*\.software.*(CommitSummary\.txt|CodeTime\.txt|session\.json|ProjectCodeSummary\.txt|data.json)/);
         // other scheme types I know of "vscode-userdata", "git"
-        if (scheme !== "file" && scheme !== "untitled") {
+        if (scheme !== 'file' && scheme !== 'untitled') {
             return false;
         }
         else if (isLiveshareTmpFile || isInternalFile) {
@@ -387,7 +387,7 @@ class KpmManager {
             // project.directory is used as an object key, must be string
             directory: rootPath,
             name,
-            identifier: "",
+            identifier: '',
             resource: {},
         });
         keystrokeStats.keystrokes = 1;
