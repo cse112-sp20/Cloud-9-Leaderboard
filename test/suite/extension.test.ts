@@ -1,29 +1,42 @@
-import * as assert from 'assert';
+//
+// Note: This example test is leveraging the Mocha test framework.
+// Please refer to their documentation on https://mochajs.org/ for help.
+//
 
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-import {Leaderboard} from './../../src/util/Leaderboard';
-import {sumT} from "./../../src/util/sumT";
+import { generateRandomName, getRandomInt, generateRandomEmail } from "../../src/util/Utility";
+import { getExtensionContext } from "../../src/util/Authentication";
 
-import * as vscode from 'vscode';
-// import * as myExtension from '../extension';
 
+// The module 'assert' provides assertion methods from node
+const assert = require('chai').assert;
 suite('Extension Test Suite', () => {
-  vscode.window.showInformationMessage('Start all tests.');
-
-  test('Sample test', () => {
-    assert.equal(-1, [1, 2, 3].indexOf(5));
-    assert.equal(-1, [1, 2, 3].indexOf(0));
-
-    assert.equal(3, sumT(1,2));
-    console.log(Leaderboard);
-  });
-
-
-  test('Sum test', () => {
+  test('utilities.js', () => {
+    const result = generateRandomName();
+      assert.typeOf(result, 'string');
+  
+      assert.equal(getRandomInt(1), 0);
    
-
-    assert.equal(3, sumT(1,2));
- 
+  
+      assert.equal(getRandomInt(0), 0);
+  
+      assert.equal(getRandomInt(100) <= 100, true);
+  
+      assert.equal(generateRandomEmail().includes('@'), true);
+  });
+  
+  test('authentication.ts', () => {
+      console.log("hi");
+  
+      //console.log(clearCachedUserId);
+  
+      //console.log(authenticateUser);
+  });
+  
+  test('leaderboard.ts', () => {
+      //const id : Number = 654;
+      //const userObj = null;
+      //console.log(Leaderboard);
+      //Leaderboard.addUser(id, userObj);
+      //assert.equal(Leaderboard.getUsers().length, 1);
   });
 });
