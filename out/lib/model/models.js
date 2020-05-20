@@ -6,15 +6,15 @@ const Constants_1 = require("../Constants");
 const vscode_1 = require("vscode");
 class KpmItem {
     constructor() {
-        this.id = "";
-        this.label = "";
-        this.description = "";
-        this.value = "";
-        this.tooltip = "";
-        this.command = "";
+        this.id = '';
+        this.label = '';
+        this.description = '';
+        this.value = '';
+        this.tooltip = '';
+        this.command = '';
         this.commandArgs = [];
-        this.type = "";
-        this.contextValue = "";
+        this.type = '';
+        this.contextValue = '';
         this.callback = null;
         this.icon = null;
         this.children = [];
@@ -39,9 +39,9 @@ class KeystrokeAggregate {
 exports.KeystrokeAggregate = KeystrokeAggregate;
 class FileChangeInfo {
     constructor() {
-        this.name = "";
-        this.fsPath = "";
-        this.projectDir = "";
+        this.name = '';
+        this.fsPath = '';
+        this.projectDir = '';
         this.kpm = 0;
         this.keystrokes = 0;
         this.add = 0;
@@ -54,7 +54,7 @@ class FileChangeInfo {
         this.lines = 0;
         this.linesAdded = 0;
         this.linesRemoved = 0;
-        this.syntax = "";
+        this.syntax = '';
         this.fileAgeDays = 0;
         this.repoFileContributorCount = 0;
         this.start = 0;
@@ -115,15 +115,15 @@ exports.CommitChangeStats = CommitChangeStats;
 // timestamp_local: 1233, description: "OnboardPrompt"}
 class CodeTimeEvent {
     constructor() {
-        this.type = "";
-        this.name = "";
+        this.type = '';
+        this.name = '';
         this.timestamp = 0;
         this.timestamp_local = 0;
-        this.description = "";
+        this.description = '';
         this.pluginId = Util_1.getPluginId();
         this.os = Util_1.getOs();
         this.version = Util_1.getVersion();
-        this.hostname = ""; // this is gathered using an await
+        this.hostname = ''; // this is gathered using an await
         this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     }
 }
