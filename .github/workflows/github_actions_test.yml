@@ -3,8 +3,10 @@ name: Github Actions Example
 on:
   pull_request:
   push:
-       branches-ignore:
-      - 'release/'
+    branches:
+      - master
+      - dev
+      - test-new-framework-hest
 
 jobs:
   test:
@@ -24,4 +26,3 @@ jobs:
         run: xvfb-run --auto-servernum npm test
         env:
           CI: 'true'
-  
