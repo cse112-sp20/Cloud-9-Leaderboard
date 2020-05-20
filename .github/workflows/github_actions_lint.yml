@@ -1,0 +1,2 @@
+- name: Lint Action
+  uses: samuelmeuli/lint-action@v1.5.2
