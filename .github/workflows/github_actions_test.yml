@@ -1,11 +1,10 @@
-name: Github Actions Test
+name: Github Actions Example
 
 on:
   pull_request:
   push:
-    branches:
-      - master
-      - dev
+       branches-ignore:
+      - 'release/'
 
 jobs:
   test:
@@ -25,3 +24,4 @@ jobs:
         run: xvfb-run --auto-servernum npm test
         env:
           CI: 'true'
+  
