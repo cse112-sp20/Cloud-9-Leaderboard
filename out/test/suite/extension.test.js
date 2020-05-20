@@ -66,7 +66,8 @@ suite('metric.ts', () => {
         userStats['keystrokes'] = 100000;
         userStats['linesChanged'] = -100000;
         score = Metric_1.scoreCalculation(userStats);
-        assert.equal(score, 101010);
+        assert.equal(score, 1010);
     });
+    //process metric test needed (don't know what payload looks like yet)
 });
 //# sourceMappingURL=extension.test.js.map
