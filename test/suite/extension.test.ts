@@ -5,6 +5,7 @@
 
 import { generateRandomName, getRandomInt, generateRandomEmail } from "../../src/util/Utility";
 import { getExtensionContext } from "../../src/util/Authentication";
+import { Leaderboard } from "../../src/util/Leaderboard";
 
 
 // The module 'assert' provides assertion methods from node
@@ -25,7 +26,7 @@ suite('Extension Test Suite', () => {
   });
   
   test('authentication.ts', () => {
-      console.log("hi");
+      console.log(Leaderboard);
   
       //console.log(clearCachedUserId);
   
