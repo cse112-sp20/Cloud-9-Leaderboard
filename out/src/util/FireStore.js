@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkIfInTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.loginUserWithEmailAndPassword = void 0;
+exports.mockFirebase = exports.checkIfInTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.loginUserWithEmailAndPassword = void 0;
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
@@ -23,8 +23,8 @@ const Utility_1 = require("./Utility");
 if (!firebase.apps.length) {
     firebase.initializeApp(Constants_1.firebaseConfig);
 }
-const auth = firebase.auth();
-const db = firebase.firestore();
+var auth = firebase.auth();
+var db = firebase.firestore();
 /**
  *
  * @param email login user with email and password
@@ -38,7 +38,7 @@ function loginUserWithEmailAndPassword(email, password) {
             console.log('signed in');
         })
             .catch((e) => {
-            console.log(e.message);
+            console.log("not signed");
         });
     });
 }
@@ -411,4 +411,9 @@ function checkIfInTeam() {
     });
 }
 exports.checkIfInTeam = checkIfInTeam;
+function mockFirebase(mockDb, mockAuth) {
+    db = mockDb;
+    auth = mockAuth;
+}
+exports.mockFirebase = mockFirebase;
 //# sourceMappingURL=FireStore.js.map

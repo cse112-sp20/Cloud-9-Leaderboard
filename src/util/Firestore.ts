@@ -25,8 +25,8 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-const auth = firebase.auth();
-const db = firebase.firestore();
+var auth = firebase.auth();
+var db = firebase.firestore();
 
 /**
  *
@@ -40,7 +40,7 @@ export async function loginUserWithEmailAndPassword(email, password) {
       console.log('signed in');
     })
     .catch((e) => {
-      console.log(e.message);
+      console.log("not signed");
     });
 }
 
@@ -462,4 +462,9 @@ export async function checkIfInTeam() {
       return inTeam;
     });
   return inTeam;
+}
+
+export function mockFirebase(mockDb, mockAuth){
+  db = mockDb;
+  auth = mockAuth;
 }

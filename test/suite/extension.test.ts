@@ -1,8 +1,3 @@
-//
-// Note: This example test is leveraging the Mocha test framework.
-// Please refer to their documentation on https://mochajs.org/ for help.
-//
-
 import {
   generateRandomName,
   getRandomInt,
@@ -11,6 +6,11 @@ import {
 import {getExtensionContext} from '../../src/util/Authentication';
 import {Leaderboard, getLeaderboardFile, getTeamLeaderboardFile} from '../../src/util/Leaderboard';
 import { scoreCalculation } from '../../src/util/Metric';
+import { mockFirebase, loginUserWithEmailAndPassword } from '../../src/util/FireStore';
+const sinon = require('sinon');
+const firebase = require('firebase/app');
+
+
 
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
@@ -44,12 +44,14 @@ suite('leaderboard.ts', () => {
 
   test('getting global leadboard file', () => {
     const leaderboardPath: string = getLeaderboardFile().toString();
-    assert.equal(leaderboardPath.includes("\\leaderboard.txt") || leaderboardPath.includes("/leaderboard.txt"), true);
+    assert.equal(leaderboardPath.includes("\\leaderboard.txt") || 
+      leaderboardPath.includes("/leaderboard.txt"), true);
   });
 
   test('getting team leadboard file', () => {
     const leaderboardPath: string = getTeamLeaderboardFile().toString();
-    assert.equal(leaderboardPath.includes("\\team_leaderboard.txt") || leaderboardPath.includes("/team_leaderboard.txt"), true);
+    assert.equal(leaderboardPath.includes("\\team_leaderboard.txt") || 
+      leaderboardPath.includes("/team_leaderboard.txt"), true);
   });
 
   //integration test of leaderboard displaying
@@ -91,4 +93,17 @@ suite('metric.ts', () => {
   });
 
   //process metric test needed (don't know what payload looks like yet)
+});
+
+suite('firestore.ts', () => {
+  var signInStub = sinon.stub(firebase.auth(), "signInWithEmailAndPassword");
+  const signInResult = {};
+  signInStub.withArgs("test", "test").returns(Promise.resolve(signInResult));
+
+
+  test('login to firebase', async () => {
+   await loginUserWithEmailAndPassword("test", "test");
+  });
+
+  
 });

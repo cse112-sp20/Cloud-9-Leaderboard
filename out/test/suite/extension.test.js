@@ -1,12 +1,20 @@
 "use strict";
-//
-// Note: This example test is leveraging the Mocha test framework.
-// Please refer to their documentation on https://mochajs.org/ for help.
-//
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Utility_1 = require("../../src/util/Utility");
 const Leaderboard_1 = require("../../src/util/Leaderboard");
 const Metric_1 = require("../../src/util/Metric");
+const FireStore_1 = require("../../src/util/FireStore");
+const sinon = require('sinon');
+const firebase = require('firebase/app');
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
 suite('utilities.ts', () => {
@@ -33,11 +41,13 @@ suite('leaderboard.ts', () => {
     });
     test('getting global leadboard file', () => {
         const leaderboardPath = Leaderboard_1.getLeaderboardFile().toString();
-        assert.equal(leaderboardPath.includes("\\leaderboard.txt") || leaderboardPath.includes("/leaderboard.txt"), true);
+        assert.equal(leaderboardPath.includes("\\leaderboard.txt") ||
+            leaderboardPath.includes("/leaderboard.txt"), true);
     });
     test('getting team leadboard file', () => {
         const leaderboardPath = Leaderboard_1.getTeamLeaderboardFile().toString();
-        assert.equal(leaderboardPath.includes("\\team_leaderboard.txt") || leaderboardPath.includes("/team_leaderboard.txt"), true);
+        assert.equal(leaderboardPath.includes("\\team_leaderboard.txt") ||
+            leaderboardPath.includes("/team_leaderboard.txt"), true);
     });
     //integration test of leaderboard displaying
 });
@@ -69,5 +79,13 @@ suite('metric.ts', () => {
         assert.equal(score, 1010);
     });
     //process metric test needed (don't know what payload looks like yet)
+});
+suite('firestore.ts', () => {
+    var signInStub = sinon.stub(firebase.auth(), "signInWithEmailAndPassword");
+    const signInResult = {};
+    signInStub.withArgs("test", "test").returns(Promise.resolve(signInResult));
+    test('login to firebase', () => __awaiter(void 0, void 0, void 0, function* () {
+        yield FireStore_1.loginUserWithEmailAndPassword("test", "test");
+    }));
 });
 //# sourceMappingURL=extension.test.js.map
