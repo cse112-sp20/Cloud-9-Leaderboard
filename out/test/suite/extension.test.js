@@ -10,9 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Utility_1 = require("../../src/util/Utility");
+const Authentication_1 = require("../../src/util/Authentication");
 const Leaderboard_1 = require("../../src/util/Leaderboard");
 const Metric_1 = require("../../src/util/Metric");
 const FireStore_1 = require("../../src/util/FireStore");
+const Constants_1 = require("../../src/util/Constants");
 const sinon = require('sinon');
 const firebase = require('firebase/app');
 // The module 'assert' provides assertion methods from node
@@ -81,11 +83,35 @@ suite('metric.ts', () => {
     //process metric test needed (don't know what payload looks like yet)
 });
 suite('firestore.ts', () => {
-    var signInStub = sinon.stub(firebase.auth(), "signInWithEmailAndPassword");
-    const signInResult = {};
-    signInStub.withArgs("test", "test").returns(Promise.resolve(signInResult));
-    test('login to firebase', () => __awaiter(void 0, void 0, void 0, function* () {
+    const testId = "testUserId";
+    test('login to firestore', () => __awaiter(void 0, void 0, void 0, function* () {
+        var signInStub = sinon.stub(firebase.auth(), "signInWithEmailAndPassword");
+        const signInResult = {};
+        signInStub.withArgs("test", "test").returns(Promise.resolve(signInResult));
         yield FireStore_1.loginUserWithEmailAndPassword("test", "test");
+    }));
+    test('update users stats', () => __awaiter(void 0, void 0, void 0, function* () {
+    }));
+    test('addNewUserDocToDb', () => __awaiter(void 0, void 0, void 0, function* () {
+    }));
+    test('getUserDocWithId', () => __awaiter(void 0, void 0, void 0, function* () {
+        var result = {};
+        result['data'] = 'yaya';
+        sinon.stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc(testId), "get").returns(Promise.resolve(result));
+        FireStore_1.getUserDocWithId(testId).then((res) => {
+            assert.equal(result, res);
+        });
+    }));
+    it('create new user', () => __awaiter(void 0, void 0, void 0, function* () {
+        //Set a fake userID
+        var result = {};
+        result['uid'] = testId;
+        sinon.stub(firebase.auth(), "currentUser").value(result);
+        //whenever the function is called, return a blank promise
+        sinon.stub(firebase.auth(), "createUserWithEmailAndPassword").
+            withArgs(testId, "testPassword").returns(Promise.resolve());
+        var successful = yield FireStore_1.createNewUserInFirebase(Authentication_1.getExtensionContext(), testId, "testPassword");
+        assert.equal(successful, true); // does not work
     }));
 });
 //# sourceMappingURL=extension.test.js.map

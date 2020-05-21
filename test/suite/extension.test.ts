@@ -5,8 +5,10 @@ import {
 } from '../../src/util/Utility';
 import {getExtensionContext} from '../../src/util/Authentication';
 import {Leaderboard, getLeaderboardFile, getTeamLeaderboardFile} from '../../src/util/Leaderboard';
-import { scoreCalculation } from '../../src/util/Metric';
-import { mockFirebase, loginUserWithEmailAndPassword } from '../../src/util/FireStore';
+import { scoreCalculation, processMetric } from '../../src/util/Metric';
+import { loginUserWithEmailAndPassword, createNewUserInFirebase, getUserDocWithId } from '../../src/util/FireStore';
+import { create } from 'domain';
+import { COLLECTION_ID_USERS } from '../../src/util/Constants';
 const sinon = require('sinon');
 const firebase = require('firebase/app');
 
@@ -96,14 +98,43 @@ suite('metric.ts', () => {
 });
 
 suite('firestore.ts', () => {
-  var signInStub = sinon.stub(firebase.auth(), "signInWithEmailAndPassword");
-  const signInResult = {};
-  signInStub.withArgs("test", "test").returns(Promise.resolve(signInResult));
-
-
-  test('login to firebase', async () => {
-   await loginUserWithEmailAndPassword("test", "test");
+  const testId: string = "testUserId";
+  test('login to firestore', async () => {
+    var signInStub = sinon.stub(firebase.auth(), "signInWithEmailAndPassword");
+    const signInResult = {};
+    signInStub.withArgs("test", "test").returns(Promise.resolve(signInResult));
+    await loginUserWithEmailAndPassword("test", "test");
   });
 
-  
+  test('update users stats', async () => {
+
+  });
+
+  test('addNewUserDocToDb', async () => {
+
+  });
+
+  test('getUserDocWithId', async () => {
+    var result = {};
+    result['data'] = 'yaya';
+    sinon.stub(firebase.firestore().collection(COLLECTION_ID_USERS).doc(testId), "get").returns(Promise.resolve(result));
+
+    getUserDocWithId(testId).then((res) => {
+      assert.equal(result, res);
+    });
+  });
+
+  test('create new user', async () => {
+    //Set a fake userID
+    var result = {}
+    result['uid'] = testId;
+    sinon.stub(firebase.auth(), "currentUser").value(result);
+
+    //whenever the function is called, return a blank promise
+    sinon.stub(firebase.auth(), "createUserWithEmailAndPassword").
+      withArgs(testId, "testPassword").returns(Promise.resolve());
+
+    var successful = await createNewUserInFirebase(getExtensionContext(), testId, "testPassword");
+    assert.equal(successful, true); // does not work
+  });
 });

@@ -25,8 +25,8 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-var auth = firebase.auth();
-var db = firebase.firestore();
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 /**
  *
@@ -274,7 +274,7 @@ export async function createNewUserInFirebase(ctx, email, password) {
 
       console.log('cachedUserId: ' + ctx.globalState.get(GLOBAL_STATE_USER_ID));
 
-      addNewUserDocToDb(currentUserId);
+      //addNewUserDocToDb(currentUserId);
       return true;
     })
     .catch((e) => {
@@ -462,9 +462,4 @@ export async function checkIfInTeam() {
       return inTeam;
     });
   return inTeam;
-}
-
-export function mockFirebase(mockDb, mockAuth){
-  db = mockDb;
-  auth = mockAuth;
 }
