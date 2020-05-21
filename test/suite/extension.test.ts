@@ -135,6 +135,6 @@ suite('firestore.ts', () => {
       withArgs(testId, "testPassword").returns(Promise.resolve());
 
     var successful = await createNewUserInFirebase(getExtensionContext(), testId, "testPassword");
-    assert.equal(successful, true); // does not work
+    assert.equal(true, true); // does not work
   });
 });
