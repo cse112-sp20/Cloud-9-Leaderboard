@@ -3,8 +3,8 @@ import {
   getRandomInt,
   generateRandomEmail,
 } from '../../src/util/Utility';
-import {getExtensionContext} from '../../src/util/Authentication';
-import {Leaderboard, getLeaderboardFile, getTeamLeaderboardFile} from '../../src/util/Leaderboard';
+import { getExtensionContext, clearCachedUserId, authenticateUser, registerNewUserWithUserInput, registerNewUserWithGeneratedCredential } from '../../src/util/Authentication';
+import { Leaderboard, getLeaderboardFile, getTeamLeaderboardFile} from '../../src/util/Leaderboard';
 import { scoreCalculation, processMetric } from '../../src/util/Metric';
 import { loginUserWithEmailAndPassword, createNewUserInFirebase, getUserDocWithId } from '../../src/util/FireStore';
 import { create } from 'domain';
@@ -16,6 +16,26 @@ const firebase = require('firebase/app');
 
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
+suite('authentication.ts', () => {
+  test('generating extension context', () => {
+    const result = getExtensionContext()
+    assert.typeOf(result, 'object');
+  });
+
+  test('clearing cached user id', () => {
+  });
+
+  test('authenticating user', () => {
+  });
+
+  test('registering new user with user input', () => {
+  });
+
+  test('registering new user with generated credentials', () => {
+  });
+
+});
+
 suite('utilities.ts', () => {
   test('generating random name', () => {
     const result = generateRandomName();

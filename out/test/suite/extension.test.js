@@ -19,6 +19,20 @@ const sinon = require('sinon');
 const firebase = require('firebase/app');
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
+suite('authentication.ts', () => {
+    test('generating extension context', () => {
+        const result = Authentication_1.getExtensionContext();
+        assert.typeOf(result, 'object');
+    });
+    test('clearing cached user id', () => {
+    });
+    test('authenticating user', () => {
+    });
+    test('registering new user with user input', () => {
+    });
+    test('registering new user with generated credentials', () => {
+    });
+});
 suite('utilities.ts', () => {
     test('generating random name', () => {
         const result = Utility_1.generateRandomName();
