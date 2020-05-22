@@ -40,7 +40,7 @@ export async function loginUserWithEmailAndPassword(email, password) {
       console.log('signed in');
     })
     .catch((e) => {
-      console.log("not signed");
+      console.log('not signed');
     });
 }
 

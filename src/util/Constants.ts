@@ -45,4 +45,4 @@ export const GLOBAL_STATE_USER_TEAM_ID = 'cachedUserTeamId';
 
 export const timeMultiplier = 0.01;
 export const keystrokeMultplier = 1;
-export const linesMultiplier = 10; 
+export const linesMultiplier = 10;

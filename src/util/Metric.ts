@@ -1,5 +1,5 @@
 import {window} from 'vscode';
-import { timeMultiplier, keystrokeMultplier, linesMultiplier } from './Constants';
+import {timeMultiplier, keystrokeMultplier, linesMultiplier} from './Constants';
 
 /*
  * Function for extract codetime payload for leaderboard metric
