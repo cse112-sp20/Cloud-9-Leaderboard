@@ -34,6 +34,7 @@ suite('authentication.ts', () => {
     });
     test('registering new user with user input', () => {
         const ctx = Authentication_1.getExtensionContext();
+        Authentication_1.registerNewUserWithUserInput(ctx);
     });
     test('registering new user with generated credentials', () => {
         const ctx = Authentication_1.getExtensionContext();

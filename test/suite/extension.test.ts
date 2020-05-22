@@ -38,14 +38,17 @@ suite('authentication.ts', () => {
 
   test('authenticating user', () => {
     const ctx = getExtensionContext();
+    authenticateUser(ctx);
   });
 
   test('registering new user with user input', () => {
     const ctx = getExtensionContext();
+    registerNewUserWithUserInput(ctx);
   });
 
   test('registering new user with generated credentials', () => {
     const ctx = getExtensionContext();
+    registerNewUserWithGeneratedCredential(ctx);
   });
 
 });
