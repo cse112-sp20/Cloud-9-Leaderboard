@@ -1,10 +1,12 @@
-name: Github Actions Test
+name: Github Actions Example
 
 on:
   pull_request:
   push:
-    branches-ignore:
-      - 'release/'
+    branches:
+      - master
+      - dev
+      - test-new-framework-hest
 
 jobs:
   test:
@@ -17,5 +19,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: npm install
         run: npm ci
+        env:
+          CI: 'true'
+      - run: sudo apt-get install xvfb
+      - name: npm test
+        run: xvfb-run --auto-servernum npm test
         env:
           CI: 'true'

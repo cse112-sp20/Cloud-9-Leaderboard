@@ -22,7 +22,7 @@ function displayProjectCommitsDashboardByStartEnd(start, end, projectIds = []) {
     });
 }
 exports.displayProjectCommitsDashboardByStartEnd = displayProjectCommitsDashboardByStartEnd;
-function displayProjectCommitsDashboardByRangeType(type = "lastWeek", projectIds = []) {
+function displayProjectCommitsDashboardByRangeType(type = 'lastWeek', projectIds = []) {
     return __awaiter(this, void 0, void 0, function* () {
         // 1st write the code time metrics dashboard file
         yield DataController_1.writeProjectCommitDashboardByRangeType(type, projectIds);
@@ -53,15 +53,15 @@ function displayProjectContributorCommitsDashboard(identifier) {
     });
 }
 exports.displayProjectContributorCommitsDashboard = displayProjectContributorCommitsDashboard;
-function generateDailyReport(type = "yesterday", projectIds = []) {
+function generateDailyReport(type = 'yesterday', projectIds = []) {
     return __awaiter(this, void 0, void 0, function* () {
         yield DataController_1.writeDailyReportDashboard(type, projectIds);
         const filePath = Util_1.getDailyReportSummaryFile();
         vscode_1.workspace.openTextDocument(filePath).then((doc) => {
             // only focus if it's not already open
             vscode_1.window.showTextDocument(doc, vscode_1.ViewColumn.One, false).then((e) => __awaiter(this, void 0, void 0, function* () {
-                const submitToSlack = yield vscode_1.window.showInformationMessage("Submit report to slack?", ...["Yes"]);
-                if (submitToSlack && submitToSlack === "Yes") {
+                const submitToSlack = yield vscode_1.window.showInformationMessage('Submit report to slack?', ...['Yes']);
+                if (submitToSlack && submitToSlack === 'Yes') {
                     // take the content and send it to a selected channel
                     SlackManager_1.sendGeneratedReportReport();
                 }

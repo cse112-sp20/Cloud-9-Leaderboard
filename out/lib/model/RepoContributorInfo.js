@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class RepoContributorInfo {
     constructor() {
-        this.identifier = "";
-        this.tag = "";
-        this.branch = "";
+        this.identifier = '';
+        this.tag = '';
+        this.branch = '';
         this.count = 0;
         this.members = [];
     }
