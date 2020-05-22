@@ -25,12 +25,18 @@ suite('authentication.ts', () => {
         assert.typeOf(result, 'object');
     });
     test('clearing cached user id', () => {
+        Authentication_1.clearCachedUserId();
+        const ctx = Authentication_1.getExtensionContext();
+        assert.equal(ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID), undefined);
     });
     test('authenticating user', () => {
+        const ctx = Authentication_1.getExtensionContext();
     });
     test('registering new user with user input', () => {
+        const ctx = Authentication_1.getExtensionContext();
     });
     test('registering new user with generated credentials', () => {
+        const ctx = Authentication_1.getExtensionContext();
     });
 });
 suite('utilities.ts', () => {

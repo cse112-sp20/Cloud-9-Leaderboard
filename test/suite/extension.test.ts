@@ -8,7 +8,15 @@ import { Leaderboard, getLeaderboardFile, getTeamLeaderboardFile} from '../../sr
 import { scoreCalculation, processMetric } from '../../src/util/Metric';
 import { loginUserWithEmailAndPassword, createNewUserInFirebase, getUserDocWithId } from '../../src/util/FireStore';
 import { create } from 'domain';
-import { COLLECTION_ID_USERS } from '../../src/util/Constants';
+import {   
+  COLLECTION_ID_USERS,
+  COLLECTION_ID_TEAMS,
+  COLLECTION_ID_TEAM_MEMBERS,
+  GLOBAL_STATE_USER_ID,
+  GLOBAL_STATE_USER_EMAIL,
+  GLOBAL_STATE_USER_PASSWORD,
+  GLOBAL_STATE_USER_TEAM_NAME,
+} from '../../src/util/Constants';
 const sinon = require('sinon');
 const firebase = require('firebase/app');
 
@@ -18,20 +26,26 @@ const firebase = require('firebase/app');
 const assert = require('chai').assert;
 suite('authentication.ts', () => {
   test('generating extension context', () => {
-    const result = getExtensionContext()
+    const result = getExtensionContext();
     assert.typeOf(result, 'object');
   });
 
   test('clearing cached user id', () => {
+    clearCachedUserId();
+    const ctx = getExtensionContext();
+    assert.equal(ctx.globalState.get(GLOBAL_STATE_USER_ID), undefined);
   });
 
   test('authenticating user', () => {
+    const ctx = getExtensionContext();
   });
 
   test('registering new user with user input', () => {
+    const ctx = getExtensionContext();
   });
 
   test('registering new user with generated credentials', () => {
+    const ctx = getExtensionContext();
   });
 
 });
