@@ -8,6 +8,7 @@ import {getExtensionContext} from './Authentication';
 import {
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_TEAM_ID,
+  GLOBAL_STATE_USER_IS_TEAM_LEADER,
 } from './Constants';
 
 /**
@@ -21,6 +22,8 @@ export async function createAndJoinTeam() {
     window.showInformationMessage('You have already joined a team!');
     return;
   }
+
+  window.showInformationMessage('Enter a name for your new team!');
 
   await window
     .showInputBox({placeHolder: 'Enter a new team name'})
@@ -56,19 +59,29 @@ export async function getTeamNameAndTeamId() {
   const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
+  //check if is leader
+  const isLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
+
   if (teamName == undefined && teamId == undefined) {
     window.showInformationMessage('No team info found.');
-  } else {
-    window.showInformationMessage('Your team id: ' + teamId);
-    console.log('Your team name: ' + teamName + '\nYour team id: ' + teamId);
-  }
+    return;
+  } 
 
-  let inTeam = await checkIfInTeam();
-  if (inTeam == true) {
-    console.log('Already in a team.');
-  } else {
-    console.log('Not in team!');
+  let messageStr = 'Your team name: ' + teamName;
+
+  if(isLeader){
+    messageStr += '\nYour team ID: ' + teamId;
   }
+  window.showInformationMessage(messageStr);
+  console.log(messageStr);
+  
+
+  // let inTeam = await checkIfInTeam();
+  // if (inTeam == true) {
+  //   console.log('Already in a team.');
+  // } else {
+  //   console.log('Not in team!');
+  // }
 }
 /**
  * prompts the user to enter a team code and add them to the team
@@ -88,6 +101,6 @@ export async function joinTeam() {
         window.showInformationMessage('Please enter a valid team name!');
         return;
       }
-      joinTeamWithTeamId(teamCode);
+      joinTeamWithTeamId(teamCode, false);
     });
 }

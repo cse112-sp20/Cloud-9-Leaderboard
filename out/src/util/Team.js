@@ -25,6 +25,7 @@ function createAndJoinTeam() {
             vscode_1.window.showInformationMessage('You have already joined a team!');
             return;
         }
+        vscode_1.window.showInformationMessage('Enter a name for your new team!');
         yield vscode_1.window
             .showInputBox({ placeHolder: 'Enter a new team name' })
             .then((teamName) => __awaiter(this, void 0, void 0, function* () {
@@ -59,20 +60,24 @@ function getTeamNameAndTeamId() {
             return;
         const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
+        //check if is leader
+        const isLeader = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER);
         if (teamName == undefined && teamId == undefined) {
             vscode_1.window.showInformationMessage('No team info found.');
+            return;
         }
-        else {
-            vscode_1.window.showInformationMessage('Your team id: ' + teamId);
-            console.log('Your team name: ' + teamName + '\nYour team id: ' + teamId);
+        let messageStr = 'Your team name: ' + teamName;
+        if (isLeader) {
+            messageStr += '\nYour team ID: ' + teamId;
         }
-        let inTeam = yield Firestore_1.checkIfInTeam();
-        if (inTeam == true) {
-            console.log('Already in a team.');
-        }
-        else {
-            console.log('Not in team!');
-        }
+        vscode_1.window.showInformationMessage(messageStr);
+        console.log(messageStr);
+        // let inTeam = await checkIfInTeam();
+        // if (inTeam == true) {
+        //   console.log('Already in a team.');
+        // } else {
+        //   console.log('Not in team!');
+        // }
     });
 }
 exports.getTeamNameAndTeamId = getTeamNameAndTeamId;
@@ -94,7 +99,7 @@ function joinTeam() {
                 vscode_1.window.showInformationMessage('Please enter a valid team name!');
                 return;
             }
-            Firestore_1.joinTeamWithTeamId(teamCode);
+            Firestore_1.joinTeamWithTeamId(teamCode, false);
         }));
     });
 }
