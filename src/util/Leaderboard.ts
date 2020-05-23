@@ -195,8 +195,10 @@ async function writeToFile(users, isTeam) {
     }
   });
 
-  teamname = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME) !== undefined?  ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME) : '______';
-
+  teamname =
+    ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME) !== undefined
+      ? ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME)
+      : '______';
 
   leaderBoardContent += 'Username \t : \t ' + username + '\n';
   leaderBoardContent += 'Teamname \t : \t ' + teamname + '\n\n';
