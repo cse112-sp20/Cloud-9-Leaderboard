@@ -157,6 +157,7 @@ function writeToFile(users, isTeam) {
         });
         let rankSection = '';
         let username = '';
+        let teamname = '';
         scoreMap.map((user, i) => {
             let rankNumberSection = '';
             if (i == 0) {
@@ -193,8 +194,9 @@ function writeToFile(users, isTeam) {
                         '\n';
             }
         });
+        teamname = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME) !== undefined ? ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME) : '______';
         leaderBoardContent += 'Username \t : \t ' + username + '\n';
-        leaderBoardContent += 'Teamname \t : \t ' + '______' + '\n\n';
+        leaderBoardContent += 'Teamname \t : \t ' + teamname + '\n\n';
         leaderBoardContent += Constants_1.SECTION_BAR;
         leaderBoardContent += 'LEADERBOARD RANKING \n';
         leaderBoardContent += Constants_1.SECTION_BAR + '\n';

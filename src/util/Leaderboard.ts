@@ -6,6 +6,7 @@ import {stat} from 'fs';
 import {getExtensionContext} from './Authentication';
 import {
   GLOBAL_STATE_USER_ID,
+  GLOBAL_STATE_USER_TEAM_NAME,
   MAX_USERNAME_LENGTH,
   MAX_RANK_LENGTH,
   SECTION_BAR,
@@ -155,6 +156,7 @@ async function writeToFile(users, isTeam) {
 
   let rankSection = '';
   let username = '';
+  let teamname = '';
 
   scoreMap.map((user, i) => {
     let rankNumberSection = '';
@@ -193,8 +195,11 @@ async function writeToFile(users, isTeam) {
     }
   });
 
+  teamname = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME) !== undefined?  ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME) : '______';
+
+
   leaderBoardContent += 'Username \t : \t ' + username + '\n';
-  leaderBoardContent += 'Teamname \t : \t ' + '______' + '\n\n';
+  leaderBoardContent += 'Teamname \t : \t ' + teamname + '\n\n';
 
   leaderBoardContent += SECTION_BAR;
   leaderBoardContent += 'LEADERBOARD RANKING \n';
