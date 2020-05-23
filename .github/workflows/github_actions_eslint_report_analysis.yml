@@ -1,4 +1,4 @@
-name: Eslint Analysis
+name: Eslint Analysis workflow
 
 on:
   pull_request:
