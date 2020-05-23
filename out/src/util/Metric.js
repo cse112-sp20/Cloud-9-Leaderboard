@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.scoreCalculation = exports.processMetric = void 0;
+exports.calculateStats = exports.scoreCalculation = exports.processMetric = void 0;
 /*
  * Function for extract codetime payload for leaderboard metric
  */
@@ -39,4 +39,33 @@ function scoreCalculation(userStats) {
     return score;
 }
 exports.scoreCalculation = scoreCalculation;
+/*
+ * Calculate daily averages and kpm, lpm, lpk
+ */
+function calculateStats(scoreMap) {
+    let totalValues = {
+        keystrokes: 0,
+        points: 0,
+        linesChanged: 0,
+        timeInterval: 0,
+    };
+    scoreMap.map((item) => {
+        totalValues['keystrokes'] += item['keystrokes'];
+        totalValues['points'] += parseFloat(item['points']);
+        totalValues['linesChanged'] += item['linesChanged'];
+        totalValues['timeInterval'] += item['timeInterval'];
+    });
+    let statsObj = {};
+    let days = scoreMap.length;
+    statsObj['kpd'] = totalValues['keystrokes'] / days;
+    statsObj['lcpd'] = totalValues['linesChanged'] / days;
+    statsObj['tspd'] = totalValues['timeInterval'] / days;
+    statsObj['ppd'] = totalValues['points'] / days;
+    statsObj['kpm'] =
+        totalValues['keystrokes'] / (totalValues['timeInterval'] / 60);
+    statsObj['lpm'] =
+        totalValues['linesChanged'] / (totalValues['timeInterval'] / 60);
+    return statsObj;
+}
+exports.calculateStats = calculateStats;
 //# sourceMappingURL=Metric.js.map

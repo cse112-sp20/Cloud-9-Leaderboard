@@ -1,7 +1,9 @@
-name: Github Actions Build
+name: Deployment workflow
 
 on:
   pull_request:
+    branches:
+      - master
   push:
     branches:
       - master
