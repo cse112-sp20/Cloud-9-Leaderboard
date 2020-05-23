@@ -2,11 +2,15 @@ name: Github Actions Test
 
 on:
   pull_request:
-  push:
     branches:
-      - master
-      - dev
-      - test-new-framework-hest
+        - master
+        - dev
+
+  push:
+    branches-ignore:
+      # Ignore any documentation pushes
+      - 'document-*'
+
 
 jobs:
   test:
