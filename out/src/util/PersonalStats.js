@@ -111,58 +111,56 @@ function writePersonalStatsFile(dates) {
         content += Constants_1.SECTION_BAR;
         content += 'Record\n';
         content += Constants_1.SECTION_BAR + '\n';
-        let FIELD_LENGTH = 12;
         content +=
-            'Dates'.padEnd(FIELD_LENGTH, ' ') +
+            'Dates'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
                 '\t' +
-                'Keystrokes'.padEnd(FIELD_LENGTH, ' ') +
+                'Keystrokes'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
                 '\t' +
-                'LinesChanged'.padEnd(FIELD_LENGTH, ' ') +
+                'LinesChanged'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
                 '\t' +
-                'TimeInterval'.padEnd(FIELD_LENGTH, ' ') +
+                'TimeInterval'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
                 '\t' +
-                'Points'.padEnd(FIELD_LENGTH, ' ') +
+                'Points'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
                 '\n';
         scoreMap.map((obj, i) => {
             content +=
-                obj['dateStr'].toString().padEnd(FIELD_LENGTH, ' ') +
+                obj['dateStr'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
                     '\t' +
-                    obj['keystrokes'].toString().padEnd(FIELD_LENGTH, ' ') +
+                    obj['keystrokes'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
                     '\t' +
-                    obj['linesChanged'].toString().padEnd(FIELD_LENGTH, ' ') +
+                    obj['linesChanged'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
                     '\t' +
-                    obj['timeInterval'].toString().padEnd(FIELD_LENGTH, ' ') +
+                    obj['timeInterval'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
                     '\t' +
-                    obj['points'].toString().padEnd(FIELD_LENGTH, ' ') +
+                    obj['points'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
                     '\n';
         });
         content += '\n' + Constants_1.SECTION_BAR;
         content += 'Statistics\n';
         content += Constants_1.SECTION_BAR + '\n';
         let statsObj = Metric_1.calculateStats(scoreMap);
-        let STAT_LENGTH = 30;
         content +=
-            'Daily Average Keystrokes'.padEnd(STAT_LENGTH, ' ') +
+            'Daily Average Keystrokes'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['kpd'].toFixed(3) +
                 '\n';
         content +=
-            'Daily Average Lines Changed'.padEnd(STAT_LENGTH, ' ') +
+            'Daily Average Lines Changed'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['lcpd'].toFixed(3) +
                 '\n';
         content +=
-            'Daily Average Time Spent'.padEnd(STAT_LENGTH, ' ') +
+            'Daily Average Time Spent'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['tspd'].toFixed(3) +
                 '\n';
         content +=
-            'Daily Average Points'.padEnd(STAT_LENGTH, ' ') +
+            'Daily Average Points'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['ppd'].toFixed(3) +
                 '\n';
         content +=
-            'Keystrokes per minute'.padEnd(STAT_LENGTH, ' ') +
+            'Keystrokes per minute'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['kpm'].toFixed(3) +
                 '\n';
         content +=
-            'Lines per minute'.padEnd(STAT_LENGTH, ' ') +
+            'Lines per minute'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['lpm'].toFixed(3) +
                 '\n';
         fs.writeFileSync(personalStatsFile, content, (err) => {

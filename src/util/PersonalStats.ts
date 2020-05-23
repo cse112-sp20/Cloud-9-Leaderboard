@@ -9,6 +9,8 @@ import {
   MAX_USERNAME_LENGTH,
   MAX_RANK_LENGTH,
   SECTION_BAR,
+  STAT_LENGTH,
+  FIELD_LENGTH,
 } from './Constants';
 const fs = require('fs');
 
@@ -116,8 +118,6 @@ async function writePersonalStatsFile(dates) {
   content += 'Record\n';
   content += SECTION_BAR + '\n';
 
-  let FIELD_LENGTH = 12;
-
   content +=
     'Dates'.padEnd(FIELD_LENGTH, ' ') +
     '\t' +
@@ -149,8 +149,6 @@ async function writePersonalStatsFile(dates) {
   content += SECTION_BAR + '\n';
 
   let statsObj = calculateStats(scoreMap);
-
-  let STAT_LENGTH = 30;
 
   content +=
     'Daily Average Keystrokes'.padEnd(STAT_LENGTH, ' ') +
