@@ -15,7 +15,8 @@ import {
   COLLECTION_ID_TEAM_MEMBERS,
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
-  GLOBAL_STATE_USER_IS_TEAM_LEADER
+  GLOBAL_STATE_USER_IS_TEAM_LEADER,
+  FIELD_ID_TEAM_LEAD_USER_ID
 } from './Constants';
 import {getExtensionContext} from './Authentication';
 import {processMetric, scoreCalculation} from './Metric';
@@ -387,7 +388,6 @@ export async function addNewTeamToDbAndJoin(teamName) {
           .then(() => {
             joinTeamWithTeamId(teamId, true);
           });
-        //console.log('Successfully created new team!')
       }
     });
 }
@@ -403,18 +403,25 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
   const ctx = getExtensionContext();
   const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
-  console.log('userid: ' + userId);
+  console.log('userid: ' + userId);  
 
   //get team doc reference
   let teamDoc = db.collection(COLLECTION_ID_TEAMS).doc(teamId);
-          
+
   //get the team name
-  const teamName = teamDoc.get().teamName;
+  let teamName = '';
+  console.log('team name is: ' + teamName);
+  let teamDocData = await teamDoc.get()
+                           .then( (doc) => {
+                             const data = doc.data();
+                              console.log(data);
+                              teamName = data.teamName;
+                           });
+  console.log('team name: '+teamName);
 
   //get team members collection
-  let teamMembersCollection = await teamDoc.collection(COLLECTION_ID_TEAM_MEMBERS);
+  let teamMembersCollection = teamDoc.collection(COLLECTION_ID_TEAM_MEMBERS);
                                     
-
   //add this user to members collection
   let addUserToMembers = await teamMembersCollection
                                 .doc(userId)
@@ -428,63 +435,98 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
                                 });
 
   //get reference to user doc
-  let userDoc = await db.collection(COLLECTION_ID_USERS).doc(userId);
+  let userDoc = db.collection(COLLECTION_ID_USERS).doc(userId);
                         
                              
   //add team info to user doc and update local cache                    
   let updateUser = await userDoc.update({
                                   teamCode: teamId,
-                                  isLeader: isLeader
+                                  isLeader: isLeader,
+                                  teamName: teamName
                                 })
                                 .then(() => {
                                   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamId);
-                                  ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, isLeader);
+                                  ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, isLeader); //whether this user is the creator/leader
                                   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
-                                    //console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
                                     console.log(
-                                      'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID)
+                                      'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID) 
                                     );
+                                    console.log('cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
                                     console.log('is leader? ' + ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER));
                                     console.log('Successfully added team info to user doc.');
-                                    window.showInformationMessage('Welcome to your new team!'); 
+                                    window.showInformationMessage('Welcome to your new team: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME)); 
                                 })
                                 .catch( (e) => {
                                   console.log(e.message);
                                   console.log('Error updating user doc.');
                                 });
-                           
-  // await db
-  //   .collection(COLLECTION_ID_TEAMS)
-  //   .doc(teamId)
-  //   .collection(COLLECTION_ID_TEAM_MEMBERS)
-  //   .doc(userId)
-  //   .set({})
-  //   .then(async () => {
-  //     await db
-  //       .collection(COLLECTION_ID_USERS)
-  //       .doc(userId)
-  //       .update({
-  //         teamCode: teamId,
-  //         isLeader: isLeader
-  //       })
-  //       .then((ref) => {
-  //         //store in context
-  //         //ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, ref.teamName);
-  //         ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamId);
-  //         ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, isLeader);
-  //         //console.log('cachedTeamName: '+ ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
-  //         console.log(
-  //           'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID)
-  //         );
-  //         console.log('is leader? ' + ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER));
-  //         console.log('Successfully added user to team.');
-  //         window.showInformationMessage('Welcome to your new team!');
-  //       });
-  //   })
-  //   .catch((e) => {
-  //     console.log(e.message);
-  //     console.log('Error adding user to team!');
-  //   });
+}
+
+/**
+ * remove user from team 
+ * @param userId 
+ * @param teamId 
+ */
+export async function leaveTeam(userId, teamId){
+  //get reference to extension context 
+  const ctx = getExtensionContext();
+
+  //get team doc reference
+  let teamDoc = db.collection(COLLECTION_ID_TEAMS).doc(teamId);
+
+  // get team lead id
+  let teamLeadId = '';
+  let teamDocData = await teamDoc.get()
+                          .then( (doc) => {
+                            let data = doc.data();
+                            console.log(data);
+                            teamLeadId = data.teamLeadUserId
+                          });
+  
+  console.log('team lead id: ' + teamLeadId);
+
+  //get team members collection
+  let teamMembersCollection = teamDoc.collection(COLLECTION_ID_TEAM_MEMBERS);
+
+  //get user doc reference
+  let userDoc = db.collection(COLLECTION_ID_USERS).doc(userId);
+
+  //remove user from team member collection 
+  let removeMember = await teamMembersCollection.doc(userId).delete();
+
+  //if the user is the leader, update team doc field
+  if(teamLeadId == userId){
+    teamDoc.update({
+      teamLeadUserId: ''
+    });
+    console.log('remove team lead id' + teamLeadId);
+  }
+
+  //remove team info from user doc 
+  let removeTeamInfo = await userDoc.update({
+    teamCode: '',
+    teamName: ''
+  })
+  .then(() => {
+
+    //update persistent storage 
+    const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
+    ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
+    ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
+    ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
+    console.log(
+      'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID) 
+    );
+    console.log('cachedTeamName: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME));
+    console.log('is leader? ' + ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER));
+    console.log('Successfully removed from team.');
+    window.showInformationMessage('Left your team: ' + teamName); 
+  })
+  .catch((e) => {
+    console.log(e.message);
+    console.log('Error removing team info from user.');
+  });
+  
 }
 
 /**

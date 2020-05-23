@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.joinTeam = exports.getTeamNameAndTeamId = exports.removeTeamNameAndId = exports.createAndJoinTeam = void 0;
+exports.joinTeam = exports.getTeamInfo = exports.removeTeamNameAndId = exports.createAndJoinTeam = void 0;
 const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
 const Authentication_1 = require("./Authentication");
@@ -40,24 +40,30 @@ function createAndJoinTeam() {
 exports.createAndJoinTeam = createAndJoinTeam;
 /**
  * DEBUG: REMOVE CACHED TEAM NAME AND ID
+ * leave the team
  */
 function removeTeamNameAndId() {
-    const ctx = Authentication_1.getExtensionContext();
-    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, undefined);
-    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, undefined);
-    console.log('Removed cached Team name and ID, team name: ' +
-        ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
-    console.log('team id: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID));
+    return __awaiter(this, void 0, void 0, function* () {
+        const ctx = Authentication_1.getExtensionContext();
+        const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
+        const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        console.log('team id: ' + teamId);
+        console.log('user id: ' + userId);
+        if (teamId == undefined) {
+            vscode_1.window.showInformationMessage('Not in a team!');
+            return;
+        }
+        Firestore_1.leaveTeam(userId, teamId);
+    });
 }
 exports.removeTeamNameAndId = removeTeamNameAndId;
 /**
- * returns the cached team name and id
+ * returns user's team name and ID
+ * values retrieved from persistent storage
  */
-function getTeamNameAndTeamId() {
+function getTeamInfo() {
     return __awaiter(this, void 0, void 0, function* () {
         const ctx = Authentication_1.getExtensionContext();
-        if (ctx == undefined)
-            return;
         const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
         //check if is leader
@@ -66,21 +72,21 @@ function getTeamNameAndTeamId() {
             vscode_1.window.showInformationMessage('No team info found.');
             return;
         }
-        let messageStr = 'Your team name: ' + teamName;
-        if (isLeader) {
-            messageStr += '\nYour team ID: ' + teamId;
-        }
+        let messageStr = 'Your team name: ' + teamName + '\n';
+        //if(isLeader){
+        messageStr += 'Your team ID: ' + teamId;
+        //}
         vscode_1.window.showInformationMessage(messageStr);
+        if (isLeader) {
+            vscode_1.window.showInformationMessage('You are the leader of your team.');
+        }
+        else {
+            vscode_1.window.showInformationMessage('You are a member of your team.');
+        }
         console.log(messageStr);
-        // let inTeam = await checkIfInTeam();
-        // if (inTeam == true) {
-        //   console.log('Already in a team.');
-        // } else {
-        //   console.log('Not in team!');
-        // }
     });
 }
-exports.getTeamNameAndTeamId = getTeamNameAndTeamId;
+exports.getTeamInfo = getTeamInfo;
 /**
  * prompts the user to enter a team code and add them to the team
  */

@@ -30,16 +30,19 @@ export const DEFAULT_USER_DOC_TOP = {
 export const DEFAULT_TEAM_DOC = {
   // teamName: '',
   // teamMembersId: {},
-  // teamLeadId:{}
+  // teamLeadId:''
 };
 
+// firebase collection IDs
 export const COLLECTION_ID_USERS = 'Users';
 export const COLLECTION_ID_TEAMS = 'Leaderboards';
 export const COLLECTION_ID_TEAM_MEMBERS = 'Members';
+export const FIELD_ID_TEAM_LEAD_USER_ID = 'teamLeadUserId';
 
+// vscode persistent storage keys
 export const GLOBAL_STATE_USER_ID = 'cachedUserId';
 export const GLOBAL_STATE_USER_EMAIL = 'cachedUserEmail';
 export const GLOBAL_STATE_USER_PASSWORD = 'cachedUserPassword';
 export const GLOBAL_STATE_USER_TEAM_NAME = 'cachedUserTeamName';
 export const GLOBAL_STATE_USER_TEAM_ID = 'cachedUserTeamId';
-export const GLOBAL_STATE_USER_IS_TEAM_LEADER  = 'cachedUserIsTeamLeader';
+export const GLOBAL_STATE_USER_IS_TEAM_LEADER  = 'cachedUserIsTeamLeader'; //bool
