@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GLOBAL_STATE_USER_TEAM_ID = exports.GLOBAL_STATE_USER_TEAM_NAME = exports.GLOBAL_STATE_USER_PASSWORD = exports.GLOBAL_STATE_USER_EMAIL = exports.GLOBAL_STATE_USER_ID = exports.COLLECTION_ID_TEAM_MEMBERS = exports.COLLECTION_ID_TEAMS = exports.COLLECTION_ID_USERS = exports.DEFAULT_TEAM_DOC = exports.DEFAULT_USER_DOC_TOP = exports.DEFAULT_USER_DOC = exports.DEFAULT_PASSWORD = exports.firebaseConfig = void 0;
+exports.SECTION_BAR = exports.MAX_RANK_LENGTH = exports.MAX_USERNAME_LENGTH = exports.GLOBAL_STATE_USER_TEAM_ID = exports.GLOBAL_STATE_USER_TEAM_NAME = exports.GLOBAL_STATE_USER_PASSWORD = exports.GLOBAL_STATE_USER_EMAIL = exports.GLOBAL_STATE_USER_ID = exports.COLLECTION_ID_TEAM_MEMBERS = exports.COLLECTION_ID_TEAMS = exports.COLLECTION_ID_USERS = exports.DEFAULT_TEAM_DOC = exports.DEFAULT_USER_DOC_TOP = exports.DEFAULT_USER_DOC = exports.DEFAULT_PASSWORD = exports.firebaseConfig = void 0;
 exports.firebaseConfig = {
     apiKey: 'AIzaSyAk7NlFSVbRfiwJvWLt7KBQArDTJpcmnO8',
     authDomain: 'cloud-9-4cd71.firebaseapp.com',
@@ -39,4 +39,7 @@ exports.GLOBAL_STATE_USER_EMAIL = 'cachedUserEmail';
 exports.GLOBAL_STATE_USER_PASSWORD = 'cachedUserPassword';
 exports.GLOBAL_STATE_USER_TEAM_NAME = 'cachedUserTeamName';
 exports.GLOBAL_STATE_USER_TEAM_ID = 'cachedUserTeamId';
+exports.MAX_USERNAME_LENGTH = 50;
+exports.MAX_RANK_LENGTH = 6;
+exports.SECTION_BAR = '\n'.padStart(80, '=');
 //# sourceMappingURL=Constants.js.map

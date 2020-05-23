@@ -4,7 +4,12 @@ import {retrieveAllUserStats, retrieveTeamMemberStats} from './Firestore';
 import {scoreCalculation} from './Metric';
 import {stat} from 'fs';
 import {getExtensionContext} from './Authentication';
-import {GLOBAL_STATE_USER_ID} from './Constants';
+import {
+  GLOBAL_STATE_USER_ID,
+  MAX_USERNAME_LENGTH,
+  MAX_RANK_LENGTH,
+  SECTION_BAR,
+} from './Constants';
 const fs = require('fs');
 
 export class Leaderboard {
@@ -152,45 +157,66 @@ async function writeToFile(users, isTeam) {
   let username = '';
 
   scoreMap.map((user, i) => {
+    let rankNumberSection = '';
+
     if (i == 0) {
-      rankSection += '\uD83E\uDD47 ';
+      rankNumberSection += '\uD83E\uDD47 ';
     } else if (i == 1) {
-      rankSection += '\uD83E\uDD48 ';
+      rankNumberSection += '\uD83E\uDD48 ';
     } else if (i == 2) {
-      rankSection += '\uD83E\uDD49 ';
+      rankNumberSection += '\uD83E\uDD49 ';
     } else {
-      rankSection += '   ';
+      rankNumberSection += '';
     }
     if (cachedUserId == user.id) {
       username = user.name;
+
+      rankNumberSection = i + 1 + ' ' + rankNumberSection;
+
       rankSection +=
-        i + 1 + '\t\t' + user.name + ' (YOU) \t\t' + user.score + '\n';
+        rankNumberSection.padEnd(MAX_RANK_LENGTH, ' ') +
+        '\t\t' +
+        (user.name + ' (YOU)').padEnd(MAX_USERNAME_LENGTH, ' ') +
+        '\t\t' +
+        user.score +
+        '\n';
     } else {
-      rankSection += i + 1 + '\t\t' + user.name + '\t\t' + user.score + '\n';
+      rankNumberSection = i + 1 + ' ' + rankNumberSection;
+
+      rankSection +=
+        rankNumberSection.padEnd(MAX_RANK_LENGTH, ' ') +
+        '\t\t' +
+        user.name.padEnd(MAX_USERNAME_LENGTH, ' ') +
+        '\t\t' +
+        user.score +
+        '\n';
     }
   });
 
   leaderBoardContent += 'Username \t : \t ' + username + '\n';
   leaderBoardContent += 'Teamname \t : \t ' + '______' + '\n\n';
 
-  leaderBoardContent +=
-    '============================================================\n';
+  leaderBoardContent += SECTION_BAR;
   leaderBoardContent += 'LEADERBOARD RANKING \n';
-  leaderBoardContent +=
-    '============================================================\n\n';
+  leaderBoardContent += SECTION_BAR + '\n';
 
-  leaderBoardContent += 'RANK     NAME                         SCORE\n';
-  leaderBoardContent += '----     ----                         -----\n';
+  leaderBoardContent +=
+    'RANK'.padEnd(MAX_RANK_LENGTH, ' ') +
+    '\t\t' +
+    'NAME'.padEnd(MAX_USERNAME_LENGTH, ' ') +
+    '\t\tSCORE\n';
+  leaderBoardContent +=
+    '----'.padEnd(MAX_RANK_LENGTH, ' ') +
+    '\t\t' +
+    '----'.padEnd(MAX_USERNAME_LENGTH, ' ') +
+    '\t\t-----\n';
   leaderBoardContent += rankSection + '\n';
 
   //STATS HERE, TODO
 
-  leaderBoardContent +=
-    '============================================================\n';
+  leaderBoardContent += SECTION_BAR;
   leaderBoardContent += 'Metric \n';
-  leaderBoardContent +=
-    '============================================================\n\n';
-
+  leaderBoardContent += SECTION_BAR + '\n';
   console.log(scoreMap);
   leaderBoardContent += 'Each second spent coding        + 0.01 \n';
   leaderBoardContent += 'Each keystroke                  +    1 \n';
