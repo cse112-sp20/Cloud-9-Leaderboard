@@ -314,7 +314,7 @@ function addNewTeamToDbAndJoin(teamName) {
         //check if already in database
         const cachedUserId = Authentication_1.getExtensionContext().globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         var teamId = undefined;
-        // team doc fields 
+        // team doc fields
         var newTeamDoc = Constants_1.DEFAULT_TEAM_DOC;
         newTeamDoc['teamName'] = teamName;
         newTeamDoc['teamLeadUserId'] = cachedUserId;
@@ -361,8 +361,7 @@ function joinTeamWithTeamId(teamId, isLeader) {
         //get the team name
         let teamName = '';
         console.log('team name is: ' + teamName);
-        let teamDocData = yield teamDoc.get()
-            .then((doc) => {
+        let teamDocData = yield teamDoc.get().then((doc) => {
             const data = doc.data();
             console.log(data);
             teamName = data.teamName;
@@ -383,11 +382,12 @@ function joinTeamWithTeamId(teamId, isLeader) {
         });
         //get reference to user doc
         let userDoc = db.collection(Constants_1.COLLECTION_ID_USERS).doc(userId);
-        //add team info to user doc and update local cache                    
-        let updateUser = yield userDoc.update({
+        //add team info to user doc and update local cache
+        let updateUser = yield userDoc
+            .update({
             teamCode: teamId,
             isLeader: isLeader,
-            teamName: teamName
+            teamName: teamName,
         })
             .then(() => {
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, teamId);
@@ -397,7 +397,8 @@ function joinTeamWithTeamId(teamId, isLeader) {
             console.log('cachedTeamId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
             console.log('is leader? ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER));
             console.log('Successfully added team info to user doc.');
-            vscode_1.window.showInformationMessage('Welcome to your new team: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
+            vscode_1.window.showInformationMessage('Welcome to your new team: ' +
+                ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
         })
             .catch((e) => {
             console.log(e.message);
@@ -413,14 +414,13 @@ exports.joinTeamWithTeamId = joinTeamWithTeamId;
  */
 function leaveTeam(userId, teamId) {
     return __awaiter(this, void 0, void 0, function* () {
-        //get reference to extension context 
+        //get reference to extension context
         const ctx = Authentication_1.getExtensionContext();
         //get team doc reference
         let teamDoc = db.collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamId);
         // get team lead id
         let teamLeadId = '';
-        let teamDocData = yield teamDoc.get()
-            .then((doc) => {
+        let teamDocData = yield teamDoc.get().then((doc) => {
             let data = doc.data();
             console.log(data);
             teamLeadId = data.teamLeadUserId;
@@ -430,22 +430,23 @@ function leaveTeam(userId, teamId) {
         let teamMembersCollection = teamDoc.collection(Constants_1.COLLECTION_ID_TEAM_MEMBERS);
         //get user doc reference
         let userDoc = db.collection(Constants_1.COLLECTION_ID_USERS).doc(userId);
-        //remove user from team member collection 
+        //remove user from team member collection
         let removeMember = yield teamMembersCollection.doc(userId).delete();
         //if the user is the leader, update team doc field
         if (teamLeadId == userId) {
             teamDoc.update({
-                teamLeadUserId: ''
+                teamLeadUserId: '',
             });
             console.log('remove team lead id' + teamLeadId);
         }
-        //remove team info from user doc 
-        let removeTeamInfo = yield userDoc.update({
+        //remove team info from user doc
+        let removeTeamInfo = yield userDoc
+            .update({
             teamCode: '',
-            teamName: ''
+            teamName: '',
         })
             .then(() => {
-            //update persistent storage 
+            //update persistent storage
             const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, undefined);
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
