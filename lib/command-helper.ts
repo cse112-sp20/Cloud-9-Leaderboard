@@ -36,6 +36,7 @@ import {
   removeTeamNameAndId,
   joinTeam,
 } from '../src/util/Team';
+import {displayPersonalStats} from '../src/util/PersonalStats';
 
 export function createCommands(
   kpmController: KpmManager,
@@ -143,6 +144,13 @@ export function createCommands(
   cmds.push(
     commands.registerCommand('cloud9.leaderboard', () => {
       displayLeaderboard();
+    }),
+  );
+
+  // Cloud9: command used to see personal stats by date
+  cmds.push(
+    commands.registerCommand('cloud9.personalStats', () => {
+      displayPersonalStats();
     }),
   );
 

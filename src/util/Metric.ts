@@ -1,4 +1,5 @@
 import {window} from 'vscode';
+import {stat} from 'fs';
 
 /*
  * Function for extract codetime payload for leaderboard metric
@@ -39,4 +40,35 @@ export function scoreCalculation(userStats) {
   score += userStats['keystrokes'] * 1;
   score += userStats['linesChanged'] + 10;
   return score;
+}
+
+/*
+ * Calculate daily averages and kpm, lpm, lpk
+ */
+export function calculateStats(scoreMap) {
+  let totalValues = {
+    keystrokes: 0,
+    points: 0,
+    linesChanged: 0,
+    timeInterval: 0,
+  };
+  scoreMap.map((item) => {
+    totalValues['keystrokes'] += item['keystrokes'];
+    totalValues['points'] += parseFloat(item['points']);
+    totalValues['linesChanged'] += item['linesChanged'];
+    totalValues['timeInterval'] += item['timeInterval'];
+  });
+
+  let statsObj = {};
+  let days = scoreMap.length;
+
+  statsObj['kpd'] = totalValues['keystrokes'] / days;
+  statsObj['lcpd'] = totalValues['linesChanged'] / days;
+  statsObj['tspd'] = totalValues['timeInterval'] / days;
+  statsObj['ppd'] = totalValues['points'] / days;
+  statsObj['kpm'] =
+    totalValues['keystrokes'] / (totalValues['timeInterval'] / 60);
+  statsObj['lpm'] =
+    totalValues['linesChanged'] / (totalValues['timeInterval'] / 60);
+  return statsObj;
 }

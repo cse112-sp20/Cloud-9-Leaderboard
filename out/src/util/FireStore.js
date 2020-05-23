@@ -9,12 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkIfInTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.loginUserWithEmailAndPassword = void 0;
+exports.retrieveUserStats = exports.checkIfInTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.loginUserWithEmailAndPassword = void 0;
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
 const vscode_1 = require("vscode");
 const Leaderboard_1 = require("./Leaderboard");
+const PersonalStats_1 = require("./PersonalStats");
 const Constants_1 = require("./Constants");
 const Authentication_1 = require("./Authentication");
 const Metric_1 = require("./Metric");
@@ -414,4 +415,39 @@ function checkIfInTeam() {
     });
 }
 exports.checkIfInTeam = checkIfInTeam;
+function retrieveUserStats(callback) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let db = firebase.firestore();
+        let user = db.collection(Constants_1.COLLECTION_ID_USERS);
+        const ctx = Authentication_1.getExtensionContext();
+        const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        let dateMap = [];
+        user
+            .doc(cachedUserId)
+            .collection('dates')
+            .orderBy(firebase.firestore.FieldPath.documentId())
+            .limit(15)
+            .get()
+            .then((snapshot) => {
+            snapshot.forEach((doc) => {
+                PersonalStats_1.PersonalStats.addDayStats(doc.id, doc.data());
+                let currDate = {};
+                currDate['date'] = doc.id;
+                for (let key in doc.data()) {
+                    currDate[key] = doc.data()[key];
+                }
+                dateMap.push(currDate);
+                // console.log(doc.id + "=>" + doc.data());
+            });
+            return dateMap;
+        })
+            .then((dateMap) => {
+            callback(dateMap);
+        })
+            .catch((err) => {
+            console.log('Error getting documents', err);
+        });
+    });
+}
+exports.retrieveUserStats = retrieveUserStats;
 //# sourceMappingURL=FireStore.js.map

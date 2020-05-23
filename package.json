@@ -73,6 +73,10 @@
       {
         "command": "cloud9.getTeamNameAndId",
         "title": "Cloud9: Get Team ID"
+      },
+      {
+        "command": "cloud9.personalStats",
+        "title": "Cloud9: See your most recent stats"
       }
     ],
     "configuration": {
