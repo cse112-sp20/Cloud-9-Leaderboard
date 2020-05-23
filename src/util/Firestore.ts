@@ -184,6 +184,11 @@ export async function retrieveTeamMemberStats(callback) {
   let users = db.collection(COLLECTION_ID_USERS);
   const ctx = getExtensionContext();
   let cachedTeamID = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+
+  if (!cachedTeamID) {
+    window.showErrorMessage('Please Join a team first!');
+  }
+
   let userMap = [];
   users
     .where('teamCode', '==', cachedTeamID)

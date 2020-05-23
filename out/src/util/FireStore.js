@@ -152,6 +152,9 @@ function retrieveTeamMemberStats(callback) {
         let users = db.collection(Constants_1.COLLECTION_ID_USERS);
         const ctx = Authentication_1.getExtensionContext();
         let cachedTeamID = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
+        if (!cachedTeamID) {
+            vscode_1.window.showErrorMessage('Please Join a team first!');
+        }
         let userMap = [];
         users
             .where('teamCode', '==', cachedTeamID)
