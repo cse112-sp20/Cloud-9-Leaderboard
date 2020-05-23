@@ -71,8 +71,8 @@
         "title": "Cloud9: Team Leaderboard"
       },
       {
-        "command": "cloud9.getTeamInfo",
-        "title": "Cloud9: Get Team Info"
+        "command": "cloud9.getTeamNameAndId",
+        "title": "Cloud9: Get Team ID"
       },
       {
         "command": "cloud9.personalStats",
