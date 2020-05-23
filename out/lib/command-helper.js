@@ -20,6 +20,7 @@ const FileManager_1 = require("./managers/FileManager");
 const Leaderboard_1 = require("../src/util/Leaderboard");
 const Authentication_1 = require("../src/util/Authentication");
 const Team_1 = require("../src/util/Team");
+const PersonalStats_1 = require("../src/util/PersonalStats");
 function createCommands(kpmController) {
     let cmds = [];
     cmds.push(kpmController);
@@ -81,6 +82,10 @@ function createCommands(kpmController) {
      */
     cmds.push(vscode_1.commands.registerCommand('cloud9.leaderboard', () => {
         Leaderboard_1.displayLeaderboard();
+    }));
+    // Cloud9: command used to see personal stats by date
+    cmds.push(vscode_1.commands.registerCommand('cloud9.personalStats', () => {
+        PersonalStats_1.displayPersonalStats();
     }));
     // Cloud9: command used to view private team leaderboard
     cmds.push(vscode_1.commands.registerCommand('cloud9.teamLeaderboard', () => {

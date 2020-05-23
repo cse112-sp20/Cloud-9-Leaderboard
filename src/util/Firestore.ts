@@ -4,6 +4,7 @@ require('firebase/auth');
 
 import {window} from 'vscode';
 import {Leaderboard} from './Leaderboard';
+import {PersonalStats} from './PersonalStats';
 import {
   firebaseConfig,
   DEFAULT_USER_DOC,
@@ -467,4 +468,40 @@ export async function checkIfInTeam() {
       return inTeam;
     });
   return inTeam;
+}
+
+export async function retrieveUserStats(callback) {
+  let db = firebase.firestore();
+
+  let user = db.collection(COLLECTION_ID_USERS);
+  const ctx = getExtensionContext();
+  const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+  let dateMap = [];
+
+  user
+    .doc(cachedUserId)
+    .collection('dates')
+    .orderBy(firebase.firestore.FieldPath.documentId())
+    .limit(15)
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        PersonalStats.addDayStats(doc.id, doc.data());
+        let currDate = {};
+        currDate['date'] = doc.id;
+        for (let key in doc.data()) {
+          currDate[key] = doc.data()[key];
+        }
+        dateMap.push(currDate);
+        // console.log(doc.id + "=>" + doc.data());
+      });
+
+      return dateMap;
+    })
+    .then((dateMap) => {
+      callback(dateMap);
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
 }
