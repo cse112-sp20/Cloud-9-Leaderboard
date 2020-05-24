@@ -1,3 +1,15 @@
+/**
+ * File that contains personal stats class which displays user's
+ * personal statistics.
+ *
+ * Contain constants string to display personal stats.
+ *
+ *
+ * @file   This files defines the personalstats class.
+ * @author AuthorName.
+ * @since  0.0.1
+ */
+
 import {workspace, window, ViewColumn} from 'vscode';
 import {getSoftwareDir, isWindows} from '../../lib/Util';
 import {retrieveUserStats} from './Firestore';
@@ -11,6 +23,21 @@ import {
   SECTION_BAR,
   STAT_LENGTH,
   FIELD_LENGTH,
+  PERSONAL_STATISTIC_ROW_1,
+  PERSONAL_STATISTIC_ROW_2,
+  PERSONAL_STATISTIC_ROW_3,
+  PERSONAL_STATISTIC_ROW_4,
+  PERSONAL_STATISTIC_ROW_5,
+  WECOME_TO_CLOUD9_ROW_1,
+  WECOME_TO_CLOUD9_ROW_2,
+  WECOME_TO_CLOUD9_ROW_3,
+  WECOME_TO_CLOUD9_ROW_4,
+  WECOME_TO_CLOUD9_ROW_5,
+  ACHIEVEMENT_ROW_1,
+  ACHIEVEMENT_ROW_2,
+  ACHIEVEMENT_ROW_3,
+  ACHIEVEMENT_ROW_4,
+  ACHIEVEMENT_ROW_5,
 } from './Constants';
 const fs = require('fs');
 
@@ -106,13 +133,24 @@ async function writePersonalStatsFile(dates) {
 
   let content = '';
 
-  content += 'Personal Statistics \n\n';
+  content += WECOME_TO_CLOUD9_ROW_1;
+  content += WECOME_TO_CLOUD9_ROW_2;
+  content += WECOME_TO_CLOUD9_ROW_3;
+  content += WECOME_TO_CLOUD9_ROW_4;
+  content += WECOME_TO_CLOUD9_ROW_5;
+
   content += SECTION_BAR;
   content += 'How to gain points \n';
   content += SECTION_BAR + '\n';
   content += 'Each second spent coding        + 0.01 \n';
   content += 'Each keystroke                  +    1 \n';
   content += 'Each modified line              +   10 \n\n';
+
+  content += PERSONAL_STATISTIC_ROW_1;
+  content += PERSONAL_STATISTIC_ROW_2;
+  content += PERSONAL_STATISTIC_ROW_3;
+  content += PERSONAL_STATISTIC_ROW_4;
+  content += PERSONAL_STATISTIC_ROW_5;
 
   content += SECTION_BAR;
   content += 'Record\n';
@@ -175,6 +213,15 @@ async function writePersonalStatsFile(dates) {
     'Lines per minute'.padEnd(STAT_LENGTH, ' ') +
     statsObj['lpm'].toFixed(3) +
     '\n';
+
+  content += ACHIEVEMENT_ROW_1;
+  content += ACHIEVEMENT_ROW_2;
+  content += ACHIEVEMENT_ROW_3;
+  content += ACHIEVEMENT_ROW_4;
+  content += ACHIEVEMENT_ROW_5;
+
+  content +=
+    'These are personal achievements/milestones that you have accumulated\n\n';
 
   fs.writeFileSync(personalStatsFile, content, (err) => {
     if (err) {

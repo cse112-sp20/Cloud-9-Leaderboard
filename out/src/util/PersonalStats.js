@@ -101,13 +101,22 @@ function writePersonalStatsFile(dates) {
         });
         console.log(scoreMap);
         let content = '';
-        content += 'Personal Statistics \n\n';
+        content += Constants_1.WECOME_TO_CLOUD9_ROW_1;
+        content += Constants_1.WECOME_TO_CLOUD9_ROW_2;
+        content += Constants_1.WECOME_TO_CLOUD9_ROW_3;
+        content += Constants_1.WECOME_TO_CLOUD9_ROW_4;
+        content += Constants_1.WECOME_TO_CLOUD9_ROW_5;
         content += Constants_1.SECTION_BAR;
         content += 'How to gain points \n';
         content += Constants_1.SECTION_BAR + '\n';
         content += 'Each second spent coding        + 0.01 \n';
         content += 'Each keystroke                  +    1 \n';
         content += 'Each modified line              +   10 \n\n';
+        content += Constants_1.PERSONAL_STATISTIC_ROW_1;
+        content += Constants_1.PERSONAL_STATISTIC_ROW_2;
+        content += Constants_1.PERSONAL_STATISTIC_ROW_3;
+        content += Constants_1.PERSONAL_STATISTIC_ROW_4;
+        content += Constants_1.PERSONAL_STATISTIC_ROW_5;
         content += Constants_1.SECTION_BAR;
         content += 'Record\n';
         content += Constants_1.SECTION_BAR + '\n';
@@ -163,6 +172,12 @@ function writePersonalStatsFile(dates) {
             'Lines per minute'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['lpm'].toFixed(3) +
                 '\n';
+        content += Constants_1.ACHIEVEMENT_ROW_1;
+        content += Constants_1.ACHIEVEMENT_ROW_2;
+        content += Constants_1.ACHIEVEMENT_ROW_3;
+        content += Constants_1.ACHIEVEMENT_ROW_4;
+        content += Constants_1.ACHIEVEMENT_ROW_5;
+        content += "These are personal achievements/milestones that you have accumulated\n\n";
         fs.writeFileSync(personalStatsFile, content, (err) => {
             if (err) {
                 console.error('Error writing leaderboard');

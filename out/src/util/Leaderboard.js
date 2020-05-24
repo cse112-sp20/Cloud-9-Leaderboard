@@ -138,12 +138,17 @@ function writeToFile(users, isTeam) {
         const ctx = Authentication_1.getExtensionContext();
         let cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         let leaderBoardContent = '';
-        if (isTeam) {
-            leaderBoardContent += 'LEADERBOARD \t (Private)\n\n';
-        }
-        else {
-            leaderBoardContent += 'LEADERBOARD \t (Global)\n\n';
-        }
+        leaderBoardContent += Constants_1.LEADERBOARD_ROW_1;
+        leaderBoardContent += Constants_1.LEADERBOARD_ROW_2;
+        leaderBoardContent += Constants_1.LEADERBOARD_ROW_3;
+        leaderBoardContent += Constants_1.LEADERBOARD_ROW_4;
+        leaderBoardContent += Constants_1.LEADERBOARD_ROW_5;
+        leaderBoardContent += '\n';
+        // if (isTeam) {
+        //   leaderBoardContent += 'LEADERBOARD \t (Private)\n\n';
+        // } else {
+        //   leaderBoardContent += 'LEADERBOARD \t (Global)\n\n';
+        // }
         let scoreMap = [];
         users.map((user) => {
             let obj = {};
