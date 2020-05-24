@@ -120,9 +120,9 @@ function writePersonalStatsFile(dates) {
         content += Constants_1.SECTION_BAR;
         content += 'How to gain points \n';
         content += Constants_1.SECTION_BAR + '\n';
-        content += 'Each second spent coding        + 0.01 \n';
-        content += 'Each keystroke                  +    1 \n';
-        content += 'Each modified line              +   10 \n\n';
+        content += 'Each second spent coding:                            + 0.01 points per second \n';
+        content += 'Each keystroke:                                      +    1 points per keystroke\n';
+        content += 'Each modified line:                                  +   10 points per line \n\n';
         content += Constants_1.PERSONAL_STATISTIC_ROW_1;
         content += Constants_1.PERSONAL_STATISTIC_ROW_2;
         content += Constants_1.PERSONAL_STATISTIC_ROW_3;
@@ -131,37 +131,55 @@ function writePersonalStatsFile(dates) {
         content += Constants_1.SECTION_BAR;
         content += 'Record\n';
         content += Constants_1.SECTION_BAR + '\n';
-        content +=
-            'Dates'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
-                '\t' +
-                'Keystrokes'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
-                '\t' +
-                'LinesChanged'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
-                '\t' +
-                'TimeInterval'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
-                '\t' +
-                'Points'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
-                '\n';
-        scoreMap.map((obj, i) => {
-            content +=
-                obj['dateStr'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
-                    '\t' +
-                    obj['keystrokes'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
-                    '\t' +
-                    obj['linesChanged'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
-                    '\t' +
-                    obj['timeInterval'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
-                    '\t' +
-                    obj['points'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
-                    '\n';
-        });
-        content += '\n\n';
+        // content +=
+        //   'Dates'.padEnd(FIELD_LENGTH, ' ') +
+        //   '\t' +
+        //   'Keystrokes'.padEnd(FIELD_LENGTH, ' ') +
+        //   '\t' +
+        //   'LinesChanged'.padEnd(FIELD_LENGTH, ' ') +
+        //   '\t' +
+        //   'TimeInterval'.padEnd(FIELD_LENGTH, ' ') +
+        //   '\t' +
+        //   'Points'.padEnd(FIELD_LENGTH, ' ') +
+        //   '\n';
+        // scoreMap.map((obj, i) => {
+        //   content +=
+        //     obj['dateStr'].toString().padEnd(FIELD_LENGTH, ' ') +
+        //     '\t' +
+        //     obj['keystrokes'].toString().padEnd(FIELD_LENGTH, ' ') +
+        //     '\t' +
+        //     obj['linesChanged'].toString().padEnd(FIELD_LENGTH, ' ') +
+        //     '\t' +
+        //     obj['timeInterval'].toString().padEnd(FIELD_LENGTH, ' ') +
+        //     '\t' +
+        //     obj['points'].toString().padEnd(FIELD_LENGTH, ' ') +
+        //     '\n';
+        // });
         scoreMap.map((obj, i) => {
             content += obj['dateStr'] + '\n';
-            content += '___________________________________________________________________________________________\n';
-            content += '    Keystrokes per minute :'.padEnd(50, ' ') + obj['keystrokes'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') + '\t' + '|'.padEnd(Constants_1.FIELD_LENGTH, ' ') + '\t' + '10 points\n';
-            content += '      Lines of code added :'.padEnd(50, ' ') + obj['linesChanged'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') + '\t' + '|'.padEnd(Constants_1.FIELD_LENGTH, ' ') + '\t' + '10 points\n';
-            content += '         Active code time :'.padEnd(50, ' ') + obj['timeInterval'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') + '\t' + '|'.padEnd(Constants_1.FIELD_LENGTH, ' ') + '\t' + '10 points\n';
+            content +=
+                '___________________________________________________________________________________________\n';
+            content +=
+                '    Keystrokes per minute :'.padEnd(50, ' ') +
+                    obj['keystrokes'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
+                    '\t' +
+                    '|'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
+                    '\t' +
+                    obj['points'] + ' points\n';
+            content +=
+                '      Lines of code added :'.padEnd(50, ' ') +
+                    obj['linesChanged'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
+                    '\t' +
+                    '|'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
+                    '\t' +
+                    obj['points'] + ' points\n';
+            content +=
+                '         Active code time :'.padEnd(50, ' ') +
+                    obj['timeInterval'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
+                    '\t' +
+                    '|'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
+                    '\t' +
+                    obj['points'] + ' points\n';
             content += '\n';
         });
         content += '\n' + Constants_1.SECTION_BAR;
