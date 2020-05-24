@@ -182,6 +182,36 @@ async function writePersonalStatsFile(dates) {
       '\n';
   });
 
+  content += '\n\n';
+
+  scoreMap.map((obj, i) => {
+    content += obj['dateStr'] + '\n';
+    content +=
+      '___________________________________________________________________________________________\n';
+    content +=
+      '    Keystrokes per minute :'.padEnd(50, ' ') +
+      obj['keystrokes'].toString().padEnd(FIELD_LENGTH, ' ') +
+      '\t' +
+      '|'.padEnd(FIELD_LENGTH, ' ') +
+      '\t' +
+      '10 points\n';
+    content +=
+      '      Lines of code added :'.padEnd(50, ' ') +
+      obj['linesChanged'].toString().padEnd(FIELD_LENGTH, ' ') +
+      '\t' +
+      '|'.padEnd(FIELD_LENGTH, ' ') +
+      '\t' +
+      '10 points\n';
+    content +=
+      '         Active code time :'.padEnd(50, ' ') +
+      obj['timeInterval'].toString().padEnd(FIELD_LENGTH, ' ') +
+      '\t' +
+      '|'.padEnd(FIELD_LENGTH, ' ') +
+      '\t' +
+      '10 points\n';
+    content += '\n';
+  });
+
   content += '\n' + SECTION_BAR;
   content += 'Statistics\n';
   content += SECTION_BAR + '\n';
