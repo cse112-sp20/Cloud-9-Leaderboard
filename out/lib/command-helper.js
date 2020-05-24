@@ -97,9 +97,9 @@ function createCommands(kpmController) {
         Team_1.createAndJoinTeam();
     }));
     // Cloud9: command used to retrieve team code
-    cmds.push(vscode_1.commands.registerCommand('cloud9.getTeamNameAndId', () => {
+    cmds.push(vscode_1.commands.registerCommand('cloud9.getTeamInfo', () => {
         console.log('Cloud9: GET TEAM NAME AND ID');
-        Team_1.getTeamNameAndTeamId();
+        Team_1.getTeamInfo();
     }));
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
         console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
