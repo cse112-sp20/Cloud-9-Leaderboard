@@ -190,7 +190,7 @@ async function writePersonalStatsFile(dates) {
     content +=
       '___________________________________________________________________________________________\n';
     content +=
-      '    Keystrokes per minute :'.padEnd(50, ' ') +
+      '    Keystrokes per minute :'.padEnd(40, ' ') +
       obj['keystrokes'].toString().padEnd(FIELD_LENGTH, ' ') +
       '\t' +
       '|'.padEnd(FIELD_LENGTH, ' ') +
@@ -198,7 +198,7 @@ async function writePersonalStatsFile(dates) {
       obj['points'] +
       ' points\n';
     content +=
-      '      Lines of code added :'.padEnd(50, ' ') +
+      '      Lines of code added :'.padEnd(40, ' ') +
       obj['linesChanged'].toString().padEnd(FIELD_LENGTH, ' ') +
       '\t' +
       '|'.padEnd(FIELD_LENGTH, ' ') +
@@ -206,7 +206,7 @@ async function writePersonalStatsFile(dates) {
       obj['points'] +
       ' points\n';
     content +=
-      '         Active code time :'.padEnd(50, ' ') +
+      '         Active code time :'.padEnd(40, ' ') +
       obj['timeInterval'].toString().padEnd(FIELD_LENGTH, ' ') +
       '\t' +
       '|'.padEnd(FIELD_LENGTH, ' ') +
@@ -223,28 +223,28 @@ async function writePersonalStatsFile(dates) {
   let statsObj = calculateStats(scoreMap);
 
   content +=
-    'Daily Average Keystrokes'.padEnd(STAT_LENGTH, ' ') +
+    'Daily Average Keystrokes:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['kpd'].toFixed(3) +
     '\n';
   content +=
-    'Daily Average Lines Changed'.padEnd(STAT_LENGTH, ' ') +
+    'Daily Average Lines Changed:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['lcpd'].toFixed(3) +
     '\n';
   content +=
-    'Daily Average Time Spent'.padEnd(STAT_LENGTH, ' ') +
+    'Daily Average Time Spent:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['tspd'].toFixed(3) +
     '\n';
   content +=
-    'Daily Average Points'.padEnd(STAT_LENGTH, ' ') +
+    'Daily Average Points:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['ppd'].toFixed(3) +
     '\n';
 
   content +=
-    'Keystrokes per minute'.padEnd(STAT_LENGTH, ' ') +
+    'Keystrokes per minute:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['kpm'].toFixed(3) +
     '\n';
   content +=
-    'Lines per minute'.padEnd(STAT_LENGTH, ' ') +
+    'Lines per minute:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['lpm'].toFixed(3) +
     '\n';
 

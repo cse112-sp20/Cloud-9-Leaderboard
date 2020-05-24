@@ -120,9 +120,12 @@ function writePersonalStatsFile(dates) {
         content += Constants_1.SECTION_BAR;
         content += 'How to gain points \n';
         content += Constants_1.SECTION_BAR + '\n';
-        content += 'Each second spent coding:                            + 0.01 points per second \n';
-        content += 'Each keystroke:                                      +    1 points per keystroke\n';
-        content += 'Each modified line:                                  +   10 points per line \n\n';
+        content +=
+            'Each second spent coding:                            + 0.01 points per second \n';
+        content +=
+            'Each keystroke:                                      +    1 points per keystroke\n';
+        content +=
+            'Each modified line:                                  +   10 points per line \n\n';
         content += Constants_1.PERSONAL_STATISTIC_ROW_1;
         content += Constants_1.PERSONAL_STATISTIC_ROW_2;
         content += Constants_1.PERSONAL_STATISTIC_ROW_3;
@@ -160,26 +163,29 @@ function writePersonalStatsFile(dates) {
             content +=
                 '___________________________________________________________________________________________\n';
             content +=
-                '    Keystrokes per minute :'.padEnd(50, ' ') +
+                '    Keystrokes per minute :'.padEnd(40, ' ') +
                     obj['keystrokes'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
                     '\t' +
                     '|'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
                     '\t' +
-                    obj['points'] + ' points\n';
+                    obj['points'] +
+                    ' points\n';
             content +=
-                '      Lines of code added :'.padEnd(50, ' ') +
+                '      Lines of code added :'.padEnd(40, ' ') +
                     obj['linesChanged'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
                     '\t' +
                     '|'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
                     '\t' +
-                    obj['points'] + ' points\n';
+                    obj['points'] +
+                    ' points\n';
             content +=
-                '         Active code time :'.padEnd(50, ' ') +
+                '         Active code time :'.padEnd(40, ' ') +
                     obj['timeInterval'].toString().padEnd(Constants_1.FIELD_LENGTH, ' ') +
                     '\t' +
                     '|'.padEnd(Constants_1.FIELD_LENGTH, ' ') +
                     '\t' +
-                    obj['points'] + ' points\n';
+                    obj['points'] +
+                    ' points\n';
             content += '\n';
         });
         content += '\n' + Constants_1.SECTION_BAR;
@@ -187,27 +193,27 @@ function writePersonalStatsFile(dates) {
         content += Constants_1.SECTION_BAR + '\n';
         let statsObj = Metric_1.calculateStats(scoreMap);
         content +=
-            'Daily Average Keystrokes'.padEnd(Constants_1.STAT_LENGTH, ' ') +
+            'Daily Average Keystrokes:'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['kpd'].toFixed(3) +
                 '\n';
         content +=
-            'Daily Average Lines Changed'.padEnd(Constants_1.STAT_LENGTH, ' ') +
+            'Daily Average Lines Changed:'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['lcpd'].toFixed(3) +
                 '\n';
         content +=
-            'Daily Average Time Spent'.padEnd(Constants_1.STAT_LENGTH, ' ') +
+            'Daily Average Time Spent:'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['tspd'].toFixed(3) +
                 '\n';
         content +=
-            'Daily Average Points'.padEnd(Constants_1.STAT_LENGTH, ' ') +
+            'Daily Average Points:'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['ppd'].toFixed(3) +
                 '\n';
         content +=
-            'Keystrokes per minute'.padEnd(Constants_1.STAT_LENGTH, ' ') +
+            'Keystrokes per minute:'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['kpm'].toFixed(3) +
                 '\n';
         content +=
-            'Lines per minute'.padEnd(Constants_1.STAT_LENGTH, ' ') +
+            'Lines per minute:'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['lpm'].toFixed(3) +
                 '\n';
         content += Constants_1.ACHIEVEMENT_ROW_1;
