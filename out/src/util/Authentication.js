@@ -52,6 +52,10 @@ function authenticateUser(ctx) {
         console.log('No cachedUserId found. Need to create a new user account.');
         //registerNewUserWithUserInput(ctx);
         registerNewUserWithGeneratedCredential(ctx);
+        /**
+         * post-mvp:
+         * alow user to sign in to existing account when switching device
+         */
     }
     else {
         // case2: existing user

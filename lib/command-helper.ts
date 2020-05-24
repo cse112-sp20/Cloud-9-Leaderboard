@@ -32,7 +32,7 @@ import {
 import {clearCachedUserId} from '../src/util/Authentication';
 import {
   createAndJoinTeam,
-  getTeamNameAndTeamId,
+  getTeamInfo,
   removeTeamNameAndId,
   joinTeam,
 } from '../src/util/Team';
@@ -171,9 +171,9 @@ export function createCommands(
 
   // Cloud9: command used to retrieve team code
   cmds.push(
-    commands.registerCommand('cloud9.getTeamNameAndId', () => {
+    commands.registerCommand('cloud9.getTeamInfo', () => {
       console.log('Cloud9: GET TEAM NAME AND ID');
-      getTeamNameAndTeamId();
+      getTeamInfo();
     }),
   );
 
