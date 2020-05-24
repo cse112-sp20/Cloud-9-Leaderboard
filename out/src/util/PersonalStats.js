@@ -1,4 +1,15 @@
 "use strict";
+/**
+ * File that contains personal stats class which displays user's
+ * personal statistics.
+ *
+ * Contain constants string to display personal stats.
+ *
+ *
+ * @file   This files defines the personalstats class.
+ * @author AuthorName.
+ * @since  0.0.1
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -177,7 +188,8 @@ function writePersonalStatsFile(dates) {
         content += Constants_1.ACHIEVEMENT_ROW_3;
         content += Constants_1.ACHIEVEMENT_ROW_4;
         content += Constants_1.ACHIEVEMENT_ROW_5;
-        content += "These are personal achievements/milestones that you have accumulated\n\n";
+        content +=
+            'These are personal achievements/milestones that you have accumulated\n\n';
         fs.writeFileSync(personalStatsFile, content, (err) => {
             if (err) {
                 console.error('Error writing leaderboard');

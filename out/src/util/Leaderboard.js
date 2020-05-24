@@ -1,4 +1,15 @@
 "use strict";
+/**
+ * File that contains leaderboard class which displays user's
+ * personal leaderboard or team leaderboard.
+ *
+ * Contain constants string to display leaderboard User Interface.
+ *
+ *
+ * @file   This files defines the Leaderboard class.
+ * @author AuthorName.
+ * @since  0.0.1
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {

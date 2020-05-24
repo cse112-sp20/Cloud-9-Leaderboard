@@ -1,4 +1,14 @@
 "use strict";
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @link   URL
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ * @since  x.x.x
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateStats = exports.scoreCalculation = exports.processMetric = void 0;
 /*
