@@ -1,3 +1,15 @@
+/**
+ * File that contains personal stats class which displays user's
+ * personal statistics.
+ *
+ * Contain constants string to display personal stats.
+ *
+ *
+ * @file   This files defines the personalstats class.
+ * @author AuthorName.
+ * @since  0.0.1
+ */
+
 import {workspace, window, ViewColumn} from 'vscode';
 import {getSoftwareDir, isWindows} from '../../lib/Util';
 import {retrieveUserStats} from './Firestore';
@@ -11,6 +23,21 @@ import {
   SECTION_BAR,
   STAT_LENGTH,
   FIELD_LENGTH,
+  PERSONAL_STATISTIC_ROW_1,
+  PERSONAL_STATISTIC_ROW_2,
+  PERSONAL_STATISTIC_ROW_3,
+  PERSONAL_STATISTIC_ROW_4,
+  PERSONAL_STATISTIC_ROW_5,
+  WECOME_TO_CLOUD9_ROW_1,
+  WECOME_TO_CLOUD9_ROW_2,
+  WECOME_TO_CLOUD9_ROW_3,
+  WECOME_TO_CLOUD9_ROW_4,
+  WECOME_TO_CLOUD9_ROW_5,
+  ACHIEVEMENT_ROW_1,
+  ACHIEVEMENT_ROW_2,
+  ACHIEVEMENT_ROW_3,
+  ACHIEVEMENT_ROW_4,
+  ACHIEVEMENT_ROW_5,
 } from './Constants';
 const fs = require('fs');
 
@@ -106,42 +133,87 @@ async function writePersonalStatsFile(dates) {
 
   let content = '';
 
-  content += 'Personal Statistics \n\n';
+  content += WECOME_TO_CLOUD9_ROW_1;
+  content += WECOME_TO_CLOUD9_ROW_2;
+  content += WECOME_TO_CLOUD9_ROW_3;
+  content += WECOME_TO_CLOUD9_ROW_4;
+  content += WECOME_TO_CLOUD9_ROW_5;
+
   content += SECTION_BAR;
   content += 'How to gain points \n';
   content += SECTION_BAR + '\n';
-  content += 'Each second spent coding        + 0.01 \n';
-  content += 'Each keystroke                  +    1 \n';
-  content += 'Each modified line              +   10 \n\n';
+  content +=
+    'Each second spent coding:                            + 0.01 points per second \n';
+  content +=
+    'Each keystroke:                                      +    1 points per keystroke\n';
+  content +=
+    'Each modified line:                                  +   10 points per line \n\n';
+
+  content += PERSONAL_STATISTIC_ROW_1;
+  content += PERSONAL_STATISTIC_ROW_2;
+  content += PERSONAL_STATISTIC_ROW_3;
+  content += PERSONAL_STATISTIC_ROW_4;
+  content += PERSONAL_STATISTIC_ROW_5;
 
   content += SECTION_BAR;
   content += 'Record\n';
   content += SECTION_BAR + '\n';
 
-  content +=
-    'Dates'.padEnd(FIELD_LENGTH, ' ') +
-    '\t' +
-    'Keystrokes'.padEnd(FIELD_LENGTH, ' ') +
-    '\t' +
-    'LinesChanged'.padEnd(FIELD_LENGTH, ' ') +
-    '\t' +
-    'TimeInterval'.padEnd(FIELD_LENGTH, ' ') +
-    '\t' +
-    'Points'.padEnd(FIELD_LENGTH, ' ') +
-    '\n';
+  // content +=
+  //   'Dates'.padEnd(FIELD_LENGTH, ' ') +
+  //   '\t' +
+  //   'Keystrokes'.padEnd(FIELD_LENGTH, ' ') +
+  //   '\t' +
+  //   'LinesChanged'.padEnd(FIELD_LENGTH, ' ') +
+  //   '\t' +
+  //   'TimeInterval'.padEnd(FIELD_LENGTH, ' ') +
+  //   '\t' +
+  //   'Points'.padEnd(FIELD_LENGTH, ' ') +
+  //   '\n';
+
+  // scoreMap.map((obj, i) => {
+  //   content +=
+  //     obj['dateStr'].toString().padEnd(FIELD_LENGTH, ' ') +
+  //     '\t' +
+  //     obj['keystrokes'].toString().padEnd(FIELD_LENGTH, ' ') +
+  //     '\t' +
+  //     obj['linesChanged'].toString().padEnd(FIELD_LENGTH, ' ') +
+  //     '\t' +
+  //     obj['timeInterval'].toString().padEnd(FIELD_LENGTH, ' ') +
+  //     '\t' +
+  //     obj['points'].toString().padEnd(FIELD_LENGTH, ' ') +
+  //     '\n';
+  // });
 
   scoreMap.map((obj, i) => {
+    content += obj['dateStr'] + '\n';
     content +=
-      obj['dateStr'].toString().padEnd(FIELD_LENGTH, ' ') +
-      '\t' +
+      '___________________________________________________________________________________________\n';
+    content +=
+      '    Keystrokes per minute :'.padEnd(40, ' ') +
       obj['keystrokes'].toString().padEnd(FIELD_LENGTH, ' ') +
       '\t' +
+      '|'.padEnd(FIELD_LENGTH, ' ') +
+      '\t' +
+      obj['points'] +
+      ' points\n';
+    content +=
+      '      Lines of code added :'.padEnd(40, ' ') +
       obj['linesChanged'].toString().padEnd(FIELD_LENGTH, ' ') +
       '\t' +
+      '|'.padEnd(FIELD_LENGTH, ' ') +
+      '\t' +
+      obj['points'] +
+      ' points\n';
+    content +=
+      '         Active code time :'.padEnd(40, ' ') +
       obj['timeInterval'].toString().padEnd(FIELD_LENGTH, ' ') +
       '\t' +
-      obj['points'].toString().padEnd(FIELD_LENGTH, ' ') +
-      '\n';
+      '|'.padEnd(FIELD_LENGTH, ' ') +
+      '\t' +
+      obj['points'] +
+      ' points\n';
+    content += '\n';
   });
 
   content += '\n' + SECTION_BAR;
@@ -151,30 +223,39 @@ async function writePersonalStatsFile(dates) {
   let statsObj = calculateStats(scoreMap);
 
   content +=
-    'Daily Average Keystrokes'.padEnd(STAT_LENGTH, ' ') +
+    'Daily Average Keystrokes:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['kpd'].toFixed(3) +
     '\n';
   content +=
-    'Daily Average Lines Changed'.padEnd(STAT_LENGTH, ' ') +
+    'Daily Average Lines Changed:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['lcpd'].toFixed(3) +
     '\n';
   content +=
-    'Daily Average Time Spent'.padEnd(STAT_LENGTH, ' ') +
+    'Daily Average Time Spent:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['tspd'].toFixed(3) +
     '\n';
   content +=
-    'Daily Average Points'.padEnd(STAT_LENGTH, ' ') +
+    'Daily Average Points:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['ppd'].toFixed(3) +
     '\n';
 
   content +=
-    'Keystrokes per minute'.padEnd(STAT_LENGTH, ' ') +
+    'Keystrokes per minute:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['kpm'].toFixed(3) +
     '\n';
   content +=
-    'Lines per minute'.padEnd(STAT_LENGTH, ' ') +
+    'Lines per minute:'.padEnd(STAT_LENGTH, ' ') +
     statsObj['lpm'].toFixed(3) +
     '\n';
+
+  content += ACHIEVEMENT_ROW_1;
+  content += ACHIEVEMENT_ROW_2;
+  content += ACHIEVEMENT_ROW_3;
+  content += ACHIEVEMENT_ROW_4;
+  content += ACHIEVEMENT_ROW_5;
+
+  content +=
+    'These are personal achievements/milestones that you have accumulated\n\n';
 
   fs.writeFileSync(personalStatsFile, content, (err) => {
     if (err) {
