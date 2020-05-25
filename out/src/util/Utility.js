@@ -1,4 +1,14 @@
 "use strict";
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @link   URL
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ * @since  x.x.x
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateRandomEmail = exports.getRandomInt = exports.generateRandomName = void 0;
 const unique_names_generator_1 = require("unique-names-generator");

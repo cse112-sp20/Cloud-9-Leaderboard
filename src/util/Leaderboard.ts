@@ -1,3 +1,15 @@
+/**
+ * File that contains leaderboard class which displays user's
+ * personal leaderboard or team leaderboard.
+ *
+ * Contain constants string to display leaderboard User Interface.
+ *
+ *
+ * @file   This files defines the Leaderboard class.
+ * @author AuthorName.
+ * @since  0.0.1
+ */
+
 import {workspace, window, ViewColumn} from 'vscode';
 import {getSoftwareDir, isWindows} from '../../lib/Util';
 import {retrieveAllUserStats, retrieveTeamMemberStats} from './Firestore';
@@ -10,6 +22,11 @@ import {
   MAX_USERNAME_LENGTH,
   MAX_RANK_LENGTH,
   SECTION_BAR,
+  LEADERBOARD_ROW_1,
+  LEADERBOARD_ROW_2,
+  LEADERBOARD_ROW_3,
+  LEADERBOARD_ROW_4,
+  LEADERBOARD_ROW_5,
 } from './Constants';
 const fs = require('fs');
 
@@ -134,11 +151,19 @@ async function writeToFile(users, isTeam) {
   const ctx = getExtensionContext();
   let cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   let leaderBoardContent = '';
-  if (isTeam) {
-    leaderBoardContent += 'LEADERBOARD \t (Private)\n\n';
-  } else {
-    leaderBoardContent += 'LEADERBOARD \t (Global)\n\n';
-  }
+
+  leaderBoardContent += LEADERBOARD_ROW_1;
+  leaderBoardContent += LEADERBOARD_ROW_2;
+  leaderBoardContent += LEADERBOARD_ROW_3;
+  leaderBoardContent += LEADERBOARD_ROW_4;
+  leaderBoardContent += LEADERBOARD_ROW_5;
+  leaderBoardContent += '\n';
+
+  // if (isTeam) {
+  //   leaderBoardContent += 'LEADERBOARD \t (Private)\n\n';
+  // } else {
+  //   leaderBoardContent += 'LEADERBOARD \t (Global)\n\n';
+  // }
 
   let scoreMap = [];
 
