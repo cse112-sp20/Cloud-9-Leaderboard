@@ -66,6 +66,7 @@ function authenticateUser() {
     const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
     const cachedUserEmail = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_EMAIL);
     const cachedUserPassword = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_PASSWORD);
+    const cachedUserNickName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME);
     const cachedTeamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
     const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
     console.log('AUTHENTICATION USERID IS: ' + cachedUserId);
@@ -82,12 +83,13 @@ function authenticateUser() {
     }
     else {
         // case2: existing user's id found
-        vscode_1.window.showInformationMessage('Cloud9: Welcome back!');
+        vscode_1.window.showInformationMessage('Cloud9: Welcome back ' + cachedUserNickName + '!');
         console.log('Found cachedUserId: ' + cachedUserId);
         console.log('Found cachedUserEmail: ' + cachedUserEmail);
         console.log('Found cachedUserPassword: ' + cachedUserPassword);
         console.log('Found cachedTeamName: ' + cachedTeamName);
         console.log('Found cachedTeamId: ' + cachedTeamId);
+        console.log('Found cachedUserNickname: ' + cachedUserNickName);
     }
 }
 exports.authenticateUser = authenticateUser;
@@ -131,14 +133,20 @@ function registerNewUserOrSigInWithUserInput() {
                     yield Firestore_1.createNewUserInFirebase(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
                         console.log(result.created);
                         console.log(result.errorCode);
+                        if (result.created) {
+                            vscode_1.window.showInformationMessage('Successfully created new account, your nickname is ' +
+                                ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME));
+                        }
                         //email already in use, now log the user in
-                        if (result.errorCode == 'auth/email-already-in-use') {
+                        else if (result.errorCode == 'auth/email-already-in-use') {
                             yield Firestore_1.loginUserWithEmailAndPassword(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
                                 console.log(result.loggedIn);
                                 console.log(result.errorCode);
                                 //successfully logged the user in, return
                                 if (result.loggedIn == true) {
                                     completed = true;
+                                    vscode_1.window.showInformationMessage('Hello, ' +
+                                        ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) + '!!');
                                     return;
                                 }
                                 else if (result.errorCode == 'auth/wrong-password') {
@@ -147,7 +155,7 @@ function registerNewUserOrSigInWithUserInput() {
                             }));
                         }
                         else if (result.errorCode == 'auth/weak-password') {
-                            vscode_1.window.showInformationMessage('Password must to be 6 characters of longer! Please try again!');
+                            vscode_1.window.showInformationMessage('Password must to be 6 characters or longer! Please try again!');
                         }
                     }));
                 }

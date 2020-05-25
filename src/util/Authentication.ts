@@ -101,6 +101,7 @@ export function authenticateUser() {
     console.log('Found cachedUserPassword: ' + cachedUserPassword);
     console.log('Found cachedTeamName: ' + cachedTeamName);
     console.log('Found cachedTeamId: ' + cachedTeamId);
+    console.log('Found cachedUserNickname: ' + cachedUserNickName);
   }
 }
 
@@ -147,9 +148,14 @@ export async function registerNewUserOrSigInWithUserInput() {
             async (result) => {
               console.log(result.created);
               console.log(result.errorCode);
-
+              if (result.created) {
+                window.showInformationMessage(
+                  'Successfully created new account, your nickname is ' +
+                    ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME),
+                );
+              }
               //email already in use, now log the user in
-              if (result.errorCode == 'auth/email-already-in-use') {
+              else if (result.errorCode == 'auth/email-already-in-use') {
                 await loginUserWithEmailAndPassword(email, password).then(
                   async (result) => {
                     console.log(result.loggedIn);
@@ -158,6 +164,11 @@ export async function registerNewUserOrSigInWithUserInput() {
                     //successfully logged the user in, return
                     if (result.loggedIn == true) {
                       completed = true;
+                      window.showInformationMessage(
+                        'Hello, ' +
+                          ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
+                          '!!',
+                      );
                       return;
                     } else if (result.errorCode == 'auth/wrong-password') {
                       window.showInformationMessage(
@@ -168,7 +179,7 @@ export async function registerNewUserOrSigInWithUserInput() {
                 );
               } else if (result.errorCode == 'auth/weak-password') {
                 window.showInformationMessage(
-                  'Password must to be 6 characters of longer! Please try again!',
+                  'Password must to be 6 characters or longer! Please try again!',
                 );
               }
             },

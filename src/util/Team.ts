@@ -70,7 +70,7 @@ export async function getTeamInfo() {
   //check if is leader
   const isLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
 
-  if (teamName == undefined && teamId == undefined) {
+  if (teamName == '' && teamId == '') {
     window.showInformationMessage('No team info found.');
     return;
   }
