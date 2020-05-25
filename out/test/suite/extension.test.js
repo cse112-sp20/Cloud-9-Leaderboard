@@ -125,6 +125,16 @@ suite('firestore.ts', () => {
             assert.equal(result, res);
         });
     }));
+    test('getUserDocWithId', () => __awaiter(void 0, void 0, void 0, function* () {
+        var result = {};
+        result['data'] = 'yaya';
+        sinon
+            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc(testId), 'get')
+            .returns(Promise.resolve(result));
+        FireStore_1.getUserDocWithId(testId).then((res) => {
+            assert.equal(result, res);
+        });
+    }));
     test('create new user', () => __awaiter(void 0, void 0, void 0, function* () {
         //Set a fake userID
         var result = {};
@@ -138,5 +148,21 @@ suite('firestore.ts', () => {
         var successful = yield FireStore_1.createNewUserInFirebase(Authentication_1.getExtensionContext(), testId, 'testPassword');
         assert.equal(true, true); // does not work
     }));
+    test('addNewTeamToDbAndJoin', () => __awaiter(void 0, void 0, void 0, function* () { }));
+    test('joinTeamWithTeamId', () => __awaiter(void 0, void 0, void 0, function* () { }));
+    test('leaveTeam', () => __awaiter(void 0, void 0, void 0, function* () { }));
+    test('checkIfInTeam', () => __awaiter(void 0, void 0, void 0, function* () {
+        const ctx = Authentication_1.getExtensionContext();
+        const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        var result = {};
+        result['team'] = 'ted';
+        sinon
+            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc(userId), 'get')
+            .returns(Promise.resolve(result));
+        FireStore_1.checkIfInTeam();
+    }));
+    test('retrieveUserStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
+    test('retrieveAllUserStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
+    test('retrieveTeamMemberStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
 });
 //# sourceMappingURL=extension.test.js.map

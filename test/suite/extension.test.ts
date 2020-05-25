@@ -20,6 +20,13 @@ import {
   loginUserWithEmailAndPassword,
   createNewUserInFirebase,
   getUserDocWithId,
+  addNewTeamToDbAndJoin,
+  joinTeamWithTeamId,
+  leaveTeam,
+  checkIfInTeam,
+  retrieveUserStats,
+  retrieveAllUserStats,
+  retrieveTeamMemberStats,
 } from '../../src/util/FireStore';
 import {create} from 'domain';
 import {
@@ -179,6 +186,21 @@ suite('firestore.ts', () => {
     });
   });
 
+  test('getUserDocWithId', async () => {
+    var result = {};
+    result['data'] = 'yaya';
+    sinon
+      .stub(
+        firebase.firestore().collection(COLLECTION_ID_USERS).doc(testId),
+        'get',
+      )
+      .returns(Promise.resolve(result));
+
+    getUserDocWithId(testId).then((res) => {
+      assert.equal(result, res);
+    });
+  });
+
   test('create new user', async () => {
     //Set a fake userID
     var result = {};
@@ -198,4 +220,24 @@ suite('firestore.ts', () => {
     );
     assert.equal(true, true); // does not work
   });
+
+  test('addNewTeamToDbAndJoin', async () => {});
+  test('joinTeamWithTeamId', async () => {});
+  test('leaveTeam', async () => {});
+  test('checkIfInTeam', async () => {
+    const ctx = getExtensionContext();
+    const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+    var result = {};
+    result['team'] = 'ted';
+    sinon
+      .stub(
+        firebase.firestore().collection(COLLECTION_ID_USERS).doc(userId),
+        'get',
+      )
+      .returns(Promise.resolve(result));
+    checkIfInTeam();
+  });
+  test('retrieveUserStats', async () => {});
+  test('retrieveAllUserStats', async () => {});
+  test('retrieveTeamMemberStats', async () => {});
 });
