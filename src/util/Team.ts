@@ -3,7 +3,7 @@ import {
   addNewTeamToDbAndJoin,
   joinTeamWithTeamId,
   checkIfInTeam,
-  leaveTeam
+  leaveTeam,
 } from './Firestore';
 import {getExtensionContext} from './Authentication';
 import {
@@ -46,9 +46,10 @@ export async function removeTeamNameAndId() {
   const ctx = getExtensionContext();
   const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
   const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
   console.log('team id: ' + teamId);
   console.log('user id: ' + userId);
-  if(teamId == undefined) {
+  if (teamId == undefined) {
     window.showInformationMessage('Not in a team!');
     return;
   }
@@ -72,22 +73,21 @@ export async function getTeamInfo() {
   if (teamName == undefined && teamId == undefined) {
     window.showInformationMessage('No team info found.');
     return;
-  } 
+  }
 
   let messageStr = 'Your team name: ' + teamName + '\n';
 
   //if(isLeader){
-    messageStr += 'Your team ID: ' + teamId;
+  messageStr += 'Your team ID: ' + teamId;
   //}
   window.showInformationMessage(messageStr);
 
-  if(isLeader){
+  if (isLeader) {
     window.showInformationMessage('You are the leader of your team.');
-  }else{
+  } else {
     window.showInformationMessage('You are a member of your team.');
   }
   console.log(messageStr);
-  
 }
 /**
  * prompts the user to enter a team code and add them to the team

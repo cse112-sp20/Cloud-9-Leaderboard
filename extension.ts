@@ -39,7 +39,10 @@ import {
   getLastSavedKeystrokesStats,
 } from './lib/managers/FileManager';
 
-import {authenticateUser} from './src/util/Authentication';
+import {
+  storeExtensionContext,
+  authenticateUser,
+} from './src/util/Authentication';
 
 let TELEMETRY_ON = true;
 let statusBarItem = null;
@@ -146,8 +149,10 @@ export async function activate(ctx: ExtensionContext) {
     }, 1000 * secondDelay);
   }
 
+  //store ref to extension context
+  storeExtensionContext(ctx);
   // sign the user in
-  authenticateUser(ctx);
+  authenticateUser();
 }
 
 function getRandomArbitrary(min, max) {

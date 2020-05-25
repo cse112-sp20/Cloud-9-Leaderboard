@@ -111,8 +111,10 @@ function activate(ctx) {
                 OnboardManager_1.onboardInit(ctx, intializePlugin /*successFunction*/);
             }, 1000 * secondDelay);
         }
+        //store ref to extension context 
+        Authentication_1.storeExtensionContext(ctx);
         // sign the user in
-        Authentication_1.authenticateUser(ctx);
+        Authentication_1.authenticateUser();
     });
 }
 exports.activate = activate;

@@ -177,6 +177,14 @@ export function createCommands(
     }),
   );
 
+  //password recovery
+  cmds.push(
+    commands.registerCommand('cloud9.resetPassword', () => {
+      console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
+      //doing nothing rn
+    }),
+  );
+
   cmds.push(
     commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
       console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');

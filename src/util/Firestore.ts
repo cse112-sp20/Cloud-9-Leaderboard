@@ -1,6 +1,7 @@
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
+//const admin = require("firebase-admin");
 
 import {window} from 'vscode';
 import {Leaderboard} from './Leaderboard';
@@ -17,6 +18,7 @@ import {
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
+  GLOBAL_STATE_USER_NICKNAME,
   FIELD_ID_TEAM_LEAD_USER_ID,
 } from './Constants';
 import {getExtensionContext} from './Authentication';
@@ -31,20 +33,51 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// var serviceAccount = require("./../../cloud-9-4cd71-firebase-adminsdk-qics5-b5a237b84d.json");
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://cloud-9-4cd71.firebaseio.com"
+// });
+
 /**
  *
  * @param email login user with email and password
  * @param password
  */
 export async function loginUserWithEmailAndPassword(email, password) {
+  let ctx = getExtensionContext();
+  let loggedIn = false;
+  let errorCode = undefined;
   await auth
     .signInWithEmailAndPassword(email, password)
-    .then(() => {
-      console.log('signed in');
+    .then((userCred) => {
+      console.log(userCred);
+      //update persistent storage
+      //updatePersistentStorageWithUserDocData();
+      //console.log('signed in');
+      ctx.globalState.update(GLOBAL_STATE_USER_ID, userCred.user.uid);
+      console.log(userCred.user.uid);
+      window.showInformationMessage('Successfully signed in!');
+
+      loggedIn = true;
+      errorCode = 'no error';
+      //return {loggedIn: true, errorCode: 'no error'};
     })
     .catch((e) => {
       console.log(e.message);
+      console.log(e.code);
+      //return {loggedIn: false, errorCode: e.code};
+      //window.showInformationMessage('Error signing in!');
+      loggedIn = false;
+      errorCode = e.code;
     });
+  return {loggedIn: loggedIn, errorCode: errorCode};
+}
+
+export function updatePersistentStorageWithUserDocData() {
+  console.log('Updating persistent storage...');
+  //let userDoc = getUserDocWithId()l
 }
 
 /*
@@ -258,19 +291,20 @@ export async function retrieveAllUserStats(callback) {
  * Create new user credential and add new doc to db
  */
 
-export async function createNewUserInFirebase(ctx, email, password) {
-  console.log('From Authentication: createNewUser');
-
-  //const email = generateRandomEmail(); // ...do we need this?
-
+export async function createNewUserInFirebase(email, password) {
+  console.log('Creating new user...');
+  let ctx = getExtensionContext();
   if (email == null) {
     console.log('email is null');
-    return;
+    return {created: false, errorCode: 'email is null'};
   }
   if (password == null) {
     console.log('password is null');
-    return;
+    return {created: false, errorCode: 'password is null'};
   }
+
+  let created = false;
+  let errorCode = undefined;
 
   await auth
     .createUserWithEmailAndPassword(email, password)
@@ -278,18 +312,29 @@ export async function createNewUserInFirebase(ctx, email, password) {
       // add new uid to persistent storage
       const currentUserId = auth.currentUser.uid;
 
-      ctx.globalState.update(GLOBAL_STATE_USER_ID, currentUserId);
-      ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
+      //ctx.globalState.update(GLOBAL_STATE_USER_ID, currentUserId);
+      //ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
 
       console.log('cachedUserId: ' + ctx.globalState.get(GLOBAL_STATE_USER_ID));
 
       addNewUserDocToDb(currentUserId);
-      return true;
+      window.showInformationMessage('Successfully created new account!');
+      //return {created: true, errorCode: errorCode};
+      created = true;
+      errorCode = 'no error';
     })
     .catch((e) => {
       console.log(e.message);
-      return false;
+      console.log('error code: ' + e.code);
+      console.log('Error creating new user!');
+
+      created = false;
+      errorCode = e.code;
     });
+
+  return {created: created, errorCode: errorCode};
+
+  //return {created: false, errorCode: 'end of function'};
 }
 
 /**
@@ -299,6 +344,7 @@ export async function createNewUserInFirebase(ctx, email, password) {
 
 async function addNewUserDocToDb(userId) {
   console.log('Adding doc to db for new user...');
+  const ctx = getExtensionContext();
 
   if (userId === undefined) {
     console.log('userId undefined.');
@@ -306,15 +352,16 @@ async function addNewUserDocToDb(userId) {
   }
 
   let today = new Date().toISOString().split('T')[0];
-
+  const generatedName = generateRandomName();
   db.collection(COLLECTION_ID_USERS)
     .doc(userId)
     .set({
-      name: generateRandomName(),
+      name: generatedName,
       ...DEFAULT_USER_DOC_TOP,
     })
     .then(() => {
       console.log('Added name');
+      ctx.globalState.update(GLOBAL_STATE_USER_NICKNAME, generatedName);
     })
     .catch(() => {
       console.log('Error creating new entry');
@@ -327,7 +374,9 @@ async function addNewUserDocToDb(userId) {
     .set(DEFAULT_USER_DOC)
     .then(() => {
       console.log('Added new user: ' + userId + ' doc to db.');
-      getUserDocWithId(userId);
+      ctx.globalState.update(GLOBAL_STATE_USER_ID, userId);
+      let data = getUserDocWithId(userId);
+      console.log(data);
     })
     .catch(() => {
       console.log('Error adding new user: ' + userId + ' doc to db.');
@@ -348,13 +397,15 @@ export async function getUserDocWithId(userId) {
     .get()
     .then((doc) => {
       console.log('Retrieved user: (' + userId + ') doc from db.');
-      console.log(doc.data());
+      //console.log(doc.data());
+      return doc.data();
     })
     .catch(() => {
       console.log('Error getting user: (' + userId + ') doc from db.');
+      return undefined;
     });
 
-  return userDoc;
+  //return userDoc;
 }
 
 /**
@@ -459,7 +510,7 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
         'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID),
       );
       console.log(
-        'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME),
+        'cachedTeamName: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME),
       );
       console.log(
         'is leader? ' + ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER),
@@ -541,7 +592,7 @@ export async function leaveTeam(userId, teamId) {
     })
     .catch((e) => {
       console.log(e.message);
-      console.log('Error removing team info from user.');
+      console.log('Error removing team info for user.');
     });
 }
 
@@ -552,7 +603,8 @@ export async function checkIfInTeam() {
   const ctx = getExtensionContext();
   const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
-  let inTeam = false;
+  var inTeam = false;
+  console.log(inTeam);
   await db
     .collection(COLLECTION_ID_USERS)
     .doc(userId)
@@ -575,8 +627,10 @@ export async function checkIfInTeam() {
       }
     })
     .then(() => {
+      console.log(inTeam);
       return inTeam;
     });
+  console.log(inTeam);
   return inTeam;
 }
 

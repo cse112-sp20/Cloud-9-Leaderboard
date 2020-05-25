@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.loginUserWithEmailAndPassword = void 0;
+exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.updatePersistentStorageWithUserDocData = exports.loginUserWithEmailAndPassword = void 0;
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
+//const admin = require("firebase-admin");
 const vscode_1 = require("vscode");
 const Leaderboard_1 = require("./Leaderboard");
 const PersonalStats_1 = require("./PersonalStats");
@@ -26,6 +27,11 @@ if (!firebase.apps.length) {
 }
 const auth = firebase.auth();
 const db = firebase.firestore();
+// var serviceAccount = require("./../../cloud-9-4cd71-firebase-adminsdk-qics5-b5a237b84d.json");
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://cloud-9-4cd71.firebaseio.com"
+// });
 /**
  *
  * @param email login user with email and password
@@ -33,17 +39,40 @@ const db = firebase.firestore();
  */
 function loginUserWithEmailAndPassword(email, password) {
     return __awaiter(this, void 0, void 0, function* () {
+        let ctx = Authentication_1.getExtensionContext();
+        let loggedIn = false;
+        let errorCode = undefined;
         yield auth
             .signInWithEmailAndPassword(email, password)
-            .then(() => {
-            console.log('signed in');
+            .then((userCred) => {
+            console.log(userCred);
+            //update persistent storage 
+            //updatePersistentStorageWithUserDocData();
+            //console.log('signed in');
+            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, userCred.user.uid);
+            console.log(userCred.user.uid);
+            vscode_1.window.showInformationMessage('Successfully signed in!');
+            loggedIn = true;
+            errorCode = 'no error';
+            //return {loggedIn: true, errorCode: 'no error'};
         })
             .catch((e) => {
             console.log(e.message);
+            console.log(e.code);
+            //return {loggedIn: false, errorCode: e.code};
+            //window.showInformationMessage('Error signing in!');
+            loggedIn = false;
+            errorCode = e.code;
         });
+        return { loggedIn: loggedIn, errorCode: errorCode };
     });
 }
 exports.loginUserWithEmailAndPassword = loginUserWithEmailAndPassword;
+function updatePersistentStorageWithUserDocData() {
+    console.log('Updating persistent storage...');
+    //let userDoc = getUserDocWithId()l
+}
+exports.updatePersistentStorageWithUserDocData = updatePersistentStorageWithUserDocData;
 /*
  * Whenever new payload from codetime is posted to their api,
  * we will update our database
@@ -218,33 +247,43 @@ exports.retrieveAllUserStats = retrieveAllUserStats;
 /**
  * Create new user credential and add new doc to db
  */
-function createNewUserInFirebase(ctx, email, password) {
+function createNewUserInFirebase(email, password) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('From Authentication: createNewUser');
-        //const email = generateRandomEmail(); // ...do we need this?
+        console.log('Creating new user...');
+        let ctx = Authentication_1.getExtensionContext();
         if (email == null) {
             console.log('email is null');
-            return;
+            return { created: false, errorCode: 'email is null' };
         }
         if (password == null) {
             console.log('password is null');
-            return;
+            return { created: false, errorCode: 'password is null' };
         }
+        let created = false;
+        let errorCode = undefined;
         yield auth
             .createUserWithEmailAndPassword(email, password)
             .then(() => {
             // add new uid to persistent storage
             const currentUserId = auth.currentUser.uid;
-            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, currentUserId);
-            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
+            //ctx.globalState.update(GLOBAL_STATE_USER_ID, currentUserId);
+            //ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
             console.log('cachedUserId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID));
             addNewUserDocToDb(currentUserId);
-            return true;
+            vscode_1.window.showInformationMessage('Successfully created new account!');
+            //return {created: true, errorCode: errorCode};
+            created = true;
+            errorCode = 'no error';
         })
             .catch((e) => {
             console.log(e.message);
-            return false;
+            console.log('error code: ' + e.code);
+            console.log('Error creating new user!');
+            created = false;
+            errorCode = e.code;
         });
+        return { created: created, errorCode: errorCode };
+        //return {created: false, errorCode: 'end of function'};
     });
 }
 exports.createNewUserInFirebase = createNewUserInFirebase;
@@ -255,16 +294,19 @@ exports.createNewUserInFirebase = createNewUserInFirebase;
 function addNewUserDocToDb(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Adding doc to db for new user...');
+        const ctx = Authentication_1.getExtensionContext();
         if (userId === undefined) {
             console.log('userId undefined.');
             return;
         }
         let today = new Date().toISOString().split('T')[0];
+        const generatedName = Utility_1.generateRandomName();
         db.collection(Constants_1.COLLECTION_ID_USERS)
             .doc(userId)
-            .set(Object.assign({ name: Utility_1.generateRandomName() }, Constants_1.DEFAULT_USER_DOC_TOP))
+            .set(Object.assign({ name: generatedName }, Constants_1.DEFAULT_USER_DOC_TOP))
             .then(() => {
             console.log('Added name');
+            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_NICKNAME, generatedName);
         })
             .catch(() => {
             console.log('Error creating new entry');
@@ -276,7 +318,9 @@ function addNewUserDocToDb(userId) {
             .set(Constants_1.DEFAULT_USER_DOC)
             .then(() => {
             console.log('Added new user: ' + userId + ' doc to db.');
-            getUserDocWithId(userId);
+            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, userId);
+            let data = getUserDocWithId(userId);
+            console.log(data);
         })
             .catch(() => {
             console.log('Error adding new user: ' + userId + ' doc to db.');
@@ -296,12 +340,14 @@ function getUserDocWithId(userId) {
             .get()
             .then((doc) => {
             console.log('Retrieved user: (' + userId + ') doc from db.');
-            console.log(doc.data());
+            //console.log(doc.data());
+            return doc.data();
         })
             .catch(() => {
             console.log('Error getting user: (' + userId + ') doc from db.');
+            return undefined;
         });
-        return userDoc;
+        //return userDoc;
     });
 }
 exports.getUserDocWithId = getUserDocWithId;
@@ -314,7 +360,7 @@ function addNewTeamToDbAndJoin(teamName) {
         //check if already in database
         const cachedUserId = Authentication_1.getExtensionContext().globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         var teamId = undefined;
-        // team doc fields 
+        // team doc fields
         var newTeamDoc = Constants_1.DEFAULT_TEAM_DOC;
         newTeamDoc['teamName'] = teamName;
         newTeamDoc['teamLeadUserId'] = cachedUserId;
@@ -361,8 +407,7 @@ function joinTeamWithTeamId(teamId, isLeader) {
         //get the team name
         let teamName = '';
         console.log('team name is: ' + teamName);
-        let teamDocData = yield teamDoc.get()
-            .then((doc) => {
+        let teamDocData = yield teamDoc.get().then((doc) => {
             const data = doc.data();
             console.log(data);
             teamName = data.teamName;
@@ -383,21 +428,23 @@ function joinTeamWithTeamId(teamId, isLeader) {
         });
         //get reference to user doc
         let userDoc = db.collection(Constants_1.COLLECTION_ID_USERS).doc(userId);
-        //add team info to user doc and update local cache                    
-        let updateUser = yield userDoc.update({
+        //add team info to user doc and update local cache
+        let updateUser = yield userDoc
+            .update({
             teamCode: teamId,
             isLeader: isLeader,
-            teamName: teamName
+            teamName: teamName,
         })
             .then(() => {
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, teamId);
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, isLeader); //whether this user is the creator/leader
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, teamName);
             console.log('cachedTeamId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID));
-            console.log('cachedTeamId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
+            console.log('cachedTeamName: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
             console.log('is leader? ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER));
             console.log('Successfully added team info to user doc.');
-            vscode_1.window.showInformationMessage('Welcome to your new team: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
+            vscode_1.window.showInformationMessage('Welcome to your new team: ' +
+                ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
         })
             .catch((e) => {
             console.log(e.message);
@@ -413,14 +460,13 @@ exports.joinTeamWithTeamId = joinTeamWithTeamId;
  */
 function leaveTeam(userId, teamId) {
     return __awaiter(this, void 0, void 0, function* () {
-        //get reference to extension context 
+        //get reference to extension context
         const ctx = Authentication_1.getExtensionContext();
         //get team doc reference
         let teamDoc = db.collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamId);
         // get team lead id
         let teamLeadId = '';
-        let teamDocData = yield teamDoc.get()
-            .then((doc) => {
+        let teamDocData = yield teamDoc.get().then((doc) => {
             let data = doc.data();
             console.log(data);
             teamLeadId = data.teamLeadUserId;
@@ -430,22 +476,23 @@ function leaveTeam(userId, teamId) {
         let teamMembersCollection = teamDoc.collection(Constants_1.COLLECTION_ID_TEAM_MEMBERS);
         //get user doc reference
         let userDoc = db.collection(Constants_1.COLLECTION_ID_USERS).doc(userId);
-        //remove user from team member collection 
+        //remove user from team member collection
         let removeMember = yield teamMembersCollection.doc(userId).delete();
         //if the user is the leader, update team doc field
         if (teamLeadId == userId) {
             teamDoc.update({
-                teamLeadUserId: ''
+                teamLeadUserId: '',
             });
             console.log('remove team lead id' + teamLeadId);
         }
-        //remove team info from user doc 
-        let removeTeamInfo = yield userDoc.update({
+        //remove team info from user doc
+        let removeTeamInfo = yield userDoc
+            .update({
             teamCode: '',
-            teamName: ''
+            teamName: '',
         })
             .then(() => {
-            //update persistent storage 
+            //update persistent storage
             const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, undefined);
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
@@ -458,7 +505,7 @@ function leaveTeam(userId, teamId) {
         })
             .catch((e) => {
             console.log(e.message);
-            console.log('Error removing team info from user.');
+            console.log('Error removing team info for user.');
         });
     });
 }
@@ -470,7 +517,8 @@ function checkIfInTeam() {
     return __awaiter(this, void 0, void 0, function* () {
         const ctx = Authentication_1.getExtensionContext();
         const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-        let inTeam = false;
+        var inTeam = false;
+        console.log(inTeam);
         yield db
             .collection(Constants_1.COLLECTION_ID_USERS)
             .doc(userId)
@@ -492,8 +540,10 @@ function checkIfInTeam() {
             }
         })
             .then(() => {
+            console.log(inTeam);
             return inTeam;
         });
+        console.log(inTeam);
         return inTeam;
     });
 }
