@@ -15,6 +15,7 @@ const Leaderboard_1 = require("../../src/util/Leaderboard");
 const Metric_1 = require("../../src/util/Metric");
 const FireStore_1 = require("../../src/util/FireStore");
 const Constants_1 = require("../../src/util/Constants");
+const PersonalStats_1 = require("../../src/util/PersonalStats");
 const sinon = require('sinon');
 const firebase = require('firebase/app');
 // The module 'assert' provides assertion methods from node
@@ -164,5 +165,24 @@ suite('firestore.ts', () => {
     test('retrieveUserStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
     test('retrieveAllUserStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
     test('retrieveTeamMemberStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
+});
+suite('personalstats.ts', () => {
+    test('adding day stats to personal stats file', () => {
+        var date = "12/1/2012";
+        var statsObj = { ["test"]: 0 };
+        PersonalStats_1.PersonalStats.addDayStats(date, statsObj);
+    });
+    test('getting dates from personal stats file', () => {
+        var dates = PersonalStats_1.PersonalStats.getUsers();
+        assert.equal(Array.isArray(dates) && dates.length > 0, true);
+    });
+    test('getting personal stats file', () => {
+        const filePath = PersonalStats_1.getPersonalStatsFile().toString();
+        assert.equal(filePath.includes('\\personal_statistics.txt') ||
+            filePath.includes('/personal_statistics.txt'), true);
+    });
+    test('displaying personal stats file', () => {
+    });
+    //integration test of personal stats displaying
 });
 //# sourceMappingURL=extension.test.js.map

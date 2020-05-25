@@ -38,6 +38,11 @@ import {
   GLOBAL_STATE_USER_PASSWORD,
   GLOBAL_STATE_USER_TEAM_NAME,
 } from '../../src/util/Constants';
+import {
+  PersonalStats,
+  getPersonalStatsFile,
+  displayPersonalStats,
+} from '../../src/util/PersonalStats';
 const sinon = require('sinon');
 const firebase = require('firebase/app');
 
@@ -240,4 +245,30 @@ suite('firestore.ts', () => {
   test('retrieveUserStats', async () => {});
   test('retrieveAllUserStats', async () => {});
   test('retrieveTeamMemberStats', async () => {});
+});
+
+suite('personalstats.ts', () => {
+  test('adding day stats to personal stats file', () => {
+    var date = '12/1/2012';
+    var statsObj = {['test']: 0};
+    PersonalStats.addDayStats(date, statsObj);
+  });
+
+  test('getting dates from personal stats file', () => {
+    var dates: Object[] = PersonalStats.getUsers();
+    assert.equal(Array.isArray(dates) && dates.length > 0, true);
+  });
+
+  test('getting personal stats file', () => {
+    const filePath: string = getPersonalStatsFile().toString();
+    assert.equal(
+      filePath.includes('\\personal_statistics.txt') ||
+        filePath.includes('/personal_statistics.txt'),
+      true,
+    );
+  });
+
+  test('displaying personal stats file', () => {});
+
+  //integration test of personal stats displaying
 });
