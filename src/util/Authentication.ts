@@ -1,3 +1,13 @@
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ * @since  x.x.x
+ */
+
 import {window, ExtensionContext} from 'vscode';
 import {
   createNewUserInFirebase,
