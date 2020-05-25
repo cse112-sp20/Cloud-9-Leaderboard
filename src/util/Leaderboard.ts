@@ -1,10 +1,33 @@
+/**
+ * File that contains leaderboard class which displays user's
+ * personal leaderboard or team leaderboard.
+ *
+ * Contain constants string to display leaderboard User Interface.
+ *
+ *
+ * @file   This files defines the Leaderboard class.
+ * @author AuthorName.
+ * @since  0.0.1
+ */
+
 import {workspace, window, ViewColumn} from 'vscode';
 import {getSoftwareDir, isWindows} from '../../lib/Util';
 import {retrieveAllUserStats, retrieveTeamMemberStats} from './Firestore';
 import {scoreCalculation} from './Metric';
 import {stat} from 'fs';
 import {getExtensionContext} from './Authentication';
-import {GLOBAL_STATE_USER_ID} from './Constants';
+import {
+  GLOBAL_STATE_USER_ID,
+  GLOBAL_STATE_USER_TEAM_NAME,
+  MAX_USERNAME_LENGTH,
+  MAX_RANK_LENGTH,
+  SECTION_BAR,
+  LEADERBOARD_ROW_1,
+  LEADERBOARD_ROW_2,
+  LEADERBOARD_ROW_3,
+  LEADERBOARD_ROW_4,
+  LEADERBOARD_ROW_5,
+} from './Constants';
 const fs = require('fs');
 
 export class Leaderboard {
@@ -128,11 +151,19 @@ async function writeToFile(users, isTeam) {
   const ctx = getExtensionContext();
   let cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   let leaderBoardContent = '';
-  if (isTeam) {
-    leaderBoardContent += 'LEADERBOARD \t (Private)\n\n';
-  } else {
-    leaderBoardContent += 'LEADERBOARD \t (Global)\n\n';
-  }
+
+  leaderBoardContent += LEADERBOARD_ROW_1;
+  leaderBoardContent += LEADERBOARD_ROW_2;
+  leaderBoardContent += LEADERBOARD_ROW_3;
+  leaderBoardContent += LEADERBOARD_ROW_4;
+  leaderBoardContent += LEADERBOARD_ROW_5;
+  leaderBoardContent += '\n';
+
+  // if (isTeam) {
+  //   leaderBoardContent += 'LEADERBOARD \t (Private)\n\n';
+  // } else {
+  //   leaderBoardContent += 'LEADERBOARD \t (Global)\n\n';
+  // }
 
   let scoreMap = [];
 
@@ -150,47 +181,74 @@ async function writeToFile(users, isTeam) {
 
   let rankSection = '';
   let username = '';
+  let teamname = '';
 
   scoreMap.map((user, i) => {
+    let rankNumberSection = '';
+
     if (i == 0) {
-      rankSection += '\uD83E\uDD47 ';
+      rankNumberSection += '\uD83E\uDD47 ';
     } else if (i == 1) {
-      rankSection += '\uD83E\uDD48 ';
+      rankNumberSection += '\uD83E\uDD48 ';
     } else if (i == 2) {
-      rankSection += '\uD83E\uDD49 ';
+      rankNumberSection += '\uD83E\uDD49 ';
     } else {
-      rankSection += '   ';
+      rankNumberSection += '';
     }
     if (cachedUserId == user.id) {
       username = user.name;
+
+      rankNumberSection = i + 1 + ' ' + rankNumberSection;
+
       rankSection +=
-        i + 1 + '\t\t' + user.name + ' (YOU) \t\t' + user.score + '\n';
+        rankNumberSection.padEnd(MAX_RANK_LENGTH, ' ') +
+        '\t\t' +
+        (user.name + ' (YOU)').padEnd(MAX_USERNAME_LENGTH, ' ') +
+        '\t\t' +
+        user.score +
+        '\n';
     } else {
-      rankSection += i + 1 + '\t\t' + user.name + '\t\t' + user.score + '\n';
+      rankNumberSection = i + 1 + ' ' + rankNumberSection;
+
+      rankSection +=
+        rankNumberSection.padEnd(MAX_RANK_LENGTH, ' ') +
+        '\t\t' +
+        user.name.padEnd(MAX_USERNAME_LENGTH, ' ') +
+        '\t\t' +
+        user.score +
+        '\n';
     }
   });
 
+  teamname =
+    ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME) !== undefined
+      ? ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME)
+      : '______';
+
   leaderBoardContent += 'Username \t : \t ' + username + '\n';
-  leaderBoardContent += 'Teamname \t : \t ' + '______' + '\n\n';
+  leaderBoardContent += 'Teamname \t : \t ' + teamname + '\n\n';
 
-  leaderBoardContent +=
-    '============================================================\n';
+  leaderBoardContent += SECTION_BAR;
   leaderBoardContent += 'LEADERBOARD RANKING \n';
-  leaderBoardContent +=
-    '============================================================\n\n';
+  leaderBoardContent += SECTION_BAR + '\n';
 
-  leaderBoardContent += 'RANK     NAME                         SCORE\n';
-  leaderBoardContent += '----     ----                         -----\n';
+  leaderBoardContent +=
+    'RANK'.padEnd(MAX_RANK_LENGTH, ' ') +
+    '\t\t' +
+    'NAME'.padEnd(MAX_USERNAME_LENGTH, ' ') +
+    '\t\tSCORE\n';
+  leaderBoardContent +=
+    '----'.padEnd(MAX_RANK_LENGTH, ' ') +
+    '\t\t' +
+    '----'.padEnd(MAX_USERNAME_LENGTH, ' ') +
+    '\t\t-----\n';
   leaderBoardContent += rankSection + '\n';
 
   //STATS HERE, TODO
 
-  leaderBoardContent +=
-    '============================================================\n';
+  leaderBoardContent += SECTION_BAR;
   leaderBoardContent += 'Metric \n';
-  leaderBoardContent +=
-    '============================================================\n\n';
-
+  leaderBoardContent += SECTION_BAR + '\n';
   console.log(scoreMap);
   leaderBoardContent += 'Each second spent coding        + 0.01 \n';
   leaderBoardContent += 'Each keystroke                  +    1 \n';

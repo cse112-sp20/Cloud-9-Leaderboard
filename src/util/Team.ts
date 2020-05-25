@@ -1,13 +1,27 @@
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @link   URL
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ * @since  x.x.x
+ */
+
 import {window} from 'vscode';
 import {
   addNewTeamToDbAndJoin,
   joinTeamWithTeamId,
   checkIfInTeam,
+  leaveTeam,
 } from './Firestore';
 import {getExtensionContext} from './Authentication';
 import {
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_TEAM_ID,
+  GLOBAL_STATE_USER_IS_TEAM_LEADER,
+  GLOBAL_STATE_USER_ID,
 } from './Constants';
 
 /**
@@ -22,6 +36,8 @@ export async function createAndJoinTeam() {
     return;
   }
 
+  window.showInformationMessage('Enter a name for your new team!');
+
   await window
     .showInputBox({placeHolder: 'Enter a new team name'})
     .then(async (teamName) => {
@@ -35,40 +51,53 @@ export async function createAndJoinTeam() {
 
 /**
  * DEBUG: REMOVE CACHED TEAM NAME AND ID
+ * leave the team
  */
-export function removeTeamNameAndId() {
+export async function removeTeamNameAndId() {
   const ctx = getExtensionContext();
-  ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
-  ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
-  console.log(
-    'Removed cached Team name and ID, team name: ' +
-      ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME),
-  );
-  console.log('team id: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID));
+  const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+  const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+  console.log('team id: ' + teamId);
+  console.log('user id: ' + userId);
+  if (teamId == undefined) {
+    window.showInformationMessage('Not in a team!');
+    return;
+  }
+
+  leaveTeam(userId, teamId);
 }
+
 /**
- * returns the cached team name and id
+ * returns user's team name and ID
+ * values retrieved from persistent storage
  */
-export async function getTeamNameAndTeamId() {
+export async function getTeamInfo() {
   const ctx = getExtensionContext();
-  if (ctx == undefined) return;
 
   const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
+  //check if is leader
+  const isLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
+
   if (teamName == undefined && teamId == undefined) {
     window.showInformationMessage('No team info found.');
-  } else {
-    window.showInformationMessage('Your team id: ' + teamId);
-    console.log('Your team name: ' + teamName + '\nYour team id: ' + teamId);
+    return;
   }
 
-  let inTeam = await checkIfInTeam();
-  if (inTeam == true) {
-    console.log('Already in a team.');
+  let messageStr = 'Your team name: ' + teamName + '\n';
+
+  //if(isLeader){
+  messageStr += 'Your team ID: ' + teamId;
+  //}
+  window.showInformationMessage(messageStr);
+
+  if (isLeader) {
+    window.showInformationMessage('You are the leader of your team.');
   } else {
-    console.log('Not in team!');
+    window.showInformationMessage('You are a member of your team.');
   }
+  console.log(messageStr);
 }
 /**
  * prompts the user to enter a team code and add them to the team
@@ -88,6 +117,6 @@ export async function joinTeam() {
         window.showInformationMessage('Please enter a valid team name!');
         return;
       }
-      joinTeamWithTeamId(teamCode);
+      joinTeamWithTeamId(teamCode, false);
     });
 }

@@ -1,4 +1,13 @@
 "use strict";
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ * @since  x.x.x
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -52,6 +61,10 @@ function authenticateUser(ctx) {
         console.log('No cachedUserId found. Need to create a new user account.');
         //registerNewUserWithUserInput(ctx);
         registerNewUserWithGeneratedCredential(ctx);
+        /**
+         * post-mvp:
+         * alow user to sign in to existing account when switching device
+         */
     }
     else {
         // case2: existing user

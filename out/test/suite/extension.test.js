@@ -31,6 +31,7 @@ suite('authentication.ts', () => {
     });
     test('authenticating user', () => {
         const ctx = Authentication_1.getExtensionContext();
+        Authentication_1.authenticateUser(ctx);
     });
     test('registering new user with user input', () => {
         const ctx = Authentication_1.getExtensionContext();
@@ -38,6 +39,7 @@ suite('authentication.ts', () => {
     });
     test('registering new user with generated credentials', () => {
         const ctx = Authentication_1.getExtensionContext();
+        Authentication_1.registerNewUserWithGeneratedCredential(ctx);
     });
 });
 suite('utilities.ts', () => {
@@ -64,13 +66,13 @@ suite('leaderboard.ts', () => {
     });
     test('getting global leadboard file', () => {
         const leaderboardPath = Leaderboard_1.getLeaderboardFile().toString();
-        assert.equal(leaderboardPath.includes("\\leaderboard.txt") ||
-            leaderboardPath.includes("/leaderboard.txt"), true);
+        assert.equal(leaderboardPath.includes('\\leaderboard.txt') ||
+            leaderboardPath.includes('/leaderboard.txt'), true);
     });
     test('getting team leadboard file', () => {
         const leaderboardPath = Leaderboard_1.getTeamLeaderboardFile().toString();
-        assert.equal(leaderboardPath.includes("\\team_leaderboard.txt") ||
-            leaderboardPath.includes("/team_leaderboard.txt"), true);
+        assert.equal(leaderboardPath.includes('\\team_leaderboard.txt') ||
+            leaderboardPath.includes('/team_leaderboard.txt'), true);
     });
     //integration test of leaderboard displaying
 });
@@ -104,21 +106,21 @@ suite('metric.ts', () => {
     //process metric test needed (don't know what payload looks like yet)
 });
 suite('firestore.ts', () => {
-    const testId = "testUserId";
+    const testId = 'testUserId';
     test('login to firestore', () => __awaiter(void 0, void 0, void 0, function* () {
-        var signInStub = sinon.stub(firebase.auth(), "signInWithEmailAndPassword");
+        var signInStub = sinon.stub(firebase.auth(), 'signInWithEmailAndPassword');
         const signInResult = {};
-        signInStub.withArgs("test", "test").returns(Promise.resolve(signInResult));
-        yield FireStore_1.loginUserWithEmailAndPassword("test", "test");
+        signInStub.withArgs('test', 'test').returns(Promise.resolve(signInResult));
+        yield FireStore_1.loginUserWithEmailAndPassword('test', 'test');
     }));
-    test('update users stats', () => __awaiter(void 0, void 0, void 0, function* () {
-    }));
-    test('addNewUserDocToDb', () => __awaiter(void 0, void 0, void 0, function* () {
-    }));
+    test('update users stats', () => __awaiter(void 0, void 0, void 0, function* () { }));
+    test('addNewUserDocToDb', () => __awaiter(void 0, void 0, void 0, function* () { }));
     test('getUserDocWithId', () => __awaiter(void 0, void 0, void 0, function* () {
         var result = {};
         result['data'] = 'yaya';
-        sinon.stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc(testId), "get").returns(Promise.resolve(result));
+        sinon
+            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc(testId), 'get')
+            .returns(Promise.resolve(result));
         FireStore_1.getUserDocWithId(testId).then((res) => {
             assert.equal(result, res);
         });
@@ -127,11 +129,13 @@ suite('firestore.ts', () => {
         //Set a fake userID
         var result = {};
         result['uid'] = testId;
-        sinon.stub(firebase.auth(), "currentUser").value(result);
+        sinon.stub(firebase.auth(), 'currentUser').value(result);
         //whenever the function is called, return a blank promise
-        sinon.stub(firebase.auth(), "createUserWithEmailAndPassword").
-            withArgs(testId, "testPassword").returns(Promise.resolve());
-        var successful = yield FireStore_1.createNewUserInFirebase(Authentication_1.getExtensionContext(), testId, "testPassword");
+        sinon
+            .stub(firebase.auth(), 'createUserWithEmailAndPassword')
+            .withArgs(testId, 'testPassword')
+            .returns(Promise.resolve());
+        var successful = yield FireStore_1.createNewUserInFirebase(Authentication_1.getExtensionContext(), testId, 'testPassword');
         assert.equal(true, true); // does not work
     }));
 });

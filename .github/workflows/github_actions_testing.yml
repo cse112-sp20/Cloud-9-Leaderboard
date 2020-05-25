@@ -1,12 +1,15 @@
-name: Github Actions Testing
+name: Testing workflow
 
 on:
   pull_request:
-  push:
     branches:
       - master
       - dev
-      - test-new-framework-hest
+
+  push:
+    branches-ignore:
+      # Ignore any documentation pushes
+      - 'document-*'
 
 jobs:
   test:

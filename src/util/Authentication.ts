@@ -1,3 +1,13 @@
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ * @since  x.x.x
+ */
+
 import {window, ExtensionContext} from 'vscode';
 import {
   createNewUserInFirebase,
@@ -56,6 +66,11 @@ export function authenticateUser(ctx: ExtensionContext) {
     console.log('No cachedUserId found. Need to create a new user account.');
     //registerNewUserWithUserInput(ctx);
     registerNewUserWithGeneratedCredential(ctx);
+
+    /**
+     * post-mvp:
+     * alow user to sign in to existing account when switching device
+     */
   } else {
     // case2: existing user
     // do we need to actually sign the user in again??

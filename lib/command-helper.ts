@@ -32,10 +32,11 @@ import {
 import {clearCachedUserId} from '../src/util/Authentication';
 import {
   createAndJoinTeam,
-  getTeamNameAndTeamId,
+  getTeamInfo,
   removeTeamNameAndId,
   joinTeam,
 } from '../src/util/Team';
+import {displayPersonalStats} from '../src/util/PersonalStats';
 
 export function createCommands(
   kpmController: KpmManager,
@@ -146,6 +147,13 @@ export function createCommands(
     }),
   );
 
+  // Cloud9: command used to see personal stats by date
+  cmds.push(
+    commands.registerCommand('cloud9.personalStats', () => {
+      displayPersonalStats();
+    }),
+  );
+
   // Cloud9: command used to view private team leaderboard
   cmds.push(
     commands.registerCommand('cloud9.teamLeaderboard', () => {
@@ -163,9 +171,9 @@ export function createCommands(
 
   // Cloud9: command used to retrieve team code
   cmds.push(
-    commands.registerCommand('cloud9.getTeamNameAndId', () => {
+    commands.registerCommand('cloud9.getTeamInfo', () => {
       console.log('Cloud9: GET TEAM NAME AND ID');
-      getTeamNameAndTeamId();
+      getTeamInfo();
     }),
   );
 

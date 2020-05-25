@@ -73,6 +73,10 @@
       {
         "command": "cloud9.getTeamNameAndId",
         "title": "Cloud9: Get Team ID"
+      },
+      {
+        "command": "cloud9.personalStats",
+        "title": "Cloud9: See your most recent stats"
       }
     ],
     "configuration": {
@@ -122,8 +126,9 @@
     "@types/mocha": "^5.2.6",
     "@types/node": "^13.13.5",
     "@types/vscode": "^1.45.0",
+    "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
-    "eslint": "^7.0.0",
+    "eslint": "^2.10.1",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
@@ -158,5 +163,10 @@
     "sinon": "^9.0.2",
     "unique-names-generator": "^4.2.0",
     "vsls": "0.3.1291"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
