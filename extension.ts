@@ -2,7 +2,21 @@
 
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import {window, ExtensionContext, StatusBarAlignment, commands} from 'vscode';
+import {
+  window,
+  ExtensionContext,
+  StatusBarAlignment,
+  commands,
+  Command,
+  TreeDataProvider,
+  TreeItemCollapsibleState,
+  ProviderResult,
+  TreeItem,
+  Event,
+  EventEmitter,
+  TreeView,
+  Disposable,
+} from 'vscode';
 import {
   isLoggedIn,
   sendHeartbeat,
@@ -114,6 +128,8 @@ export function deactivate(ctx: ExtensionContext) {
 //export var extensionContext;
 
 export async function activate(ctx: ExtensionContext) {
+  window.registerTreeDataProvider('exampleView', new TaskProvider());
+
   //console.log("CLOUD9 ACTIVATED");
   window.showInformationMessage('Cloud9 Activated!');
   // add the code time commands
@@ -329,5 +345,51 @@ async function initializeLiveshare() {
         _ls = null;
       }
     });
+  }
+}
+
+export class TaskProvider implements TreeDataProvider<TreeTask> {
+  onDidChangeTreeData?: Event<TreeTask | null | undefined> | undefined;
+
+  data: TreeTask[];
+  constructor() {
+    this.data = [
+      new TreeTask('cars', [
+        new TreeTask('Ford', [
+          new TreeTask('Fiesta'),
+          new TreeTask('Focus'),
+          new TreeTask('Mustang'),
+        ]),
+        new TreeTask('BMW', [
+          new TreeTask('320'),
+          new TreeTask('X3'),
+          new TreeTask('X5'),
+        ]),
+      ]),
+    ];
+  }
+
+  getChildren(task?: TreeTask | undefined): ProviderResult<TreeTask[]> {
+    if (task === undefined) {
+      return this.data;
+    }
+    return task.children;
+  }
+
+  getTreeItem(task: TreeTask): TreeItem | Thenable<TreeItem> {
+    return task;
+  }
+}
+class TreeTask extends TreeItem {
+  children: TreeTask[] | undefined;
+
+  constructor(label: string, children?: TreeTask[]) {
+    super(
+      label,
+      children === undefined
+        ? TreeItemCollapsibleState.None
+        : TreeItemCollapsibleState.Expanded,
+    );
+    this.children = children;
   }
 }

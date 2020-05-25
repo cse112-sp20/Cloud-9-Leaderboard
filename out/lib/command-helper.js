@@ -14,8 +14,6 @@ const vscode_1 = require("vscode");
 const DataController_1 = require("./DataController");
 const MenuManager_1 = require("./menu/MenuManager");
 const Util_1 = require("./Util");
-const ProjectCommitManager_1 = require("./menu/ProjectCommitManager");
-const ReportManager_1 = require("./menu/ReportManager");
 const FileManager_1 = require("./managers/FileManager");
 const Leaderboard_1 = require("../src/util/Leaderboard");
 const Authentication_1 = require("../src/util/Authentication");
@@ -114,14 +112,6 @@ function createCommands(kpmController) {
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearUserId', () => {
         console.log('Cloud9: DEBUG CLEAR CACHED ID');
         Authentication_1.clearCachedUserId();
-    }));
-    // DISPLAY PROJECT METRICS REPORT
-    cmds.push(vscode_1.commands.registerCommand('codetime.generateProjectSummary', () => {
-        ProjectCommitManager_1.ProjectCommitManager.getInstance().launchProjectCommitMenuFlow();
-    }));
-    // DISPLAY REPO COMMIT CONTRIBUTOR REPORT
-    cmds.push(vscode_1.commands.registerCommand('codetime.generateContributorSummary', (identifier) => {
-        ReportManager_1.displayProjectContributorCommitsDashboard(identifier);
     }));
     // LAUNCH COMMIT URL
     cmds.push(vscode_1.commands.registerCommand('codetime.launchCommitUrl', (commitLink) => {

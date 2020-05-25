@@ -20,9 +20,6 @@ import {KpmManager} from './managers/KpmManager';
 
 import {KpmItem} from './model/models';
 
-import {ProjectCommitManager} from './menu/ProjectCommitManager';
-
-import {displayProjectContributorCommitsDashboard} from './menu/ReportManager';
 import {sendOfflineData} from './managers/FileManager';
 import {
   displayLeaderboard,
@@ -198,23 +195,6 @@ export function createCommands(
       console.log('Cloud9: DEBUG CLEAR CACHED ID');
       clearCachedUserId();
     }),
-  );
-
-  // DISPLAY PROJECT METRICS REPORT
-  cmds.push(
-    commands.registerCommand('codetime.generateProjectSummary', () => {
-      ProjectCommitManager.getInstance().launchProjectCommitMenuFlow();
-    }),
-  );
-
-  // DISPLAY REPO COMMIT CONTRIBUTOR REPORT
-  cmds.push(
-    commands.registerCommand(
-      'codetime.generateContributorSummary',
-      (identifier) => {
-        displayProjectContributorCommitsDashboard(identifier);
-      },
-    ),
   );
 
   // LAUNCH COMMIT URL

@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.intializePlugin = exports.activate = exports.deactivate = exports.getStatusBarItem = exports.isTelemetryOn = void 0;
+exports.TaskProvider = exports.intializePlugin = exports.activate = exports.deactivate = exports.getStatusBarItem = exports.isTelemetryOn = void 0;
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode_1 = require("vscode");
@@ -90,6 +90,7 @@ exports.deactivate = deactivate;
 //export var extensionContext;
 function activate(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
+        vscode_1.window.registerTreeDataProvider('exampleView', new TaskProvider());
         //console.log("CLOUD9 ACTIVATED");
         vscode_1.window.showInformationMessage('Cloud9 Activated!');
         // add the code time commands
@@ -263,5 +264,30 @@ function initializeLiveshare() {
             }));
         }
     });
+}
+class TaskProvider {
+    constructor() {
+        this.data = [new TreeTask('cars', [
+                new TreeTask('Ford', [new TreeTask('Fiesta'), new TreeTask('Focus'), new TreeTask('Mustang')]),
+                new TreeTask('BMW', [new TreeTask('320'), new TreeTask('X3'), new TreeTask('X5')])
+            ])];
+    }
+    getChildren(task) {
+        if (task === undefined) {
+            return this.data;
+        }
+        return task.children;
+    }
+    getTreeItem(task) {
+        return task;
+    }
+}
+exports.TaskProvider = TaskProvider;
+class TreeTask extends vscode_1.TreeItem {
+    constructor(label, children) {
+        super(label, children === undefined ? vscode_1.TreeItemCollapsibleState.None :
+            vscode_1.TreeItemCollapsibleState.Expanded);
+        this.children = children;
+    }
 }
 //# sourceMappingURL=extension.js.map
