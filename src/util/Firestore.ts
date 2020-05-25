@@ -413,6 +413,9 @@ export async function getUserDocWithId(userId) {
  * @param input the new team's name
  */
 export async function addNewTeamToDbAndJoin(teamName) {
+  if (teamName == '' || teamName == undefined) {
+    return;
+  }
   //check if already in database
   const cachedUserId = getExtensionContext().globalState.get(
     GLOBAL_STATE_USER_ID,

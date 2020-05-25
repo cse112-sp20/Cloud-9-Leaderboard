@@ -46,7 +46,7 @@ function loginUserWithEmailAndPassword(email, password) {
             .signInWithEmailAndPassword(email, password)
             .then((userCred) => {
             console.log(userCred);
-            //update persistent storage 
+            //update persistent storage
             //updatePersistentStorageWithUserDocData();
             //console.log('signed in');
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, userCred.user.uid);

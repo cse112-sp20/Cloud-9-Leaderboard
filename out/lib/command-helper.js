@@ -101,7 +101,7 @@ function createCommands(kpmController) {
         console.log('Cloud9: GET TEAM NAME AND ID');
         Team_1.getTeamInfo();
     }));
-    //password recovery 
+    //password recovery
     cmds.push(vscode_1.commands.registerCommand('cloud9.resetPassword', () => {
         console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
         //doing nothing rn

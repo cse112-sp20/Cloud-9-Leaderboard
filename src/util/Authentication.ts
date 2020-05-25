@@ -12,6 +12,7 @@ import {
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
+  GLOBAL_STATE_USER_NICKNAME,
 } from './Constants';
 import {getMaxListeners} from 'cluster';
 
@@ -71,6 +72,7 @@ export function authenticateUser() {
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   const cachedUserEmail = ctx.globalState.get(GLOBAL_STATE_USER_EMAIL);
   const cachedUserPassword = ctx.globalState.get(GLOBAL_STATE_USER_PASSWORD);
+  const cachedUserNickName = ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME);
 
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
@@ -91,7 +93,9 @@ export function authenticateUser() {
      */
   } else {
     // case2: existing user's id found
-    window.showInformationMessage('Cloud9: Welcome back!');
+    window.showInformationMessage(
+      'Cloud9: Welcome back ' + cachedUserNickName + '!',
+    );
     console.log('Found cachedUserId: ' + cachedUserId);
     console.log('Found cachedUserEmail: ' + cachedUserEmail);
     console.log('Found cachedUserPassword: ' + cachedUserPassword);

@@ -30,7 +30,7 @@ export async function createAndJoinTeam() {
   await window
     .showInputBox({placeHolder: 'Enter a new team name'})
     .then(async (teamName) => {
-      if (teamName == undefined) {
+      if (teamName == undefined || teamName == '') {
         window.showInformationMessage('Please enter a valid team name!');
         return;
       }

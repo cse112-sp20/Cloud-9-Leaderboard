@@ -29,7 +29,7 @@ function createAndJoinTeam() {
         yield vscode_1.window
             .showInputBox({ placeHolder: 'Enter a new team name' })
             .then((teamName) => __awaiter(this, void 0, void 0, function* () {
-            if (teamName == undefined) {
+            if (teamName == undefined || teamName == '') {
                 vscode_1.window.showInformationMessage('Please enter a valid team name!');
                 return;
             }

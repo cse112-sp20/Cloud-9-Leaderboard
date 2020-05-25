@@ -101,7 +101,8 @@ function registerNewUserOrSigInWithUserInput() {
         let email = null;
         let password = null;
         let completed = false;
-        while (!completed) { //forcing the user to always sign in 
+        while (!completed) {
+            //forcing the user to always sign in
             vscode_1.window.showInformationMessage('Please sign in or create a new account.');
             //prompt for email and password
             yield vscode_1.window
@@ -112,7 +113,9 @@ function registerNewUserOrSigInWithUserInput() {
             })
                 .then(() => __awaiter(this, void 0, void 0, function* () {
                 yield vscode_1.window
-                    .showInputBox({ placeHolder: 'Enter your password (must be 6 characters long or more)' })
+                    .showInputBox({
+                    placeHolder: 'Enter your password (must be 6 characters long or more)',
+                })
                     .then((inputPassword) => {
                     password = inputPassword;
                     console.log('user input password: ' + password);
@@ -124,15 +127,13 @@ function registerNewUserOrSigInWithUserInput() {
                 }
                 else {
                     //first try creating a new user account
-                    //if email is already in use, try logging them in with the credential 
-                    yield Firestore_1.createNewUserInFirebase(email, password)
-                        .then((result) => __awaiter(this, void 0, void 0, function* () {
+                    //if email is already in use, try logging them in with the credential
+                    yield Firestore_1.createNewUserInFirebase(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
                         console.log(result.created);
                         console.log(result.errorCode);
-                        //email already in use, now log the user in 
+                        //email already in use, now log the user in
                         if (result.errorCode == 'auth/email-already-in-use') {
-                            yield Firestore_1.loginUserWithEmailAndPassword(email, password)
-                                .then((result) => __awaiter(this, void 0, void 0, function* () {
+                            yield Firestore_1.loginUserWithEmailAndPassword(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
                                 console.log(result.loggedIn);
                                 console.log(result.errorCode);
                                 //successfully logged the user in, return
