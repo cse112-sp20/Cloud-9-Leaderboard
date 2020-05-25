@@ -12,6 +12,7 @@ import {window, ExtensionContext} from 'vscode';
 import {
   createNewUserInFirebase,
   loginUserWithEmailAndPassword,
+  userDocExists,
 } from './Firestore';
 import {generateRandomEmail} from './Utility';
 import {
@@ -30,7 +31,7 @@ import {getMaxListeners} from 'cluster';
 let extensionContext: ExtensionContext = undefined;
 
 /**
- * keep the extension context
+ * stores the extension context
  * @param ctx vscode extension context
  */
 export function storeExtensionContext(ctx) {
@@ -45,17 +46,8 @@ export function getExtensionContext() {
 }
 
 /**
- * return true if user id is found in persistent storage
- * can be used to determine whether user has an account
- */
-export function checkExtensionContextID() {
-  let ctx = getExtensionContext();
-  return ctx.globalState.get(GLOBAL_STATE_USER_ID) != undefined;
-}
-
-/**
  * *****for debugging purpose only******
- * removes the userId stored in extensionContext
+ * removes extensionContext data
  */
 export function clearCachedUserId() {
   let ctx = getExtensionContext();
@@ -67,8 +59,7 @@ export function clearCachedUserId() {
   ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
 
   console.log(
-    'After clearing cached id: ' +
-      extensionContext.globalState.get(GLOBAL_STATE_USER_ID),
+    'After clearing persistent storage: ' + extensionContext.globalState,
   );
 }
 
@@ -76,7 +67,7 @@ export function clearCachedUserId() {
  * authentication entry point
  * @param ctx
  */
-export function authenticateUser() {
+export async function authenticateUser() {
   //get ref to extension context
   let ctx = getExtensionContext();
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
@@ -87,37 +78,43 @@ export function authenticateUser() {
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
-  console.log('AUTHENTICATION USERID IS: ' + cachedUserId);
+  console.log('--AUTHENTICATION-- USER ID IS: ' + cachedUserId);
+
   if (cachedUserId === undefined) {
     // case1: sign in or create new account
     window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
     console.log(
       'No cachedUserId found. Need to sign in or create a new account.',
     );
-    registerNewUserOrSigInWithUserInput();
-    //registerNewUserWithGeneratedCredential(ctx);
 
-    /**
-     * post-mvp:
-     * alow user to sign in to existing account when switching device
-     */
+    registerNewUserOrSigInWithUserInput();
   } else {
     // case2: existing user's id found
-    window.showInformationMessage(
-      'Cloud9: Welcome back ' + cachedUserNickName + '!',
-    );
     console.log('Found cachedUserId: ' + cachedUserId);
     console.log('Found cachedUserEmail: ' + cachedUserEmail);
     console.log('Found cachedUserPassword: ' + cachedUserPassword);
     console.log('Found cachedTeamName: ' + cachedTeamName);
     console.log('Found cachedTeamId: ' + cachedTeamId);
     console.log('Found cachedUserNickname: ' + cachedUserNickName);
+
+    //check if user doc exists in firebase
+    await userDocExists(cachedUserId).then((result) => {
+      if (result) {
+        //true, do nothing
+        window.showInformationMessage(
+          'Welcome back, ' + cachedUserNickName + '!!',
+        );
+      } else {
+        //false prompt user to sign in
+        console.log('Need to login or register for a new account.');
+        registerNewUserOrSigInWithUserInput();
+      }
+    });
   }
 }
 
 /**
  * prompt the user to enter an email and password and sign in or create a new account for them
- * @param ctx
  */
 export async function registerNewUserOrSigInWithUserInput() {
   const ctx = getExtensionContext();
@@ -147,7 +144,12 @@ export async function registerNewUserOrSigInWithUserInput() {
           });
       })
       .then(async () => {
-        if (email == undefined || password == undefined) {
+        if (
+          email == undefined ||
+          password == undefined ||
+          email == '' ||
+          password == ''
+        ) {
           window.showInformationMessage(
             'Invalid email or password! Please try again!',
           );
@@ -195,14 +197,15 @@ export async function registerNewUserOrSigInWithUserInput() {
             },
           );
         }
-
-        //completed = true; //TODO: delete this line
       });
   }
 }
 
 export function passwordRecovery() {}
 
+/**
+ * not using this function
+ */
 export async function registerNewUserWithGeneratedCredential() {
   const email = generateRandomEmail();
 

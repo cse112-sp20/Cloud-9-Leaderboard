@@ -155,7 +155,8 @@ function registerNewUserOrSigInWithUserInput() {
                                 if (result.loggedIn == true) {
                                     completed = true;
                                     vscode_1.window.showInformationMessage('Hello, ' +
-                                        ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) + '!!');
+                                        ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
+                                        '!!');
                                     return;
                                 }
                                 else if (result.errorCode == 'auth/wrong-password') {

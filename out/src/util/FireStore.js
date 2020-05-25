@@ -62,7 +62,8 @@ function updatePersistentStorageWithUserDocData(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Updating persistent storage...');
         let ctx = Authentication_1.getExtensionContext();
-        yield db.collection(Constants_1.COLLECTION_ID_USERS)
+        yield db
+            .collection(Constants_1.COLLECTION_ID_USERS)
             .doc(userId)
             .get()
             .then((userDoc) => {
@@ -332,7 +333,7 @@ function addNewUserDocToDb(userId, email) {
             .doc(today)
             .set(Constants_1.DEFAULT_USER_DOC)
             .then(() => {
-            console.log('Added user\'s doc for today:' + today);
+            console.log("Added user's doc for today:" + today);
             let data = getUserDocWithId(userId);
             console.log(data);
         })
@@ -389,7 +390,7 @@ function addNewTeamToDbAndJoin(teamName) {
             }
             else {
                 //create this team and add user as a member
-                // Add a new document to db for this team 
+                // Add a new document to db for this team
                 db.collection(Constants_1.COLLECTION_ID_TEAMS)
                     .add(newTeamDoc)
                     .then((ref) => {
@@ -398,7 +399,7 @@ function addNewTeamToDbAndJoin(teamName) {
                     console.log('Team Name: ' + teamName);
                 })
                     .then(() => {
-                    //add this user to team, isLeader = true 
+                    //add this user to team, isLeader = true
                     joinTeamWithTeamId(teamId, true);
                 });
             }

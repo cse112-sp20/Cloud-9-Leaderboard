@@ -24,7 +24,7 @@ import {
 } from './Constants';
 import {getExtensionContext} from './Authentication';
 import {processMetric, scoreCalculation} from './Metric';
-import {generateRandomEmail, generateRandomName} from './Utility';
+import {generateRandomName} from './Utility';
 
 // Initialize Firebase
 if (!firebase.apps.length) {
@@ -685,4 +685,27 @@ export async function retrieveUserStats(callback) {
     .catch((err) => {
       console.log('Error getting documents', err);
     });
+}
+
+/**
+ * returns true if a document associated with the passed in ID exists in firebase
+ * @param userId uid
+ */
+export async function userDocExists(userId) {
+  if (userId == undefined || userId == '') return false;
+  console.log('Checking if user id (' + userId + ') exists in firebase...');
+  db.collection(COLLECTION_ID_USERS)
+    .doc(userId)
+    .get()
+    .then((docRef) => {
+      if (docRef.exists) {
+        console.log('User document found in firebase!');
+        return true;
+      }
+    })
+    .catch(() => {
+      console.log('Cannot find user document in firebase.');
+      return false;
+    });
+  return false;
 }

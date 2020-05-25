@@ -23,9 +23,9 @@ export const DEFAULT_USER_DOC_TOP = {
   keystrokes: 0,
   linesChanged: 0,
   timeInterval: 0,
-  teamCode: undefined,
+  teamCode: '',
   cumulativePoints: 0,
-  teamName: undefined,
+  teamName: '',
 };
 
 export const DEFAULT_TEAM_DOC = {
