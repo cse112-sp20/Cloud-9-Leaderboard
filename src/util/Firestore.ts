@@ -51,17 +51,6 @@ export async function loginUserWithEmailAndPassword(email, password) {
  * Whenever new payload from codetime is posted to their api,
  * we will update our database
  */
-/**
- * Summary. (use period)
- *
- * Description. (use period)
- *
- * @link   URL
- * @file   This files defines the MyClass class.
- * @author AuthorName.
- * @since  x.x.x
- */
-
 export function updateStats(payload) {
   console.log('Firestore.ts, updateStats');
 
@@ -586,8 +575,12 @@ export async function checkIfInTeam() {
       }
     })
     .then(() => {
+      console.log('test statement 1');
+      console.log('inTeam: ', inTeam);
       return inTeam;
     });
+  console.log('test statement 2');
+  console.log('inTeam: ', inTeam);
   return inTeam;
 }
 

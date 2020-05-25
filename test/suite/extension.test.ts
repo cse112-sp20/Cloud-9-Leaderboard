@@ -240,7 +240,9 @@ suite('firestore.ts', () => {
         'get',
       )
       .returns(Promise.resolve(result));
-    checkIfInTeam();
+    var output = checkIfInTeam();
+    console.log('test statement 3');
+    console.log('output: ', output);
   });
   test('retrieveUserStats', async () => {});
   test('retrieveAllUserStats', async () => {});

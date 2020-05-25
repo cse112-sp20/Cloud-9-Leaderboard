@@ -160,7 +160,9 @@ suite('firestore.ts', () => {
         sinon
             .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc(userId), 'get')
             .returns(Promise.resolve(result));
-        FireStore_1.checkIfInTeam();
+        var output = FireStore_1.checkIfInTeam();
+        console.log("test statement 3");
+        console.log("output: ", output);
     }));
     test('retrieveUserStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
     test('retrieveAllUserStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
@@ -168,8 +170,8 @@ suite('firestore.ts', () => {
 });
 suite('personalstats.ts', () => {
     test('adding day stats to personal stats file', () => {
-        var date = "12/1/2012";
-        var statsObj = { ["test"]: 0 };
+        var date = '12/1/2012';
+        var statsObj = { ['test']: 0 };
         PersonalStats_1.PersonalStats.addDayStats(date, statsObj);
     });
     test('getting dates from personal stats file', () => {
@@ -181,8 +183,7 @@ suite('personalstats.ts', () => {
         assert.equal(filePath.includes('\\personal_statistics.txt') ||
             filePath.includes('/personal_statistics.txt'), true);
     });
-    test('displaying personal stats file', () => {
-    });
+    test('displaying personal stats file', () => { });
     //integration test of personal stats displaying
 });
 //# sourceMappingURL=extension.test.js.map
