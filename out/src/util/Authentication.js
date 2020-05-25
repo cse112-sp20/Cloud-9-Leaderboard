@@ -14,6 +14,7 @@ const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
 const Utility_1 = require("./Utility");
 const Constants_1 = require("./Constants");
+const extension_1 = require("./../../extension");
 //export let cachedUserId = undefined;
 let extensionContext = undefined;
 /**
@@ -38,34 +39,37 @@ exports.clearCachedUserId = clearCachedUserId;
  * @param ctx
  */
 function authenticateUser(ctx) {
-    //stores the extension context
-    extensionContext = ctx;
-    const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-    const cachedUserEmail = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_EMAIL);
-    const cachedUserPassword = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_PASSWORD);
-    const cachedTeamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
-    const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-    console.log('AUTHENTICATION USERID IS: ' + cachedUserId);
-    if (cachedUserId === undefined) {
-        // case1: new user, create an account for them
-        vscode_1.window.showInformationMessage('Cloud9: Welcome new user!');
-        console.log('No cachedUserId found. Need to create a new user account.');
-        //registerNewUserWithUserInput(ctx);
-        registerNewUserWithGeneratedCredential(ctx);
-        /**
-         * post-mvp:
-         * alow user to sign in to existing account when switching device
-         */
-    }
-    else {
-        // case2: existing user
-        // do we need to actually sign the user in again??
-        vscode_1.window.showInformationMessage('Cloud9: Welcome back!');
-        console.log('Found cachedUserId: ' + cachedUserId);
-        console.log('Found cachedTeamName: ' + cachedTeamName);
-        console.log('Found cachedTeamId: ' + cachedTeamId);
-        //loginUserWithEmailAndPassword(cachedUserEmail, cachedUserPassword);
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        //stores the extension context
+        extensionContext = ctx;
+        const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        const cachedUserEmail = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_EMAIL);
+        const cachedUserPassword = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_PASSWORD);
+        const cachedTeamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
+        const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
+        console.log('AUTHENTICATION USERID IS: ' + cachedUserId);
+        if (cachedUserId === undefined) {
+            // case1: new user, create an account for them
+            vscode_1.window.showInformationMessage('Cloud9: Welcome new user!');
+            console.log('No cachedUserId found. Need to create a new user account.');
+            //registerNewUserWithUserInput(ctx);
+            registerNewUserWithGeneratedCredential(ctx);
+            /**
+             * post-mvp:
+             * alow user to sign in to existing account when switching device
+             */
+        }
+        else {
+            // case2: existing user
+            // do we need to actually sign the user in again??
+            vscode_1.window.showInformationMessage('Cloud9: Welcome back!');
+            console.log('Found cachedUserId: ' + cachedUserId);
+            console.log('Found cachedTeamName: ' + cachedTeamName);
+            console.log('Found cachedTeamId: ' + cachedTeamId);
+            //loginUserWithEmailAndPassword(cachedUserEmail, cachedUserPassword);
+        }
+        yield Firestore_1.retrieveUserDailyMetric(extension_1.testCallback, ctx);
+    });
 }
 exports.authenticateUser = authenticateUser;
 /**

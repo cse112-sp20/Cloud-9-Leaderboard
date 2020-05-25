@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TaskProvider = exports.intializePlugin = exports.activate = exports.deactivate = exports.getStatusBarItem = exports.isTelemetryOn = void 0;
+exports.testCallback = exports.TaskProvider = exports.intializePlugin = exports.activate = exports.deactivate = exports.getStatusBarItem = exports.isTelemetryOn = void 0;
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode_1 = require("vscode");
@@ -90,7 +90,7 @@ exports.deactivate = deactivate;
 //export var extensionContext;
 function activate(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
-        vscode_1.window.registerTreeDataProvider('exampleView', new TaskProvider());
+        // window.registerTreeDataProvider('exampleView', new TaskProvider());
         //console.log("CLOUD9 ACTIVATED");
         vscode_1.window.showInformationMessage('Cloud9 Activated!');
         // add the code time commands
@@ -114,6 +114,7 @@ function activate(ctx) {
         }
         // sign the user in
         Authentication_1.authenticateUser(ctx);
+        //await retrieveUserDailyMetric(testCallback, ctx);
     });
 }
 exports.activate = activate;
@@ -266,11 +267,14 @@ function initializeLiveshare() {
     });
 }
 class TaskProvider {
-    constructor() {
-        this.data = [new TreeTask('cars', [
-                new TreeTask('Ford', [new TreeTask('Fiesta'), new TreeTask('Focus'), new TreeTask('Mustang')]),
-                new TreeTask('BMW', [new TreeTask('320'), new TreeTask('X3'), new TreeTask('X5')])
-            ])];
+    constructor(d) {
+        console.log('***************' + d['keystrokes']);
+        this.data = [];
+        let tempList = [];
+        for (let key in d) {
+            tempList.push(new TreeTask(key, [new TreeTask(d[key] + '')]));
+        }
+        this.data = [new TreeTask('DAILY METRICS', tempList)];
     }
     getChildren(task) {
         if (task === undefined) {
@@ -285,9 +289,14 @@ class TaskProvider {
 exports.TaskProvider = TaskProvider;
 class TreeTask extends vscode_1.TreeItem {
     constructor(label, children) {
-        super(label, children === undefined ? vscode_1.TreeItemCollapsibleState.None :
-            vscode_1.TreeItemCollapsibleState.Expanded);
+        super(label, children === undefined
+            ? vscode_1.TreeItemCollapsibleState.None
+            : vscode_1.TreeItemCollapsibleState.Expanded);
         this.children = children;
     }
 }
+function testCallback(data, ctx) {
+    vscode_1.window.registerTreeDataProvider('exampleView', new TaskProvider(data));
+}
+exports.testCallback = testCallback;
 //# sourceMappingURL=extension.js.map

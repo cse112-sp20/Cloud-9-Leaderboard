@@ -2,6 +2,7 @@ import {window, ExtensionContext} from 'vscode';
 import {
   createNewUserInFirebase,
   loginUserWithEmailAndPassword,
+  retrieveUserDailyMetric,
 } from './Firestore';
 import {generateRandomEmail} from './Utility';
 import {
@@ -12,6 +13,8 @@ import {
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
 } from './Constants';
+
+import {testCallback} from './../../extension';
 
 //export let cachedUserId = undefined;
 let extensionContext: ExtensionContext = undefined;
@@ -39,7 +42,7 @@ export function clearCachedUserId() {
  * authentication entry point
  * @param ctx
  */
-export function authenticateUser(ctx: ExtensionContext) {
+export async function authenticateUser(ctx: ExtensionContext) {
   //stores the extension context
   extensionContext = ctx;
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
@@ -71,6 +74,8 @@ export function authenticateUser(ctx: ExtensionContext) {
 
     //loginUserWithEmailAndPassword(cachedUserEmail, cachedUserPassword);
   }
+
+  await retrieveUserDailyMetric(testCallback, ctx);
 }
 
 /**

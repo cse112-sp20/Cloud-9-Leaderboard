@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.loginUserWithEmailAndPassword = void 0;
+exports.retrieveUserDailyMetric = exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.loginUserWithEmailAndPassword = void 0;
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
@@ -523,6 +523,8 @@ function retrieveUserStats(callback) {
                 dateMap.push(currDate);
                 // console.log(doc.id + "=>" + doc.data());
             });
+            console.log('*************');
+            console.log(dateMap);
             return dateMap;
         })
             .then((dateMap) => {
@@ -534,4 +536,34 @@ function retrieveUserStats(callback) {
     });
 }
 exports.retrieveUserStats = retrieveUserStats;
-//# sourceMappingURL=FireStore.js.map
+function retrieveUserDailyMetric(callback, c) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let db = firebase.firestore();
+        let user = db.collection(Constants_1.COLLECTION_ID_USERS);
+        const ctx = Authentication_1.getExtensionContext();
+        const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        let userDataMap = [];
+        user
+            .doc(cachedUserId)
+            .collection('dates')
+            .doc(new Date().toISOString().split('T')[0])
+            .get()
+            .then((userDoc) => {
+            if (userDoc.exists) {
+                // Convert to City object
+                return userDoc.data();
+            }
+            else {
+                return undefined;
+            }
+        })
+            .then((dataMap) => {
+            callback(dataMap, c);
+        })
+            .catch((err) => {
+            console.log('Error getting documents', err);
+        });
+    });
+}
+exports.retrieveUserDailyMetric = retrieveUserDailyMetric;
+//# sourceMappingURL=Firestore.js.map

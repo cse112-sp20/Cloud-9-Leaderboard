@@ -17,6 +17,7 @@ import {
   TreeView,
   Disposable,
 } from 'vscode';
+import {retrieveUserDailyMetric} from './src/util/Firestore';
 import {
   isLoggedIn,
   sendHeartbeat,
@@ -128,7 +129,7 @@ export function deactivate(ctx: ExtensionContext) {
 //export var extensionContext;
 
 export async function activate(ctx: ExtensionContext) {
-  window.registerTreeDataProvider('exampleView', new TaskProvider());
+  // window.registerTreeDataProvider('exampleView', new TaskProvider());
 
   //console.log("CLOUD9 ACTIVATED");
   window.showInformationMessage('Cloud9 Activated!');
@@ -164,6 +165,7 @@ export async function activate(ctx: ExtensionContext) {
 
   // sign the user in
   authenticateUser(ctx);
+  //await retrieveUserDailyMetric(testCallback, ctx);
 }
 
 function getRandomArbitrary(min, max) {
@@ -352,21 +354,17 @@ export class TaskProvider implements TreeDataProvider<TreeTask> {
   onDidChangeTreeData?: Event<TreeTask | null | undefined> | undefined;
 
   data: TreeTask[];
-  constructor() {
-    this.data = [
-      new TreeTask('cars', [
-        new TreeTask('Ford', [
-          new TreeTask('Fiesta'),
-          new TreeTask('Focus'),
-          new TreeTask('Mustang'),
-        ]),
-        new TreeTask('BMW', [
-          new TreeTask('320'),
-          new TreeTask('X3'),
-          new TreeTask('X5'),
-        ]),
-      ]),
-    ];
+  constructor(d) {
+    console.log('***************' + d['keystrokes']);
+
+    this.data = [];
+
+    let tempList = [];
+    for (let key in d) {
+      tempList.push(new TreeTask(key, [new TreeTask(d[key] + '')]));
+    }
+
+    this.data = [new TreeTask('DAILY METRICS', tempList)];
   }
 
   getChildren(task?: TreeTask | undefined): ProviderResult<TreeTask[]> {
@@ -392,4 +390,8 @@ class TreeTask extends TreeItem {
     );
     this.children = children;
   }
+}
+
+export function testCallback(data, ctx) {
+  window.registerTreeDataProvider('exampleView', new TaskProvider(data));
 }

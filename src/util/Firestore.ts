@@ -606,10 +606,44 @@ export async function retrieveUserStats(callback) {
         // console.log(doc.id + "=>" + doc.data());
       });
 
+      console.log('*************');
+      console.log(dateMap);
+
       return dateMap;
     })
     .then((dateMap) => {
       callback(dateMap);
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
+}
+
+export async function retrieveUserDailyMetric(callback, c) {
+  let db = firebase.firestore();
+
+  let user = db.collection(COLLECTION_ID_USERS);
+
+  const ctx = getExtensionContext();
+  const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
+  let userDataMap = [];
+
+  user
+    .doc(cachedUserId)
+    .collection('dates')
+    .doc(new Date().toISOString().split('T')[0])
+    .get()
+    .then((userDoc) => {
+      if (userDoc.exists) {
+        // Convert to City object
+        return userDoc.data();
+      } else {
+        return undefined;
+      }
+    })
+    .then((dataMap) => {
+      callback(dataMap, c);
     })
     .catch((err) => {
       console.log('Error getting documents', err);
