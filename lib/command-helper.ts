@@ -4,7 +4,11 @@ import {
   updatePreferences,
   sendTeamInvite,
 } from './DataController';
-import {MenuProvider, MenuTask,connectCloud9MenuTreeView} from './../src/util/MenuProvier';
+import {
+  MenuProvider,
+  MenuTask,
+  connectCloud9MenuTreeView,
+} from './../src/util/MenuProvier';
 import {
   displayCodeTimeMetricsDashboard,
   showMenuOptions,
@@ -49,15 +53,14 @@ export function createCommands(
   const cloud9MenuTreeProvider = new MenuProvider();
 
   const cloud9MenuTreeView: TreeView<MenuTask> = window.createTreeView(
-    "menuView",
+    'menuView',
     {
-        treeDataProvider: cloud9MenuTreeProvider,
-        showCollapseAll: false,
-    }
-);
-cloud9MenuTreeProvider.bindView(cloud9MenuTreeView);
-cmds.push(connectCloud9MenuTreeView(cloud9MenuTreeView));
-
+      treeDataProvider: cloud9MenuTreeProvider,
+      showCollapseAll: false,
+    },
+  );
+  cloud9MenuTreeProvider.bindView(cloud9MenuTreeView);
+  cmds.push(connectCloud9MenuTreeView(cloud9MenuTreeView));
 
   // TEAM TREE: INVITE MEMBER
   cmds.push(
