@@ -24,7 +24,7 @@ import {
   GLOBAL_STATE_USER_TEAM_NAME,
 } from './Constants';
 
-import {testCallback} from './../../extension';
+import {testCallback} from './TaskProvier';
 
 //export let cachedUserId = undefined;
 let extensionContext: ExtensionContext = undefined;

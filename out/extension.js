@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleMenuChangeSelection = exports.connectCloud9MenuTreeView = exports.MenuTask = exports.MenuProvider = exports.testCallback = exports.TaskProvider = exports.intializePlugin = exports.activate = exports.deactivate = exports.getStatusBarItem = exports.isTelemetryOn = void 0;
+exports.intializePlugin = exports.activate = exports.deactivate = exports.getStatusBarItem = exports.isTelemetryOn = void 0;
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode_1 = require("vscode");
@@ -266,77 +266,4 @@ function initializeLiveshare() {
         }
     });
 }
-class TaskProvider {
-    constructor(d) {
-        console.log(d);
-        this.data = [];
-        let tempList = [];
-        for (let key in d) {
-            tempList.push(new TreeTask(key, [new TreeTask(d[key] + '')]));
-        }
-        this.data = [new TreeTask('DAILY METRICS', tempList)];
-    }
-    getChildren(task) {
-        if (task === undefined) {
-            return this.data;
-        }
-        return task.children;
-    }
-    getTreeItem(task) {
-        return task;
-    }
-}
-exports.TaskProvider = TaskProvider;
-class TreeTask extends vscode_1.TreeItem {
-    constructor(label, children) {
-        super(label, children === undefined
-            ? vscode_1.TreeItemCollapsibleState.None
-            : vscode_1.TreeItemCollapsibleState.Expanded);
-        this.children = children;
-    }
-}
-function testCallback(data, ctx) {
-    vscode_1.window.registerTreeDataProvider('exampleView', new TaskProvider(data));
-}
-exports.testCallback = testCallback;
-class MenuProvider {
-    constructor() {
-        this.data = [new MenuTask('Join team')];
-    }
-    bindView(menuTreeView) {
-        this.view = menuTreeView;
-    }
-    getChildren(task) {
-        if (task === undefined) {
-            return this.data;
-        }
-        return task.children;
-    }
-    getTreeItem(task) {
-        return task;
-    }
-}
-exports.MenuProvider = MenuProvider;
-class MenuTask extends vscode_1.TreeItem {
-    constructor(label, children) {
-        super(label, children === undefined
-            ? vscode_1.TreeItemCollapsibleState.None
-            : vscode_1.TreeItemCollapsibleState.Expanded);
-        this.children = children;
-    }
-}
-exports.MenuTask = MenuTask;
-exports.connectCloud9MenuTreeView = (view) => {
-    return vscode_1.Disposable.from(view.onDidChangeSelection((e) => __awaiter(void 0, void 0, void 0, function* () {
-        if (!e.selection || e.selection.length === 0) {
-            return;
-        }
-        const item = e.selection[0];
-        exports.handleMenuChangeSelection(view, item);
-    })));
-};
-exports.handleMenuChangeSelection = (view, item) => {
-    console.log('ethan');
-    vscode_1.commands.executeCommand('cloud9.joinTeam');
-};
 //# sourceMappingURL=extension.js.map

@@ -23,7 +23,7 @@ const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
 const Utility_1 = require("./Utility");
 const Constants_1 = require("./Constants");
-const extension_1 = require("./../../extension");
+const TaskProvier_1 = require("./TaskProvier");
 //export let cachedUserId = undefined;
 let extensionContext = undefined;
 /**
@@ -77,7 +77,7 @@ function authenticateUser(ctx) {
             console.log('Found cachedTeamId: ' + cachedTeamId);
             //loginUserWithEmailAndPassword(cachedUserEmail, cachedUserPassword);
         }
-        yield Firestore_1.retrieveUserDailyMetric(extension_1.testCallback, ctx);
+        yield Firestore_1.retrieveUserDailyMetric(TaskProvier_1.testCallback, ctx);
     });
 }
 exports.authenticateUser = authenticateUser;
