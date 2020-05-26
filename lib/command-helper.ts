@@ -4,6 +4,7 @@ import {
   updatePreferences,
   sendTeamInvite,
 } from './DataController';
+import {MenuProvider, MenuTask,connectCloud9MenuTreeView} from './../extension';
 import {
   displayCodeTimeMetricsDashboard,
   showMenuOptions,
@@ -45,6 +46,20 @@ export function createCommands(
   cmds.push(kpmController);
 
   // MENU TREE: INIT
+  const cloud9MenuTreeProvider = new MenuProvider();
+
+  const cloud9MenuTreeView: TreeView<MenuTask> = window.createTreeView(
+    "menuView",
+    {
+        treeDataProvider: cloud9MenuTreeProvider,
+        showCollapseAll: false,
+    }
+);
+cloud9MenuTreeProvider.bindView(cloud9MenuTreeView);
+cmds.push(connectCloud9MenuTreeView(cloud9MenuTreeView));
+
+
+
 
   // TEAM TREE: INVITE MEMBER
   cmds.push(

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCommands = void 0;
 const vscode_1 = require("vscode");
 const DataController_1 = require("./DataController");
+const extension_1 = require("./../extension");
 const MenuManager_1 = require("./menu/MenuManager");
 const Util_1 = require("./Util");
 const FileManager_1 = require("./managers/FileManager");
@@ -23,6 +24,13 @@ function createCommands(kpmController) {
     let cmds = [];
     cmds.push(kpmController);
     // MENU TREE: INIT
+    const cloud9MenuTreeProvider = new extension_1.MenuProvider();
+    const cloud9MenuTreeView = vscode_1.window.createTreeView("menuView", {
+        treeDataProvider: cloud9MenuTreeProvider,
+        showCollapseAll: false,
+    });
+    cloud9MenuTreeProvider.bindView(cloud9MenuTreeView);
+    cmds.push(extension_1.connectCloud9MenuTreeView(cloud9MenuTreeView));
     // TEAM TREE: INVITE MEMBER
     cmds.push(vscode_1.commands.registerCommand('codetime.inviteTeamMember', (item) => __awaiter(this, void 0, void 0, function* () {
         // the identifier will be in the value

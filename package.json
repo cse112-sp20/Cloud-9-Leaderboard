@@ -109,6 +109,10 @@
         {
           "id": "exampleView",
           "name": "exampleView"
+        },
+        {
+          "id": "menuView",
+          "name": "menuView"
         }
       ]
     }

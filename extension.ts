@@ -355,7 +355,7 @@ export class TaskProvider implements TreeDataProvider<TreeTask> {
 
   data: TreeTask[];
   constructor(d) {
-    console.log('***************' + d['keystrokes']);
+    console.log(d);
 
     this.data = [];
 
@@ -395,3 +395,79 @@ class TreeTask extends TreeItem {
 export function testCallback(data, ctx) {
   window.registerTreeDataProvider('exampleView', new TaskProvider(data));
 }
+
+
+
+
+
+
+export class MenuProvider implements TreeDataProvider<MenuTask> {
+  onDidChangeTreeData?: Event<MenuTask | null | undefined> | undefined;
+
+  private view: TreeView<MenuTask>;
+  data: MenuTask[];
+  constructor() {
+    this.data = [new MenuTask('Join team')];
+  }
+
+  bindView(menuTreeView: TreeView<MenuTask>): void {
+    this.view = menuTreeView;
+}
+
+
+
+
+  getChildren(task?: MenuTask | undefined): ProviderResult<MenuTask[]> {
+    if (task === undefined) {
+      return this.data;
+    }
+    return task.children;
+  }
+
+  getTreeItem(task: MenuTask): TreeItem | Thenable<TreeItem> {
+    return task;
+  }
+}
+
+export class MenuTask extends TreeItem {
+  children: MenuTask[] | undefined;
+
+  constructor(label: string, children?: MenuTask[]) {
+    super(
+      label,
+      children === undefined
+        ? TreeItemCollapsibleState.None
+        : TreeItemCollapsibleState.Expanded,
+    );
+    this.children = children;
+  }
+}
+
+
+export const connectCloud9MenuTreeView = (view: TreeView<MenuTask>) => {
+  return Disposable.from(
+
+      view.onDidChangeSelection(async e => {
+          if (!e.selection || e.selection.length === 0) {
+              return;
+          }
+
+          const item: MenuTask = e.selection[0];
+
+          handleMenuChangeSelection(view, item);
+      })
+
+  );
+};
+
+export const handleMenuChangeSelection = (
+  view: TreeView<MenuTask>,
+  item: MenuTask
+) => {
+
+  console.log('ethan');
+  commands.executeCommand('cloud9.joinTeam');
+
+
+  
+};
