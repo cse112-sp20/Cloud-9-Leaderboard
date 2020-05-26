@@ -17,7 +17,7 @@ const vscode_1 = require("vscode");
 class MenuProvider {
     // Constructor simply for displaying
     constructor() {
-        this.data = [new MenuTask('Join team')];
+        this.data = [new MenuTask('🛡Join team')];
     }
     /**
      * Method to bind view to Menu Provider

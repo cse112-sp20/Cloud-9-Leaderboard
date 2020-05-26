@@ -26,7 +26,7 @@ export class MenuProvider implements TreeDataProvider<MenuTask> {
 
     // Constructor simply for displaying
     constructor() {
-      this.data = [new MenuTask('Join team')];
+      this.data = [new MenuTask('🛡Join team')];
     }
   
     /**
