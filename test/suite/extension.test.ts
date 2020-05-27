@@ -45,6 +45,7 @@ import {
 } from '../../src/util/PersonalStats';
 const sinon = require('sinon');
 const firebase = require('firebase/app');
+import * as Mocha from 'mocha';
 
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
@@ -223,12 +224,15 @@ suite('firestore.ts', () => {
       testId,
       'testPassword',
     );
-    assert.equal(true, true); // does not work
+    assert.equal(successful, true); // works!!
   });
 
   test('addNewTeamToDbAndJoin', async () => {});
   test('joinTeamWithTeamId', async () => {});
-  test('leaveTeam', async () => {});
+  test('leaveTeam', async () => {
+    
+  });
+
   test('checkIfInTeam', async () => {
     const ctx = getExtensionContext();
     const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
@@ -240,11 +244,25 @@ suite('firestore.ts', () => {
         'get',
       )
       .returns(Promise.resolve(result));
-    var output = checkIfInTeam();
-    console.log('test statement 3');
-    console.log('output: ', output);
+    var output = await checkIfInTeam();
+    //console.log('test statement 3'); console.log('output: ', output);
+    assert.equal(output, false);
   });
-  test('retrieveUserStats', async () => {});
+
+  test('retrieveUserStats', async () => {
+    const ctx = getExtensionContext();
+    const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+    var result = {};
+    result['team'] = 'ted';
+    sinon
+      .stub(
+        firebase.firestore().collection('dates')
+        .orderBy(firebase.firestore.FieldPath.documentId())
+        .limit(15),
+        'get').returns(Promise.resolve(result));
+        retrieveAllUserStats(() =>{}); // in progess, not working
+  });
+
   test('retrieveAllUserStats', async () => {});
   test('retrieveTeamMemberStats', async () => {});
 });
@@ -273,4 +291,9 @@ suite('personalstats.ts', () => {
   test('displaying personal stats file', () => {});
 
   //integration test of personal stats displaying
+});
+
+suite('team.ts', () => {
+  
+
 });

@@ -147,7 +147,7 @@ suite('firestore.ts', () => {
             .withArgs(testId, 'testPassword')
             .returns(Promise.resolve());
         var successful = yield FireStore_1.createNewUserInFirebase(Authentication_1.getExtensionContext(), testId, 'testPassword');
-        assert.equal(true, true); // does not work
+        assert.equal(successful, true); // works!!
     }));
     test('addNewTeamToDbAndJoin', () => __awaiter(void 0, void 0, void 0, function* () { }));
     test('joinTeamWithTeamId', () => __awaiter(void 0, void 0, void 0, function* () { }));
@@ -160,11 +160,21 @@ suite('firestore.ts', () => {
         sinon
             .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc(userId), 'get')
             .returns(Promise.resolve(result));
-        var output = FireStore_1.checkIfInTeam();
-        console.log("test statement 3");
-        console.log("output: ", output);
+        var output = yield FireStore_1.checkIfInTeam();
+        //console.log('test statement 3'); console.log('output: ', output);
+        assert.equal(output, false);
     }));
-    test('retrieveUserStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
+    test('retrieveUserStats', () => __awaiter(void 0, void 0, void 0, function* () {
+        const ctx = Authentication_1.getExtensionContext();
+        const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        var result = {};
+        result['team'] = 'ted';
+        sinon
+            .stub(firebase.firestore().collection('dates')
+            .orderBy(firebase.firestore.FieldPath.documentId())
+            .limit(15), 'get').returns(Promise.resolve(result));
+        FireStore_1.retrieveAllUserStats(() => { });
+    }));
     test('retrieveAllUserStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
     test('retrieveTeamMemberStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
 });
@@ -185,5 +195,7 @@ suite('personalstats.ts', () => {
     });
     test('displaying personal stats file', () => { });
     //integration test of personal stats displaying
+});
+suite('team.ts', () => {
 });
 //# sourceMappingURL=extension.test.js.map

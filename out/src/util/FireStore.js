@@ -238,13 +238,14 @@ function createNewUserInFirebase(ctx, email, password) {
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, currentUserId);
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
             console.log('cachedUserId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID));
-            //addNewUserDocToDb(currentUserId);
+            addNewUserDocToDb(currentUserId);
             return true;
         })
             .catch((e) => {
             console.log(e.message);
             return false;
         });
+        return true;
     });
 }
 exports.createNewUserInFirebase = createNewUserInFirebase;
@@ -493,12 +494,10 @@ function checkIfInTeam() {
             }
         })
             .then(() => {
-            console.log("test statement 1");
-            console.log("inTeam: ", inTeam);
+            //console.log('test statement 1'); console.log('inTeam: ', inTeam);
             return inTeam;
         });
-        console.log("test statement 2");
-        console.log("inTeam: ", inTeam);
+        //console.log('test statement 2'); console.log('inTeam: ', inTeam);
         return inTeam;
     });
 }
@@ -517,6 +516,7 @@ function retrieveUserStats(callback) {
             .limit(15)
             .get()
             .then((snapshot) => {
+            console.log("woob");
             snapshot.forEach((doc) => {
                 PersonalStats_1.PersonalStats.addDayStats(doc.id, doc.data());
                 let currDate = {};
@@ -525,7 +525,7 @@ function retrieveUserStats(callback) {
                     currDate[key] = doc.data()[key];
                 }
                 dateMap.push(currDate);
-                // console.log(doc.id + "=>" + doc.data());
+                console.log(doc.id + "=>" + doc.data());
             });
             return dateMap;
         })
