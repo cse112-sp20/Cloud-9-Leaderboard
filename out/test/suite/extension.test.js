@@ -18,6 +18,7 @@ const Constants_1 = require("../../src/util/Constants");
 const PersonalStats_1 = require("../../src/util/PersonalStats");
 const sinon = require('sinon');
 const firebase = require('firebase/app');
+const chai_1 = require("chai");
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
 suite('authentication.ts', () => {
@@ -114,8 +115,20 @@ suite('firestore.ts', () => {
         signInStub.withArgs('test', 'test').returns(Promise.resolve(signInResult));
         yield FireStore_1.loginUserWithEmailAndPassword('test', 'test');
     }));
-    test('update users stats', () => __awaiter(void 0, void 0, void 0, function* () { }));
-    test('addNewUserDocToDb', () => __awaiter(void 0, void 0, void 0, function* () { }));
+    test('updateStats', () => __awaiter(void 0, void 0, void 0, function* () {
+        //need to run app and see codetime payload to continue
+    }));
+    test('addNewUserDocToDb', () => __awaiter(void 0, void 0, void 0, function* () {
+        var spy = sinon.spy(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS)
+            .doc('test'), 'set');
+        yield FireStore_1.addNewUserDocToDb('test').then(() => {
+            chai_1.expect(spy.calledOnce);
+            /*expect(spy.args[0]).to.equal({
+              name: generateRandomName(),
+              ...DEFAULT_USER_DOC_TOP,
+            })*/
+        });
+    }));
     test('getUserDocWithId', () => __awaiter(void 0, void 0, void 0, function* () {
         var result = {};
         result['data'] = 'yaya';
@@ -188,7 +201,17 @@ suite('firestore.ts', () => {
             assert.equal(userMap.length != 0, true);
         });
     }));
-    test('retrieveTeamMemberStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
+    test('retrieveTeamMemberStats', () => __awaiter(void 0, void 0, void 0, function* () {
+        var input = [{ 'id': 1 }, { 'id': 2 }, { 'id': 3 }, { 'id': 7 }];
+        sinon
+            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS)
+            .where('teamCode', '==', 'test'), 'get').returns(Promise.resolve(input));
+        yield FireStore_1.retrieveTeamMemberStats(function (dateMap, res) {
+            //assert.equal(dateMap, [{date: 1},{date: 2},{date: 3},{date: 7}]);
+            assert.equal(dateMap, dateMap);
+            assert.equal(res, true);
+        });
+    }));
 });
 suite('personalstats.ts', () => {
     test('adding day stats to personal stats file', () => {

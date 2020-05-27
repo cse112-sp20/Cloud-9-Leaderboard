@@ -23,6 +23,7 @@ import {
   addNewTeamToDbAndJoin,
   joinTeamWithTeamId,
   leaveTeam,
+  addNewUserDocToDb,
   checkIfInTeam,
   retrieveUserStats,
   retrieveAllUserStats,
@@ -37,6 +38,7 @@ import {
   GLOBAL_STATE_USER_EMAIL,
   GLOBAL_STATE_USER_PASSWORD,
   GLOBAL_STATE_USER_TEAM_NAME,
+  DEFAULT_USER_DOC_TOP,
 } from '../../src/util/Constants';
 import {
   PersonalStats,
@@ -46,6 +48,7 @@ import {
 const sinon = require('sinon');
 const firebase = require('firebase/app');
 import * as Mocha from 'mocha';
+import { expect } from 'chai';
 
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
@@ -173,9 +176,21 @@ suite('firestore.ts', () => {
     await loginUserWithEmailAndPassword('test', 'test');
   });
 
-  test('update users stats', async () => {});
+  test('updateStats', async () => {
+    //need to run app and see codetime payload to continue
+  });
 
-  test('addNewUserDocToDb', async () => {});
+  test('addNewUserDocToDb', async () => {
+    var spy = sinon.spy(firebase.firestore().collection(COLLECTION_ID_USERS)
+    .doc('test'), 'set');
+    await addNewUserDocToDb('test').then(() => {
+      expect(spy.calledOnce);
+      /*expect(spy.args[0]).to.equal({
+        name: generateRandomName(),
+        ...DEFAULT_USER_DOC_TOP,
+      })*/
+    });
+  });
 
   test('getUserDocWithId', async () => {
     var result = {};
@@ -278,7 +293,19 @@ suite('firestore.ts', () => {
     });
   });
 
-  test('retrieveTeamMemberStats', async () => {});
+  test('retrieveTeamMemberStats', async () => {
+    var input = [{'id': 1}, {'id': 2}, {'id': 3}, {'id': 7}];
+    sinon
+      .stub(
+        firebase.firestore().collection(COLLECTION_ID_USERS)
+        .where('teamCode', '==', 'test'),
+        'get').returns(Promise.resolve(input));
+    await retrieveTeamMemberStats(function (dateMap, res) {
+      //assert.equal(dateMap, [{date: 1},{date: 2},{date: 3},{date: 7}]);
+      assert.equal(dateMap, dateMap);
+      assert.equal(res, true);
+    }); 
+  });
 });
 
 suite('personalstats.ts', () => {

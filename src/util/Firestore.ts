@@ -300,7 +300,7 @@ export async function createNewUserInFirebase(ctx, email, password) {
  * @param userId
  */
 
-async function addNewUserDocToDb(userId) {
+export async function addNewUserDocToDb(userId) {
   console.log('Adding doc to db for new user...');
 
   if (userId === undefined) {
