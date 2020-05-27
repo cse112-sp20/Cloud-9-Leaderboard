@@ -234,6 +234,7 @@ export async function retrieveAllUserStats(callback) {
     .get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
+        //console.log(doc);
         Leaderboard.addUser(doc.id, doc.data());
         let currUser = {};
         currUser['id'] = doc.id;
@@ -599,8 +600,7 @@ export async function retrieveUserStats(callback) {
     .limit(15)
     .get()
     .then((snapshot) => {
-      console.log("woob");
-      snapshot.forEach((doc) => {
+      snapshot.forEach((doc) => {     
         PersonalStats.addDayStats(doc.id, doc.data());
         let currDate = {};
         currDate['date'] = doc.id;
@@ -608,7 +608,7 @@ export async function retrieveUserStats(callback) {
           currDate[key] = doc.data()[key];
         }
         dateMap.push(currDate);
-        console.log(doc.id + "=>" + doc.data());
+        //console.log(doc.id + "=>" + doc.data());
       });
 
       return dateMap;

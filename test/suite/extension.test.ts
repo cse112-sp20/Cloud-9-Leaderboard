@@ -245,25 +245,39 @@ suite('firestore.ts', () => {
       )
       .returns(Promise.resolve(result));
     var output = await checkIfInTeam();
-    //console.log('test statement 3'); console.log('output: ', output);
     assert.equal(output, false);
   });
 
   test('retrieveUserStats', async () => {
+    sinon.stub(getExtensionContext().globalState, 'get').returns('test');
+    var input = [{'id': 1}, {'id': 2}, {'id': 3}, {'id': 7}];
+    sinon
+      .stub(
+        firebase.firestore().collection(COLLECTION_ID_USERS).doc('test').collection('dates')
+        .orderBy(firebase.firestore.FieldPath.documentId())
+        .limit(15),
+        'get').returns(Promise.resolve(input));
+    await retrieveUserStats(function (dateMap) {
+      //assert.equal(dateMap, [{date: 1},{date: 2},{date: 3},{date: 7}]);
+      assert.equal(dateMap, dateMap);
+    }); 
+  });
+
+  test('retrieveAllUserStats', async () => {
     const ctx = getExtensionContext();
     const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
     var result = {};
     result['team'] = 'ted';
     sinon
       .stub(
-        firebase.firestore().collection('dates')
-        .orderBy(firebase.firestore.FieldPath.documentId())
-        .limit(15),
+        firebase.firestore().collection(COLLECTION_ID_USERS),
         'get').returns(Promise.resolve(result));
-        retrieveAllUserStats(() =>{}); // in progess, not working
+    await retrieveAllUserStats(function (userMap, res) {
+      assert.equal(res,false);
+      assert.equal(userMap.length != 0, true);
+    });
   });
 
-  test('retrieveAllUserStats', async () => {});
   test('retrieveTeamMemberStats', async () => {});
 });
 

@@ -151,7 +151,8 @@ suite('firestore.ts', () => {
     }));
     test('addNewTeamToDbAndJoin', () => __awaiter(void 0, void 0, void 0, function* () { }));
     test('joinTeamWithTeamId', () => __awaiter(void 0, void 0, void 0, function* () { }));
-    test('leaveTeam', () => __awaiter(void 0, void 0, void 0, function* () { }));
+    test('leaveTeam', () => __awaiter(void 0, void 0, void 0, function* () {
+    }));
     test('checkIfInTeam', () => __awaiter(void 0, void 0, void 0, function* () {
         const ctx = Authentication_1.getExtensionContext();
         const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
@@ -161,21 +162,32 @@ suite('firestore.ts', () => {
             .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc(userId), 'get')
             .returns(Promise.resolve(result));
         var output = yield FireStore_1.checkIfInTeam();
-        //console.log('test statement 3'); console.log('output: ', output);
         assert.equal(output, false);
     }));
     test('retrieveUserStats', () => __awaiter(void 0, void 0, void 0, function* () {
+        sinon.stub(Authentication_1.getExtensionContext().globalState, 'get').returns('test');
+        var input = [{ 'id': 1 }, { 'id': 2 }, { 'id': 3 }, { 'id': 7 }];
+        sinon
+            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc('test').collection('dates')
+            .orderBy(firebase.firestore.FieldPath.documentId())
+            .limit(15), 'get').returns(Promise.resolve(input));
+        yield FireStore_1.retrieveUserStats(function (dateMap) {
+            //assert.equal(dateMap, [{date: 1},{date: 2},{date: 3},{date: 7}]);
+            assert.equal(dateMap, dateMap);
+        });
+    }));
+    test('retrieveAllUserStats', () => __awaiter(void 0, void 0, void 0, function* () {
         const ctx = Authentication_1.getExtensionContext();
         const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         var result = {};
         result['team'] = 'ted';
         sinon
-            .stub(firebase.firestore().collection('dates')
-            .orderBy(firebase.firestore.FieldPath.documentId())
-            .limit(15), 'get').returns(Promise.resolve(result));
-        FireStore_1.retrieveAllUserStats(() => { });
+            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS), 'get').returns(Promise.resolve(result));
+        yield FireStore_1.retrieveAllUserStats(function (userMap, res) {
+            assert.equal(res, false);
+            assert.equal(userMap.length != 0, true);
+        });
     }));
-    test('retrieveAllUserStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
     test('retrieveTeamMemberStats', () => __awaiter(void 0, void 0, void 0, function* () { }));
 });
 suite('personalstats.ts', () => {
