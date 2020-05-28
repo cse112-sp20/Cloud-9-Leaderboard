@@ -140,6 +140,7 @@ exports.displayTeamLeaderboard = displayTeamLeaderboard;
 function writeToFile(users, isTeam) {
     return __awaiter(this, void 0, void 0, function* () {
         let leaderboardFile;
+        let MAX_SCORE_LENGTH = 15;
         if (isTeam) {
             leaderboardFile = getTeamLeaderboardFile();
         }
@@ -165,6 +166,9 @@ function writeToFile(users, isTeam) {
             let obj = {};
             obj['id'] = user.id;
             obj['name'] = user['name'];
+            obj['totalKeystrokes'] = user['keystrokes'];
+            obj['totalLinesChanged'] = user['linesChanged'];
+            obj['totalTimeInterval'] = user['timeInterval'];
             obj['score'] = parseFloat(user['cumulativePoints']).toFixed(3);
             scoreMap.push(obj);
         });
@@ -188,6 +192,18 @@ function writeToFile(users, isTeam) {
             else {
                 rankNumberSection += '';
             }
+            let badges = '';
+            if (isTeam) {
+                if (user.totalKeystrokes > 5000) {
+                    badges += '\uD83D\uDC8E ';
+                }
+                if (user.totalLinesChanged > 0) {
+                    badges += '🔍 ';
+                }
+                if (user.totalTimeInterval > 0) {
+                    badges += '⌛ ';
+                }
+            }
             if (cachedUserId == user.id) {
                 username = user.name;
                 rankNumberSection = i + 1 + ' ' + rankNumberSection;
@@ -196,7 +212,9 @@ function writeToFile(users, isTeam) {
                         '\t\t' +
                         (user.name + ' (YOU)').padEnd(Constants_1.MAX_USERNAME_LENGTH, ' ') +
                         '\t\t' +
-                        user.score +
+                        user.score.padEnd(MAX_SCORE_LENGTH, ' ') +
+                        '\t\t' +
+                        badges +
                         '\n';
             }
             else {
@@ -206,7 +224,9 @@ function writeToFile(users, isTeam) {
                         '\t\t' +
                         user.name.padEnd(Constants_1.MAX_USERNAME_LENGTH, ' ') +
                         '\t\t' +
-                        user.score +
+                        user.score.padEnd(MAX_SCORE_LENGTH, ' ') +
+                        '\t\t' +
+                        badges +
                         '\n';
             }
         });
@@ -219,18 +239,37 @@ function writeToFile(users, isTeam) {
         leaderBoardContent += Constants_1.SECTION_BAR;
         leaderBoardContent += 'LEADERBOARD RANKING \n';
         leaderBoardContent += Constants_1.SECTION_BAR + '\n';
-        leaderBoardContent +=
-            'RANK'.padEnd(Constants_1.MAX_RANK_LENGTH, ' ') +
-                '\t\t' +
-                'NAME'.padEnd(Constants_1.MAX_USERNAME_LENGTH, ' ') +
-                '\t\tSCORE\n';
-        leaderBoardContent +=
-            '----'.padEnd(Constants_1.MAX_RANK_LENGTH, ' ') +
-                '\t\t' +
-                '----'.padEnd(Constants_1.MAX_USERNAME_LENGTH, ' ') +
-                '\t\t-----\n';
+        if (isTeam) {
+            leaderBoardContent +=
+                'RANK'.padEnd(Constants_1.MAX_RANK_LENGTH, ' ') +
+                    '\t\t' +
+                    'NAME'.padEnd(Constants_1.MAX_USERNAME_LENGTH, ' ') +
+                    '\t\t' +
+                    'SCORE'.padEnd(MAX_SCORE_LENGTH, ' ') +
+                    '\t\tBADGES\n';
+            leaderBoardContent +=
+                '----'.padEnd(Constants_1.MAX_RANK_LENGTH, ' ') +
+                    '\t\t' +
+                    '----'.padEnd(Constants_1.MAX_USERNAME_LENGTH, ' ') +
+                    '\t\t' +
+                    '----'.padEnd(MAX_SCORE_LENGTH, ' ') +
+                    '\t\t-----\n';
+        }
+        else {
+            leaderBoardContent +=
+                'RANK'.padEnd(Constants_1.MAX_RANK_LENGTH, ' ') +
+                    '\t\t' +
+                    'NAME'.padEnd(Constants_1.MAX_USERNAME_LENGTH, ' ') +
+                    '\t\tSCORE\n';
+            leaderBoardContent +=
+                '----'.padEnd(Constants_1.MAX_RANK_LENGTH, ' ') +
+                    '\t\t' +
+                    '----'.padEnd(Constants_1.MAX_USERNAME_LENGTH, ' ') +
+                    '\t\t-----\n';
+        }
         leaderBoardContent += rankSection + '\n';
         //STATS HERE, TODO
+        let BADGE_LENGTH = 6;
         leaderBoardContent += Constants_1.SECTION_BAR;
         leaderBoardContent += 'Metric \n';
         leaderBoardContent += Constants_1.SECTION_BAR + '\n';
@@ -238,6 +277,23 @@ function writeToFile(users, isTeam) {
         leaderBoardContent += 'Each second spent coding        + 0.01 \n';
         leaderBoardContent += 'Each keystroke                  +    1 \n';
         leaderBoardContent += 'Each modified line              +   10 \n';
+        leaderBoardContent += '\n' + Constants_1.SECTION_BAR;
+        leaderBoardContent += 'Achievements (How you can earn these badges) \n';
+        leaderBoardContent += Constants_1.SECTION_BAR + '\n';
+        console.log(scoreMap);
+        leaderBoardContent +=
+            '\uD83E\uDD47'.padEnd(BADGE_LENGTH, ' ') + '- rank first \n';
+        leaderBoardContent +=
+            '\uD83E\uDD48'.padEnd(BADGE_LENGTH, ' ') + '- rank second \n';
+        leaderBoardContent +=
+            '\uD83E\uDD49'.padEnd(BADGE_LENGTH, ' ') + '- rank third \n';
+        leaderBoardContent +=
+            '\uD83D\uDC8E'.padEnd(BADGE_LENGTH, ' ') +
+                '- reach 5000 total keystrokes \n';
+        leaderBoardContent +=
+            '🔍'.padEnd(BADGE_LENGTH, ' ') + '- reach 2000 lines changed \n';
+        leaderBoardContent +=
+            '⌛'.padEnd(BADGE_LENGTH, ' ') + '- spend 10 hours coding \n';
         fs.writeFileSync(leaderboardFile, leaderBoardContent, (err) => {
             if (err) {
                 console.error('Error writing leaderboard');

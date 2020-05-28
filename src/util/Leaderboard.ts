@@ -143,6 +143,8 @@ export async function displayTeamLeaderboard() {
 async function writeToFile(users, isTeam) {
   let leaderboardFile;
 
+  let MAX_SCORE_LENGTH = 15;
+
   if (isTeam) {
     leaderboardFile = getTeamLeaderboardFile();
   } else {
@@ -171,6 +173,9 @@ async function writeToFile(users, isTeam) {
     let obj = {};
     obj['id'] = user.id;
     obj['name'] = user['name'];
+    obj['totalKeystrokes'] = user['keystrokes'];
+    obj['totalLinesChanged'] = user['linesChanged'];
+    obj['totalTimeInterval'] = user['timeInterval'];
     obj['score'] = parseFloat(user['cumulativePoints']).toFixed(3);
     scoreMap.push(obj);
   });
@@ -195,6 +200,23 @@ async function writeToFile(users, isTeam) {
     } else {
       rankNumberSection += '';
     }
+
+    let badges = '';
+
+    if (isTeam) {
+      if (user.totalKeystrokes > 5000) {
+        badges += '\uD83D\uDC8E ';
+      }
+
+      if (user.totalLinesChanged > 0) {
+        badges += '🔍 ';
+      }
+
+      if (user.totalTimeInterval > 0) {
+        badges += '⌛ ';
+      }
+    }
+
     if (cachedUserId == user.id) {
       username = user.name;
 
@@ -205,7 +227,9 @@ async function writeToFile(users, isTeam) {
         '\t\t' +
         (user.name + ' (YOU)').padEnd(MAX_USERNAME_LENGTH, ' ') +
         '\t\t' +
-        user.score +
+        user.score.padEnd(MAX_SCORE_LENGTH, ' ') +
+        '\t\t' +
+        badges +
         '\n';
     } else {
       rankNumberSection = i + 1 + ' ' + rankNumberSection;
@@ -215,7 +239,9 @@ async function writeToFile(users, isTeam) {
         '\t\t' +
         user.name.padEnd(MAX_USERNAME_LENGTH, ' ') +
         '\t\t' +
-        user.score +
+        user.score.padEnd(MAX_SCORE_LENGTH, ' ') +
+        '\t\t' +
+        badges +
         '\n';
     }
   });
@@ -232,19 +258,38 @@ async function writeToFile(users, isTeam) {
   leaderBoardContent += 'LEADERBOARD RANKING \n';
   leaderBoardContent += SECTION_BAR + '\n';
 
-  leaderBoardContent +=
-    'RANK'.padEnd(MAX_RANK_LENGTH, ' ') +
-    '\t\t' +
-    'NAME'.padEnd(MAX_USERNAME_LENGTH, ' ') +
-    '\t\tSCORE\n';
-  leaderBoardContent +=
-    '----'.padEnd(MAX_RANK_LENGTH, ' ') +
-    '\t\t' +
-    '----'.padEnd(MAX_USERNAME_LENGTH, ' ') +
-    '\t\t-----\n';
+  if (isTeam) {
+    leaderBoardContent +=
+      'RANK'.padEnd(MAX_RANK_LENGTH, ' ') +
+      '\t\t' +
+      'NAME'.padEnd(MAX_USERNAME_LENGTH, ' ') +
+      '\t\t' +
+      'SCORE'.padEnd(MAX_SCORE_LENGTH, ' ') +
+      '\t\tBADGES\n';
+    leaderBoardContent +=
+      '----'.padEnd(MAX_RANK_LENGTH, ' ') +
+      '\t\t' +
+      '----'.padEnd(MAX_USERNAME_LENGTH, ' ') +
+      '\t\t' +
+      '----'.padEnd(MAX_SCORE_LENGTH, ' ') +
+      '\t\t-----\n';
+  } else {
+    leaderBoardContent +=
+      'RANK'.padEnd(MAX_RANK_LENGTH, ' ') +
+      '\t\t' +
+      'NAME'.padEnd(MAX_USERNAME_LENGTH, ' ') +
+      '\t\tSCORE\n';
+    leaderBoardContent +=
+      '----'.padEnd(MAX_RANK_LENGTH, ' ') +
+      '\t\t' +
+      '----'.padEnd(MAX_USERNAME_LENGTH, ' ') +
+      '\t\t-----\n';
+  }
   leaderBoardContent += rankSection + '\n';
 
   //STATS HERE, TODO
+
+  let BADGE_LENGTH = 6;
 
   leaderBoardContent += SECTION_BAR;
   leaderBoardContent += 'Metric \n';
@@ -253,6 +298,24 @@ async function writeToFile(users, isTeam) {
   leaderBoardContent += 'Each second spent coding        + 0.01 \n';
   leaderBoardContent += 'Each keystroke                  +    1 \n';
   leaderBoardContent += 'Each modified line              +   10 \n';
+
+  leaderBoardContent += '\n' + SECTION_BAR;
+  leaderBoardContent += 'Achievements (How you can earn these badges) \n';
+  leaderBoardContent += SECTION_BAR + '\n';
+  console.log(scoreMap);
+  leaderBoardContent +=
+    '\uD83E\uDD47'.padEnd(BADGE_LENGTH, ' ') + '- rank first \n';
+  leaderBoardContent +=
+    '\uD83E\uDD48'.padEnd(BADGE_LENGTH, ' ') + '- rank second \n';
+  leaderBoardContent +=
+    '\uD83E\uDD49'.padEnd(BADGE_LENGTH, ' ') + '- rank third \n';
+  leaderBoardContent +=
+    '\uD83D\uDC8E'.padEnd(BADGE_LENGTH, ' ') +
+    '- reach 5000 total keystrokes \n';
+  leaderBoardContent +=
+    '🔍'.padEnd(BADGE_LENGTH, ' ') + '- reach 2000 lines changed \n';
+  leaderBoardContent +=
+    '⌛'.padEnd(BADGE_LENGTH, ' ') + '- spend 10 hours coding \n';
 
   fs.writeFileSync(leaderboardFile, leaderBoardContent, (err) => {
     if (err) {
