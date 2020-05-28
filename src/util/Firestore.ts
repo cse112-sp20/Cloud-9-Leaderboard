@@ -721,8 +721,7 @@ export async function retrieveUserDailyMetric(callback, c) {
     .catch((err) => {
       console.log('Error getting documents', err);
     });
-
-  }
+}
 /**
  * returns true if a document associated with the passed in ID exists in firebase
  * @param userId uid
