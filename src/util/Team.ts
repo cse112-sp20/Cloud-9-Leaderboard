@@ -15,6 +15,7 @@ import {
   joinTeamWithTeamId,
   checkIfInTeam,
   leaveTeam,
+  fetchTeamMembersList,
 } from './Firestore';
 import {getExtensionContext} from './Authentication';
 import {
@@ -119,5 +120,28 @@ export async function joinTeam() {
         return;
       }
       joinTeamWithTeamId(teamCode, false);
+    });
+}
+
+export async function removeTeamMember() {
+  const ctx = getExtensionContext();
+  const isTeamLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
+  if (!isTeamLeader) {
+    window.showErrorMessage(
+      'Sorry! Only the team leader is allowed to remove team members!',
+    );
+    return;
+  }
+
+  const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+  await fetchTeamMembersList(teamId)
+    .then((memberMap) => {
+      console.log('memberMap: ');
+      console.log(memberMap);
+
+      let quickpick = window.createQuickPick();
+    })
+    .catch(() => {
+      console.log('Error getting team members!');
     });
 }

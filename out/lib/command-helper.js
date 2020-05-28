@@ -93,12 +93,10 @@ function createCommands(kpmController) {
     }));
     // Cloud9: command used to create a new team
     cmds.push(vscode_1.commands.registerCommand('cloud9.createTeam', () => {
-        console.log('Cloud9: CREATE A NEW TEAM');
         Team_1.createAndJoinTeam();
     }));
     // Cloud9: command used to retrieve team code
     cmds.push(vscode_1.commands.registerCommand('cloud9.getTeamInfo', () => {
-        console.log('Cloud9: GET TEAM NAME AND ID');
         Team_1.getTeamInfo();
     }));
     //password recovery
@@ -106,6 +104,11 @@ function createCommands(kpmController) {
         console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
         //doing nothing rn
         vscode_1.window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
+    }));
+    //remove team member, only leader is allowed to use this command 
+    cmds.push(vscode_1.commands.registerCommand('cloud9.removeTeamMember', () => {
+        console.log('Leader removing team member(s).');
+        Team_1.removeTeamMember();
     }));
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
         console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');

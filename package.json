@@ -63,6 +63,10 @@
         "title": "Cloud9 DEBUG: Clear Team name and ID"
       },
       {
+        "command": "cloud9.removeTeamMember",
+        "title": "Cloud9: Remove team member"
+      },
+      {
         "command": "cloud9.resetPassword",
         "title": "Cloud9: Reset my password"
       },

@@ -35,6 +35,7 @@ import {
   getTeamInfo,
   removeTeamNameAndId,
   joinTeam,
+  removeTeamMember,
 } from '../src/util/Team';
 import {displayPersonalStats} from '../src/util/PersonalStats';
 
@@ -164,7 +165,6 @@ export function createCommands(
   // Cloud9: command used to create a new team
   cmds.push(
     commands.registerCommand('cloud9.createTeam', () => {
-      console.log('Cloud9: CREATE A NEW TEAM');
       createAndJoinTeam();
     }),
   );
@@ -172,7 +172,6 @@ export function createCommands(
   // Cloud9: command used to retrieve team code
   cmds.push(
     commands.registerCommand('cloud9.getTeamInfo', () => {
-      console.log('Cloud9: GET TEAM NAME AND ID');
       getTeamInfo();
     }),
   );
@@ -183,6 +182,14 @@ export function createCommands(
       console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
       //doing nothing rn
       window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
+    }),
+  );
+
+  //remove team member, only leader is allowed to use this command
+  cmds.push(
+    commands.registerCommand('cloud9.removeTeamMember', () => {
+      console.log('Leader removing team member(s).');
+      removeTeamMember();
     }),
   );
 

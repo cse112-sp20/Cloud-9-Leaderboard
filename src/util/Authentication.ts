@@ -13,19 +13,20 @@ import {
   createNewUserInFirebase,
   loginUserWithEmailAndPassword,
   userDocExists,
+  updatePersistentStorageWithUserDocData,
 } from './Firestore';
 import {generateRandomEmail} from './Utility';
 import {
   DEFAULT_PASSWORD,
   GLOBAL_STATE_USER_ID,
   GLOBAL_STATE_USER_EMAIL,
-  GLOBAL_STATE_USER_PASSWORD,
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
   GLOBAL_STATE_USER_NICKNAME,
 } from './Constants';
 import {getMaxListeners} from 'cluster';
+import {removeTeamNameAndId} from './Team';
 
 //export let cachedUserId = undefined;
 let extensionContext: ExtensionContext = undefined;
@@ -52,15 +53,16 @@ export function getExtensionContext() {
 export function clearCachedUserId() {
   let ctx = getExtensionContext();
   ctx.globalState.update(GLOBAL_STATE_USER_ID, undefined);
-  ctx.globalState.update(GLOBAL_STATE_USER_EMAIL, undefined);
-  ctx.globalState.update(GLOBAL_STATE_USER_PASSWORD, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
+  ctx.globalState.update(GLOBAL_STATE_USER_NICKNAME, undefined);
 
   console.log(
     'After clearing persistent storage: ' + extensionContext.globalState,
   );
+
+  removeTeamNameAndId();
 }
 
 /**
@@ -71,8 +73,6 @@ export async function authenticateUser() {
   //get ref to extension context
   let ctx = getExtensionContext();
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
-  const cachedUserEmail = ctx.globalState.get(GLOBAL_STATE_USER_EMAIL);
-  const cachedUserPassword = ctx.globalState.get(GLOBAL_STATE_USER_PASSWORD);
   const cachedUserNickName = ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME);
 
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
@@ -91,8 +91,6 @@ export async function authenticateUser() {
   } else {
     // case2: existing user's id found
     console.log('Found cachedUserId: ' + cachedUserId);
-    console.log('Found cachedUserEmail: ' + cachedUserEmail);
-    console.log('Found cachedUserPassword: ' + cachedUserPassword);
     console.log('Found cachedTeamName: ' + cachedTeamName);
     console.log('Found cachedTeamId: ' + cachedTeamId);
     console.log('Found cachedUserNickname: ' + cachedUserNickName);
@@ -101,6 +99,7 @@ export async function authenticateUser() {
     let exists = await userDocExists(cachedUserId);
     if (exists) {
       console.log('User doc exists in db.');
+      updatePersistentStorageWithUserDocData(cachedUserId);
       window.showInformationMessage(
         'Welcome back, ' + cachedUserNickName + '!!',
       );

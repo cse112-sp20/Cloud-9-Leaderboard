@@ -44,9 +44,9 @@ export async function loginUserWithEmailAndPassword(email, password) {
   let errorCode = undefined;
   await auth
     .signInWithEmailAndPassword(email, password)
-    .then((userCred) => {
-      updatePersistentStorageWithUserDocData(userCred.user.uid);
+    .then(async (userCred) => {
       console.log('logging user in: ' + userCred.user.uid);
+      await updatePersistentStorageWithUserDocData(userCred.user.uid);
 
       loggedIn = true;
       errorCode = 'no error';
@@ -72,7 +72,7 @@ export async function updatePersistentStorageWithUserDocData(userId) {
     .collection(COLLECTION_ID_USERS)
     .doc(userId)
     .get()
-    .then((userDoc) => {
+    .then(async (userDoc) => {
       if (userDoc.exists) {
         let userData = userDoc.data();
         console.log(userData.name);
@@ -81,10 +81,42 @@ export async function updatePersistentStorageWithUserDocData(userId) {
         ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, userData.teamCode);
         ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, userData.teamName);
         ctx.globalState.update(GLOBAL_STATE_USER_EMAIL, userData.email);
+
+        const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+        console.log('teamId: ' + teamId);
+        if (teamId != undefined && teamId != '') {
+          await db
+            .collection(COLLECTION_ID_TEAMS)
+            .doc(teamId)
+            .get()
+            .then((teamDoc) => {
+              if (teamDoc.exists) {
+                const teamDocData = teamDoc.data();
+                if (teamDocData.teamLeadUserId == userId) {
+                  ctx.globalState.update(
+                    GLOBAL_STATE_USER_IS_TEAM_LEADER,
+                    true,
+                  );
+                } else {
+                  ctx.globalState.update(
+                    GLOBAL_STATE_USER_IS_TEAM_LEADER,
+                    false,
+                  );
+                }
+              }
+            })
+            .catch((e) => {
+              console.log(e.message);
+            });
+        } else {
+          ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
+        }
+
         console.log(ctx.globalState);
       }
     })
-    .catch(() => {
+    .catch((e) => {
+      console.log(e.message);
       console.log('Error updating persistent storage');
     });
 }
@@ -477,9 +509,11 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
 
   const ctx = getExtensionContext();
   const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+  const userEmail = ctx.globalState.get(GLOBAL_STATE_USER_EMAIL);
+  const userNickname = ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME);
 
   console.log('userid: ' + userId);
-
+  console.log('userEmail: ' + userEmail);
   //get team doc reference
   let teamDoc = db.collection(COLLECTION_ID_TEAMS).doc(teamId);
 
@@ -499,13 +533,18 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
   //add this user to members collection
   let addUserToMembers = await teamMembersCollection
     .doc(userId)
-    .set({})
+    .set({
+      email: userEmail, //add user email as a field
+      nickname: userNickname, //add user nickname as a field
+    })
     .then(() => {
-      console.log('Successfully added user to team members collection.');
+      console.log(
+        'Successfully added ' + userNickname + ' to team members collection.',
+      );
     })
     .catch((e) => {
       console.log(e.message);
-      console.log('Error add user to team members collection.');
+      console.log('Error adding user to team members collection.');
     });
 
   //get reference to user doc
@@ -629,7 +668,7 @@ export async function checkIfInTeam() {
       if (userDoc.exists) {
         const data = userDoc.data();
         const teamField = data.teamCode;
-        if (teamField == '') {
+        if (teamField == '' || teamField == undefined) {
           console.log('No team code in db, not in a team.');
           inTeam = false;
         } else {
@@ -646,9 +685,45 @@ export async function checkIfInTeam() {
       console.log(inTeam);
       return inTeam;
     });
-  console.log(inTeam);
+
+  console.log('end of checkIfInTeam: ' + inTeam);
   return inTeam;
 }
+
+// /**
+//  * checks via db if the user is the leader of their team
+//  */
+// export async function checkIfIsTeamLeader(){
+//   let isLeader = false;
+
+//   const ctx = getExtensionContext();
+//   const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+//   const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+
+//   if(teamId == undefined || teamId ==''){
+//     console.log('no cached team id');
+//     return isLeader;
+//   }else{
+//     await db.collection(COLLECTION_ID_TEAMS)
+//       .doc(teamId)
+//       .get()
+//       .then((teamDoc) => {
+//         if(teamDoc.exists){
+//           let teamDocData = teamDoc.data();
+//           if(teamDocData.teamLeadUserId == userId){
+//             isLeader = true;
+//           }
+//         }
+//       })
+//       .then(() => {
+//         console.log('isLeader? ' + isLeader);
+//         return isLeader;
+//       });
+//   }
+//   console.log('end of checkIfIsLeader: ' + isLeader);
+//   return isLeader;
+
+// }
 
 export async function retrieveUserStats(callback) {
   let db = firebase.firestore();
@@ -715,4 +790,45 @@ export async function userDocExists(userId) {
     });
   console.log('end of function userDocExists');
   return exists;
+}
+
+export async function fetchTeamMembersList(teamId) {
+  const ctx = getExtensionContext();
+  const leaderId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
+  let members = [];
+  await db
+    .collection(COLLECTION_ID_USERS)
+    .where('teamCode', '==', teamId)
+    .get()
+    .then((snapshot) => {
+      if (snapshot.empty) {
+        console.log('Empty team.');
+        return members;
+      }
+
+      snapshot.forEach((memberDoc) => {
+        const memberId = memberDoc.id;
+        //if(memberId != leaderId) {
+        const memberData = memberDoc.data();
+        let member = new Map<string, string>();
+        member['id'] = memberId;
+        member['email'] = memberData.email;
+        member['name'] = memberData.name;
+        members.push(member);
+        console.log('added member: ');
+        console.log(member);
+        //}
+      });
+    })
+    .then(() => {
+      console.log('returning members: ');
+      console.log(members);
+      return members;
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+
+  return members;
 }
