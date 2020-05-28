@@ -63,6 +63,10 @@
         "title": "Cloud9 DEBUG: Clear Team name and ID"
       },
       {
+        "command": "cloud9.resetPassword",
+        "title": "Cloud9: Reset my password"
+      },
+      {
         "command": "cloud9.leaderboard",
         "title": "Cloud9: Leaderboard"
       },
@@ -71,8 +75,8 @@
         "title": "Cloud9: Team Leaderboard"
       },
       {
-        "command": "cloud9.getTeamNameAndId",
-        "title": "Cloud9: Get Team ID"
+        "command": "cloud9.getTeamInfo",
+        "title": "Cloud9: Get Team Info"
       },
       {
         "command": "cloud9.personalStats",
@@ -153,6 +157,7 @@
     "axios": "^0.19.0",
     "clipboardy": "^2.1.0",
     "firebase": "^7.14.3",
+    "firebase-admin": "^8.12.1",
     "moment-timezone": "^0.5.25",
     "node-cache": "^5.1.0",
     "numeral": "^2.0.6",

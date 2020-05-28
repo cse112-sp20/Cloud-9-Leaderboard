@@ -177,6 +177,15 @@ export function createCommands(
     }),
   );
 
+  //password recovery
+  cmds.push(
+    commands.registerCommand('cloud9.resetPassword', () => {
+      console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
+      //doing nothing rn
+      window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
+    }),
+  );
+
   cmds.push(
     commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
       console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
@@ -193,6 +202,7 @@ export function createCommands(
   );
 
   // Cloud9: command used to clear the cached id (for debugging and testing only)
+  // ***can be used to sign the user out***
   cmds.push(
     commands.registerCommand('cloud9.debugClearUserId', () => {
       console.log('Cloud9: DEBUG CLEAR CACHED ID');
