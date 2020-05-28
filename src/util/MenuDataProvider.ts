@@ -32,8 +32,7 @@ import {
     data: MenuItem[];
 
     constructor() {
-  
-      this.data = [new MenuItem('View personal stats')];
+      this.data = [new MenuItem('View Stats')];
     }
   
   
