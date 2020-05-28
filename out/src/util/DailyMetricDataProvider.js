@@ -8,7 +8,7 @@ class DailyMetricDataProvider {
         this.data = [];
         let tempList = [];
         for (let key in d) {
-            tempList.push(new TreeTask(key, [new TreeTask(d[key] + '')]));
+            tempList.push(new TreeTask(key, [new TreeTask('Today: ' + d[key] + ' (Latest Update)')]));
         }
         this.data = tempList;
     }
@@ -35,4 +35,4 @@ function testCallback(data, ctx) {
     vscode_1.window.registerTreeDataProvider('DailyMetric', new DailyMetricDataProvider(data));
 }
 exports.testCallback = testCallback;
-//# sourceMappingURL=TaskProvier.js.map
+//# sourceMappingURL=DailyMetricDataProvider.js.map

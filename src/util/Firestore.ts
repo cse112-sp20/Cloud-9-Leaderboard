@@ -650,10 +650,15 @@ export async function retrieveUserDailyMetric(callback, c) {
         // Convert to City object
         return userDoc.data();
       } else {
+
+        console.log("userDoc does not exist");
         return undefined;
       }
     })
     .then((dataMap) => {
+
+      console.log("data map")
+      console.log(dataMap)
       callback(dataMap, c);
     })
     .catch((err) => {

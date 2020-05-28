@@ -71,8 +71,13 @@
         "title": "Cloud9: Team Leaderboard"
       },
       {
-        "command": "cloud9.getTeamNameAndId",
-        "title": "Cloud9: Get Team ID"
+        "command": "nodeDependencies.refreshEntry",
+        "title": "Refresh"
+       
+    },
+      {
+        "command": "cloud9.getTeamInfo",
+        "title": "Cloud9: Get Team Info"
       },
       {
         "command": "cloud9.personalStats",
@@ -107,12 +112,16 @@
     "views": {
       "code-time": [
         {
-          "id": "exampleView",
-          "name": "exampleView"
+          "id": "MenuView",
+          "name": "Menu"
         },
         {
-          "id": "menuView",
-          "name": "menuView"
+          "id": "DailyMetric",
+          "name": "Daily Metric"
+        },
+        {
+          "id": "TeamMenuView",
+          "name": "Team Info"
         }
       ]
     }

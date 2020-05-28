@@ -90,7 +90,7 @@ exports.deactivate = deactivate;
 //export var extensionContext;
 function activate(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
-        // window.registerTreeDataProvider('exampleView', new TaskProvider());
+        // window.registerTreeDataProvider('exampleView', new DailyMetricDataProvider());
         //console.log("CLOUD9 ACTIVATED");
         vscode_1.window.showInformationMessage('Cloud9 Activated!');
         // add the code time commands

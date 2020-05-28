@@ -9,15 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleMenuChangeSelection = exports.connectCloud9MenuTreeView = exports.TeamItem = exports.TeamDataProvider = void 0;
+exports.handleTeamInfoChangeSelection = exports.connectCloud9TeamInfoTreeView = exports.TeamItem = exports.TeamDataProvider = void 0;
 const vscode_1 = require("vscode");
+const Authentication_1 = require("./Authentication");
+const Constants_1 = require("./Constants");
 /**
  * Menu Provider for treeview
  */
 class TeamDataProvider {
     // Constructor simply for displaying
     constructor() {
-        this.data = [new TeamItem('🛡Join team'), new TeamItem("View team leaderboard"), new TeamItem('Get Team Info'), new TeamItem('test', [new TeamItem('s')])];
+        //onDidChangeTreeData?: Event<TeamItem | null | undefined> | undefined;
+        this._onDidChangeTreeData = new vscode_1.EventEmitter();
+        this.onDidChangeTreeData = this._onDidChangeTreeData.event;
+        this.data = [new TeamItem('Join team'), new TeamItem("View team leaderboard"), new TeamItem('Get Team Info', [new TeamItem('')])];
+    }
+    refresh() {
+        this._onDidChangeTreeData.fire(null);
     }
     /**
      * Method to bind view to Menu Provider
@@ -43,7 +51,7 @@ class TeamItem extends vscode_1.TreeItem {
     constructor(label, children) {
         super(label, children === undefined
             ? vscode_1.TreeItemCollapsibleState.None
-            : vscode_1.TreeItemCollapsibleState.Expanded);
+            : vscode_1.TreeItemCollapsibleState.Collapsed);
         this.children = children;
     }
 }
@@ -53,7 +61,7 @@ exports.TeamItem = TeamItem;
  *
  * @param view
  */
-exports.connectCloud9MenuTreeView = (view) => {
+exports.connectCloud9TeamInfoTreeView = (view) => {
     return vscode_1.Disposable.from(view.onDidChangeSelection((e) => __awaiter(void 0, void 0, void 0, function* () {
         if (!e.selection || e.selection.length === 0) {
             return;
@@ -63,13 +71,13 @@ exports.connectCloud9MenuTreeView = (view) => {
         console.log(e.selection);
         console.log("item");
         console.log(item);
-        exports.handleMenuChangeSelection(view, item);
+        exports.handleTeamInfoChangeSelection(view, item);
     })));
 };
-exports.handleMenuChangeSelection = (view, item) => {
+exports.handleTeamInfoChangeSelection = (view, item) => {
     // Hard coded now to invoke on joinTeam
     //commands.executeCommand('cloud9.joinTeam');
-    if (item.label === "🛡Join team") {
+    if (item.label === "Join team") {
         console.log("join a team");
         vscode_1.commands.executeCommand('cloud9.joinTeam');
     }
@@ -78,8 +86,12 @@ exports.handleMenuChangeSelection = (view, item) => {
         vscode_1.commands.executeCommand('cloud9.teamLeaderboard');
     }
     else if (item.label === "Get Team Info") {
-        console.log("view team id");
-        item.label = "hello";
+        console.log("Get Team Info");
+        const ctx = Authentication_1.getExtensionContext();
+        const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
+        const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
+        item.children = [new TeamItem('TeamName', [new TeamItem(teamName + '')]), new TeamItem('teamId', [new TeamItem(teamId + '')])];
+        vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
     }
 };
-//# sourceMappingURL=MenuProvier.js.map
+//# sourceMappingURL=TeamDataProvider.js.map

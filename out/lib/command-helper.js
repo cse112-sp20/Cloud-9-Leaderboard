@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCommands = void 0;
 const vscode_1 = require("vscode");
 const DataController_1 = require("./DataController");
-const MenuProvier_1 = require("./../src/util/MenuProvier");
+const TeamDataProvider_1 = require("../src/util/TeamDataProvider");
 const MenuManager_1 = require("./menu/MenuManager");
 const Util_1 = require("./Util");
 const FileManager_1 = require("./managers/FileManager");
@@ -20,17 +20,27 @@ const Leaderboard_1 = require("../src/util/Leaderboard");
 const Authentication_1 = require("../src/util/Authentication");
 const Team_1 = require("../src/util/Team");
 const PersonalStats_1 = require("../src/util/PersonalStats");
+const MenuDataProvider_1 = require("../src/util/MenuDataProvider");
 function createCommands(kpmController) {
     let cmds = [];
     cmds.push(kpmController);
     // MENU TREE: INIT
-    const cloud9MenuTreeProvider = new MenuProvier_1.MenuProvider();
-    const cloud9MenuTreeView = vscode_1.window.createTreeView("menuView", {
+    const cloud9MenuTreeProvider = new MenuDataProvider_1.MenuDataProvider();
+    const cloud9TeamTreeProvider = new TeamDataProvider_1.TeamDataProvider();
+    const cloud9MenuTreeView = vscode_1.window.createTreeView('MenuView', {
         treeDataProvider: cloud9MenuTreeProvider,
         showCollapseAll: false,
     });
     cloud9MenuTreeProvider.bindView(cloud9MenuTreeView);
-    cmds.push(MenuProvier_1.connectCloud9MenuTreeView(cloud9MenuTreeView));
+    cmds.push(MenuDataProvider_1.connectCloud9MenuTreeView(cloud9MenuTreeView));
+    cmds.push(vscode_1.commands.registerCommand('MenuView.refreshEntry', () => cloud9MenuTreeProvider.refresh()));
+    const cloud9TeamTreeView = vscode_1.window.createTreeView('TeamMenuView', {
+        treeDataProvider: cloud9TeamTreeProvider,
+        showCollapseAll: false,
+    });
+    cloud9TeamTreeProvider.bindView(cloud9TeamTreeView);
+    cmds.push(TeamDataProvider_1.connectCloud9TeamInfoTreeView(cloud9TeamTreeView));
+    cmds.push(vscode_1.commands.registerCommand('TeamMenuView.refreshEntry', () => cloud9TeamTreeProvider.refresh()));
     // TEAM TREE: INVITE MEMBER
     cmds.push(vscode_1.commands.registerCommand('codetime.inviteTeamMember', (item) => __awaiter(this, void 0, void 0, function* () {
         // the identifier will be in the value

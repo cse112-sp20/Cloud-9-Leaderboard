@@ -129,7 +129,7 @@ export function deactivate(ctx: ExtensionContext) {
 //export var extensionContext;
 
 export async function activate(ctx: ExtensionContext) {
-  // window.registerTreeDataProvider('exampleView', new TaskProvider());
+  // window.registerTreeDataProvider('exampleView', new DailyMetricDataProvider());
 
   //console.log("CLOUD9 ACTIVATED");
   window.showInformationMessage('Cloud9 Activated!');

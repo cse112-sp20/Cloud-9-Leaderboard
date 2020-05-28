@@ -94,6 +94,7 @@ function getTeamInfo() {
             vscode_1.window.showInformationMessage('You are a member of your team.');
         }
         console.log(messageStr);
+        return messageStr;
     });
 }
 exports.getTeamInfo = getTeamInfo;

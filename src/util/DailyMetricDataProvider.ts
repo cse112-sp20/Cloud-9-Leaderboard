@@ -14,7 +14,7 @@ import {
   Disposable,
 } from 'vscode';
 
-export class TaskProvider implements TreeDataProvider<TreeTask> {
+export class DailyMetricDataProvider implements TreeDataProvider<TreeTask> {
   onDidChangeTreeData?: Event<TreeTask | null | undefined> | undefined;
 
   data: TreeTask[];
@@ -25,10 +25,10 @@ export class TaskProvider implements TreeDataProvider<TreeTask> {
 
     let tempList = [];
     for (let key in d) {
-      tempList.push(new TreeTask(key, [new TreeTask(d[key] + '')]));
+      tempList.push(new TreeTask(key, [ new TreeTask('Today: ' + d[key] + ' (Latest Update)')]));
     }
 
-    this.data = [new TreeTask('DAILY METRICS', tempList)];
+    this.data = tempList;
   }
 
   getChildren(task?: TreeTask | undefined): ProviderResult<TreeTask[]> {
@@ -57,5 +57,5 @@ class TreeTask extends TreeItem {
 }
 
 export function testCallback(data, ctx) {
-  window.registerTreeDataProvider('exampleView', new TaskProvider(data));
+  window.registerTreeDataProvider('DailyMetric', new DailyMetricDataProvider(data));
 }

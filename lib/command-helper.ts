@@ -5,13 +5,14 @@ import {
   sendTeamInvite,
 } from './DataController';
 import {
-  MenuProvider,
-  MenuTask,
-  connectCloud9MenuTreeView,
-} from './../src/util/MenuProvier';
+  TeamDataProvider,
+  TeamItem,
+  connectCloud9TeamInfoTreeView,
+} from '../src/util/TeamDataProvider';
 import {
   displayCodeTimeMetricsDashboard,
   showMenuOptions,
+  
 } from './menu/MenuManager';
 import {
   launchWebUrl,
@@ -39,6 +40,7 @@ import {
   joinTeam,
 } from '../src/util/Team';
 import {displayPersonalStats} from '../src/util/PersonalStats';
+import { MenuDataProvider, MenuItem,connectCloud9MenuTreeView } from '../src/util/MenuDataProvider';
 
 export function createCommands(
   kpmController: KpmManager,
@@ -50,17 +52,51 @@ export function createCommands(
   cmds.push(kpmController);
 
   // MENU TREE: INIT
-  const cloud9MenuTreeProvider = new MenuProvider();
+  const cloud9MenuTreeProvider = new MenuDataProvider();
+  const cloud9TeamTreeProvider = new TeamDataProvider();
 
-  const cloud9MenuTreeView: TreeView<MenuTask> = window.createTreeView(
-    'menuView',
+  const cloud9MenuTreeView: TreeView<MenuItem> = window.createTreeView(
+    'MenuView',
     {
       treeDataProvider: cloud9MenuTreeProvider,
       showCollapseAll: false,
     },
   );
+
   cloud9MenuTreeProvider.bindView(cloud9MenuTreeView);
-  cmds.push(connectCloud9MenuTreeView(cloud9MenuTreeView));
+
+
+
+   cmds.push(connectCloud9MenuTreeView(cloud9MenuTreeView));
+
+  cmds.push(
+    commands.registerCommand('MenuView.refreshEntry', () =>
+    cloud9MenuTreeProvider.refresh()
+
+  )
+  );
+
+
+
+
+  const cloud9TeamTreeView: TreeView<TeamItem> = window.createTreeView(
+    'TeamMenuView',
+    {
+      treeDataProvider: cloud9TeamTreeProvider,
+      showCollapseAll: false,
+    },
+  );
+
+
+  cloud9TeamTreeProvider.bindView(cloud9TeamTreeView);
+  cmds.push(connectCloud9TeamInfoTreeView(cloud9TeamTreeView));
+
+  cmds.push(
+    commands.registerCommand('TeamMenuView.refreshEntry', () =>
+    cloud9TeamTreeProvider.refresh()
+
+  )
+  );
 
   // TEAM TREE: INVITE MEMBER
   cmds.push(
