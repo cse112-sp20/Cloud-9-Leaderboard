@@ -5,13 +5,13 @@
  *
  * @file   This files defines the MyClass class.
  * @author AuthorName.
- * @since  x.x.x
  */
 
 import {window, ExtensionContext} from 'vscode';
 import {
   createNewUserInFirebase,
   loginUserWithEmailAndPassword,
+  retrieveUserDailyMetric,
   userDocExists,
 } from './Firestore';
 import {generateRandomEmail} from './Utility';
@@ -26,6 +26,8 @@ import {
   GLOBAL_STATE_USER_NICKNAME,
 } from './Constants';
 import {getMaxListeners} from 'cluster';
+
+import {testCallback} from './DailyMetricDataProvider';
 
 //export let cachedUserId = undefined;
 let extensionContext: ExtensionContext = undefined;
@@ -67,9 +69,9 @@ export function clearCachedUserId() {
  * authentication entry point
  * @param ctx
  */
-export async function authenticateUser() {
-  //get ref to extension context
-  let ctx = getExtensionContext();
+export async function authenticateUser(ctx: ExtensionContext) {
+  //stores the extension context
+  extensionContext = ctx;
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   const cachedUserEmail = ctx.globalState.get(GLOBAL_STATE_USER_EMAIL);
   const cachedUserPassword = ctx.globalState.get(GLOBAL_STATE_USER_PASSWORD);
@@ -122,6 +124,8 @@ export async function authenticateUser() {
     //   }
     // });
   }
+
+  await retrieveUserDailyMetric(testCallback, ctx);
 }
 
 /**

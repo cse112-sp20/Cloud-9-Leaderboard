@@ -6,7 +6,6 @@
  *
  * @file   This files defines the MyClass class.
  * @author AuthorName.
- * @since  x.x.x
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -23,6 +22,7 @@ const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
 const Utility_1 = require("./Utility");
 const Constants_1 = require("./Constants");
+const DailyMetricDataProvider_1 = require("./DailyMetricDataProvider");
 //export let cachedUserId = undefined;
 let extensionContext = undefined;
 /**
@@ -59,10 +59,10 @@ exports.clearCachedUserId = clearCachedUserId;
  * authentication entry point
  * @param ctx
  */
-function authenticateUser() {
+function authenticateUser(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
-        //get ref to extension context
-        let ctx = getExtensionContext();
+        //stores the extension context
+        extensionContext = ctx;
         const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         const cachedUserEmail = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_EMAIL);
         const cachedUserPassword = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_PASSWORD);
@@ -108,6 +108,7 @@ function authenticateUser() {
             //   }
             // });
         }
+        yield Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
     });
 }
 exports.authenticateUser = authenticateUser;

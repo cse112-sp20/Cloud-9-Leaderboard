@@ -99,6 +99,7 @@ export async function getTeamInfo() {
     window.showInformationMessage('You are a member of your team.');
   }
   console.log(messageStr);
+  return messageStr;
 }
 /**
  * prompts the user to enter a team code and add them to the team

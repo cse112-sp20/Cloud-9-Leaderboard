@@ -111,16 +111,16 @@
     "views": {
       "code-time": [
         {
-          "id": "ct-menu-tree",
-          "name": "MENU"
+          "id": "MenuView",
+          "name": "Menu"
         },
         {
-          "id": "ct-metrics-tree",
-          "name": "DAILY METRICS"
+          "id": "DailyMetric",
+          "name": "Daily Metric"
         },
         {
-          "id": "ct-team-tree",
-          "name": "CONTRIBUTORS"
+          "id": "TeamMenuView",
+          "name": "Team Info"
         }
       ]
     }
