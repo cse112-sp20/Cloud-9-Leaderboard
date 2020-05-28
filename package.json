@@ -74,7 +74,6 @@
         "command": "cloud9.teamLeaderboard",
         "title": "Cloud9: Team Leaderboard"
       },
-    
       {
         "command": "cloud9.getTeamInfo",
         "title": "Cloud9: Get Team Info"

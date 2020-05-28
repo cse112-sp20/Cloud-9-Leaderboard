@@ -96,11 +96,6 @@ export const connectCloud9TeamInfoTreeView = (view: TreeView<TeamItem>) => {
 
       const item: TeamItem = e.selection[0];
 
-      console.log(e.selection);
-
-      console.log('item');
-      console.log(item);
-
       handleTeamInfoChangeSelection(view, item);
     }),
   );

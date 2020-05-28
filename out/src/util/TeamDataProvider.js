@@ -65,9 +65,6 @@ exports.connectCloud9TeamInfoTreeView = (view) => {
             return;
         }
         const item = e.selection[0];
-        console.log(e.selection);
-        console.log('item');
-        console.log(item);
         exports.handleTeamInfoChangeSelection(view, item);
     })));
 };
