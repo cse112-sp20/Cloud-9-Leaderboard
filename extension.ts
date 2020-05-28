@@ -2,7 +2,22 @@
 
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import {window, ExtensionContext, StatusBarAlignment, commands} from 'vscode';
+import {
+  window,
+  ExtensionContext,
+  StatusBarAlignment,
+  commands,
+  Command,
+  TreeDataProvider,
+  TreeItemCollapsibleState,
+  ProviderResult,
+  TreeItem,
+  Event,
+  EventEmitter,
+  TreeView,
+  Disposable,
+} from 'vscode';
+import {retrieveUserDailyMetric} from './src/util/Firestore';
 import {
   isLoggedIn,
   sendHeartbeat,
@@ -152,7 +167,8 @@ export async function activate(ctx: ExtensionContext) {
   }
 
   // sign the user in
-  authenticateUser();
+  authenticateUser(ctx);
+  //await retrieveUserDailyMetric(testCallback, ctx);
 }
 
 function getRandomArbitrary(min, max) {
