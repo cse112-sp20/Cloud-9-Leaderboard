@@ -564,12 +564,12 @@ function retrieveUserDailyMetric(callback, c) {
                 return userDoc.data();
             }
             else {
-                console.log("userDoc does not exist");
+                console.log('userDoc does not exist');
                 return undefined;
             }
         })
             .then((dataMap) => {
-            console.log("data map");
+            console.log('data map');
             console.log(dataMap);
             callback(dataMap, c);
         })

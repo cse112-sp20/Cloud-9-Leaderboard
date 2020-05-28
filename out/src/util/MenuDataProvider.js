@@ -1,4 +1,13 @@
 "use strict";
+/**
+ * File that contains method and class that enable displaying
+ * user's personal info
+ *
+ * Contain MenuDataProvider and MenuItem class.
+ *
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -14,8 +23,9 @@ const vscode_1 = require("vscode");
 class MenuDataProvider {
     constructor() {
         this._onDidChangeTreeData = new vscode_1.EventEmitter();
-        this.onDidChangeTreeData = this._onDidChangeTreeData.event;
-        this.data = [new MenuItem('View personal stats')];
+        this.onDidChangeTreeData = this
+            ._onDidChangeTreeData.event;
+        this.data = [new MenuItem('View personal stats'), new MenuItem('Leaderboard')];
     }
     refresh() {
         this._onDidChangeTreeData.fire(null);
@@ -53,8 +63,11 @@ exports.connectCloud9MenuTreeView = (view) => {
     })));
 };
 exports.handleMenuChangeSelection = (view, item) => {
-    if (item.label === "View personal stats") {
+    if (item.label === 'View personal stats') {
         vscode_1.commands.executeCommand('cloud9.personalStats');
+    }
+    else if (item.label === 'Leaderboard') {
+        vscode_1.commands.executeCommand('cloud9.leaderboard');
     }
 };
 //# sourceMappingURL=MenuDataProvider.js.map

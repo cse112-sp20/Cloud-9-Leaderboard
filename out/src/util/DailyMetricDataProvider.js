@@ -1,4 +1,13 @@
 "use strict";
+/**
+ * File that contains method and class that enable displaying
+ * user's daily metrics
+ *
+ * Contain DailyMetricData Provider and DailyMetricItem class.
+ *
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testCallback = exports.DailyMetricDataProvider = void 0;
 const vscode_1 = require("vscode");
@@ -8,7 +17,9 @@ class DailyMetricDataProvider {
         this.data = [];
         let tempList = [];
         for (let key in d) {
-            tempList.push(new DailyMetricItem(key, [new DailyMetricItem('Today: ' + d[key] + ' (Latest Update)')]));
+            tempList.push(new DailyMetricItem(key, [
+                new DailyMetricItem('Today: ' + d[key] + ' (Latest Update)'),
+            ]));
         }
         this.data = tempList;
     }
