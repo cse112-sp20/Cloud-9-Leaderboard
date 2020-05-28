@@ -21,12 +21,21 @@ const Authentication_1 = require("../src/util/Authentication");
 const Team_1 = require("../src/util/Team");
 const PersonalStats_1 = require("../src/util/PersonalStats");
 const MenuDataProvider_1 = require("../src/util/MenuDataProvider");
+const LeaderDataProvider_1 = require("../src/util/LeaderDataProvider");
 function createCommands(kpmController) {
     let cmds = [];
     cmds.push(kpmController);
     // MENU TREE: INIT
     const cloud9MenuTreeProvider = new MenuDataProvider_1.MenuDataProvider();
     const cloud9TeamTreeProvider = new TeamDataProvider_1.TeamDataProvider();
+    const cloud9LeaderTreeProvider = new LeaderDataProvider_1.LeaderDataProvider();
+    const cloud9LeaderTreeView = vscode_1.window.createTreeView('LeaderView', {
+        treeDataProvider: cloud9LeaderTreeProvider,
+        showCollapseAll: false,
+    });
+    cmds.push(LeaderDataProvider_1.connectCloud9LeaderTreeView(cloud9LeaderTreeView));
+    cloud9LeaderTreeProvider.bindView(cloud9LeaderTreeView);
+    cmds.push(vscode_1.commands.registerCommand('LeaderView.refreshEntry', () => cloud9LeaderTreeProvider.refresh()));
     const cloud9MenuTreeView = vscode_1.window.createTreeView('MenuView', {
         treeDataProvider: cloud9MenuTreeProvider,
         showCollapseAll: false,
