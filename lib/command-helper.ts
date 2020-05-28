@@ -44,7 +44,11 @@ import {
   MenuItem,
   connectCloud9MenuTreeView,
 } from '../src/util/MenuDataProvider';
-import { LeaderDataProvider, LeaderItem, connectCloud9LeaderTreeView } from '../src/util/LeaderDataProvider';
+import {
+  LeaderDataProvider,
+  LeaderItem,
+  connectCloud9LeaderTreeView,
+} from '../src/util/LeaderDataProvider';
 
 export function createCommands(
   kpmController: KpmManager,
@@ -73,7 +77,7 @@ export function createCommands(
 
   cmds.push(
     commands.registerCommand('LeaderView.refreshEntry', () =>
-    cloud9LeaderTreeProvider.refresh(),
+      cloud9LeaderTreeProvider.refresh(),
     ),
   );
 
@@ -84,8 +88,6 @@ export function createCommands(
       showCollapseAll: false,
     },
   );
-
-
 
   cloud9MenuTreeProvider.bindView(cloud9MenuTreeView);
 
