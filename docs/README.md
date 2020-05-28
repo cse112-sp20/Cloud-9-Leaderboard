@@ -88,7 +88,10 @@ Badges and Achievements
 
 #### Patrick Pajarillaga
 
-<img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/33/Patrick_Star.svg/1200px-Patrick_Star.svg.png" alt="drawing" width="200"/>
+<img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/33/Patrick_Star.svg/1200px-Patrick_Star.svg.png" alt="drawing" width="100"/>
+
+<p>Patrick is a 3rd year computer sciences with interests in topics of machine learning and augmented reality. His hobbies include gaming on his PC or going to various concerts scattered around the city.</p>
+
 
 #### Devin Junanto
 
