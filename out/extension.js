@@ -90,11 +90,6 @@ exports.deactivate = deactivate;
 //export var extensionContext;
 function activate(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
-<<<<<<< HEAD
-        // window.registerTreeDataProvider('exampleView', new DailyMetricDataProvider());
-        //console.log("CLOUD9 ACTIVATED");
-=======
->>>>>>> fefbe9437aa19e4b681ae21f6fab3c57b7aa1b65
         vscode_1.window.showInformationMessage('Cloud9 Activated!');
         //store ref to extension context
         Authentication_1.storeExtensionContext(ctx);
