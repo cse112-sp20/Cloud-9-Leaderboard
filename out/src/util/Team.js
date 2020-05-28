@@ -63,8 +63,6 @@ function removeTeamNameAndId() {
             vscode_1.window.showInformationMessage('Not in a team!');
             return;
         }
-        let removeUser = 'iE4BgJboPkfkV6HvYOz1e4w0xVM2';
-        Firestore_1.leaveTeam(removeUser, teamId);
     });
 }
 exports.removeTeamNameAndId = removeTeamNameAndId;

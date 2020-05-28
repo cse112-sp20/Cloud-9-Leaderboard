@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchTeamMembersList = exports.userDocExists = exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.updatePersistentStorageWithUserDocData = exports.loginUserWithEmailAndPassword = void 0;
+exports.fetchTeamMembersList = exports.userDocExists = exports.retrieveUserDailyMetric = exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.updatePersistentStorageWithUserDocData = exports.loginUserWithEmailAndPassword = void 0;
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
@@ -87,7 +87,7 @@ function updatePersistentStorageWithUserDocData(userId) {
                             const teamDocData = teamDoc.data();
                             if (teamDocData.teamLeadUserId == userId) {
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, true);
-                                //store team member data in persistent storage 
+                                //store team member data in persistent storage
                                 let members = yield fetchTeamMembersList(teamId);
                                 console.log('updating team member list to persistent storage.');
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, members);
@@ -568,7 +568,7 @@ function leaveTeam(userId, teamId) {
             // );
             // console.log('Successfully removed from team.');
             // window.showInformationMessage('Left your team: ' + teamName);
-            //update leader's persistent storage 
+            //update leader's persistent storage
             let membersMap = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS);
             console.log('old members map: ');
             console.log(membersMap);
@@ -677,6 +677,8 @@ function retrieveUserStats(callback) {
                 dateMap.push(currDate);
                 // console.log(doc.id + "=>" + doc.data());
             });
+            console.log('*************');
+            console.log(dateMap);
             return dateMap;
         })
             .then((dateMap) => {
@@ -688,6 +690,39 @@ function retrieveUserStats(callback) {
     });
 }
 exports.retrieveUserStats = retrieveUserStats;
+function retrieveUserDailyMetric(callback, c) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let db = firebase.firestore();
+        let user = db.collection(Constants_1.COLLECTION_ID_USERS);
+        const ctx = Authentication_1.getExtensionContext();
+        const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        let userDataMap = [];
+        user
+            .doc(cachedUserId)
+            .collection('dates')
+            .doc(new Date().toISOString().split('T')[0])
+            .get()
+            .then((userDoc) => {
+            if (userDoc.exists) {
+                // Convert to City object
+                return userDoc.data();
+            }
+            else {
+                console.log('userDoc does not exist');
+                return undefined;
+            }
+        })
+            .then((dataMap) => {
+            console.log('data map');
+            console.log(dataMap);
+            callback(dataMap, c);
+        })
+            .catch((err) => {
+            console.log('Error getting documents', err);
+        });
+    });
+}
+exports.retrieveUserDailyMetric = retrieveUserDailyMetric;
 /**
  * returns true if a document associated with the passed in ID exists in firebase
  * @param userId uid
@@ -758,4 +793,4 @@ function fetchTeamMembersList(teamId) {
     });
 }
 exports.fetchTeamMembersList = fetchTeamMembersList;
-//# sourceMappingURL=FireStore.js.map
+//# sourceMappingURL=Firestore.js.map
