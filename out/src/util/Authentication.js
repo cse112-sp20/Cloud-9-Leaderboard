@@ -60,10 +60,10 @@ exports.clearCachedUserId = clearCachedUserId;
  * authentication entry point
  * @param ctx
  */
-function authenticateUser() {
+function authenticateUser(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
-        //get ref to extension context
-        let ctx = getExtensionContext();
+        //stores the extension context
+        extensionContext = ctx;
         const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         const cachedUserEmail = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_EMAIL);
         const cachedUserPassword = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_PASSWORD);
@@ -109,6 +109,7 @@ function authenticateUser() {
             //   }
             // });
         }
+        yield Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
     });
 }
 exports.authenticateUser = authenticateUser;

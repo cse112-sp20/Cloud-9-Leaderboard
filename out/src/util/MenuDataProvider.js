@@ -25,7 +25,10 @@ class MenuDataProvider {
         this._onDidChangeTreeData = new vscode_1.EventEmitter();
         this.onDidChangeTreeData = this
             ._onDidChangeTreeData.event;
-        this.data = [new MenuItem('View personal stats'), new MenuItem('Leaderboard')];
+        this.data = [
+            new MenuItem('View personal stats'),
+            new MenuItem('Leaderboard'),
+        ];
     }
     refresh() {
         this._onDidChangeTreeData.fire(null);

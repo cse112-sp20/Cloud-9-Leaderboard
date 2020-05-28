@@ -132,12 +132,6 @@ export function deactivate(ctx: ExtensionContext) {
 //export var extensionContext;
 
 export async function activate(ctx: ExtensionContext) {
-<<<<<<< HEAD
-  // window.registerTreeDataProvider('exampleView', new DailyMetricDataProvider());
-
-  //console.log("CLOUD9 ACTIVATED");
-=======
->>>>>>> fefbe9437aa19e4b681ae21f6fab3c57b7aa1b65
   window.showInformationMessage('Cloud9 Activated!');
   //store ref to extension context
   storeExtensionContext(ctx);
@@ -173,12 +167,8 @@ export async function activate(ctx: ExtensionContext) {
   }
 
   // sign the user in
-<<<<<<< HEAD
   authenticateUser(ctx);
   //await retrieveUserDailyMetric(testCallback, ctx);
-=======
-  authenticateUser();
->>>>>>> fefbe9437aa19e4b681ae21f6fab3c57b7aa1b65
 }
 
 function getRandomArbitrary(min, max) {

@@ -113,12 +113,8 @@ function activate(ctx) {
             }, 1000 * secondDelay);
         }
         // sign the user in
-<<<<<<< HEAD
         Authentication_1.authenticateUser(ctx);
         //await retrieveUserDailyMetric(testCallback, ctx);
-=======
-        Authentication_1.authenticateUser();
->>>>>>> fefbe9437aa19e4b681ae21f6fab3c57b7aa1b65
     });
 }
 exports.activate = activate;

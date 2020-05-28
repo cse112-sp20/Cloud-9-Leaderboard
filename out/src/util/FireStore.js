@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userDocExists = exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.updatePersistentStorageWithUserDocData = exports.loginUserWithEmailAndPassword = void 0;
+exports.userDocExists = exports.retrieveUserDailyMetric = exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.updatePersistentStorageWithUserDocData = exports.loginUserWithEmailAndPassword = void 0;
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
@@ -602,7 +602,6 @@ function retrieveUserStats(callback) {
     });
 }
 exports.retrieveUserStats = retrieveUserStats;
-<<<<<<< HEAD
 function retrieveUserDailyMetric(callback, c) {
     return __awaiter(this, void 0, void 0, function* () {
         let db = firebase.firestore();
@@ -636,8 +635,6 @@ function retrieveUserDailyMetric(callback, c) {
     });
 }
 exports.retrieveUserDailyMetric = retrieveUserDailyMetric;
-//# sourceMappingURL=Firestore.js.map
-=======
 /**
  * returns true if a document associated with the passed in ID exists in firebase
  * @param userId uid
@@ -648,7 +645,8 @@ function userDocExists(userId) {
             return false;
         console.log('Checking if user id (' + userId + ') exists in firebase...');
         let exists = false;
-        yield db.collection(Constants_1.COLLECTION_ID_USERS)
+        yield db
+            .collection(Constants_1.COLLECTION_ID_USERS)
             .doc(userId)
             .get()
             .then((docRef) => {
@@ -671,5 +669,4 @@ function userDocExists(userId) {
     });
 }
 exports.userDocExists = userDocExists;
-//# sourceMappingURL=FireStore.js.map
->>>>>>> fefbe9437aa19e4b681ae21f6fab3c57b7aa1b65
+//# sourceMappingURL=Firestore.js.map
