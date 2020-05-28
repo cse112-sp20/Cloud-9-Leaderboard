@@ -12,7 +12,6 @@ import {
 import {
   displayCodeTimeMetricsDashboard,
   showMenuOptions,
-  
 } from './menu/MenuManager';
 import {
   launchWebUrl,
@@ -40,7 +39,11 @@ import {
   joinTeam,
 } from '../src/util/Team';
 import {displayPersonalStats} from '../src/util/PersonalStats';
-import { MenuDataProvider, MenuItem,connectCloud9MenuTreeView } from '../src/util/MenuDataProvider';
+import {
+  MenuDataProvider,
+  MenuItem,
+  connectCloud9MenuTreeView,
+} from '../src/util/MenuDataProvider';
 
 export function createCommands(
   kpmController: KpmManager,
@@ -65,19 +68,13 @@ export function createCommands(
 
   cloud9MenuTreeProvider.bindView(cloud9MenuTreeView);
 
-
-
-   cmds.push(connectCloud9MenuTreeView(cloud9MenuTreeView));
+  cmds.push(connectCloud9MenuTreeView(cloud9MenuTreeView));
 
   cmds.push(
     commands.registerCommand('MenuView.refreshEntry', () =>
-    cloud9MenuTreeProvider.refresh()
-
-  )
+      cloud9MenuTreeProvider.refresh(),
+    ),
   );
-
-
-
 
   const cloud9TeamTreeView: TreeView<TeamItem> = window.createTreeView(
     'TeamMenuView',
@@ -87,15 +84,13 @@ export function createCommands(
     },
   );
 
-
   cloud9TeamTreeProvider.bindView(cloud9TeamTreeView);
   cmds.push(connectCloud9TeamInfoTreeView(cloud9TeamTreeView));
 
   cmds.push(
     commands.registerCommand('TeamMenuView.refreshEntry', () =>
-    cloud9TeamTreeProvider.refresh()
-
-  )
+      cloud9TeamTreeProvider.refresh(),
+    ),
   );
 
   // TEAM TREE: INVITE MEMBER

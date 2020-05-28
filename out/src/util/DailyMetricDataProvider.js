@@ -8,7 +8,7 @@ class DailyMetricDataProvider {
         this.data = [];
         let tempList = [];
         for (let key in d) {
-            tempList.push(new TreeTask(key, [new TreeTask('Today: ' + d[key] + ' (Latest Update)')]));
+            tempList.push(new DailyMetricItem(key, [new DailyMetricItem('Today: ' + d[key] + ' (Latest Update)')]));
         }
         this.data = tempList;
     }
@@ -23,7 +23,7 @@ class DailyMetricDataProvider {
     }
 }
 exports.DailyMetricDataProvider = DailyMetricDataProvider;
-class TreeTask extends vscode_1.TreeItem {
+class DailyMetricItem extends vscode_1.TreeItem {
     constructor(label, children) {
         super(label, children === undefined
             ? vscode_1.TreeItemCollapsibleState.None

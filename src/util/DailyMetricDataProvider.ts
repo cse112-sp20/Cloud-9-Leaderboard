@@ -1,3 +1,13 @@
+/**
+ * File that contains method and class that enable displaying
+ * user's daily metrics
+ *
+ * Contain DailyMetricData Provider and DailyMetricItem class.
+ *
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ */
+
 import {
   window,
   ExtensionContext,
@@ -14,10 +24,11 @@ import {
   Disposable,
 } from 'vscode';
 
-export class DailyMetricDataProvider implements TreeDataProvider<TreeTask> {
-  onDidChangeTreeData?: Event<TreeTask | null | undefined> | undefined;
+export class DailyMetricDataProvider
+  implements TreeDataProvider<DailyMetricItem> {
+  onDidChangeTreeData?: Event<DailyMetricItem | null | undefined> | undefined;
 
-  data: TreeTask[];
+  data: DailyMetricItem[];
   constructor(d) {
     console.log(d);
 
@@ -25,27 +36,33 @@ export class DailyMetricDataProvider implements TreeDataProvider<TreeTask> {
 
     let tempList = [];
     for (let key in d) {
-      tempList.push(new TreeTask(key, [ new TreeTask('Today: ' + d[key] + ' (Latest Update)')]));
+      tempList.push(
+        new DailyMetricItem(key, [
+          new DailyMetricItem('Today: ' + d[key] + ' (Latest Update)'),
+        ]),
+      );
     }
 
     this.data = tempList;
   }
 
-  getChildren(task?: TreeTask | undefined): ProviderResult<TreeTask[]> {
+  getChildren(
+    task?: DailyMetricItem | undefined,
+  ): ProviderResult<DailyMetricItem[]> {
     if (task === undefined) {
       return this.data;
     }
     return task.children;
   }
 
-  getTreeItem(task: TreeTask): TreeItem | Thenable<TreeItem> {
+  getTreeItem(task: DailyMetricItem): TreeItem | Thenable<TreeItem> {
     return task;
   }
 }
-class TreeTask extends TreeItem {
-  children: TreeTask[] | undefined;
+class DailyMetricItem extends TreeItem {
+  children: DailyMetricItem[] | undefined;
 
-  constructor(label: string, children?: TreeTask[]) {
+  constructor(label: string, children?: DailyMetricItem[]) {
     super(
       label,
       children === undefined
@@ -57,5 +74,8 @@ class TreeTask extends TreeItem {
 }
 
 export function testCallback(data, ctx) {
-  window.registerTreeDataProvider('DailyMetric', new DailyMetricDataProvider(data));
+  window.registerTreeDataProvider(
+    'DailyMetric',
+    new DailyMetricDataProvider(data),
+  );
 }
