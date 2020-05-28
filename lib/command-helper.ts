@@ -44,6 +44,7 @@ import {
   MenuItem,
   connectCloud9MenuTreeView,
 } from '../src/util/MenuDataProvider';
+import { LeaderDataProvider, LeaderItem, connectCloud9LeaderTreeView } from '../src/util/LeaderDataProvider';
 
 export function createCommands(
   kpmController: KpmManager,
@@ -57,6 +58,24 @@ export function createCommands(
   // MENU TREE: INIT
   const cloud9MenuTreeProvider = new MenuDataProvider();
   const cloud9TeamTreeProvider = new TeamDataProvider();
+  const cloud9LeaderTreeProvider = new LeaderDataProvider();
+
+  const cloud9LeaderTreeView: TreeView<LeaderItem> = window.createTreeView(
+    'LeaderView',
+    {
+      treeDataProvider: cloud9LeaderTreeProvider,
+      showCollapseAll: false,
+    },
+  );
+
+  cmds.push(connectCloud9LeaderTreeView(cloud9LeaderTreeView));
+  cloud9LeaderTreeProvider.bindView(cloud9LeaderTreeView);
+
+  cmds.push(
+    commands.registerCommand('LeaderView.refreshEntry', () =>
+    cloud9LeaderTreeProvider.refresh(),
+    ),
+  );
 
   const cloud9MenuTreeView: TreeView<MenuItem> = window.createTreeView(
     'MenuView',
@@ -65,6 +84,8 @@ export function createCommands(
       showCollapseAll: false,
     },
   );
+
+
 
   cloud9MenuTreeProvider.bindView(cloud9MenuTreeView);
 

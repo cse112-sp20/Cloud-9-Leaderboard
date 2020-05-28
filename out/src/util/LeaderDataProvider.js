@@ -1,9 +1,9 @@
 "use strict";
 /**
  * File that contains method and class that enable displaying
- * user's personal info
+ * leader's team mangement info
  *
- * Contain MenuDataProvider and MenuItem class.
+ * Contain LeaderDataProvider and LeaderItem class.
  *
  * @file   This files defines the MyClass class.
  * @author AuthorName.
@@ -18,16 +18,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleMenuChangeSelection = exports.connectCloud9MenuTreeView = exports.MenuItem = exports.MenuDataProvider = void 0;
+exports.handleLeaderInfoChangeSelection = exports.connectCloud9LeaderTreeView = exports.LeaderItem = exports.LeaderDataProvider = void 0;
 const vscode_1 = require("vscode");
-class MenuDataProvider {
+class LeaderDataProvider {
     constructor() {
         this._onDidChangeTreeData = new vscode_1.EventEmitter();
         this.onDidChangeTreeData = this
             ._onDidChangeTreeData.event;
+        let childLeaderItem = new LeaderItem('');
+        let topLeaderItem = new LeaderItem('Remove Team members', undefined, [childLeaderItem]);
+        childLeaderItem.parent = topLeaderItem;
         this.data = [
-            new MenuItem('📊 View personal stats'),
-            new MenuItem('🌐 Leaderboard'),
+            topLeaderItem
         ];
     }
     refresh() {
@@ -46,31 +48,44 @@ class MenuDataProvider {
         return task;
     }
 }
-exports.MenuDataProvider = MenuDataProvider;
-class MenuItem extends vscode_1.TreeItem {
-    constructor(label, children) {
+exports.LeaderDataProvider = LeaderDataProvider;
+class LeaderItem extends vscode_1.TreeItem {
+    constructor(label, parent, children) {
         super(label, children === undefined
             ? vscode_1.TreeItemCollapsibleState.None
             : vscode_1.TreeItemCollapsibleState.Collapsed);
         this.children = children;
+        this.parent = parent;
     }
 }
-exports.MenuItem = MenuItem;
-exports.connectCloud9MenuTreeView = (view) => {
+exports.LeaderItem = LeaderItem;
+exports.connectCloud9LeaderTreeView = (view) => {
     return vscode_1.Disposable.from(view.onDidChangeSelection((e) => __awaiter(void 0, void 0, void 0, function* () {
         if (!e.selection || e.selection.length === 0) {
             return;
         }
         const item = e.selection[0];
-        exports.handleMenuChangeSelection(view, item);
+        exports.handleLeaderInfoChangeSelection(view, item);
     })));
 };
-exports.handleMenuChangeSelection = (view, item) => {
-    if (item.label === '📊 View personal stats') {
-        vscode_1.commands.executeCommand('cloud9.personalStats');
+exports.handleLeaderInfoChangeSelection = (view, item) => {
+    if (item.label === 'Remove Team members') {
+        console.log('Team members');
+        item.children = [new LeaderItem('Member: etyuan@ucsd.edu', item), new LeaderItem('Member: aihsieh@ucsd.edu', item)];
+        vscode_1.commands.executeCommand('LeaderView.refreshEntry');
     }
-    else if (item.label === '🌐 Leaderboard') {
-        vscode_1.commands.executeCommand('cloud9.leaderboard');
+    else if (item.label.startsWith("Member: ")) {
+        let selectedMemberEmail = item.label.substring(8);
+        vscode_1.window.showInformationMessage(`Are you sure you want to remove ${selectedMemberEmail}?`, "yes", "no").then((input) => {
+            if (input === "yes") {
+                item.parent.children = [new LeaderItem('Member: aihsieh@ucsd.edu', item)];
+                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                vscode_1.window.showInformationMessage("Successfully remove");
+            }
+            else {
+                vscode_1.window.showInformationMessage("Removal canceled");
+            }
+        });
     }
 };
-//# sourceMappingURL=MenuDataProvider.js.map
+//# sourceMappingURL=LeaderDataProvider.js.map

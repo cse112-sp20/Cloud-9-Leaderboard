@@ -38,7 +38,7 @@ export class DailyMetricDataProvider
     for (let key in d) {
       tempList.push(
         new DailyMetricItem(key, [
-          new DailyMetricItem('Today: ' + d[key] + ' (Latest Update)'),
+          new DailyMetricItem('🚀 Today: ' + d[key] + ' (Latest Update)'),
         ]),
       );
     }
