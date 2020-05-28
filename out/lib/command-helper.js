@@ -105,6 +105,7 @@ function createCommands(kpmController) {
     cmds.push(vscode_1.commands.registerCommand('cloud9.resetPassword', () => {
         console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
         //doing nothing rn
+        vscode_1.window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
     }));
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
         console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
@@ -116,6 +117,7 @@ function createCommands(kpmController) {
         Team_1.joinTeam();
     }));
     // Cloud9: command used to clear the cached id (for debugging and testing only)
+    // ***can be used to sign the user out***
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearUserId', () => {
         console.log('Cloud9: DEBUG CLEAR CACHED ID');
         Authentication_1.clearCachedUserId();

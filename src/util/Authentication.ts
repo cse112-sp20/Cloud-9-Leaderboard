@@ -98,18 +98,29 @@ export async function authenticateUser() {
     console.log('Found cachedUserNickname: ' + cachedUserNickName);
 
     //check if user doc exists in firebase
-    await userDocExists(cachedUserId).then((result) => {
-      if (result) {
-        //true, do nothing
-        window.showInformationMessage(
-          'Welcome back, ' + cachedUserNickName + '!!',
-        );
-      } else {
-        //false prompt user to sign in
-        console.log('Need to login or register for a new account.');
-        registerNewUserOrSigInWithUserInput();
-      }
-    });
+    let exists = await userDocExists(cachedUserId);
+    if (exists) {
+      console.log('User doc exists in db.');
+      window.showInformationMessage(
+        'Welcome back, ' + cachedUserNickName + '!!',
+      );
+    } else {
+      console.log('Need to log in or register for a new account.');
+      registerNewUserOrSigInWithUserInput();
+    }
+    //.then((result) => {
+    //   if (result==true) {
+    //     console.log('User doc exists in db');
+    //     //true, do nothing
+    //     window.showInformationMessage(
+    //       'Welcome back, ' + cachedUserNickName + '!!',
+    //     );
+    //   } else {
+    //     //false prompt user to sign in
+    //     console.log('Need to login or register for a new account.');
+    //     registerNewUserOrSigInWithUserInput();
+    //   }
+    // });
   }
 }
 

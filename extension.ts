@@ -117,8 +117,10 @@ export function deactivate(ctx: ExtensionContext) {
 //export var extensionContext;
 
 export async function activate(ctx: ExtensionContext) {
-  //console.log("CLOUD9 ACTIVATED");
   window.showInformationMessage('Cloud9 Activated!');
+  //store ref to extension context
+  storeExtensionContext(ctx);
+
   // add the code time commands
   ctx.subscriptions.push(createCommands(kpmController));
 
@@ -149,8 +151,6 @@ export async function activate(ctx: ExtensionContext) {
     }, 1000 * secondDelay);
   }
 
-  //store ref to extension context
-  storeExtensionContext(ctx);
   // sign the user in
   authenticateUser();
 }

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.updatePersistentStorageWithUserDocData = exports.loginUserWithEmailAndPassword = void 0;
+exports.userDocExists = exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.updatePersistentStorageWithUserDocData = exports.loginUserWithEmailAndPassword = void 0;
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
@@ -535,8 +535,7 @@ function checkIfInTeam() {
     return __awaiter(this, void 0, void 0, function* () {
         const ctx = Authentication_1.getExtensionContext();
         const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-        var inTeam = false;
-        console.log(inTeam);
+        let inTeam = false;
         yield db
             .collection(Constants_1.COLLECTION_ID_USERS)
             .doc(userId)
@@ -601,4 +600,37 @@ function retrieveUserStats(callback) {
     });
 }
 exports.retrieveUserStats = retrieveUserStats;
+/**
+ * returns true if a document associated with the passed in ID exists in firebase
+ * @param userId uid
+ */
+function userDocExists(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (userId == undefined || userId == '')
+            return false;
+        console.log('Checking if user id (' + userId + ') exists in firebase...');
+        let exists = false;
+        yield db.collection(Constants_1.COLLECTION_ID_USERS)
+            .doc(userId)
+            .get()
+            .then((docRef) => {
+            if (docRef.exists) {
+                console.log('User document found in firebase!');
+                console.log(docRef.data());
+                exists = true;
+            }
+        })
+            .then(() => {
+            console.log('User doc found in firebase: ' + exists);
+            return exists;
+        })
+            .catch(() => {
+            console.log('Cannot find user document in firebase.');
+            exists = false;
+        });
+        console.log('end of function userDocExists');
+        return exists;
+    });
+}
+exports.userDocExists = userDocExists;
 //# sourceMappingURL=FireStore.js.map

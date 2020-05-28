@@ -620,8 +620,7 @@ export async function checkIfInTeam() {
   const ctx = getExtensionContext();
   const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
-  var inTeam = false;
-  console.log(inTeam);
+  let inTeam = false;
   await db
     .collection(COLLECTION_ID_USERS)
     .doc(userId)
@@ -694,18 +693,26 @@ export async function retrieveUserStats(callback) {
 export async function userDocExists(userId) {
   if (userId == undefined || userId == '') return false;
   console.log('Checking if user id (' + userId + ') exists in firebase...');
-  db.collection(COLLECTION_ID_USERS)
+  let exists = false;
+  await db
+    .collection(COLLECTION_ID_USERS)
     .doc(userId)
     .get()
     .then((docRef) => {
       if (docRef.exists) {
         console.log('User document found in firebase!');
-        return true;
+        console.log(docRef.data());
+        exists = true;
       }
+    })
+    .then(() => {
+      console.log('User doc found in firebase: ' + exists);
+      return exists;
     })
     .catch(() => {
       console.log('Cannot find user document in firebase.');
-      return false;
+      exists = false;
     });
-  return false;
+  console.log('end of function userDocExists');
+  return exists;
 }
