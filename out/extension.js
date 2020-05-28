@@ -90,9 +90,14 @@ exports.deactivate = deactivate;
 //export var extensionContext;
 function activate(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
+<<<<<<< HEAD
         // window.registerTreeDataProvider('exampleView', new DailyMetricDataProvider());
         //console.log("CLOUD9 ACTIVATED");
+=======
+>>>>>>> fefbe9437aa19e4b681ae21f6fab3c57b7aa1b65
         vscode_1.window.showInformationMessage('Cloud9 Activated!');
+        //store ref to extension context
+        Authentication_1.storeExtensionContext(ctx);
         // add the code time commands
         ctx.subscriptions.push(command_helper_1.createCommands(kpmController));
         const workspace_name = Util_1.getWorkspaceName();
@@ -113,8 +118,12 @@ function activate(ctx) {
             }, 1000 * secondDelay);
         }
         // sign the user in
+<<<<<<< HEAD
         Authentication_1.authenticateUser(ctx);
         //await retrieveUserDailyMetric(testCallback, ctx);
+=======
+        Authentication_1.authenticateUser();
+>>>>>>> fefbe9437aa19e4b681ae21f6fab3c57b7aa1b65
     });
 }
 exports.activate = activate;
