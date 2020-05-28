@@ -90,8 +90,9 @@ exports.deactivate = deactivate;
 //export var extensionContext;
 function activate(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
-        //console.log("CLOUD9 ACTIVATED");
         vscode_1.window.showInformationMessage('Cloud9 Activated!');
+        //store ref to extension context
+        Authentication_1.storeExtensionContext(ctx);
         // add the code time commands
         ctx.subscriptions.push(command_helper_1.createCommands(kpmController));
         const workspace_name = Util_1.getWorkspaceName();
@@ -113,6 +114,7 @@ function activate(ctx) {
         }
         // sign the user in
         Authentication_1.authenticateUser(ctx);
+        //await retrieveUserDailyMetric(testCallback, ctx);
     });
 }
 exports.activate = activate;
