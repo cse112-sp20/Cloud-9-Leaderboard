@@ -78,14 +78,9 @@ export async function authenticateUser() {
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
-  console.log('--AUTHENTICATION-- USER ID IS: ' + cachedUserId);
-
   if (cachedUserId === undefined) {
     // case1: sign in or create new account
     window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
-    console.log(
-      'No cachedUserId found. Need to sign in or create a new account.',
-    );
 
     registerNewUserOrSigInWithUserInput();
   } else {
@@ -98,28 +93,13 @@ export async function authenticateUser() {
     //check if user doc exists in firebase
     let exists = await userDocExists(cachedUserId);
     if (exists) {
-      console.log('User doc exists in db.');
       updatePersistentStorageWithUserDocData(cachedUserId);
       window.showInformationMessage(
         'Welcome back, ' + cachedUserNickName + '!!',
       );
     } else {
-      console.log('Need to log in or register for a new account.');
       registerNewUserOrSigInWithUserInput();
     }
-    //.then((result) => {
-    //   if (result==true) {
-    //     console.log('User doc exists in db');
-    //     //true, do nothing
-    //     window.showInformationMessage(
-    //       'Welcome back, ' + cachedUserNickName + '!!',
-    //     );
-    //   } else {
-    //     //false prompt user to sign in
-    //     console.log('Need to login or register for a new account.');
-    //     registerNewUserOrSigInWithUserInput();
-    //   }
-    // });
   }
 }
 

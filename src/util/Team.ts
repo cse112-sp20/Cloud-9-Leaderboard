@@ -65,8 +65,6 @@ export async function removeTeamNameAndId() {
     window.showInformationMessage('Not in a team!');
     return;
   }
-
-  leaveTeam(userId, teamId);
 }
 
 /**
@@ -82,7 +80,7 @@ export async function getTeamInfo() {
   //check if is leader
   const isLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
 
-  if (teamName == '' && teamId == '') {
+  if (teamId == undefined || teamId == '') {
     window.showInformationMessage('No team info found.');
     return;
   }
@@ -93,13 +91,6 @@ export async function getTeamInfo() {
   messageStr += 'Your team ID: ' + teamId;
   //}
   window.showInformationMessage(messageStr);
-
-  if (isLeader) {
-    window.showInformationMessage('You are the leader of your team.');
-  } else {
-    window.showInformationMessage('You are a member of your team.');
-  }
-  console.log(messageStr);
 }
 /**
  * prompts the user to enter a team code and add them to the team

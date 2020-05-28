@@ -105,14 +105,10 @@ function createCommands(kpmController) {
         //doing nothing rn
         vscode_1.window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
     }));
-    //remove team member, only leader is allowed to use this command 
-    cmds.push(vscode_1.commands.registerCommand('cloud9.removeTeamMember', () => {
-        console.log('Leader removing team member(s).');
-        Team_1.removeTeamMember();
-    }));
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
         console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
         Team_1.removeTeamNameAndId();
+        //leaveTeam()
     }));
     // Cloud9: command used to join a new team
     cmds.push(vscode_1.commands.registerCommand('cloud9.joinTeam', () => {

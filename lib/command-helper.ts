@@ -38,6 +38,7 @@ import {
   removeTeamMember,
 } from '../src/util/Team';
 import {displayPersonalStats} from '../src/util/PersonalStats';
+import {leaveTeam} from '../src/util/FireStore';
 
 export function createCommands(
   kpmController: KpmManager,
@@ -185,18 +186,11 @@ export function createCommands(
     }),
   );
 
-  //remove team member, only leader is allowed to use this command
-  cmds.push(
-    commands.registerCommand('cloud9.removeTeamMember', () => {
-      console.log('Leader removing team member(s).');
-      removeTeamMember();
-    }),
-  );
-
   cmds.push(
     commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
       console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
-      removeTeamNameAndId();
+      //removeTeamNameAndId();
+      //leaveTeam()
     }),
   );
 

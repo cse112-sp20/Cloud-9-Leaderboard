@@ -21,6 +21,7 @@ import {
   GLOBAL_STATE_USER_NICKNAME,
   FIELD_ID_TEAM_LEAD_USER_ID,
   GLOBAL_STATE_USER_EMAIL,
+  GLOBAL_STATE_USER_TEAM_MEMBERS,
 } from './Constants';
 import {getExtensionContext} from './Authentication';
 import {processMetric, scoreCalculation} from './Metric';
@@ -89,13 +90,26 @@ export async function updatePersistentStorageWithUserDocData(userId) {
             .collection(COLLECTION_ID_TEAMS)
             .doc(teamId)
             .get()
-            .then((teamDoc) => {
+            .then(async (teamDoc) => {
               if (teamDoc.exists) {
                 const teamDocData = teamDoc.data();
                 if (teamDocData.teamLeadUserId == userId) {
                   ctx.globalState.update(
                     GLOBAL_STATE_USER_IS_TEAM_LEADER,
                     true,
+                  );
+
+                  //store team member data in persistent storage
+                  let members = await fetchTeamMembersList(teamId);
+                  console.log(
+                    'updating team member list to persistent storage.',
+                  );
+                  ctx.globalState.update(
+                    GLOBAL_STATE_USER_TEAM_MEMBERS,
+                    members,
+                  );
+                  console.log(
+                    ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS),
                   );
                 } else {
                   ctx.globalState.update(
@@ -110,6 +124,7 @@ export async function updatePersistentStorageWithUserDocData(userId) {
             });
         } else {
           ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
+          ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
         }
 
         console.log(ctx.globalState);
@@ -583,7 +598,7 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
 }
 
 /**
- * remove user from team
+ * remove member from team in db, only leader is allowed to call this function
  * @param userId
  * @param teamId
  */
@@ -591,6 +606,11 @@ export async function leaveTeam(userId, teamId) {
   //get reference to extension context
   const ctx = getExtensionContext();
 
+  const isLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
+  if (!isLeader) {
+    window.showErrorMessage('Only the leader is allowed to remove members.');
+    return;
+  }
   //get team doc reference
   let teamDoc = db.collection(COLLECTION_ID_TEAMS).doc(teamId);
 
@@ -629,21 +649,31 @@ export async function leaveTeam(userId, teamId) {
     })
     .then(() => {
       //update persistent storage
-      const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
-      ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
-      ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
-      ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
-      console.log(
-        'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID),
-      );
-      console.log(
-        'cachedTeamName: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME),
-      );
-      console.log(
-        'is leader? ' + ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER),
-      );
-      console.log('Successfully removed from team.');
-      window.showInformationMessage('Left your team: ' + teamName);
+      // const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
+      // ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
+      // ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
+      // ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
+      // console.log(
+      //   'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID),
+      // );
+      // console.log(
+      //   'cachedTeamName: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME),
+      // );
+      // console.log(
+      //   'is leader? ' + ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER),
+      // );
+      // console.log('Successfully removed from team.');
+      // window.showInformationMessage('Left your team: ' + teamName);
+
+      //update leader's persistent storage
+      let membersMap = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS);
+      console.log('old members map: ');
+      console.log(membersMap);
+
+      let newMembersMap = fetchTeamMembersList(teamId);
+      ctx.globalState.update(GLOBAL_STATE_USER_TEAM_MEMBERS, newMembersMap);
+      console.log('new members map: ');
+      console.log(ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS));
     })
     .catch((e) => {
       console.log(e.message);
@@ -809,21 +839,17 @@ export async function fetchTeamMembersList(teamId) {
 
       snapshot.forEach((memberDoc) => {
         const memberId = memberDoc.id;
-        //if(memberId != leaderId) {
-        const memberData = memberDoc.data();
-        let member = new Map<string, string>();
-        member['id'] = memberId;
-        member['email'] = memberData.email;
-        member['name'] = memberData.name;
-        members.push(member);
-        console.log('added member: ');
-        console.log(member);
-        //}
+        if (memberId != leaderId) {
+          const memberData = memberDoc.data();
+          let member = new Map<string, string>();
+          member['id'] = memberId;
+          member['email'] = memberData.email;
+          member['name'] = memberData.name;
+          members.push(member);
+        }
       });
     })
     .then(() => {
-      console.log('returning members: ');
-      console.log(members);
       return members;
     })
     .catch((e) => {

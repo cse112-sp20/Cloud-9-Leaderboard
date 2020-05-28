@@ -68,11 +68,9 @@ function authenticateUser() {
         const cachedUserNickName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME);
         const cachedTeamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-        console.log('--AUTHENTICATION-- USER ID IS: ' + cachedUserId);
         if (cachedUserId === undefined) {
             // case1: sign in or create new account
             vscode_1.window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
-            console.log('No cachedUserId found. Need to sign in or create a new account.');
             registerNewUserOrSigInWithUserInput();
         }
         else {
@@ -84,27 +82,12 @@ function authenticateUser() {
             //check if user doc exists in firebase
             let exists = yield Firestore_1.userDocExists(cachedUserId);
             if (exists) {
-                console.log('User doc exists in db.');
                 Firestore_1.updatePersistentStorageWithUserDocData(cachedUserId);
                 vscode_1.window.showInformationMessage('Welcome back, ' + cachedUserNickName + '!!');
             }
             else {
-                console.log('Need to log in or register for a new account.');
                 registerNewUserOrSigInWithUserInput();
             }
-            //.then((result) => {
-            //   if (result==true) {
-            //     console.log('User doc exists in db');
-            //     //true, do nothing
-            //     window.showInformationMessage(
-            //       'Welcome back, ' + cachedUserNickName + '!!',
-            //     );
-            //   } else {
-            //     //false prompt user to sign in
-            //     console.log('Need to login or register for a new account.');
-            //     registerNewUserOrSigInWithUserInput();
-            //   }
-            // });
         }
     });
 }
