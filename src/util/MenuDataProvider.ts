@@ -42,8 +42,8 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
 
   constructor() {
     this.data = [
-      new MenuItem('View personal stats'),
-      new MenuItem('Leaderboard'),
+      new MenuItem('📊 View personal stats'),
+      new MenuItem('🌐 Leaderboard'),
     ];
   }
 
@@ -95,9 +95,9 @@ export const handleMenuChangeSelection = (
   view: TreeView<MenuItem>,
   item: MenuItem,
 ) => {
-  if (item.label === 'View personal stats') {
+  if (item.label === '📊 View personal stats') {
     commands.executeCommand('cloud9.personalStats');
-  } else if (item.label === 'Leaderboard') {
+  } else if (item.label === '🌐 Leaderboard') {
     commands.executeCommand('cloud9.leaderboard');
   }
 };

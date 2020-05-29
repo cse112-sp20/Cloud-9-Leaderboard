@@ -18,7 +18,7 @@ class DailyMetricDataProvider {
         let tempList = [];
         for (let key in d) {
             tempList.push(new DailyMetricItem(key, [
-                new DailyMetricItem('Today: ' + d[key] + ' (Latest Update)'),
+                new DailyMetricItem('🚀 Today: ' + d[key] + ' (Latest Update)'),
             ]));
         }
         this.data = tempList;

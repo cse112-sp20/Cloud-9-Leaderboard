@@ -28,8 +28,8 @@ class TeamDataProvider {
         this.onDidChangeTreeData = this
             ._onDidChangeTreeData.event;
         this.data = [
-            new TeamItem('Join team'),
-            new TeamItem('View team leaderboard'),
+            new TeamItem('🔰 Join team'),
+            new TeamItem('📋 View team leaderboard'),
             new TeamItem('Get Team Info', [new TeamItem('')]),
         ];
     }
@@ -69,11 +69,11 @@ exports.connectCloud9TeamInfoTreeView = (view) => {
     })));
 };
 exports.handleTeamInfoChangeSelection = (view, item) => {
-    if (item.label === 'Join team') {
+    if (item.label === '🔰 Join team') {
         console.log('join a team');
         vscode_1.commands.executeCommand('cloud9.joinTeam');
     }
-    else if (item.label === 'View team leaderboard') {
+    else if (item.label === '📋 View team leaderboard') {
         console.log('View team leaderboard');
         vscode_1.commands.executeCommand('cloud9.teamLeaderboard');
     }
