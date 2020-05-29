@@ -12,19 +12,44 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCommands = void 0;
 const vscode_1 = require("vscode");
 const DataController_1 = require("./DataController");
+const TeamDataProvider_1 = require("../src/util/TeamDataProvider");
 const MenuManager_1 = require("./menu/MenuManager");
 const Util_1 = require("./Util");
-const ProjectCommitManager_1 = require("./menu/ProjectCommitManager");
-const ReportManager_1 = require("./menu/ReportManager");
 const FileManager_1 = require("./managers/FileManager");
 const Leaderboard_1 = require("../src/util/Leaderboard");
 const Authentication_1 = require("../src/util/Authentication");
 const Team_1 = require("../src/util/Team");
 const PersonalStats_1 = require("../src/util/PersonalStats");
+const MenuDataProvider_1 = require("../src/util/MenuDataProvider");
+const LeaderDataProvider_1 = require("../src/util/LeaderDataProvider");
 function createCommands(kpmController) {
     let cmds = [];
     cmds.push(kpmController);
     // MENU TREE: INIT
+    const cloud9MenuTreeProvider = new MenuDataProvider_1.MenuDataProvider();
+    const cloud9TeamTreeProvider = new TeamDataProvider_1.TeamDataProvider();
+    const cloud9LeaderTreeProvider = new LeaderDataProvider_1.LeaderDataProvider();
+    const cloud9LeaderTreeView = vscode_1.window.createTreeView('LeaderView', {
+        treeDataProvider: cloud9LeaderTreeProvider,
+        showCollapseAll: false,
+    });
+    cmds.push(LeaderDataProvider_1.connectCloud9LeaderTreeView(cloud9LeaderTreeView));
+    cloud9LeaderTreeProvider.bindView(cloud9LeaderTreeView);
+    cmds.push(vscode_1.commands.registerCommand('LeaderView.refreshEntry', () => cloud9LeaderTreeProvider.refresh()));
+    const cloud9MenuTreeView = vscode_1.window.createTreeView('MenuView', {
+        treeDataProvider: cloud9MenuTreeProvider,
+        showCollapseAll: false,
+    });
+    cloud9MenuTreeProvider.bindView(cloud9MenuTreeView);
+    cmds.push(MenuDataProvider_1.connectCloud9MenuTreeView(cloud9MenuTreeView));
+    cmds.push(vscode_1.commands.registerCommand('MenuView.refreshEntry', () => cloud9MenuTreeProvider.refresh()));
+    const cloud9TeamTreeView = vscode_1.window.createTreeView('TeamMenuView', {
+        treeDataProvider: cloud9TeamTreeProvider,
+        showCollapseAll: false,
+    });
+    cloud9TeamTreeProvider.bindView(cloud9TeamTreeView);
+    cmds.push(TeamDataProvider_1.connectCloud9TeamInfoTreeView(cloud9TeamTreeView));
+    cmds.push(vscode_1.commands.registerCommand('TeamMenuView.refreshEntry', () => cloud9TeamTreeProvider.refresh()));
     // TEAM TREE: INVITE MEMBER
     cmds.push(vscode_1.commands.registerCommand('codetime.inviteTeamMember', (item) => __awaiter(this, void 0, void 0, function* () {
         // the identifier will be in the value
@@ -101,6 +126,12 @@ function createCommands(kpmController) {
         console.log('Cloud9: GET TEAM NAME AND ID');
         Team_1.getTeamInfo();
     }));
+    //password recovery
+    cmds.push(vscode_1.commands.registerCommand('cloud9.resetPassword', () => {
+        console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
+        //doing nothing rn
+        vscode_1.window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
+    }));
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
         console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
         Team_1.removeTeamNameAndId();
@@ -111,17 +142,10 @@ function createCommands(kpmController) {
         Team_1.joinTeam();
     }));
     // Cloud9: command used to clear the cached id (for debugging and testing only)
+    // ***can be used to sign the user out***
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearUserId', () => {
         console.log('Cloud9: DEBUG CLEAR CACHED ID');
         Authentication_1.clearCachedUserId();
-    }));
-    // DISPLAY PROJECT METRICS REPORT
-    cmds.push(vscode_1.commands.registerCommand('codetime.generateProjectSummary', () => {
-        ProjectCommitManager_1.ProjectCommitManager.getInstance().launchProjectCommitMenuFlow();
-    }));
-    // DISPLAY REPO COMMIT CONTRIBUTOR REPORT
-    cmds.push(vscode_1.commands.registerCommand('codetime.generateContributorSummary', (identifier) => {
-        ReportManager_1.displayProjectContributorCommitsDashboard(identifier);
     }));
     // LAUNCH COMMIT URL
     cmds.push(vscode_1.commands.registerCommand('codetime.launchCommitUrl', (commitLink) => {

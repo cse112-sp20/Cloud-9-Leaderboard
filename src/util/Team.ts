@@ -41,7 +41,7 @@ export async function createAndJoinTeam() {
   await window
     .showInputBox({placeHolder: 'Enter a new team name'})
     .then(async (teamName) => {
-      if (teamName == undefined) {
+      if (teamName == undefined || teamName == '') {
         window.showInformationMessage('Please enter a valid team name!');
         return;
       }
@@ -57,6 +57,7 @@ export async function removeTeamNameAndId() {
   const ctx = getExtensionContext();
   const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
   const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
   console.log('team id: ' + teamId);
   console.log('user id: ' + userId);
   if (teamId == undefined) {
@@ -80,7 +81,7 @@ export async function getTeamInfo() {
   //check if is leader
   const isLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
 
-  if (teamName == undefined && teamId == undefined) {
+  if (teamName == '' && teamId == '') {
     window.showInformationMessage('No team info found.');
     return;
   }
@@ -98,6 +99,7 @@ export async function getTeamInfo() {
     window.showInformationMessage('You are a member of your team.');
   }
   console.log(messageStr);
+  return messageStr;
 }
 /**
  * prompts the user to enter a team code and add them to the team

@@ -25,6 +25,7 @@ export const DEFAULT_USER_DOC_TOP = {
   timeInterval: 0,
   teamCode: '',
   cumulativePoints: 0,
+  teamName: '',
 };
 
 export const DEFAULT_TEAM_DOC = {
@@ -41,6 +42,7 @@ export const FIELD_ID_TEAM_LEAD_USER_ID = 'teamLeadUserId';
 
 // vscode persistent storage keys
 export const GLOBAL_STATE_USER_ID = 'cachedUserId';
+export const GLOBAL_STATE_USER_NICKNAME = 'cachedUserNickname';
 export const GLOBAL_STATE_USER_EMAIL = 'cachedUserEmail';
 export const GLOBAL_STATE_USER_PASSWORD = 'cachedUserPassword';
 export const GLOBAL_STATE_USER_TEAM_NAME = 'cachedUserTeamName';
@@ -50,7 +52,6 @@ export const timeMultiplier = 0.01;
 export const keystrokeMultplier = 1;
 export const linesMultiplier = 10;
 export const GLOBAL_STATE_USER_IS_TEAM_LEADER = 'cachedUserIsTeamLeader'; //bool
-
 export const MAX_USERNAME_LENGTH = 50;
 export const MAX_RANK_LENGTH = 6;
 export const SECTION_BAR = '\n'.padStart(80, '=');

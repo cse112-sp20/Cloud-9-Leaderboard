@@ -2,7 +2,22 @@
 
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import {window, ExtensionContext, StatusBarAlignment, commands} from 'vscode';
+import {
+  window,
+  ExtensionContext,
+  StatusBarAlignment,
+  commands,
+  Command,
+  TreeDataProvider,
+  TreeItemCollapsibleState,
+  ProviderResult,
+  TreeItem,
+  Event,
+  EventEmitter,
+  TreeView,
+  Disposable,
+} from 'vscode';
+import {retrieveUserDailyMetric} from './src/util/Firestore';
 import {
   isLoggedIn,
   sendHeartbeat,
@@ -39,7 +54,10 @@ import {
   getLastSavedKeystrokesStats,
 } from './lib/managers/FileManager';
 
-import {authenticateUser} from './src/util/Authentication';
+import {
+  storeExtensionContext,
+  authenticateUser,
+} from './src/util/Authentication';
 
 let TELEMETRY_ON = true;
 let statusBarItem = null;
@@ -114,8 +132,10 @@ export function deactivate(ctx: ExtensionContext) {
 //export var extensionContext;
 
 export async function activate(ctx: ExtensionContext) {
-  //console.log("CLOUD9 ACTIVATED");
   window.showInformationMessage('Cloud9 Activated!');
+  //store ref to extension context
+  storeExtensionContext(ctx);
+
   // add the code time commands
   ctx.subscriptions.push(createCommands(kpmController));
 
@@ -148,6 +168,7 @@ export async function activate(ctx: ExtensionContext) {
 
   // sign the user in
   authenticateUser(ctx);
+  //await retrieveUserDailyMetric(testCallback, ctx);
 }
 
 function getRandomArbitrary(min, max) {

@@ -1,6 +1,6 @@
 {
   "name": "cloud9",
-  "displayName": "Code Time",
+  "displayName": "Cloud9",
   "version": "0.0.1",
   "publisher": "cse112team9",
   "description": "Code Time is an open source plugin that provides programming metrics right in Visual Studio Code.",
@@ -63,6 +63,10 @@
         "title": "Cloud9 DEBUG: Clear Team name and ID"
       },
       {
+        "command": "cloud9.resetPassword",
+        "title": "Cloud9: Reset my password"
+      },
+      {
         "command": "cloud9.leaderboard",
         "title": "Cloud9: Leaderboard"
       },
@@ -71,8 +75,8 @@
         "title": "Cloud9: Team Leaderboard"
       },
       {
-        "command": "cloud9.getTeamNameAndId",
-        "title": "Cloud9: Get Team ID"
+        "command": "cloud9.getTeamInfo",
+        "title": "Cloud9: Get Team Info"
       },
       {
         "command": "cloud9.personalStats",
@@ -107,16 +111,20 @@
     "views": {
       "code-time": [
         {
-          "id": "ct-menu-tree",
-          "name": "MENU"
+          "id": "MenuView",
+          "name": "Menu"
         },
         {
-          "id": "ct-metrics-tree",
-          "name": "DAILY METRICS"
+          "id": "DailyMetric",
+          "name": "Daily Metric"
         },
         {
-          "id": "ct-team-tree",
-          "name": "CONTRIBUTORS"
+          "id": "TeamMenuView",
+          "name": "Team Info"
+        },
+        {
+          "id": "LeaderView",
+          "name": "Team Management"
         }
       ]
     }
@@ -153,7 +161,7 @@
     "axios": "^0.19.0",
     "clipboardy": "^2.1.0",
     "firebase": "^7.14.3",
-    "jsmockito": "^1.0.5",
+    "firebase-admin": "^8.12.1",
     "moment-timezone": "^0.5.25",
     "node-cache": "^5.1.0",
     "numeral": "^2.0.6",

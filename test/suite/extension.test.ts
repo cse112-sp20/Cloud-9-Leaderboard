@@ -7,7 +7,6 @@ import {
   getExtensionContext,
   clearCachedUserId,
   authenticateUser,
-  registerNewUserWithUserInput,
   registerNewUserWithGeneratedCredential,
 } from '../../src/util/Authentication';
 import {
@@ -71,12 +70,11 @@ suite('authentication.ts', () => {
 
   test('registering new user with user input', () => {
     const ctx = getExtensionContext();
-    registerNewUserWithUserInput(ctx);
+    //registerNewUserWithUserInput(ctx);
   });
 
   test('registering new user with generated credentials', () => {
-    const ctx = getExtensionContext();
-    registerNewUserWithGeneratedCredential(ctx);
+    registerNewUserWithGeneratedCredential();
   });
 });
 
@@ -183,7 +181,7 @@ suite('firestore.ts', () => {
   test('addNewUserDocToDb', async () => {
     var spy = sinon.spy(firebase.firestore().collection(COLLECTION_ID_USERS)
     .doc('test'), 'set');
-    await addNewUserDocToDb('test').then(() => {
+    await addNewUserDocToDb('testEmail', 'testPassword').then(() => {
       expect(spy.calledOnce);
       /*expect(spy.args[0]).to.equal({
         name: generateRandomName(),
@@ -235,11 +233,10 @@ suite('firestore.ts', () => {
       .returns(Promise.resolve());
 
     var successful = await createNewUserInFirebase(
-      getExtensionContext(),
       testId,
-      'testPassword',
+      "testPassword"
     );
-    assert.equal(successful, true); // works!!
+    assert.equal(successful.created, true); // works!!
   });
 
   test('addNewTeamToDbAndJoin', async () => {});
@@ -250,17 +247,18 @@ suite('firestore.ts', () => {
 
   test('checkIfInTeam', async () => {
     const ctx = getExtensionContext();
-    const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+    sinon.stub(ctx.globalState, "get").withArgs(GLOBAL_STATE_USER_ID).returns("testId");
     var result = {};
     result['team'] = 'ted';
     sinon
       .stub(
-        firebase.firestore().collection(COLLECTION_ID_USERS).doc(userId),
+        firebase.firestore().collection(COLLECTION_ID_USERS).doc("testId"),
         'get',
       )
       .returns(Promise.resolve(result));
     var output = await checkIfInTeam();
     assert.equal(output, false);
+    sinon.restore();
   });
 
   test('retrieveUserStats', async () => {

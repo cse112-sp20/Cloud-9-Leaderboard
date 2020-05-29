@@ -37,11 +37,10 @@ suite('authentication.ts', () => {
     });
     test('registering new user with user input', () => {
         const ctx = Authentication_1.getExtensionContext();
-        Authentication_1.registerNewUserWithUserInput(ctx);
+        //registerNewUserWithUserInput(ctx);
     });
     test('registering new user with generated credentials', () => {
-        const ctx = Authentication_1.getExtensionContext();
-        Authentication_1.registerNewUserWithGeneratedCredential(ctx);
+        Authentication_1.registerNewUserWithGeneratedCredential();
     });
 });
 suite('utilities.ts', () => {
@@ -121,7 +120,7 @@ suite('firestore.ts', () => {
     test('addNewUserDocToDb', () => __awaiter(void 0, void 0, void 0, function* () {
         var spy = sinon.spy(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS)
             .doc('test'), 'set');
-        yield FireStore_1.addNewUserDocToDb('test').then(() => {
+        yield FireStore_1.addNewUserDocToDb('testEmail', 'testPassword').then(() => {
             chai_1.expect(spy.calledOnce);
             /*expect(spy.args[0]).to.equal({
               name: generateRandomName(),
@@ -159,8 +158,8 @@ suite('firestore.ts', () => {
             .stub(firebase.auth(), 'createUserWithEmailAndPassword')
             .withArgs(testId, 'testPassword')
             .returns(Promise.resolve());
-        var successful = yield FireStore_1.createNewUserInFirebase(Authentication_1.getExtensionContext(), testId, 'testPassword');
-        assert.equal(successful, true); // works!!
+        var successful = yield FireStore_1.createNewUserInFirebase(testId, "testPassword");
+        assert.equal(successful.created, true); // works!!
     }));
     test('addNewTeamToDbAndJoin', () => __awaiter(void 0, void 0, void 0, function* () { }));
     test('joinTeamWithTeamId', () => __awaiter(void 0, void 0, void 0, function* () { }));
@@ -168,14 +167,15 @@ suite('firestore.ts', () => {
     }));
     test('checkIfInTeam', () => __awaiter(void 0, void 0, void 0, function* () {
         const ctx = Authentication_1.getExtensionContext();
-        const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        sinon.stub(ctx.globalState, "get").withArgs(Constants_1.GLOBAL_STATE_USER_ID).returns("testId");
         var result = {};
         result['team'] = 'ted';
         sinon
-            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc(userId), 'get')
+            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc("testId"), 'get')
             .returns(Promise.resolve(result));
         var output = yield FireStore_1.checkIfInTeam();
         assert.equal(output, false);
+        sinon.restore();
     }));
     test('retrieveUserStats', () => __awaiter(void 0, void 0, void 0, function* () {
         sinon.stub(Authentication_1.getExtensionContext().globalState, 'get').returns('test');

@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.addNewUserDocToDb = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.loginUserWithEmailAndPassword = void 0;
+exports.userDocExists = exports.retrieveUserDailyMetric = exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.addNewUserDocToDb = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.updatePersistentStorageWithUserDocData = exports.loginUserWithEmailAndPassword = void 0;
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
+//const admin = require("firebase-admin");
 const vscode_1 = require("vscode");
 const Leaderboard_1 = require("./Leaderboard");
 const PersonalStats_1 = require("./PersonalStats");
@@ -33,17 +34,56 @@ const db = firebase.firestore();
  */
 function loginUserWithEmailAndPassword(email, password) {
     return __awaiter(this, void 0, void 0, function* () {
+        let loggedIn = false;
+        let errorCode = undefined;
         yield auth
             .signInWithEmailAndPassword(email, password)
-            .then(() => {
-            console.log('signed in');
+            .then((userCred) => {
+            updatePersistentStorageWithUserDocData(userCred.user.uid);
+            console.log('logging user in: ' + userCred.user.uid);
+            loggedIn = true;
+            errorCode = 'no error';
         })
             .catch((e) => {
-            console.log('not signed');
+            console.log(e.message);
+            console.log(e.code);
+            loggedIn = false;
+            errorCode = e.code;
         });
+        return { loggedIn: loggedIn, errorCode: errorCode };
     });
 }
 exports.loginUserWithEmailAndPassword = loginUserWithEmailAndPassword;
+/**
+ * update persistent storage after signing in (or after creating new user doc)
+ * @param userId
+ */
+function updatePersistentStorageWithUserDocData(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log('Updating persistent storage...');
+        let ctx = Authentication_1.getExtensionContext();
+        yield db
+            .collection(Constants_1.COLLECTION_ID_USERS)
+            .doc(userId)
+            .get()
+            .then((userDoc) => {
+            if (userDoc.exists) {
+                let userData = userDoc.data();
+                console.log(userData.name);
+                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, userId);
+                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_NICKNAME, userData.name);
+                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, userData.teamCode);
+                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, userData.teamName);
+                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_EMAIL, userData.email);
+                console.log(ctx.globalState);
+            }
+        })
+            .catch(() => {
+            console.log('Error updating persistent storage');
+        });
+    });
+}
+exports.updatePersistentStorageWithUserDocData = updatePersistentStorageWithUserDocData;
 /*
  * Whenever new payload from codetime is posted to their api,
  * we will update our database
@@ -219,34 +259,38 @@ exports.retrieveAllUserStats = retrieveAllUserStats;
 /**
  * Create new user credential and add new doc to db
  */
-function createNewUserInFirebase(ctx, email, password) {
+function createNewUserInFirebase(email, password) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('From Authentication: createNewUser');
-        //const email = generateRandomEmail(); // ...do we need this?
+        console.log('Creating new user...');
+        let ctx = Authentication_1.getExtensionContext();
         if (email == null) {
             console.log('email is null');
-            return;
+            return { created: false, errorCode: 'email is null' };
         }
         if (password == null) {
             console.log('password is null');
-            return;
+            return { created: false, errorCode: 'password is null' };
         }
+        let created = false;
+        let errorCode = undefined;
         yield auth
             .createUserWithEmailAndPassword(email, password)
             .then(() => {
-            // add new uid to persistent storage
             const currentUserId = auth.currentUser.uid;
-            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, currentUserId);
-            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
-            console.log('cachedUserId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID));
-            addNewUserDocToDb(currentUserId);
-            return true;
+            console.log('Adding new user with ID: ' + currentUserId);
+            addNewUserDocToDb(currentUserId, email);
+            //window.showInformationMessage('Successfully created new account!');
+            created = true;
+            errorCode = 'no error';
         })
             .catch((e) => {
             console.log(e.message);
-            return false;
+            console.log('error code: ' + e.code);
+            console.log('Error creating new user!');
+            created = false;
+            errorCode = e.code;
         });
-        return true;
+        return { created: created, errorCode: errorCode };
     });
 }
 exports.createNewUserInFirebase = createNewUserInFirebase;
@@ -254,7 +298,7 @@ exports.createNewUserInFirebase = createNewUserInFirebase;
  * Add a new user doc to database
  * @param userId
  */
-function addNewUserDocToDb(userId) {
+function addNewUserDocToDb(userId, email) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Adding doc to db for new user...');
         if (userId === undefined) {
@@ -262,23 +306,27 @@ function addNewUserDocToDb(userId) {
             return;
         }
         let today = new Date().toISOString().split('T')[0];
+        const generatedName = Utility_1.generateRandomName();
         db.collection(Constants_1.COLLECTION_ID_USERS)
             .doc(userId)
-            .set(Object.assign({ name: Utility_1.generateRandomName() }, Constants_1.DEFAULT_USER_DOC_TOP))
+            .set(Object.assign({ name: generatedName, email: email }, Constants_1.DEFAULT_USER_DOC_TOP))
             .then(() => {
             console.log('Added name');
+            console.log('Added doc with default values for new user');
         })
             .catch(() => {
             console.log('Error creating new entry');
         });
+        updatePersistentStorageWithUserDocData(userId);
         db.collection(Constants_1.COLLECTION_ID_USERS)
             .doc(userId)
             .collection('dates')
             .doc(today)
             .set(Constants_1.DEFAULT_USER_DOC)
             .then(() => {
-            console.log('Added new user: ' + userId + ' doc to db.');
-            getUserDocWithId(userId);
+            console.log("Added user's doc for today:" + today);
+            let data = getUserDocWithId(userId);
+            console.log(data);
         })
             .catch(() => {
             console.log('Error adding new user: ' + userId + ' doc to db.');
@@ -293,18 +341,19 @@ exports.addNewUserDocToDb = addNewUserDocToDb;
 function getUserDocWithId(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Getting user doc from db...');
-        var userDoc = yield db
+        yield db
             .collection(Constants_1.COLLECTION_ID_USERS)
             .doc(userId)
             .get()
             .then((doc) => {
             console.log('Retrieved user: (' + userId + ') doc from db.');
-            console.log(doc.data());
+            //console.log(doc.data());
+            return doc.data();
         })
             .catch(() => {
             console.log('Error getting user: (' + userId + ') doc from db.');
+            return undefined;
         });
-        return userDoc;
     });
 }
 exports.getUserDocWithId = getUserDocWithId;
@@ -314,7 +363,9 @@ exports.getUserDocWithId = getUserDocWithId;
  */
 function addNewTeamToDbAndJoin(teamName) {
     return __awaiter(this, void 0, void 0, function* () {
-        //check if already in database
+        if (teamName == '' || teamName == undefined) {
+            return;
+        }
         const cachedUserId = Authentication_1.getExtensionContext().globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         var teamId = undefined;
         // team doc fields
@@ -331,16 +382,16 @@ function addNewTeamToDbAndJoin(teamName) {
             }
             else {
                 //create this team and add user as a member
-                // Add a new document with a generated id.
+                // Add a new document to db for this team
                 db.collection(Constants_1.COLLECTION_ID_TEAMS)
                     .add(newTeamDoc)
                     .then((ref) => {
                     teamId = ref.id;
                     console.log('Added team document with ID: ', teamId);
                     console.log('Team Name: ' + teamName);
-                    //link user with team
                 })
                     .then(() => {
+                    //add this user to team, isLeader = true
                     joinTeamWithTeamId(teamId, true);
                 });
             }
@@ -352,6 +403,7 @@ exports.addNewTeamToDbAndJoin = addNewTeamToDbAndJoin;
  * finds the team and adds user as a member
  * update user doc with team info
  * @param input name of the team to join
+ * @param isLeader whether this user is the leader (true) or just a member (false)
  */
 function joinTeamWithTeamId(teamId, isLeader) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -364,7 +416,7 @@ function joinTeamWithTeamId(teamId, isLeader) {
         //get the team name
         let teamName = '';
         console.log('team name is: ' + teamName);
-        let teamDocData = yield teamDoc.get().then((doc) => {
+        yield teamDoc.get().then((doc) => {
             const data = doc.data();
             console.log(data);
             teamName = data.teamName;
@@ -385,7 +437,7 @@ function joinTeamWithTeamId(teamId, isLeader) {
         });
         //get reference to user doc
         let userDoc = db.collection(Constants_1.COLLECTION_ID_USERS).doc(userId);
-        //add team info to user doc and update local cache
+        //add team info to user doc and update persistent storage
         let updateUser = yield userDoc
             .update({
             teamCode: teamId,
@@ -397,7 +449,7 @@ function joinTeamWithTeamId(teamId, isLeader) {
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, isLeader); //whether this user is the creator/leader
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, teamName);
             console.log('cachedTeamId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID));
-            console.log('cachedTeamId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
+            console.log('cachedTeamName: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
             console.log('is leader? ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER));
             console.log('Successfully added team info to user doc.');
             vscode_1.window.showInformationMessage('Welcome to your new team: ' +
@@ -462,13 +514,14 @@ function leaveTeam(userId, teamId) {
         })
             .catch((e) => {
             console.log(e.message);
-            console.log('Error removing team info from user.');
+            console.log('Error removing team info for user.');
         });
     });
 }
 exports.leaveTeam = leaveTeam;
 /**
  * checks if the user has already joined a team
+ * @returns whether current user is in a team
  */
 function checkIfInTeam() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -496,10 +549,10 @@ function checkIfInTeam() {
             }
         })
             .then(() => {
-            //console.log('test statement 1'); console.log('inTeam: ', inTeam);
+            console.log(inTeam);
             return inTeam;
         });
-        //console.log('test statement 2'); console.log('inTeam: ', inTeam);
+        console.log(inTeam);
         return inTeam;
     });
 }
@@ -528,6 +581,8 @@ function retrieveUserStats(callback) {
                 dateMap.push(currDate);
                 //console.log(doc.id + "=>" + doc.data());
             });
+            console.log('*************');
+            console.log(dateMap);
             return dateMap;
         })
             .then((dateMap) => {
@@ -539,4 +594,71 @@ function retrieveUserStats(callback) {
     });
 }
 exports.retrieveUserStats = retrieveUserStats;
-//# sourceMappingURL=FireStore.js.map
+function retrieveUserDailyMetric(callback, c) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let db = firebase.firestore();
+        let user = db.collection(Constants_1.COLLECTION_ID_USERS);
+        const ctx = Authentication_1.getExtensionContext();
+        const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        let userDataMap = [];
+        user
+            .doc(cachedUserId)
+            .collection('dates')
+            .doc(new Date().toISOString().split('T')[0])
+            .get()
+            .then((userDoc) => {
+            if (userDoc.exists) {
+                // Convert to City object
+                return userDoc.data();
+            }
+            else {
+                console.log('userDoc does not exist');
+                return undefined;
+            }
+        })
+            .then((dataMap) => {
+            console.log('data map');
+            console.log(dataMap);
+            callback(dataMap, c);
+        })
+            .catch((err) => {
+            console.log('Error getting documents', err);
+        });
+    });
+}
+exports.retrieveUserDailyMetric = retrieveUserDailyMetric;
+/**
+ * returns true if a document associated with the passed in ID exists in firebase
+ * @param userId uid
+ */
+function userDocExists(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (userId == undefined || userId == '')
+            return false;
+        console.log('Checking if user id (' + userId + ') exists in firebase...');
+        let exists = false;
+        yield db
+            .collection(Constants_1.COLLECTION_ID_USERS)
+            .doc(userId)
+            .get()
+            .then((docRef) => {
+            if (docRef.exists) {
+                console.log('User document found in firebase!');
+                console.log(docRef.data());
+                exists = true;
+            }
+        })
+            .then(() => {
+            console.log('User doc found in firebase: ' + exists);
+            return exists;
+        })
+            .catch(() => {
+            console.log('Cannot find user document in firebase.');
+            exists = false;
+        });
+        console.log('end of function userDocExists');
+        return exists;
+    });
+}
+exports.userDocExists = userDocExists;
+//# sourceMappingURL=Firestore.js.map

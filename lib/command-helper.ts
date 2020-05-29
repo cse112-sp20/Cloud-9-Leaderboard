@@ -5,6 +5,11 @@ import {
   sendTeamInvite,
 } from './DataController';
 import {
+  TeamDataProvider,
+  TeamItem,
+  connectCloud9TeamInfoTreeView,
+} from '../src/util/TeamDataProvider';
+import {
   displayCodeTimeMetricsDashboard,
   showMenuOptions,
 } from './menu/MenuManager';
@@ -20,9 +25,6 @@ import {KpmManager} from './managers/KpmManager';
 
 import {KpmItem} from './model/models';
 
-import {ProjectCommitManager} from './menu/ProjectCommitManager';
-
-import {displayProjectContributorCommitsDashboard} from './menu/ReportManager';
 import {sendOfflineData} from './managers/FileManager';
 import {
   displayLeaderboard,
@@ -37,6 +39,16 @@ import {
   joinTeam,
 } from '../src/util/Team';
 import {displayPersonalStats} from '../src/util/PersonalStats';
+import {
+  MenuDataProvider,
+  MenuItem,
+  connectCloud9MenuTreeView,
+} from '../src/util/MenuDataProvider';
+import {
+  LeaderDataProvider,
+  LeaderItem,
+  connectCloud9LeaderTreeView,
+} from '../src/util/LeaderDataProvider';
 
 export function createCommands(
   kpmController: KpmManager,
@@ -48,6 +60,61 @@ export function createCommands(
   cmds.push(kpmController);
 
   // MENU TREE: INIT
+  const cloud9MenuTreeProvider = new MenuDataProvider();
+  const cloud9TeamTreeProvider = new TeamDataProvider();
+  const cloud9LeaderTreeProvider = new LeaderDataProvider();
+
+  const cloud9LeaderTreeView: TreeView<LeaderItem> = window.createTreeView(
+    'LeaderView',
+    {
+      treeDataProvider: cloud9LeaderTreeProvider,
+      showCollapseAll: false,
+    },
+  );
+
+  cmds.push(connectCloud9LeaderTreeView(cloud9LeaderTreeView));
+  cloud9LeaderTreeProvider.bindView(cloud9LeaderTreeView);
+
+  cmds.push(
+    commands.registerCommand('LeaderView.refreshEntry', () =>
+      cloud9LeaderTreeProvider.refresh(),
+    ),
+  );
+
+  const cloud9MenuTreeView: TreeView<MenuItem> = window.createTreeView(
+    'MenuView',
+    {
+      treeDataProvider: cloud9MenuTreeProvider,
+      showCollapseAll: false,
+    },
+  );
+
+  cloud9MenuTreeProvider.bindView(cloud9MenuTreeView);
+
+  cmds.push(connectCloud9MenuTreeView(cloud9MenuTreeView));
+
+  cmds.push(
+    commands.registerCommand('MenuView.refreshEntry', () =>
+      cloud9MenuTreeProvider.refresh(),
+    ),
+  );
+
+  const cloud9TeamTreeView: TreeView<TeamItem> = window.createTreeView(
+    'TeamMenuView',
+    {
+      treeDataProvider: cloud9TeamTreeProvider,
+      showCollapseAll: false,
+    },
+  );
+
+  cloud9TeamTreeProvider.bindView(cloud9TeamTreeView);
+  cmds.push(connectCloud9TeamInfoTreeView(cloud9TeamTreeView));
+
+  cmds.push(
+    commands.registerCommand('TeamMenuView.refreshEntry', () =>
+      cloud9TeamTreeProvider.refresh(),
+    ),
+  );
 
   // TEAM TREE: INVITE MEMBER
   cmds.push(
@@ -177,6 +244,15 @@ export function createCommands(
     }),
   );
 
+  //password recovery
+  cmds.push(
+    commands.registerCommand('cloud9.resetPassword', () => {
+      console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
+      //doing nothing rn
+      window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
+    }),
+  );
+
   cmds.push(
     commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
       console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
@@ -193,28 +269,12 @@ export function createCommands(
   );
 
   // Cloud9: command used to clear the cached id (for debugging and testing only)
+  // ***can be used to sign the user out***
   cmds.push(
     commands.registerCommand('cloud9.debugClearUserId', () => {
       console.log('Cloud9: DEBUG CLEAR CACHED ID');
       clearCachedUserId();
     }),
-  );
-
-  // DISPLAY PROJECT METRICS REPORT
-  cmds.push(
-    commands.registerCommand('codetime.generateProjectSummary', () => {
-      ProjectCommitManager.getInstance().launchProjectCommitMenuFlow();
-    }),
-  );
-
-  // DISPLAY REPO COMMIT CONTRIBUTOR REPORT
-  cmds.push(
-    commands.registerCommand(
-      'codetime.generateContributorSummary',
-      (identifier) => {
-        displayProjectContributorCommitsDashboard(identifier);
-      },
-    ),
   );
 
   // LAUNCH COMMIT URL
