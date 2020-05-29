@@ -20,6 +20,12 @@ import {
   Disposable,
   window,
 } from 'vscode';
+import {getExtensionContext} from './Authentication';
+import {
+  GLOBAL_STATE_USER_TEAM_MEMBERS,
+  GLOBAL_STATE_USER_TEAM_ID,
+} from './Constants';
+import {leaveTeam} from './Firestore';
 
 export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
   private _onDidChangeTreeData: EventEmitter<
@@ -94,13 +100,24 @@ export const handleLeaderInfoChangeSelection = (
   view: TreeView<LeaderItem>,
   item: LeaderItem,
 ) => {
+  const ctx = getExtensionContext();
+  const memberMaps: Map<string, Map<string, string>> = ctx.globalState.get(
+    GLOBAL_STATE_USER_TEAM_MEMBERS,
+  );
+
   if (item.label === 'Remove Team members') {
     console.log('Team members selected');
 
-    item.children = [
-      new LeaderItem('Member: etyuan@ucsd.edu', item),
-      new LeaderItem('Member: aihsieh@ucsd.edu', item),
-    ];
+    item.children = [];
+    for (let [key, value] of Object.entries(memberMaps)) {
+      item.children.push(new LeaderItem('Member: ' + key, item));
+    }
+
+    console.log(item.children);
+    // item.children = [
+    //   new LeaderItem('etyuan@ucsd.edu', item),
+    //   new LeaderItem('Member: aihsieh@ucsd.edu', item),
+    // ];
     commands.executeCommand('LeaderView.refreshEntry');
   } else if (item.label.startsWith('Member: ')) {
     let selectedMemberEmail = item.label.substring(8);
@@ -113,11 +130,22 @@ export const handleLeaderInfoChangeSelection = (
       )
       .then((input) => {
         if (input === 'yes') {
-          item.parent.children = [
-            new LeaderItem('Member: aihsieh@ucsd.edu', item),
-          ];
-          commands.executeCommand('LeaderView.refreshEntry');
-          window.showInformationMessage('Successfully remove');
+          const member = memberMaps[selectedMemberEmail];
+          const memberId = member['id'];
+          const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+
+          leaveTeam(memberId, teamId).then(() => {
+            const newMemberMaps = ctx.globalState.get(
+              GLOBAL_STATE_USER_TEAM_MEMBERS,
+            );
+            item.parent.children = [];
+            for (let [key, value] of Object.entries(newMemberMaps)) {
+              item.parent.children.push(new LeaderItem('Member: ' + key, item));
+            }
+
+            commands.executeCommand('LeaderView.refreshEntry');
+            window.showInformationMessage('Successfully remove');
+          });
         } else {
           window.showInformationMessage('Removal canceled');
         }

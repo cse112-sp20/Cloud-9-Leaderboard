@@ -862,7 +862,8 @@ export async function fetchTeamMembersList(teamId) {
   const ctx = getExtensionContext();
   const leaderId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
-  let members = [];
+  let members = new Map<string, Map<string, string>>();
+  //let members = [];
   await db
     .collection(COLLECTION_ID_USERS)
     .where('teamCode', '==', teamId)
@@ -881,7 +882,8 @@ export async function fetchTeamMembersList(teamId) {
           member['id'] = memberId;
           member['email'] = memberData.email;
           member['name'] = memberData.name;
-          members.push(member);
+          //members.push(member);
+          members[member['email']] = member;
         }
       });
     })

@@ -761,7 +761,8 @@ function fetchTeamMembersList(teamId) {
     return __awaiter(this, void 0, void 0, function* () {
         const ctx = Authentication_1.getExtensionContext();
         const leaderId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-        let members = [];
+        let members = new Map();
+        //let members = [];
         yield db
             .collection(Constants_1.COLLECTION_ID_USERS)
             .where('teamCode', '==', teamId)
@@ -779,7 +780,8 @@ function fetchTeamMembersList(teamId) {
                     member['id'] = memberId;
                     member['email'] = memberData.email;
                     member['name'] = memberData.name;
-                    members.push(member);
+                    //members.push(member);
+                    members[member['email']] = member;
                 }
             });
         })
