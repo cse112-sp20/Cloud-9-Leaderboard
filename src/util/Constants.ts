@@ -48,6 +48,7 @@ export const GLOBAL_STATE_USER_PASSWORD = 'cachedUserPassword';
 export const GLOBAL_STATE_USER_TEAM_NAME = 'cachedUserTeamName';
 export const GLOBAL_STATE_USER_TEAM_ID = 'cachedUserTeamId';
 export const GLOBAL_STATE_USER_IS_TEAM_LEADER = 'cachedUserIsTeamLeader'; //bool
+export const GLOBAL_STATE_USER_TEAM_MEMBERS = 'cachedUserTeamMembers'; //maps
 export const MAX_USERNAME_LENGTH = 50;
 export const MAX_RANK_LENGTH = 6;
 export const SECTION_BAR = '\n'.padStart(80, '=');
