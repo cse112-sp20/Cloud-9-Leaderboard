@@ -69,10 +69,8 @@ function authenticateUser(ctx) {
         const cachedUserNickName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME);
         const cachedTeamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-        console.log('--AUTHENTICATION-- USER ID IS: ' + cachedUserId);
         if (cachedUserId === undefined) {
             // case1: sign in or create new account
-            vscode_1.window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
             console.log('No cachedUserId found. Need to sign in or create a new account.');
             registerNewUserOrSigInWithUserInput();
         }
@@ -123,7 +121,10 @@ function registerNewUserOrSigInWithUserInput() {
         let completed = false;
         while (!completed) {
             //forcing the user to always sign in
-            vscode_1.window.showInformationMessage('Please sign in or create a new account.');
+            vscode_1.window.showInformationMessage('Please sign in or create a new account.', 'Sign in', 'Create account')
+                .then((selection) => __awaiter(this, void 0, void 0, function* () {
+                console.log(selection);
+            }));
             //prompt for email and password
             yield vscode_1.window
                 .showInputBox({ placeHolder: 'Enter your email' })

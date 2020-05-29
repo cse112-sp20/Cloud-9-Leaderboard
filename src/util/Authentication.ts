@@ -24,6 +24,10 @@ import {
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
   GLOBAL_STATE_USER_NICKNAME,
+  AUTH_ERR_CODE_EMAIL_USED,
+  AUTH_ERR_CODE_WEAK_PASSWORD,
+  AUTH_ERR_CODE_WRONG_PASSWORD,
+  AUTH_SIGN_IN,
 } from './Constants';
 import {getMaxListeners} from 'cluster';
 
@@ -80,11 +84,8 @@ export async function authenticateUser(ctx: ExtensionContext) {
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
-  console.log('--AUTHENTICATION-- USER ID IS: ' + cachedUserId);
-
   if (cachedUserId === undefined) {
     // case1: sign in or create new account
-    window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
     console.log(
       'No cachedUserId found. Need to sign in or create a new account.',
     );
@@ -139,7 +140,15 @@ export async function registerNewUserOrSigInWithUserInput() {
 
   while (!completed) {
     //forcing the user to always sign in
-    window.showInformationMessage('Please sign in or create a new account.');
+    window
+      .showInformationMessage(
+        'Please sign in or create a new account.',
+        'Sign in',
+        'Create account',
+      )
+      .then(async (selection) => {
+        console.log(selection);
+      });
     //prompt for email and password
     await window
       .showInputBox({placeHolder: 'Enter your email'})
@@ -211,6 +220,27 @@ export async function registerNewUserOrSigInWithUserInput() {
               }
             },
           );
+        }
+      });
+  }
+}
+
+export async function signInOrSignUpUserWithUserInput() {
+  const ctx = getExtensionContext();
+  let email = null;
+  let password = null;
+
+  while (true) {
+    window
+      .showInformationMessage(
+        'Please sign in or sign up for a new account!',
+        'Sign in',
+        'Create account',
+      )
+      .then(async (selection) => {
+        switch (selection) {
+          case AUTH_SIGN_IN:
+            console.log(selection);
         }
       });
   }
