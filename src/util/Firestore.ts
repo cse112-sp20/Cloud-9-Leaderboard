@@ -649,7 +649,7 @@ export async function retrieveUserStats(callback) {
   let dateMap = [];
 
   user
-    .doc(cachedUserId)
+    .doc(cachedUserId) //changed from cachedUserId to "testing" for testing purposes
     .collection('dates')
     .orderBy(firebase.firestore.FieldPath.documentId())
     .limit(15)

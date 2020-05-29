@@ -565,7 +565,7 @@ function retrieveUserStats(callback) {
         const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         let dateMap = [];
         user
-            .doc(cachedUserId)
+            .doc(cachedUserId) //changed from cachedUserId to "testing" for testing purposes
             .collection('dates')
             .orderBy(firebase.firestore.FieldPath.documentId())
             .limit(15)
