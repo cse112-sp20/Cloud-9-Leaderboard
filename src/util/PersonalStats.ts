@@ -149,11 +149,11 @@ async function writePersonalStatsFile(dates) {
   content +=
     'Each modified line:                                  +   10 points per line \n\n';
 
-  content += PERSONAL_STATISTIC_ROW_1;
-  content += PERSONAL_STATISTIC_ROW_2;
-  content += PERSONAL_STATISTIC_ROW_3;
-  content += PERSONAL_STATISTIC_ROW_4;
-  content += PERSONAL_STATISTIC_ROW_5;
+  // content += PERSONAL_STATISTIC_ROW_1;
+  // content += PERSONAL_STATISTIC_ROW_2;
+  // content += PERSONAL_STATISTIC_ROW_3;
+  // content += PERSONAL_STATISTIC_ROW_4;
+  // content += PERSONAL_STATISTIC_ROW_5;
 
   content += SECTION_BAR;
   content += 'Record\n';

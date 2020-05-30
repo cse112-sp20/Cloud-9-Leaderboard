@@ -126,11 +126,11 @@ function writePersonalStatsFile(dates) {
             'Each keystroke:                                      +    1 points per keystroke\n';
         content +=
             'Each modified line:                                  +   10 points per line \n\n';
-        content += Constants_1.PERSONAL_STATISTIC_ROW_1;
-        content += Constants_1.PERSONAL_STATISTIC_ROW_2;
-        content += Constants_1.PERSONAL_STATISTIC_ROW_3;
-        content += Constants_1.PERSONAL_STATISTIC_ROW_4;
-        content += Constants_1.PERSONAL_STATISTIC_ROW_5;
+        // content += PERSONAL_STATISTIC_ROW_1;
+        // content += PERSONAL_STATISTIC_ROW_2;
+        // content += PERSONAL_STATISTIC_ROW_3;
+        // content += PERSONAL_STATISTIC_ROW_4;
+        // content += PERSONAL_STATISTIC_ROW_5;
         content += Constants_1.SECTION_BAR;
         content += 'Record\n';
         content += Constants_1.SECTION_BAR + '\n';
