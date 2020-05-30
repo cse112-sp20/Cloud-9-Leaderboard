@@ -3,12 +3,11 @@
   "displayName": "Cloud9",
   "version": "0.0.1",
   "publisher": "cse112team9",
-  "description": "Code Time is an open source plugin that provides programming metrics right in Visual Studio Code.",
+  "description": "Cloud9 is an open source vscode extenion that provides programming metrics right in Visual Studio Code.",
   "author": {
-    "name": "Software.com"
+    "name": "UCSDCSE112SP19Team9"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "icon": "images/app-icon-blue.png",
   "galleryBanner": {
     "color": "#384356",
     "theme": "dark"
@@ -102,14 +101,14 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "code-time",
+          "id": "cloud9",
           "title": "Cloud9",
           "icon": "images/cloud9-vscode-icon.svg"
         }
       ]
     },
     "views": {
-      "code-time": [
+      "cloud9": [
         {
           "id": "MenuView",
           "name": "Menu"

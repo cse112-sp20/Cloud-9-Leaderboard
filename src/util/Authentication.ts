@@ -84,7 +84,9 @@ export async function authenticateUser(ctx: ExtensionContext) {
     // case1: sign in or create new account
     window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
 
-    registerNewUserOrSigInWithUserInput();
+    registerNewUserOrSigInWithUserInput().then(() => {
+      retrieveUserDailyMetric(testCallback, ctx);
+    });
   } else {
     // case2: existing user's id found
     console.log('Found cachedUserId: ' + cachedUserId);
@@ -95,16 +97,20 @@ export async function authenticateUser(ctx: ExtensionContext) {
     //check if user doc exists in firebase
     let exists = await userDocExists(cachedUserId);
     if (exists) {
-      updatePersistentStorageWithUserDocData(cachedUserId);
+      updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
+        retrieveUserDailyMetric(testCallback, ctx);
+      });
       window.showInformationMessage(
         'Welcome back, ' + cachedUserNickName + '!!',
       );
     } else {
-      registerNewUserOrSigInWithUserInput();
+      registerNewUserOrSigInWithUserInput().then(() => {
+        retrieveUserDailyMetric(testCallback, ctx);
+      });
     }
   }
 
-  await retrieveUserDailyMetric(testCallback, ctx);
+  //retrieveUserDailyMetric(testCallback, ctx);
 }
 
 /**
@@ -131,6 +137,7 @@ export async function registerNewUserOrSigInWithUserInput() {
           .showInputBox({
             placeHolder:
               'Enter your password (must be 6 characters long or more)',
+            password: true,
           })
           .then((inputPassword) => {
             password = inputPassword;

@@ -166,9 +166,10 @@ export async function activate(ctx: ExtensionContext) {
     }, 1000 * secondDelay);
   }
 
+  console.log('BEfore calling authenticateUser');
+
   // sign the user in
   authenticateUser(ctx);
-  //await retrieveUserDailyMetric(testCallback, ctx);
 }
 
 function getRandomArbitrary(min, max) {
@@ -302,16 +303,6 @@ function initializeIntervalJobs() {
       updateLiveshareTime();
     }
   }, one_min_millis);
-}
-
-function handlePauseMetricsEvent() {
-  TELEMETRY_ON = false;
-  showStatus('Code Time Paused', 'Enable metrics to resume');
-}
-
-function handleEnableMetricsEvent() {
-  TELEMETRY_ON = true;
-  showStatus('Code Time', null);
 }
 
 function updateLiveshareTime() {

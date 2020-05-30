@@ -256,8 +256,6 @@ export function createCommands(
   cmds.push(
     commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
       console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
-      //removeTeamNameAndId();
-      //leaveTeam()
     }),
   );
 
