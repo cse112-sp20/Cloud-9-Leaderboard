@@ -158,8 +158,28 @@ function writePersonalStatsFile(dates) {
         //     obj['points'].toString().padEnd(FIELD_LENGTH, ' ') +
         //     '\n';
         // });
+        let previousScore = -1;
+        let currentScore = 0;
+        let counter = 1;
+        let mapSize = scoreMap.length;
+        console.log(mapSize);
         scoreMap.map((obj, i) => {
-            content += obj['dateStr'] + '\n';
+            if (i + 1 >= mapSize) {
+                currentScore = +obj['points'];
+                previousScore = 0;
+            }
+            else {
+                currentScore = +obj['points'];
+                previousScore = +scoreMap[i + 1]['points'];
+            }
+            let scoreDifference = currentScore - previousScore;
+            if (scoreDifference >= 0) {
+                content += obj['dateStr'] + '  🟩🟩🟩🟩🟩' + '\n';
+            }
+            else {
+                content += obj['dateStr'] + '  🟥🟥🟥🟥🟥' + '\n';
+                counter = 1;
+            }
             content +=
                 '___________________________________________________________________________________________\n';
             content +=
