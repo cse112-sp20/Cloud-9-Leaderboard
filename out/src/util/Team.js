@@ -19,7 +19,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeTeamMember = exports.joinTeam = exports.getTeamInfo = exports.removeTeamNameAndId = exports.createAndJoinTeam = void 0;
+exports.joinTeam = exports.getTeamInfo = exports.removeTeamNameAndId = exports.createAndJoinTeam = void 0;
 const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
 const Authentication_1 = require("./Authentication");
@@ -82,9 +82,7 @@ function getTeamInfo() {
             return;
         }
         let messageStr = 'Your team name: ' + teamName + '\n';
-        //if(isLeader){
         messageStr += 'Your team ID: ' + teamId;
-        //}
         console.log(messageStr);
         return messageStr;
     });
@@ -113,25 +111,4 @@ function joinTeam() {
     });
 }
 exports.joinTeam = joinTeam;
-function removeTeamMember() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const ctx = Authentication_1.getExtensionContext();
-        const isTeamLeader = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER);
-        if (!isTeamLeader) {
-            vscode_1.window.showErrorMessage('Sorry! Only the team leader is allowed to remove team members!');
-            return;
-        }
-        const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-        yield Firestore_1.fetchTeamMembersList(teamId)
-            .then((memberMap) => {
-            console.log('memberMap: ');
-            console.log(memberMap);
-            let quickpick = vscode_1.window.createQuickPick();
-        })
-            .catch(() => {
-            console.log('Error getting team members!');
-        });
-    });
-}
-exports.removeTeamMember = removeTeamMember;
 //# sourceMappingURL=Team.js.map

@@ -186,8 +186,7 @@ function signInOrSignUpUserWithUserInput() {
         let email = undefined;
         let password = undefined;
         let completed = false;
-        //while (!completed) {
-        //forcing the user to always sign in
+        //prompt the user to sign in or create an account upon activating the extension
         vscode_1.window
             .showInformationMessage('Please sign in or create a new account!', Constants_1.AUTH_SIGN_IN, Constants_1.AUTH_CREATE_ACCOUNT)
             .then((selection) => __awaiter(this, void 0, void 0, function* () {
@@ -266,8 +265,6 @@ function signInOrSignUpUserWithUserInput() {
                 }
             }));
         }));
-        //completed = true;
-        //}
     });
 }
 exports.signInOrSignUpUserWithUserInput = signInOrSignUpUserWithUserInput;
