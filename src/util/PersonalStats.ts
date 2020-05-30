@@ -205,9 +205,9 @@ async function writePersonalStatsFile(dates) {
 
     let scoreDifference = currentScore - previousScore;
     if (scoreDifference >= 0) {
-      content += obj['dateStr'] + '  🟢🟢🟢🟢🟢' + '\n';
+      content += obj['dateStr'] + ' 🟢🟢🟢🟢🟢' + '\n';
     } else {
-      content += obj['dateStr'] + '  🔴🔴🔴🔴🔴' + '\n';
+      content += obj['dateStr'] + ' 🔴🔴🔴🔴🔴' + '\n';
       counter = 1;
     }
 
