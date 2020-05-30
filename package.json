@@ -80,8 +80,27 @@
       {
         "command": "cloud9.personalStats",
         "title": "Cloud9: See your most recent stats"
-      }
+      },
+
+      {
+        "command": "LeaderView.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+            "light": "resources/light/refresh.svg",
+            "dark": "resources/dark/refresh.svg"
+        }
+    }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "LeaderView.refreshEntry",
+          "when": "view == LeaderView",
+          "group": "navigation"
+        }
+      ]
+    },
+    
     "configuration": {
       "type": "object",
       "title": "Code Time",
