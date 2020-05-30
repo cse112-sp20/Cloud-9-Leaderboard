@@ -51,13 +51,13 @@ class DailyMetricDataProvider {
             this.data = [];
             let tempList = [];
             for (let key in userDocument) {
-                console.log("key: " + key);
+                console.log('key: ' + key);
                 tempList.push(new DailyMetricItem(key, [
                     new DailyMetricItem('🚀 Today: ' + userDocument[key] + ' (Latest Update)'),
                 ]));
             }
             this.data = tempList;
-            console.log("Refresh daily metric called");
+            console.log('Refresh daily metric called');
             this._onDidChangeTreeData.fire(null);
         });
     }

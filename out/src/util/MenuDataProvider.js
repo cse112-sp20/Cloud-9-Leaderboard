@@ -20,6 +20,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleMenuChangeSelection = exports.connectCloud9MenuTreeView = exports.MenuItem = exports.MenuDataProvider = void 0;
 const vscode_1 = require("vscode");
+const Authentication_1 = require("./Authentication");
 const path = require('path');
 const resourcePath = path.join(__filename, '..', '..', '..', 'resources');
 class MenuDataProvider {
@@ -28,6 +29,7 @@ class MenuDataProvider {
         this.onDidChangeTreeData = this
             ._onDidChangeTreeData.event;
         this.data = [
+            new MenuItem('Sign in / Create Account'),
             new MenuItem('📊 View personal stats'),
             new MenuItem('🌐 Leaderboard'),
         ];
@@ -68,7 +70,10 @@ exports.connectCloud9MenuTreeView = (view) => {
     })));
 };
 exports.handleMenuChangeSelection = (view, item) => {
-    if (item.label === '📊 View personal stats') {
+    if (item.label === 'Sign in / Create Account') {
+        Authentication_1.signInOrSignUpUserWithUserInput();
+    }
+    else if (item.label === '📊 View personal stats') {
         vscode_1.commands.executeCommand('cloud9.personalStats');
     }
     else if (item.label === '🌐 Leaderboard') {

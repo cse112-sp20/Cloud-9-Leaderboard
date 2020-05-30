@@ -700,7 +700,7 @@ function retrieveUserDailyMetric(callback, c) {
     console.log('****');
     console.log(cachedUserId);
     if (cachedUserId == undefined) {
-        console.log("cached user id undefined when calling retrieve user daily metric");
+        console.log('cached user id undefined when calling retrieve user daily metric');
         callback(undefined, c);
         return;
     }
@@ -738,7 +738,8 @@ function retrieveUserUpdateDailyMetric() {
         let userDataMap;
         console.log('****');
         console.log(cachedUserId);
-        yield db.collection(Constants_1.COLLECTION_ID_USERS)
+        yield db
+            .collection(Constants_1.COLLECTION_ID_USERS)
             .doc(cachedUserId)
             .collection('dates')
             .doc(new Date().toISOString().split('T')[0])
