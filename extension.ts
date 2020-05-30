@@ -304,9 +304,6 @@ function initializeIntervalJobs() {
   }, one_min_millis);
 }
 
-
-
-
 function updateLiveshareTime() {
   if (_ls) {
     let nowSec = nowInSecs();
