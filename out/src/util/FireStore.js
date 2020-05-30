@@ -167,6 +167,7 @@ function updateStats(payload) {
                     })
                         .then(() => {
                         console.log('Successfully update stats');
+                        vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
                     })
                         .catch(() => {
                         console.log('Error updating stats');
@@ -501,6 +502,7 @@ function joinTeamWithTeamId(teamId, isLeader) {
             console.log('Successfully added team info to user doc.');
             vscode_1.window.showInformationMessage('Welcome to your new team: ' +
                 ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
+            vscode_1.commands.executeCommand('LeaderView.refreshEntry');
         })
             .catch((e) => {
             console.log(e.message);

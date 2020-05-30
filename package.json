@@ -97,6 +97,14 @@
           "light": "resources/light/refresh.svg",
           "dark": "resources/dark/refresh.svg"
       }
+  },
+  {
+    "command": "MenuView.refreshEntry",
+    "title": "Refresh",
+    "icon": {
+        "light": "resources/light/refresh.svg",
+        "dark": "resources/dark/refresh.svg"
+    }
   }
     ],
     "menus": {
@@ -109,6 +117,11 @@
         {
           "command": "DailyMetric.refreshEntry",
           "when": "view == DailyMetric",
+          "group": "navigation"
+        },
+        {
+          "command": "MenuView.refreshEntry",
+          "when": "view == MenuView",
           "group": "navigation"
         }
 

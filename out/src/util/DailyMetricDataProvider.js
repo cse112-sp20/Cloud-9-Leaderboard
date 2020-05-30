@@ -38,6 +38,9 @@ class DailyMetricDataProvider {
             this.data = [];
             let tempList = [];
             for (let key in d) {
+                if (key === 'teamId') {
+                    continue;
+                }
                 tempList.push(new DailyMetricItem(key, [
                     new DailyMetricItem('🚀 Today: ' + d[key] + ' (Latest Update)'),
                 ]));
@@ -51,6 +54,9 @@ class DailyMetricDataProvider {
             this.data = [];
             let tempList = [];
             for (let key in userDocument) {
+                if (key === 'teamId') {
+                    continue;
+                }
                 console.log('key: ' + key);
                 tempList.push(new DailyMetricItem(key, [
                     new DailyMetricItem('🚀 Today: ' + userDocument[key] + ' (Latest Update)'),

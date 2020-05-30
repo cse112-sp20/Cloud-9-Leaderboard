@@ -20,7 +20,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleMenuChangeSelection = exports.connectCloud9MenuTreeView = exports.MenuItem = exports.MenuDataProvider = void 0;
 const vscode_1 = require("vscode");
+const Constants_1 = require("./Constants");
 const Authentication_1 = require("./Authentication");
+const Authentication_2 = require("./Authentication");
 const path = require('path');
 const resourcePath = path.join(__filename, '..', '..', '..', 'resources');
 class MenuDataProvider {
@@ -35,6 +37,18 @@ class MenuDataProvider {
         ];
     }
     refresh() {
+        console.log('Refresh called**************************');
+        const ctx = Authentication_2.getExtensionContext();
+        if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID) !== undefined) {
+            this.data = [
+                new MenuItem(`Welcome, ${ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME)}`),
+                new MenuItem('📊 View personal stats'),
+                new MenuItem('🌐 Leaderboard'),
+            ];
+        }
+        else {
+            console.log("User not logged in");
+        }
         this._onDidChangeTreeData.fire(null);
     }
     bindView(menuTreeView) {

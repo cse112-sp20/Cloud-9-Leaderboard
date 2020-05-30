@@ -3,7 +3,7 @@ require('firebase/firestore');
 require('firebase/auth');
 //const admin = require("firebase-admin");
 
-import {window} from 'vscode';
+import {commands, window} from 'vscode';
 import {Leaderboard} from './Leaderboard';
 import {PersonalStats} from './PersonalStats';
 import {
@@ -204,6 +204,7 @@ export function updateStats(payload) {
                 })
                 .then(() => {
                   console.log('Successfully update stats');
+                  commands.executeCommand('DailyMetric.refreshEntry');
                 })
                 .catch(() => {
                   console.log('Error updating stats');
@@ -592,6 +593,7 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
         'Welcome to your new team: ' +
           ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME),
       );
+      commands.executeCommand('LeaderView.refreshEntry');
     })
     .catch((e) => {
       console.log(e.message);
