@@ -91,6 +91,7 @@ exports.deactivate = deactivate;
 function activate(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         vscode_1.window.showInformationMessage('Cloud9 Activated!');
+        console.log('Cloud9 activated');
         //store ref to extension context
         Authentication_1.storeExtensionContext(ctx);
         // add the code time commands

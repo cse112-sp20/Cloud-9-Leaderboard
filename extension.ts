@@ -133,6 +133,7 @@ export function deactivate(ctx: ExtensionContext) {
 
 export async function activate(ctx: ExtensionContext) {
   window.showInformationMessage('Cloud9 Activated!');
+  console.log('Cloud9 activated');
   //store ref to extension context
   storeExtensionContext(ctx);
 

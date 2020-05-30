@@ -224,107 +224,99 @@ export async function signInOrSignUpUserWithUserInput() {
   let password = undefined;
   let completed = false;
 
-  while (!completed) {
-    //forcing the user to always sign in
-    window
-      .showInformationMessage(
-        'Please sign in or create a new account!',
-        AUTH_SIGN_IN,
-        AUTH_CREATE_ACCOUNT,
-      )
-      .then(async (selection) => {
-        await window
-          .showInputBox({placeHolder: 'Enter your email: example@gmail.com'})
-          .then((inputEmail) => {
-            email = inputEmail;
-            console.log('user input email: ' + email);
-          })
-          .then(async () => {
-            await window
-              .showInputBox({
-                placeHolder:
-                  'Enter your password (must be 6 characters long or more)',
-              })
-              .then((inputPassword) => {
-                password = inputPassword;
-                console.log('user input password: ' + password);
-              });
-          })
-          .then(async () => {
-            if (
-              email == undefined ||
-              password == undefined ||
-              email == '' ||
-              password == ''
-            ) {
-              window.showErrorMessage('Invalid email or password!');
-            } else {
-              if (selection == AUTH_SIGN_IN) {
-                await loginUserWithEmailAndPassword(email, password).then(
-                  async (result) => {
-                    console.log(result.loggedIn);
-                    console.log(result.errorCode);
-                    if (result.loggedIn) {
-                      //successfully logged in
-                      window.showInformationMessage(
-                        'Welcome back, ' +
-                          ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
-                          '!!',
-                      );
-                      completed = true;
-                      console.log('setting completed to true');
-                      return;
-                    }
-                    //not logged in
-                    if (result.errorCode == AUTH_ERR_CODE_WRONG_PASSWORD) {
-                      window.showErrorMessage('Wrong password!');
-                    } else if (
-                      result.errorCode == AUTH_ERR_CODE_USER_NOT_FOUND
-                    ) {
-                      window.showErrorMessage('User not found!');
-                    } else if (
-                      result.errorCode == AUTH_ERR_CODE_INVALID_EMAIL
-                    ) {
-                      window.showErrorMessage('Invalid email!');
-                    }
-                  },
-                );
-              } else if (selection == AUTH_CREATE_ACCOUNT) {
-                await createNewUserInFirebase(email, password).then(
-                  async (result) => {
-                    console.log(result.created);
-                    console.log(result.errorCode);
-                    if (result.created) {
-                      window.showInformationMessage(
-                        'Welcome! Your nickname is: ' +
-                          ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
-                          '!!',
-                      );
-                      completed = true;
-                      return;
-                    }
-                    //not created
-                    if (result.errorCode == AUTH_ERR_CODE_EMAIL_USED) {
-                      window.showErrorMessage('Email already in use!');
-                    } else if (
-                      result.errorCode == AUTH_ERR_CODE_WEAK_PASSWORD
-                    ) {
-                      window.showErrorMessage(
-                        'Password is too weak! Needs to be 6 characters long or more!',
-                      );
-                    } else if (
-                      result.errorCode == AUTH_ERR_CODE_INVALID_EMAIL
-                    ) {
-                      window.showErrorMessage('Invalid email!');
-                    }
-                  },
-                );
-              }
+  //while (!completed) {
+  //forcing the user to always sign in
+  window
+    .showInformationMessage(
+      'Please sign in or create a new account!',
+      AUTH_SIGN_IN,
+      AUTH_CREATE_ACCOUNT,
+    )
+    .then(async (selection) => {
+      await window
+        .showInputBox({placeHolder: 'Enter your email: example@gmail.com'})
+        .then((inputEmail) => {
+          email = inputEmail;
+          console.log('user input email: ' + email);
+        })
+        .then(async () => {
+          await window
+            .showInputBox({
+              placeHolder:
+                'Enter your password (must be 6 characters long or more)',
+            })
+            .then((inputPassword) => {
+              password = inputPassword;
+              console.log('user input password: ' + password);
+            });
+        })
+        .then(async () => {
+          if (
+            email == undefined ||
+            password == undefined ||
+            email == '' ||
+            password == ''
+          ) {
+            window.showErrorMessage('Invalid email or password!');
+          } else {
+            if (selection == AUTH_SIGN_IN) {
+              await loginUserWithEmailAndPassword(email, password).then(
+                async (result) => {
+                  console.log(result.loggedIn);
+                  console.log(result.errorCode);
+                  if (result.loggedIn) {
+                    //successfully logged in
+                    window.showInformationMessage(
+                      'Welcome back, ' +
+                        ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
+                        '!!',
+                    );
+                    completed = true;
+                    console.log('setting completed to true');
+                    return;
+                  }
+                  //not logged in
+                  if (result.errorCode == AUTH_ERR_CODE_WRONG_PASSWORD) {
+                    window.showErrorMessage('Wrong password!');
+                  } else if (result.errorCode == AUTH_ERR_CODE_USER_NOT_FOUND) {
+                    window.showErrorMessage('User not found!');
+                  } else if (result.errorCode == AUTH_ERR_CODE_INVALID_EMAIL) {
+                    window.showErrorMessage('Invalid email!');
+                  }
+                },
+              );
+            } else if (selection == AUTH_CREATE_ACCOUNT) {
+              await createNewUserInFirebase(email, password).then(
+                async (result) => {
+                  console.log(result.created);
+                  console.log(result.errorCode);
+                  if (result.created) {
+                    window.showInformationMessage(
+                      'Welcome! Your nickname is: ' +
+                        ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
+                        '!!',
+                    );
+                    completed = true;
+                    return;
+                  }
+                  //not created
+                  if (result.errorCode == AUTH_ERR_CODE_EMAIL_USED) {
+                    window.showErrorMessage('Email already in use!');
+                  } else if (result.errorCode == AUTH_ERR_CODE_WEAK_PASSWORD) {
+                    window.showErrorMessage(
+                      'Password is too weak! Needs to be 6 characters long or more!',
+                    );
+                  } else if (result.errorCode == AUTH_ERR_CODE_INVALID_EMAIL) {
+                    window.showErrorMessage('Invalid email!');
+                  }
+                },
+              );
             }
-          });
-      });
-    //completed = true;
-  }
+          }
+        });
+    });
+  //completed = true;
+  //}
 }
 
 /**

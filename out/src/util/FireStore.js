@@ -38,12 +38,12 @@ function loginUserWithEmailAndPassword(email, password) {
         let errorCode = undefined;
         yield auth
             .signInWithEmailAndPassword(email, password)
-            .then((userCred) => {
-            updatePersistentStorageWithUserDocData(userCred.user.uid);
+            .then((userCred) => __awaiter(this, void 0, void 0, function* () {
+            yield updatePersistentStorageWithUserDocData(userCred.user.uid);
             console.log('logging user in: ' + userCred.user.uid);
             loggedIn = true;
             errorCode = 'no error';
-        })
+        }))
             .catch((e) => {
             console.log(e.message);
             console.log(e.code);
@@ -284,14 +284,14 @@ function createNewUserInFirebase(email, password) {
         let errorCode = undefined;
         yield auth
             .createUserWithEmailAndPassword(email, password)
-            .then(() => {
+            .then(() => __awaiter(this, void 0, void 0, function* () {
             const currentUserId = auth.currentUser.uid;
             console.log('Adding new user with ID: ' + currentUserId);
-            addNewUserDocToDb(currentUserId, email);
+            yield addNewUserDocToDb(currentUserId, email);
             //window.showInformationMessage('Successfully created new account!');
             created = true;
             errorCode = 'no error';
-        })
+        }))
             .catch((e) => {
             console.log(e.message);
             console.log('error code: ' + e.code);
@@ -339,7 +339,7 @@ function addNewUserDocToDb(userId, email) {
             .catch(() => {
             console.log('Error adding new user: ' + userId + ' doc to db.');
         });
-        updatePersistentStorageWithUserDocData(userId);
+        yield updatePersistentStorageWithUserDocData(userId);
     });
 }
 /**

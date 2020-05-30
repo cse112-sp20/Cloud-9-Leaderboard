@@ -44,8 +44,8 @@ export async function loginUserWithEmailAndPassword(email, password) {
   let errorCode = undefined;
   await auth
     .signInWithEmailAndPassword(email, password)
-    .then((userCred) => {
-      updatePersistentStorageWithUserDocData(userCred.user.uid);
+    .then(async (userCred) => {
+      await updatePersistentStorageWithUserDocData(userCred.user.uid);
       console.log('logging user in: ' + userCred.user.uid);
 
       loggedIn = true;
@@ -328,11 +328,11 @@ export async function createNewUserInFirebase(email, password) {
 
   await auth
     .createUserWithEmailAndPassword(email, password)
-    .then(() => {
+    .then(async () => {
       const currentUserId = auth.currentUser.uid;
       console.log('Adding new user with ID: ' + currentUserId);
 
-      addNewUserDocToDb(currentUserId, email);
+      await addNewUserDocToDb(currentUserId, email);
       //window.showInformationMessage('Successfully created new account!');
 
       created = true;
@@ -394,7 +394,7 @@ async function addNewUserDocToDb(userId, email) {
       console.log('Error adding new user: ' + userId + ' doc to db.');
     });
 
-  updatePersistentStorageWithUserDocData(userId);
+  await updatePersistentStorageWithUserDocData(userId);
 }
 
 /**

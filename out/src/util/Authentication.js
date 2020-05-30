@@ -186,88 +186,88 @@ function signInOrSignUpUserWithUserInput() {
         let email = undefined;
         let password = undefined;
         let completed = false;
-        while (!completed) {
-            //forcing the user to always sign in
-            vscode_1.window
-                .showInformationMessage('Please sign in or create a new account!', Constants_1.AUTH_SIGN_IN, Constants_1.AUTH_CREATE_ACCOUNT)
-                .then((selection) => __awaiter(this, void 0, void 0, function* () {
+        //while (!completed) {
+        //forcing the user to always sign in
+        vscode_1.window
+            .showInformationMessage('Please sign in or create a new account!', Constants_1.AUTH_SIGN_IN, Constants_1.AUTH_CREATE_ACCOUNT)
+            .then((selection) => __awaiter(this, void 0, void 0, function* () {
+            yield vscode_1.window
+                .showInputBox({ placeHolder: 'Enter your email: example@gmail.com' })
+                .then((inputEmail) => {
+                email = inputEmail;
+                console.log('user input email: ' + email);
+            })
+                .then(() => __awaiter(this, void 0, void 0, function* () {
                 yield vscode_1.window
-                    .showInputBox({ placeHolder: 'Enter your email: example@gmail.com' })
-                    .then((inputEmail) => {
-                    email = inputEmail;
-                    console.log('user input email: ' + email);
+                    .showInputBox({
+                    placeHolder: 'Enter your password (must be 6 characters long or more)',
                 })
-                    .then(() => __awaiter(this, void 0, void 0, function* () {
-                    yield vscode_1.window
-                        .showInputBox({
-                        placeHolder: 'Enter your password (must be 6 characters long or more)',
-                    })
-                        .then((inputPassword) => {
-                        password = inputPassword;
-                        console.log('user input password: ' + password);
-                    });
-                }))
-                    .then(() => __awaiter(this, void 0, void 0, function* () {
-                    if (email == undefined ||
-                        password == undefined ||
-                        email == '' ||
-                        password == '') {
-                        vscode_1.window.showErrorMessage('Invalid email or password!');
+                    .then((inputPassword) => {
+                    password = inputPassword;
+                    console.log('user input password: ' + password);
+                });
+            }))
+                .then(() => __awaiter(this, void 0, void 0, function* () {
+                if (email == undefined ||
+                    password == undefined ||
+                    email == '' ||
+                    password == '') {
+                    vscode_1.window.showErrorMessage('Invalid email or password!');
+                }
+                else {
+                    if (selection == Constants_1.AUTH_SIGN_IN) {
+                        yield Firestore_1.loginUserWithEmailAndPassword(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
+                            console.log(result.loggedIn);
+                            console.log(result.errorCode);
+                            if (result.loggedIn) {
+                                //successfully logged in
+                                vscode_1.window.showInformationMessage('Welcome back, ' +
+                                    ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
+                                    '!!');
+                                completed = true;
+                                console.log('setting completed to true');
+                                return;
+                            }
+                            //not logged in
+                            if (result.errorCode == Constants_1.AUTH_ERR_CODE_WRONG_PASSWORD) {
+                                vscode_1.window.showErrorMessage('Wrong password!');
+                            }
+                            else if (result.errorCode == Constants_1.AUTH_ERR_CODE_USER_NOT_FOUND) {
+                                vscode_1.window.showErrorMessage('User not found!');
+                            }
+                            else if (result.errorCode == Constants_1.AUTH_ERR_CODE_INVALID_EMAIL) {
+                                vscode_1.window.showErrorMessage('Invalid email!');
+                            }
+                        }));
                     }
-                    else {
-                        if (selection == Constants_1.AUTH_SIGN_IN) {
-                            yield Firestore_1.loginUserWithEmailAndPassword(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
-                                console.log(result.loggedIn);
-                                console.log(result.errorCode);
-                                if (result.loggedIn) {
-                                    //successfully logged in
-                                    vscode_1.window.showInformationMessage('Welcome back, ' +
-                                        ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
-                                        '!!');
-                                    completed = true;
-                                    console.log('setting completed to true');
-                                    return;
-                                }
-                                //not logged in
-                                if (result.errorCode == Constants_1.AUTH_ERR_CODE_WRONG_PASSWORD) {
-                                    vscode_1.window.showErrorMessage('Wrong password!');
-                                }
-                                else if (result.errorCode == Constants_1.AUTH_ERR_CODE_USER_NOT_FOUND) {
-                                    vscode_1.window.showErrorMessage('User not found!');
-                                }
-                                else if (result.errorCode == Constants_1.AUTH_ERR_CODE_INVALID_EMAIL) {
-                                    vscode_1.window.showErrorMessage('Invalid email!');
-                                }
-                            }));
-                        }
-                        else if (selection == Constants_1.AUTH_CREATE_ACCOUNT) {
-                            yield Firestore_1.createNewUserInFirebase(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
-                                console.log(result.created);
-                                console.log(result.errorCode);
-                                if (result.created) {
-                                    vscode_1.window.showInformationMessage('Welcome! Your nickname is: ' +
-                                        ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
-                                        '!!');
-                                    completed = true;
-                                    return;
-                                }
-                                //not created
-                                if (result.errorCode == Constants_1.AUTH_ERR_CODE_EMAIL_USED) {
-                                    vscode_1.window.showErrorMessage('Email already in use!');
-                                }
-                                else if (result.errorCode == Constants_1.AUTH_ERR_CODE_WEAK_PASSWORD) {
-                                    vscode_1.window.showErrorMessage('Password is too weak! Needs to be 6 characters long or more!');
-                                }
-                                else if (result.errorCode == Constants_1.AUTH_ERR_CODE_INVALID_EMAIL) {
-                                    vscode_1.window.showErrorMessage('Invalid email!');
-                                }
-                            }));
-                        }
+                    else if (selection == Constants_1.AUTH_CREATE_ACCOUNT) {
+                        yield Firestore_1.createNewUserInFirebase(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
+                            console.log(result.created);
+                            console.log(result.errorCode);
+                            if (result.created) {
+                                vscode_1.window.showInformationMessage('Welcome! Your nickname is: ' +
+                                    ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
+                                    '!!');
+                                completed = true;
+                                return;
+                            }
+                            //not created
+                            if (result.errorCode == Constants_1.AUTH_ERR_CODE_EMAIL_USED) {
+                                vscode_1.window.showErrorMessage('Email already in use!');
+                            }
+                            else if (result.errorCode == Constants_1.AUTH_ERR_CODE_WEAK_PASSWORD) {
+                                vscode_1.window.showErrorMessage('Password is too weak! Needs to be 6 characters long or more!');
+                            }
+                            else if (result.errorCode == Constants_1.AUTH_ERR_CODE_INVALID_EMAIL) {
+                                vscode_1.window.showErrorMessage('Invalid email!');
+                            }
+                        }));
                     }
-                }));
+                }
             }));
-            //completed = true;
-        }
+        }));
+        //completed = true;
+        //}
     });
 }
 exports.signInOrSignUpUserWithUserInput = signInOrSignUpUserWithUserInput;
