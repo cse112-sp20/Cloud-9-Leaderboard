@@ -1,39 +1,18 @@
 name: Deployment workflow
 
 on:
-  pull_request:
-    branches:
-      - master
   push:
     branches:
       - master
-
+name: Deploy Extension
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - run: npm install
+      - uses: lannonbr/vsce-action@master
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm install
-        run: npm ci
+          args: "publish -p $VSCE_TOKEN"
         env:
-          CI: 'true'
-# on:
-#   push:
-#     branches:
-#       - master
-# name: Deploy Extension
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - run: npm install
-#       - uses: lannonbr/vsce-action@master
-#         with:
-#           args: "publish minor -p $VSCE_TOKEN"
-#         env:
-#           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}

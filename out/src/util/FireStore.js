@@ -697,7 +697,7 @@ function retrieveUserDailyMetric(callback, c) {
     const ctx = Authentication_1.getExtensionContext();
     const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
     let userDataMap = [];
-    console.log("****");
+    console.log('****');
     console.log(cachedUserId);
     user
         .doc(cachedUserId)

@@ -110,7 +110,7 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
             vscode_1.commands.executeCommand('LeaderView.refreshEntry');
         }
         else {
-            console.log("Is not a leader");
+            console.log('Is not a leader');
         }
     }
     else if (item.label === 'Team members') {

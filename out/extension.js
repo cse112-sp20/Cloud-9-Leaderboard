@@ -112,7 +112,7 @@ function activate(ctx) {
                 OnboardManager_1.onboardInit(ctx, intializePlugin /*successFunction*/);
             }, 1000 * secondDelay);
         }
-        console.log("BEfore calling authenticateUser");
+        console.log('BEfore calling authenticateUser');
         // sign the user in
         Authentication_1.authenticateUser(ctx);
     });

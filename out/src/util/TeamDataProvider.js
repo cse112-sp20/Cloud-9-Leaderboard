@@ -89,8 +89,12 @@ exports.handleTeamInfoChangeSelection = (view, item) => {
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
         if (teamId == undefined || teamId == '') {
             item.children = [
-                new TeamItem('TeamName', [new TeamItem('Empty (Please join a team first)')]),
-                new TeamItem('teamId', [new TeamItem('Empty (Please join a team first)')]),
+                new TeamItem('TeamName', [
+                    new TeamItem('Empty (Please join a team first)'),
+                ]),
+                new TeamItem('teamId', [
+                    new TeamItem('Empty (Please join a team first)'),
+                ]),
             ];
         }
         else {
