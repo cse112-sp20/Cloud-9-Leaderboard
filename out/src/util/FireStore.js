@@ -699,6 +699,11 @@ function retrieveUserDailyMetric(callback, c) {
     let userDataMap = [];
     console.log('****');
     console.log(cachedUserId);
+    if (cachedUserId == undefined) {
+        console.log("cached user id undefined when calling retrieve user daily metric");
+        callback(undefined, c);
+        return;
+    }
     user
         .doc(cachedUserId)
         .collection('dates')
