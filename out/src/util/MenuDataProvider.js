@@ -20,8 +20,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleMenuChangeSelection = exports.connectCloud9MenuTreeView = exports.MenuItem = exports.MenuDataProvider = void 0;
 const vscode_1 = require("vscode");
-const path = require("path");
-const resourcePath = path.join(__filename, "..", "..", "..", "resources");
+const path = require('path');
+const resourcePath = path.join(__filename, '..', '..', '..', 'resources');
 class MenuDataProvider {
     constructor() {
         this._onDidChangeTreeData = new vscode_1.EventEmitter();
