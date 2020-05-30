@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CLOUD9_LEADERBOARD_ROW_5 = exports.CLOUD9_LEADERBOARD_ROW_4 = exports.CLOUD9_LEADERBOARD_ROW_3 = exports.CLOUD9_LEADERBOARD_ROW_2 = exports.CLOUD9_LEADERBOARD_ROW_1 = exports.ACHIEVEMENT_ROW_5 = exports.ACHIEVEMENT_ROW_4 = exports.ACHIEVEMENT_ROW_3 = exports.ACHIEVEMENT_ROW_2 = exports.ACHIEVEMENT_ROW_1 = exports.LEADERBOARD_ROW_5 = exports.LEADERBOARD_ROW_4 = exports.LEADERBOARD_ROW_3 = exports.LEADERBOARD_ROW_2 = exports.LEADERBOARD_ROW_1 = exports.WECOME_TO_CLOUD9_ROW_5 = exports.WECOME_TO_CLOUD9_ROW_4 = exports.WECOME_TO_CLOUD9_ROW_3 = exports.WECOME_TO_CLOUD9_ROW_2 = exports.WECOME_TO_CLOUD9_ROW_1 = exports.PERSONAL_STATISTIC_ROW_5 = exports.PERSONAL_STATISTIC_ROW_4 = exports.PERSONAL_STATISTIC_ROW_3 = exports.PERSONAL_STATISTIC_ROW_2 = exports.PERSONAL_STATISTIC_ROW_1 = exports.FIELD_LENGTH = exports.STAT_LENGTH = exports.SECTION_BAR = exports.MAX_RANK_LENGTH = exports.MAX_USERNAME_LENGTH = exports.GLOBAL_STATE_USER_TEAM_MEMBERS = exports.GLOBAL_STATE_USER_IS_TEAM_LEADER = exports.GLOBAL_STATE_USER_TEAM_ID = exports.GLOBAL_STATE_USER_TEAM_NAME = exports.GLOBAL_STATE_USER_PASSWORD = exports.GLOBAL_STATE_USER_EMAIL = exports.GLOBAL_STATE_USER_NICKNAME = exports.GLOBAL_STATE_USER_ID = exports.FIELD_ID_TEAM_LEAD_USER_ID = exports.COLLECTION_ID_TEAM_MEMBERS = exports.COLLECTION_ID_TEAMS = exports.COLLECTION_ID_USERS = exports.DEFAULT_TEAM_DOC = exports.DEFAULT_USER_DOC_TOP = exports.DEFAULT_USER_DOC = exports.DEFAULT_PASSWORD = exports.firebaseConfig = void 0;
+exports.CLOUD9_LEADERBOARD_ROW_5 = exports.CLOUD9_LEADERBOARD_ROW_4 = exports.CLOUD9_LEADERBOARD_ROW_3 = exports.CLOUD9_LEADERBOARD_ROW_2 = exports.CLOUD9_LEADERBOARD_ROW_1 = exports.ACHIEVEMENT_ROW_5 = exports.ACHIEVEMENT_ROW_4 = exports.ACHIEVEMENT_ROW_3 = exports.ACHIEVEMENT_ROW_2 = exports.ACHIEVEMENT_ROW_1 = exports.LEADERBOARD_ROW_5 = exports.LEADERBOARD_ROW_4 = exports.LEADERBOARD_ROW_3 = exports.LEADERBOARD_ROW_2 = exports.LEADERBOARD_ROW_1 = exports.WECOME_TO_CLOUD9_ROW_5 = exports.WECOME_TO_CLOUD9_ROW_4 = exports.WECOME_TO_CLOUD9_ROW_3 = exports.WECOME_TO_CLOUD9_ROW_2 = exports.WECOME_TO_CLOUD9_ROW_1 = exports.PERSONAL_STATISTIC_ROW_5 = exports.PERSONAL_STATISTIC_ROW_4 = exports.PERSONAL_STATISTIC_ROW_3 = exports.PERSONAL_STATISTIC_ROW_2 = exports.PERSONAL_STATISTIC_ROW_1 = exports.FIELD_LENGTH = exports.STAT_LENGTH = exports.SECTION_BAR = exports.MAX_RANK_LENGTH = exports.MAX_USERNAME_LENGTH = exports.AUTH_ERR_CODE_INVALID_EMAIL = exports.AUTH_ERR_CODE_USER_NOT_FOUND = exports.AUTH_ERR_CODE_WEAK_PASSWORD = exports.AUTH_ERR_CODE_WRONG_PASSWORD = exports.AUTH_ERR_CODE_EMAIL_USED = exports.AUTH_CREATE_ACCOUNT = exports.AUTH_SIGN_IN = exports.GLOBAL_STATE_USER_TEAM_MEMBERS = exports.GLOBAL_STATE_USER_IS_TEAM_LEADER = exports.GLOBAL_STATE_USER_TEAM_ID = exports.GLOBAL_STATE_USER_TEAM_NAME = exports.GLOBAL_STATE_USER_PASSWORD = exports.GLOBAL_STATE_USER_EMAIL = exports.GLOBAL_STATE_USER_NICKNAME = exports.GLOBAL_STATE_USER_ID = exports.FIELD_ID_TEAM_LEAD_USER_ID = exports.COLLECTION_ID_TEAM_MEMBERS = exports.COLLECTION_ID_TEAMS = exports.COLLECTION_ID_USERS = exports.DEFAULT_TEAM_DOC = exports.DEFAULT_USER_DOC_TOP = exports.DEFAULT_USER_DOC = exports.DEFAULT_PASSWORD = exports.firebaseConfig = void 0;
 exports.firebaseConfig = {
     apiKey: 'AIzaSyAk7NlFSVbRfiwJvWLt7KBQArDTJpcmnO8',
     authDomain: 'cloud-9-4cd71.firebaseapp.com',
@@ -46,6 +46,15 @@ exports.GLOBAL_STATE_USER_TEAM_NAME = 'cachedUserTeamName';
 exports.GLOBAL_STATE_USER_TEAM_ID = 'cachedUserTeamId';
 exports.GLOBAL_STATE_USER_IS_TEAM_LEADER = 'cachedUserIsTeamLeader'; //bool
 exports.GLOBAL_STATE_USER_TEAM_MEMBERS = 'cachedUserTeamMembers'; //maps
+// authentication options
+exports.AUTH_SIGN_IN = 'Sign in';
+exports.AUTH_CREATE_ACCOUNT = 'Create a new account';
+// firebase authentication error codes
+exports.AUTH_ERR_CODE_EMAIL_USED = 'auth/email-already-in-use';
+exports.AUTH_ERR_CODE_WRONG_PASSWORD = 'auth/wrong-password';
+exports.AUTH_ERR_CODE_WEAK_PASSWORD = 'auth/weak-password';
+exports.AUTH_ERR_CODE_USER_NOT_FOUND = 'auth/user-not-found';
+exports.AUTH_ERR_CODE_INVALID_EMAIL = 'auth/invalid-email';
 exports.MAX_USERNAME_LENGTH = 50;
 exports.MAX_RANK_LENGTH = 6;
 exports.SECTION_BAR = '\n'.padStart(80, '=');
