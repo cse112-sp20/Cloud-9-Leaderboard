@@ -808,8 +808,10 @@ export function retrieveUserDailyMetric(callback, c) {
   console.log('****');
   console.log(cachedUserId);
 
-  if(cachedUserId == undefined){
-    console.log("cached user id undefined when calling retrieve user daily metric");
+  if (cachedUserId == undefined) {
+    console.log(
+      'cached user id undefined when calling retrieve user daily metric',
+    );
     callback(undefined, c);
     return;
   }
