@@ -113,7 +113,7 @@ function activate(ctx) {
             }, 1000 * secondDelay);
         }
         // sign the user in
-        Authentication_1.authenticateUser(ctx);
+        Authentication_1.authenticateUser();
         //await retrieveUserDailyMetric(testCallback, ctx);
     });
 }

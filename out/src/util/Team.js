@@ -86,13 +86,12 @@ function getTeamInfo() {
         //if(isLeader){
         messageStr += 'Your team ID: ' + teamId;
         //}
-        vscode_1.window.showInformationMessage(messageStr);
-        if (isLeader) {
-            vscode_1.window.showInformationMessage('You are the leader of your team.');
-        }
-        else {
-            vscode_1.window.showInformationMessage('You are a member of your team.');
-        }
+        //window.showInformationMessage(messageStr);
+        // if (isLeader) {
+        //   window.showInformationMessage('You are the leader of your team.');
+        // } else {
+        //   window.showInformationMessage('You are a member of your team.');
+        // }
         console.log(messageStr);
         return messageStr;
     });

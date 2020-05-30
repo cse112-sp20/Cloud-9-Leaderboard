@@ -167,7 +167,7 @@ export async function activate(ctx: ExtensionContext) {
   }
 
   // sign the user in
-  authenticateUser(ctx);
+  authenticateUser();
   //await retrieveUserDailyMetric(testCallback, ctx);
 }
 

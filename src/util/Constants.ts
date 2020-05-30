@@ -57,6 +57,8 @@ export const AUTH_CREATE_ACCOUNT = 'Create a new account';
 export const AUTH_ERR_CODE_EMAIL_USED = 'auth/email-already-in-use';
 export const AUTH_ERR_CODE_WRONG_PASSWORD = 'auth/wrong-password';
 export const AUTH_ERR_CODE_WEAK_PASSWORD = 'auth/weak-password';
+export const AUTH_ERR_CODE_USER_NOT_FOUND = 'auth/user-not-found';
+export const AUTH_ERR_CODE_INVALID_EMAIL = 'auth/invalid-email';
 
 export const MAX_USERNAME_LENGTH = 50;
 export const MAX_RANK_LENGTH = 6;

@@ -91,13 +91,13 @@ export async function getTeamInfo() {
   //if(isLeader){
   messageStr += 'Your team ID: ' + teamId;
   //}
-  window.showInformationMessage(messageStr);
+  //window.showInformationMessage(messageStr);
 
-  if (isLeader) {
-    window.showInformationMessage('You are the leader of your team.');
-  } else {
-    window.showInformationMessage('You are a member of your team.');
-  }
+  // if (isLeader) {
+  //   window.showInformationMessage('You are the leader of your team.');
+  // } else {
+  //   window.showInformationMessage('You are a member of your team.');
+  // }
   console.log(messageStr);
   return messageStr;
 }

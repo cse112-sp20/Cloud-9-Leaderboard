@@ -28,6 +28,9 @@ import {
   AUTH_ERR_CODE_WEAK_PASSWORD,
   AUTH_ERR_CODE_WRONG_PASSWORD,
   AUTH_SIGN_IN,
+  AUTH_CREATE_ACCOUNT,
+  AUTH_ERR_CODE_USER_NOT_FOUND,
+  AUTH_ERR_CODE_INVALID_EMAIL,
 } from './Constants';
 import {getMaxListeners} from 'cluster';
 
@@ -41,6 +44,7 @@ let extensionContext: ExtensionContext = undefined;
  * @param ctx vscode extension context
  */
 export function storeExtensionContext(ctx) {
+  console.log('storing extension context');
   extensionContext = ctx;
 }
 
@@ -73,9 +77,9 @@ export function clearCachedUserId() {
  * authentication entry point
  * @param ctx
  */
-export async function authenticateUser(ctx: ExtensionContext) {
+export async function authenticateUser() {
   //stores the extension context
-  extensionContext = ctx;
+  const ctx = getExtensionContext();
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   const cachedUserEmail = ctx.globalState.get(GLOBAL_STATE_USER_EMAIL);
   const cachedUserPassword = ctx.globalState.get(GLOBAL_STATE_USER_PASSWORD);
@@ -84,13 +88,13 @@ export async function authenticateUser(ctx: ExtensionContext) {
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
-  if (cachedUserId === undefined) {
+  if (cachedUserId == undefined) {
     // case1: sign in or create new account
     console.log(
       'No cachedUserId found. Need to sign in or create a new account.',
     );
-
-    registerNewUserOrSigInWithUserInput();
+    signInOrSignUpUserWithUserInput();
+    //registerNewUserOrSigInWithUserInput();
   } else {
     // case2: existing user's id found
     console.log('Found cachedUserId: ' + cachedUserId);
@@ -109,21 +113,9 @@ export async function authenticateUser(ctx: ExtensionContext) {
       );
     } else {
       console.log('Need to log in or register for a new account.');
-      registerNewUserOrSigInWithUserInput();
+      signInOrSignUpUserWithUserInput();
+      //registerNewUserOrSigInWithUserInput();
     }
-    //.then((result) => {
-    //   if (result==true) {
-    //     console.log('User doc exists in db');
-    //     //true, do nothing
-    //     window.showInformationMessage(
-    //       'Welcome back, ' + cachedUserNickName + '!!',
-    //     );
-    //   } else {
-    //     //false prompt user to sign in
-    //     console.log('Need to login or register for a new account.');
-    //     registerNewUserOrSigInWithUserInput();
-    //   }
-    // });
   }
 
   await retrieveUserDailyMetric(testCallback, ctx);
@@ -227,26 +219,108 @@ export async function registerNewUserOrSigInWithUserInput() {
 
 export async function signInOrSignUpUserWithUserInput() {
   const ctx = getExtensionContext();
-  let email = null;
-  let password = null;
+  let email = undefined;
+  let password = undefined;
+  let completed = false;
 
-  while (true) {
+  while (!completed) {
+    //forcing the user to always sign in
     window
       .showInformationMessage(
-        'Please sign in or sign up for a new account!',
-        'Sign in',
-        'Create account',
+        'Please sign in or create a new account!',
+        AUTH_SIGN_IN,
+        AUTH_CREATE_ACCOUNT,
       )
       .then(async (selection) => {
-        switch (selection) {
-          case AUTH_SIGN_IN:
-            console.log(selection);
-        }
+        await window
+          .showInputBox({placeHolder: 'Enter your email: example@gmail.com'})
+          .then((inputEmail) => {
+            email = inputEmail;
+            console.log('user input email: ' + email);
+          })
+          .then(async () => {
+            await window
+              .showInputBox({
+                placeHolder:
+                  'Enter your password (must be 6 characters long or more)',
+              })
+              .then((inputPassword) => {
+                password = inputPassword;
+                console.log('user input password: ' + password);
+              });
+          })
+          .then(async () => {
+            if (
+              email == undefined ||
+              password == undefined ||
+              email == '' ||
+              password == ''
+            ) {
+              window.showErrorMessage('Invalid email or password!');
+            } else {
+              if (selection == AUTH_SIGN_IN) {
+                await loginUserWithEmailAndPassword(email, password).then(
+                  async (result) => {
+                    console.log(result.loggedIn);
+                    console.log(result.errorCode);
+                    if (result.loggedIn) {
+                      //successfully logged in
+                      window.showInformationMessage(
+                        'Welcome back, ' +
+                          ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
+                          '!!',
+                      );
+                      completed = true;
+                    }
+                    //not logged in
+                    if (result.errorCode == AUTH_ERR_CODE_WRONG_PASSWORD) {
+                      window.showErrorMessage('Wrong password!');
+                    } else if (
+                      result.errorCode == AUTH_ERR_CODE_USER_NOT_FOUND
+                    ) {
+                      window.showErrorMessage('User not found!');
+                    } else if (
+                      result.errorCode == AUTH_ERR_CODE_INVALID_EMAIL
+                    ) {
+                      window.showErrorMessage('Invalid email!');
+                    }
+                  },
+                );
+              } else if (selection == AUTH_CREATE_ACCOUNT) {
+                await createNewUserInFirebase(email, password).then(
+                  async (result) => {
+                    console.log(result.created);
+                    console.log(result.errorCode);
+                    if (result.created) {
+                      window.showInformationMessage(
+                        'Welcome! Your nickname is: ' +
+                          ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
+                          '!!',
+                      );
+                      completed = true;
+                    }
+                    //not created
+                    if (result.errorCode == AUTH_ERR_CODE_EMAIL_USED) {
+                      window.showErrorMessage('Email already in use!');
+                    } else if (
+                      result.errorCode == AUTH_ERR_CODE_WEAK_PASSWORD
+                    ) {
+                      window.showErrorMessage(
+                        'Password is too weak! Needs to be 6 characters long or more!',
+                      );
+                    } else if (
+                      result.errorCode == AUTH_ERR_CODE_INVALID_EMAIL
+                    ) {
+                      window.showErrorMessage('Invalid email!');
+                    }
+                  },
+                );
+              }
+            }
+          });
       });
   }
 }
-
-export function passwordRecovery() {}
 
 /**
  * not using this function
