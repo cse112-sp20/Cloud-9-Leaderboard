@@ -304,15 +304,8 @@ function initializeIntervalJobs() {
   }, one_min_millis);
 }
 
-function handlePauseMetricsEvent() {
-  TELEMETRY_ON = false;
-  showStatus('Code Time Paused', 'Enable metrics to resume');
-}
 
-function handleEnableMetricsEvent() {
-  TELEMETRY_ON = true;
-  showStatus('Code Time', null);
-}
+
 
 function updateLiveshareTime() {
   if (_ls) {
