@@ -406,11 +406,11 @@ export async function createNewUserInFirebase(email, password) {
 
   await auth
     .createUserWithEmailAndPassword(email, password)
-    .then(() => {
+    .then(async () => {
       const currentUserId = auth.currentUser.uid;
       console.log('Adding new user with ID: ' + currentUserId);
 
-      addNewUserDocToDb(currentUserId, email);
+      await addNewUserDocToDb(currentUserId, email);
       //window.showInformationMessage('Successfully created new account!');
 
       created = true;
@@ -458,8 +458,6 @@ async function addNewUserDocToDb(userId, email) {
       console.log('Error creating new entry');
     });
 
-  updatePersistentStorageWithUserDocData(userId);
-
   db.collection(COLLECTION_ID_USERS)
     .doc(userId)
     .collection('dates')
@@ -473,6 +471,8 @@ async function addNewUserDocToDb(userId, email) {
     .catch(() => {
       console.log('Error adding new user: ' + userId + ' doc to db.');
     });
+
+  await updatePersistentStorageWithUserDocData(userId);
 }
 
 /**
@@ -836,6 +836,14 @@ export function retrieveUserDailyMetric(callback, c) {
   let userDataMap = [];
   console.log('****');
   console.log(cachedUserId);
+
+  if (cachedUserId == undefined) {
+    console.log(
+      'cached user id undefined when calling retrieve user daily metric',
+    );
+    callback(undefined, c);
+    return;
+  }
   user
     .doc(cachedUserId)
     .collection('dates')

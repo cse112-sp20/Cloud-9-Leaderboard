@@ -344,14 +344,14 @@ function createNewUserInFirebase(email, password) {
         let errorCode = undefined;
         yield auth
             .createUserWithEmailAndPassword(email, password)
-            .then(() => {
+            .then(() => __awaiter(this, void 0, void 0, function* () {
             const currentUserId = auth.currentUser.uid;
             console.log('Adding new user with ID: ' + currentUserId);
-            addNewUserDocToDb(currentUserId, email);
+            yield addNewUserDocToDb(currentUserId, email);
             //window.showInformationMessage('Successfully created new account!');
             created = true;
             errorCode = 'no error';
-        })
+        }))
             .catch((e) => {
             console.log(e.message);
             console.log('error code: ' + e.code);
@@ -386,7 +386,6 @@ function addNewUserDocToDb(userId, email) {
             .catch(() => {
             console.log('Error creating new entry');
         });
-        updatePersistentStorageWithUserDocData(userId);
         db.collection(Constants_1.COLLECTION_ID_USERS)
             .doc(userId)
             .collection('dates')
@@ -400,6 +399,7 @@ function addNewUserDocToDb(userId, email) {
             .catch(() => {
             console.log('Error adding new user: ' + userId + ' doc to db.');
         });
+        yield updatePersistentStorageWithUserDocData(userId);
     });
 }
 /**
@@ -726,6 +726,11 @@ function retrieveUserDailyMetric(callback, c) {
     let userDataMap = [];
     console.log('****');
     console.log(cachedUserId);
+    if (cachedUserId == undefined) {
+        console.log('cached user id undefined when calling retrieve user daily metric');
+        callback(undefined, c);
+        return;
+    }
     user
         .doc(cachedUserId)
         .collection('dates')

@@ -37,7 +37,6 @@ import {
   getTeamInfo,
   removeTeamNameAndId,
   joinTeam,
-  removeTeamMember,
 } from '../src/util/Team';
 import {displayPersonalStats} from '../src/util/PersonalStats';
 import {leaveTeam} from '../src/util/FireStore';
