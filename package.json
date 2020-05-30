@@ -98,6 +98,15 @@
         }
       }
     },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "code-time",
+          "title": "Cloud9",
+          "icon": "images/cloud9-vscode-icon.svg"
+        }
+      ]
+    },
     "views": {
       "code-time": [
         {
