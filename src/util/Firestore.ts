@@ -831,7 +831,6 @@ export function retrieveUserDailyMetric(callback, c) {
     });
 }
 
-
 export async function retrieveUserUpdateDailyMetric() {
   let db = firebase.firestore();
 
@@ -843,7 +842,8 @@ export async function retrieveUserUpdateDailyMetric() {
   let userDataMap;
   console.log('****');
   console.log(cachedUserId);
-  await db.collection(COLLECTION_ID_USERS)
+  await db
+    .collection(COLLECTION_ID_USERS)
     .doc(cachedUserId)
     .collection('dates')
     .doc(new Date().toISOString().split('T')[0])
@@ -862,11 +862,10 @@ export async function retrieveUserUpdateDailyMetric() {
       console.log('Error getting documents', err);
     });
 
-    console.log(userDataMap);
+  console.log(userDataMap);
 
-    return userDataMap;
+  return userDataMap;
 }
-
 
 /**
  * returns true if a document associated with the passed in ID exists in firebase
