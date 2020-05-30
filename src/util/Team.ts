@@ -87,10 +87,10 @@ export async function getTeamInfo() {
 
   let messageStr = 'Your team name: ' + teamName + '\n';
 
-  //if(isLeader){
   messageStr += 'Your team ID: ' + teamId;
-  //}
-  window.showInformationMessage(messageStr);
+
+  console.log(messageStr);
+  return messageStr;
 }
 /**
  * prompts the user to enter a team code and add them to the team
@@ -111,28 +111,5 @@ export async function joinTeam() {
         return;
       }
       joinTeamWithTeamId(teamCode, false);
-    });
-}
-
-export async function removeTeamMember() {
-  const ctx = getExtensionContext();
-  const isTeamLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
-  if (!isTeamLeader) {
-    window.showErrorMessage(
-      'Sorry! Only the team leader is allowed to remove team members!',
-    );
-    return;
-  }
-
-  const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
-  await fetchTeamMembersList(teamId)
-    .then((memberMap) => {
-      console.log('memberMap: ');
-      console.log(memberMap);
-
-      let quickpick = window.createQuickPick();
-    })
-    .catch(() => {
-      console.log('Error getting team members!');
     });
 }
