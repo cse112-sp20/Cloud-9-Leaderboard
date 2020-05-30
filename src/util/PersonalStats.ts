@@ -185,8 +185,8 @@ async function writePersonalStatsFile(dates) {
   //     '\n';
   // });
 
-  let previousScore:number = -1;
-  let currentScore:number = 0;
+  let previousScore: number = -1;
+  let currentScore: number = 0;
 
   let counter = 1;
 
@@ -195,27 +195,22 @@ async function writePersonalStatsFile(dates) {
   console.log(mapSize);
 
   scoreMap.map((obj, i) => {
-
-    if( i + 1 >= mapSize){
+    if (i + 1 >= mapSize) {
       currentScore = +obj['points'];
-previousScore = 0;
-
-    }
-    else{
+      previousScore = 0;
+    } else {
       currentScore = +obj['points'];
-previousScore = +scoreMap[i+1]['points'];
+      previousScore = +scoreMap[i + 1]['points'];
     }
 
-    let scoreDifference = currentScore-previousScore
-    if(scoreDifference >= 0){
-      
-      content += obj['dateStr'] + '  🟩🟩🟩🟩🟩'+'\n';
-    }
-    else{
-      content += obj['dateStr'] +  '  🟥🟥🟥🟥🟥' + '\n';
+    let scoreDifference = currentScore - previousScore;
+    if (scoreDifference >= 0) {
+      content += obj['dateStr'] + '  🟩🟩🟩🟩🟩' + '\n';
+    } else {
+      content += obj['dateStr'] + '  🟥🟥🟥🟥🟥' + '\n';
       counter = 1;
     }
-   
+
     content +=
       '___________________________________________________________________________________________\n';
     content +=
@@ -243,7 +238,6 @@ previousScore = +scoreMap[i+1]['points'];
       obj['points'] +
       ' points\n';
     content += '\n';
-
   });
 
   content += '\n' + SECTION_BAR;
