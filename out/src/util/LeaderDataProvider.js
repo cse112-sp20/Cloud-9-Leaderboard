@@ -55,6 +55,7 @@ class LeaderDataProvider {
         }
     }
     refresh() {
+        console.log("Refresh called");
         this._onDidChangeTreeData.fire(null);
     }
     bindView(menuTreeView) {

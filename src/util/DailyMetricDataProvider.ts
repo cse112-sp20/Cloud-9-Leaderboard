@@ -24,9 +24,57 @@ import {
   Disposable,
 } from 'vscode';
 
+import {retrieveUserUpdateDailyMetric} from './Firestore';
+
 export class DailyMetricDataProvider
   implements TreeDataProvider<DailyMetricItem> {
-  onDidChangeTreeData?: Event<DailyMetricItem | null | undefined> | undefined;
+  
+
+
+  private _onDidChangeTreeData: EventEmitter<
+  DailyMetricItem | undefined
+  > = new EventEmitter<DailyMetricItem | undefined>();
+  readonly onDidChangeTreeData: Event<DailyMetricItem | undefined> = this
+    ._onDidChangeTreeData.event;
+
+  refresh(): void {
+
+    
+    retrieveUserUpdateDailyMetric().then((userDocument) => {
+   
+      console.log(userDocument);
+      this.data = [];
+
+      let tempList = [];
+      for (let key in userDocument) {
+  
+        console.log("key: " + key);
+        tempList.push(
+          new DailyMetricItem(key, [
+            new DailyMetricItem('🚀 Today: ' + userDocument[key] + ' (Latest Update)'),
+          ]),
+        );
+      }
+  
+      this.data = tempList;
+  
+  
+  
+  
+      console.log("Refresh daily metric called");
+      this._onDidChangeTreeData.fire(null);
+
+
+    });
+
+   
+
+
+  }
+
+  
+
+
 
   data: DailyMetricItem[];
   constructor(d) {
@@ -91,8 +139,16 @@ class DailyMetricItem extends TreeItem {
 }
 
 export function testCallback(data, ctx) {
+
+  let cloud9DailyMetricDataProvier = new DailyMetricDataProvider(data);
+
   window.registerTreeDataProvider(
     'DailyMetric',
-    new DailyMetricDataProvider(data),
+    cloud9DailyMetricDataProvier,
+
   );
+
+  commands.registerCommand('DailyMetric.refreshEntry', () =>
+  cloud9DailyMetricDataProvier.refresh(),
+)
 }

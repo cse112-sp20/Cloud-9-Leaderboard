@@ -36,6 +36,7 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
     ._onDidChangeTreeData.event;
 
   refresh(): void {
+    console.log("Refresh called");
     this._onDidChangeTreeData.fire(null);
   }
 

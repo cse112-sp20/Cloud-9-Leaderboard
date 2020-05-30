@@ -830,6 +830,44 @@ export function retrieveUserDailyMetric(callback, c) {
       console.log('Error getting documents', err);
     });
 }
+
+
+export async function retrieveUserUpdateDailyMetric() {
+  let db = firebase.firestore();
+
+  let user = db.collection(COLLECTION_ID_USERS);
+
+  const ctx = getExtensionContext();
+  const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
+  let userDataMap;
+  console.log('****');
+  console.log(cachedUserId);
+  await db.collection(COLLECTION_ID_USERS)
+    .doc(cachedUserId)
+    .collection('dates')
+    .doc(new Date().toISOString().split('T')[0])
+    .get()
+    .then((userDoc) => {
+      if (userDoc.exists) {
+        // Convert to City object
+        console.log('user doc exist');
+        userDataMap = userDoc.data();
+      } else {
+        console.log('userDoc does not exist');
+        userDataMap = undefined;
+      }
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
+
+    console.log(userDataMap);
+
+    return userDataMap;
+}
+
+
 /**
  * returns true if a document associated with the passed in ID exists in firebase
  * @param userId uid

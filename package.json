@@ -89,7 +89,15 @@
             "light": "resources/light/refresh.svg",
             "dark": "resources/dark/refresh.svg"
         }
-    }
+    },
+    {
+      "command": "DailyMetric.refreshEntry",
+      "title": "Refresh",
+      "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+      }
+  }
     ],
     "menus": {
       "view/title": [
@@ -97,7 +105,13 @@
           "command": "LeaderView.refreshEntry",
           "when": "view == LeaderView",
           "group": "navigation"
+        },
+        {
+          "command": "DailyMetric.refreshEntry",
+          "when": "view == DailyMetric",
+          "group": "navigation"
         }
+
       ]
     },
     

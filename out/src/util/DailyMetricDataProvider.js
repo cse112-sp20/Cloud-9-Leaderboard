@@ -11,8 +11,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testCallback = exports.DailyMetricDataProvider = void 0;
 const vscode_1 = require("vscode");
+const Firestore_1 = require("./Firestore");
 class DailyMetricDataProvider {
     constructor(d) {
+        this._onDidChangeTreeData = new vscode_1.EventEmitter();
+        this.onDidChangeTreeData = this
+            ._onDidChangeTreeData.event;
         if (d == undefined) {
             this.data = [
                 new DailyMetricItem('Keystrokes', [
@@ -41,6 +45,22 @@ class DailyMetricDataProvider {
             this.data = tempList;
         }
     }
+    refresh() {
+        Firestore_1.retrieveUserUpdateDailyMetric().then((userDocument) => {
+            console.log(userDocument);
+            this.data = [];
+            let tempList = [];
+            for (let key in userDocument) {
+                console.log("key: " + key);
+                tempList.push(new DailyMetricItem(key, [
+                    new DailyMetricItem('🚀 Today: ' + userDocument[key] + ' (Latest Update)'),
+                ]));
+            }
+            this.data = tempList;
+            console.log("Refresh daily metric called");
+            this._onDidChangeTreeData.fire(null);
+        });
+    }
     getChildren(task) {
         if (task === undefined) {
             return this.data;
@@ -61,7 +81,9 @@ class DailyMetricItem extends vscode_1.TreeItem {
     }
 }
 function testCallback(data, ctx) {
-    vscode_1.window.registerTreeDataProvider('DailyMetric', new DailyMetricDataProvider(data));
+    let cloud9DailyMetricDataProvier = new DailyMetricDataProvider(data);
+    vscode_1.window.registerTreeDataProvider('DailyMetric', cloud9DailyMetricDataProvier);
+    vscode_1.commands.registerCommand('DailyMetric.refreshEntry', () => cloud9DailyMetricDataProvier.refresh());
 }
 exports.testCallback = testCallback;
 //# sourceMappingURL=DailyMetricDataProvider.js.map
