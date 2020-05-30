@@ -796,7 +796,7 @@ export async function retrieveUserStats(callback) {
     });
 }
 
-export async function retrieveUserDailyMetric(callback, c) {
+export function retrieveUserDailyMetric(callback, c) {
   let db = firebase.firestore();
 
   let user = db.collection(COLLECTION_ID_USERS);
@@ -805,7 +805,8 @@ export async function retrieveUserDailyMetric(callback, c) {
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
   let userDataMap = [];
-
+  console.log("****");
+  console.log(cachedUserId);
   user
     .doc(cachedUserId)
     .collection('dates')

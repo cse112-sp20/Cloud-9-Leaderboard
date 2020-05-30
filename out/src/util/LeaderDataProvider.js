@@ -44,7 +44,7 @@ class LeaderDataProvider {
             const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
             if (teamId == undefined || teamId == '') {
                 this.data = [
-                    new LeaderItem('Not in a team yet', undefined, undefined, this),
+                    new LeaderItem('No permission: Not in a team yet', undefined, undefined, this),
                 ];
             }
             else {
@@ -95,6 +95,7 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
     const ctx = Authentication_1.getExtensionContext();
     const memberMaps = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS);
     if (item.label.startsWith('No permission:')) {
+        console.log('No permission selected');
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
             console.log(item);
             let childItem = new LeaderItem('');
@@ -107,6 +108,9 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
                 topItem,
             ];
             vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+        }
+        else {
+            console.log("Is not a leader");
         }
     }
     else if (item.label === 'Team members') {

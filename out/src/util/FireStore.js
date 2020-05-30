@@ -692,35 +692,35 @@ function retrieveUserStats(callback) {
 }
 exports.retrieveUserStats = retrieveUserStats;
 function retrieveUserDailyMetric(callback, c) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let db = firebase.firestore();
-        let user = db.collection(Constants_1.COLLECTION_ID_USERS);
-        const ctx = Authentication_1.getExtensionContext();
-        const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-        let userDataMap = [];
-        user
-            .doc(cachedUserId)
-            .collection('dates')
-            .doc(new Date().toISOString().split('T')[0])
-            .get()
-            .then((userDoc) => {
-            if (userDoc.exists) {
-                // Convert to City object
-                return userDoc.data();
-            }
-            else {
-                console.log('userDoc does not exist');
-                return undefined;
-            }
-        })
-            .then((dataMap) => {
-            console.log('data map');
-            console.log(dataMap);
-            callback(dataMap, c);
-        })
-            .catch((err) => {
-            console.log('Error getting documents', err);
-        });
+    let db = firebase.firestore();
+    let user = db.collection(Constants_1.COLLECTION_ID_USERS);
+    const ctx = Authentication_1.getExtensionContext();
+    const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+    let userDataMap = [];
+    console.log("****");
+    console.log(cachedUserId);
+    user
+        .doc(cachedUserId)
+        .collection('dates')
+        .doc(new Date().toISOString().split('T')[0])
+        .get()
+        .then((userDoc) => {
+        if (userDoc.exists) {
+            // Convert to City object
+            return userDoc.data();
+        }
+        else {
+            console.log('userDoc does not exist');
+            return undefined;
+        }
+    })
+        .then((dataMap) => {
+        console.log('data map');
+        console.log(dataMap);
+        callback(dataMap, c);
+    })
+        .catch((err) => {
+        console.log('Error getting documents', err);
     });
 }
 exports.retrieveUserDailyMetric = retrieveUserDailyMetric;

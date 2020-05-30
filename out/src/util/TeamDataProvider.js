@@ -87,10 +87,18 @@ exports.handleTeamInfoChangeSelection = (view, item) => {
         const ctx = Authentication_1.getExtensionContext();
         const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-        item.children = [
-            new TeamItem('TeamName', [new TeamItem(teamName + '')]),
-            new TeamItem('teamId', [new TeamItem(teamId + '')]),
-        ];
+        if (teamId == undefined || teamId == '') {
+            item.children = [
+                new TeamItem('TeamName', [new TeamItem('Empty (Please join a team first)')]),
+                new TeamItem('teamId', [new TeamItem('Empty (Please join a team first)')]),
+            ];
+        }
+        else {
+            item.children = [
+                new TeamItem('TeamName', [new TeamItem(teamName + '')]),
+                new TeamItem('teamId', [new TeamItem(teamId + '')]),
+            ];
+        }
         vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
     }
 };

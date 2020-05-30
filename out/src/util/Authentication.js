@@ -71,7 +71,9 @@ function authenticateUser(ctx) {
         if (cachedUserId === undefined) {
             // case1: sign in or create new account
             vscode_1.window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
-            registerNewUserOrSigInWithUserInput();
+            registerNewUserOrSigInWithUserInput().then(() => {
+                Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+            });
         }
         else {
             // case2: existing user's id found
@@ -82,14 +84,18 @@ function authenticateUser(ctx) {
             //check if user doc exists in firebase
             let exists = yield Firestore_1.userDocExists(cachedUserId);
             if (exists) {
-                Firestore_1.updatePersistentStorageWithUserDocData(cachedUserId);
+                Firestore_1.updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
+                    Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+                });
                 vscode_1.window.showInformationMessage('Welcome back, ' + cachedUserNickName + '!!');
             }
             else {
-                registerNewUserOrSigInWithUserInput();
+                registerNewUserOrSigInWithUserInput().then(() => {
+                    Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+                });
             }
         }
-        yield Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+        //retrieveUserDailyMetric(testCallback, ctx);
     });
 }
 exports.authenticateUser = authenticateUser;
@@ -116,6 +122,7 @@ function registerNewUserOrSigInWithUserInput() {
                 yield vscode_1.window
                     .showInputBox({
                     placeHolder: 'Enter your password (must be 6 characters long or more)',
+                    password: true,
                 })
                     .then((inputPassword) => {
                     password = inputPassword;
