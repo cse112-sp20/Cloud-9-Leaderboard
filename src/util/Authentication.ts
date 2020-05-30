@@ -67,7 +67,7 @@ export function clearCachedUserId() {
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
-
+  ctx.globalState.update(GLOBAL_STATE_USER_NICKNAME, undefined);
   console.log(
     'After clearing persistent storage: ' + extensionContext.globalState,
   );
@@ -214,6 +214,7 @@ export async function registerNewUserOrSigInWithUserInput() {
           );
         }
       });
+    completed = true;
   }
 }
 
@@ -271,6 +272,8 @@ export async function signInOrSignUpUserWithUserInput() {
                           '!!',
                       );
                       completed = true;
+                      console.log('setting completed to true');
+                      return;
                     }
                     //not logged in
                     if (result.errorCode == AUTH_ERR_CODE_WRONG_PASSWORD) {
@@ -298,6 +301,7 @@ export async function signInOrSignUpUserWithUserInput() {
                           '!!',
                       );
                       completed = true;
+                      return;
                     }
                     //not created
                     if (result.errorCode == AUTH_ERR_CODE_EMAIL_USED) {
@@ -319,6 +323,7 @@ export async function signInOrSignUpUserWithUserInput() {
             }
           });
       });
+    //completed = true;
   }
 }
 

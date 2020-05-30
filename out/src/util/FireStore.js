@@ -326,7 +326,6 @@ function addNewUserDocToDb(userId, email) {
             .catch(() => {
             console.log('Error creating new entry');
         });
-        updatePersistentStorageWithUserDocData(userId);
         db.collection(Constants_1.COLLECTION_ID_USERS)
             .doc(userId)
             .collection('dates')
@@ -340,6 +339,7 @@ function addNewUserDocToDb(userId, email) {
             .catch(() => {
             console.log('Error adding new user: ' + userId + ' doc to db.');
         });
+        updatePersistentStorageWithUserDocData(userId);
     });
 }
 /**

@@ -53,6 +53,7 @@ function clearCachedUserId() {
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
+    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_NICKNAME, undefined);
     console.log('After clearing persistent storage: ' + extensionContext.globalState);
 }
 exports.clearCachedUserId = clearCachedUserId;
@@ -174,6 +175,7 @@ function registerNewUserOrSigInWithUserInput() {
                     }));
                 }
             }));
+            completed = true;
         }
     });
 }
@@ -184,7 +186,8 @@ function signInOrSignUpUserWithUserInput() {
         let email = undefined;
         let password = undefined;
         let completed = false;
-        while (!completed) { //forcing the user to always sign in 
+        while (!completed) {
+            //forcing the user to always sign in
             vscode_1.window
                 .showInformationMessage('Please sign in or create a new account!', Constants_1.AUTH_SIGN_IN, Constants_1.AUTH_CREATE_ACCOUNT)
                 .then((selection) => __awaiter(this, void 0, void 0, function* () {
@@ -213,18 +216,19 @@ function signInOrSignUpUserWithUserInput() {
                     }
                     else {
                         if (selection == Constants_1.AUTH_SIGN_IN) {
-                            yield Firestore_1.loginUserWithEmailAndPassword(email, password)
-                                .then((result) => __awaiter(this, void 0, void 0, function* () {
+                            yield Firestore_1.loginUserWithEmailAndPassword(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
                                 console.log(result.loggedIn);
                                 console.log(result.errorCode);
                                 if (result.loggedIn) {
-                                    //successfully logged in 
+                                    //successfully logged in
                                     vscode_1.window.showInformationMessage('Welcome back, ' +
                                         ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
                                         '!!');
                                     completed = true;
+                                    console.log('setting completed to true');
+                                    return;
                                 }
-                                //not logged in 
+                                //not logged in
                                 if (result.errorCode == Constants_1.AUTH_ERR_CODE_WRONG_PASSWORD) {
                                     vscode_1.window.showErrorMessage('Wrong password!');
                                 }
@@ -237,8 +241,7 @@ function signInOrSignUpUserWithUserInput() {
                             }));
                         }
                         else if (selection == Constants_1.AUTH_CREATE_ACCOUNT) {
-                            yield Firestore_1.createNewUserInFirebase(email, password)
-                                .then((result) => __awaiter(this, void 0, void 0, function* () {
+                            yield Firestore_1.createNewUserInFirebase(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
                                 console.log(result.created);
                                 console.log(result.errorCode);
                                 if (result.created) {
@@ -246,6 +249,7 @@ function signInOrSignUpUserWithUserInput() {
                                         ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
                                         '!!');
                                     completed = true;
+                                    return;
                                 }
                                 //not created
                                 if (result.errorCode == Constants_1.AUTH_ERR_CODE_EMAIL_USED) {
@@ -262,6 +266,7 @@ function signInOrSignUpUserWithUserInput() {
                     }
                 }));
             }));
+            //completed = true;
         }
     });
 }

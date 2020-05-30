@@ -380,8 +380,6 @@ async function addNewUserDocToDb(userId, email) {
       console.log('Error creating new entry');
     });
 
-  updatePersistentStorageWithUserDocData(userId);
-
   db.collection(COLLECTION_ID_USERS)
     .doc(userId)
     .collection('dates')
@@ -395,6 +393,8 @@ async function addNewUserDocToDb(userId, email) {
     .catch(() => {
       console.log('Error adding new user: ' + userId + ' doc to db.');
     });
+
+  updatePersistentStorageWithUserDocData(userId);
 }
 
 /**
