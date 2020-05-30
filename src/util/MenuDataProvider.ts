@@ -22,9 +22,20 @@ import {
   EventEmitter,
   TreeView,
   Disposable,
+  FileType,
 } from 'vscode';
 
 import {getExtensionContext} from './Authentication';
+
+const path = require("path");
+
+const resourcePath: string = path.join(
+  __filename,
+  "..",
+  "..",
+  "..",
+  "resources"
+);
 
 export class MenuDataProvider implements TreeDataProvider<MenuItem> {
   private _onDidChangeTreeData: EventEmitter<
@@ -41,7 +52,12 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
   data: MenuItem[];
 
   constructor() {
+
+    
+
+
     this.data = [
+
       new MenuItem('📊 View personal stats'),
       new MenuItem('🌐 Leaderboard'),
     ];

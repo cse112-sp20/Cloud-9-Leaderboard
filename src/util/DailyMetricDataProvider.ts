@@ -30,7 +30,17 @@ export class DailyMetricDataProvider
 
   data: DailyMetricItem[];
   constructor(d) {
-    console.log(d);
+
+    if(d == undefined){
+      this.data = [
+        new DailyMetricItem('Keystrokes', [new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),]),
+        new DailyMetricItem('Lines Changed', [new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),]),
+        new DailyMetricItem('Time Interval', [new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),]),
+        new DailyMetricItem('Points', [new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),])
+      ]
+    }
+    else{
+      console.log(d);
 
     this.data = [];
 
@@ -44,6 +54,9 @@ export class DailyMetricDataProvider
     }
 
     this.data = tempList;
+    }
+
+    
   }
 
   getChildren(

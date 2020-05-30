@@ -101,6 +101,8 @@ export async function updatePersistentStorageWithUserDocData(userId) {
 
                   //store team member data in persistent storage
                   let members = await fetchTeamMembersList(teamId);
+
+                  console.log(members);
                   console.log(
                     'updating team member list to persistent storage.',
                   );

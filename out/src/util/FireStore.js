@@ -89,6 +89,7 @@ function updatePersistentStorageWithUserDocData(userId) {
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, true);
                                 //store team member data in persistent storage
                                 let members = yield fetchTeamMembersList(teamId);
+                                console.log(members);
                                 console.log('updating team member list to persistent storage.');
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, members);
                                 console.log(ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS));

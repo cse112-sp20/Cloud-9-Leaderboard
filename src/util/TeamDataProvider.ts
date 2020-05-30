@@ -51,6 +51,7 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
 
   constructor() {
     this.data = [
+      new TeamItem('🛡 Create your Team'),
       new TeamItem('🔰 Join team'),
       new TeamItem('📋 View team leaderboard'),
       new TeamItem('Get Team Info', [new TeamItem('')]),
@@ -105,7 +106,11 @@ export const handleTeamInfoChangeSelection = (
   view: TreeView<TeamItem>,
   item: TeamItem,
 ) => {
-  if (item.label === '🔰 Join team') {
+  if (item.label === '🛡 Create your Team'){
+    console.log('create a team');
+    commands.executeCommand('cloud9.createTeam');
+  }
+  else if (item.label === '🔰 Join team') {
     console.log('join a team');
     commands.executeCommand('cloud9.joinTeam');
   } else if (item.label === '📋 View team leaderboard') {
