@@ -13,15 +13,33 @@ exports.testCallback = exports.DailyMetricDataProvider = void 0;
 const vscode_1 = require("vscode");
 class DailyMetricDataProvider {
     constructor(d) {
-        console.log(d);
-        this.data = [];
-        let tempList = [];
-        for (let key in d) {
-            tempList.push(new DailyMetricItem(key, [
-                new DailyMetricItem('🚀 Today: ' + d[key] + ' (Latest Update)'),
-            ]));
+        if (d == undefined) {
+            this.data = [
+                new DailyMetricItem('Keystrokes', [
+                    new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+                ]),
+                new DailyMetricItem('Lines Changed', [
+                    new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+                ]),
+                new DailyMetricItem('Time Interval', [
+                    new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+                ]),
+                new DailyMetricItem('Points', [
+                    new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+                ]),
+            ];
         }
-        this.data = tempList;
+        else {
+            console.log(d);
+            this.data = [];
+            let tempList = [];
+            for (let key in d) {
+                tempList.push(new DailyMetricItem(key, [
+                    new DailyMetricItem('🚀 Today: ' + d[key] + ' (Latest Update)'),
+                ]));
+            }
+            this.data = tempList;
+        }
     }
     getChildren(task) {
         if (task === undefined) {

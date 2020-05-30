@@ -13,13 +13,13 @@ import {
   loginUserWithEmailAndPassword,
   retrieveUserDailyMetric,
   userDocExists,
+  updatePersistentStorageWithUserDocData,
 } from './Firestore';
 import {generateRandomEmail} from './Utility';
 import {
   DEFAULT_PASSWORD,
   GLOBAL_STATE_USER_ID,
   GLOBAL_STATE_USER_EMAIL,
-  GLOBAL_STATE_USER_PASSWORD,
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
@@ -33,6 +33,7 @@ import {
   AUTH_ERR_CODE_INVALID_EMAIL,
 } from './Constants';
 import {getMaxListeners} from 'cluster';
+import {removeTeamNameAndId} from './Team';
 
 import {testCallback} from './DailyMetricDataProvider';
 
@@ -62,15 +63,16 @@ export function getExtensionContext() {
 export function clearCachedUserId() {
   let ctx = getExtensionContext();
   ctx.globalState.update(GLOBAL_STATE_USER_ID, undefined);
-  ctx.globalState.update(GLOBAL_STATE_USER_EMAIL, undefined);
-  ctx.globalState.update(GLOBAL_STATE_USER_PASSWORD, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_NICKNAME, undefined);
+
   console.log(
     'After clearing persistent storage: ' + extensionContext.globalState,
   );
+
+  removeTeamNameAndId();
 }
 
 /**
@@ -81,25 +83,21 @@ export async function authenticateUser() {
   //stores the extension context
   const ctx = getExtensionContext();
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
-  const cachedUserEmail = ctx.globalState.get(GLOBAL_STATE_USER_EMAIL);
-  const cachedUserPassword = ctx.globalState.get(GLOBAL_STATE_USER_PASSWORD);
   const cachedUserNickName = ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME);
 
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
-  if (cachedUserId == undefined) {
+  if (cachedUserId === undefined) {
     // case1: sign in or create new account
-    console.log(
-      'No cachedUserId found. Need to sign in or create a new account.',
-    );
-    signInOrSignUpUserWithUserInput();
-    //registerNewUserOrSigInWithUserInput();
+    window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
+
+    signInOrSignUpUserWithUserInput().then(() => {
+      retrieveUserDailyMetric(testCallback, ctx);
+    });
   } else {
     // case2: existing user's id found
     console.log('Found cachedUserId: ' + cachedUserId);
-    console.log('Found cachedUserEmail: ' + cachedUserEmail);
-    console.log('Found cachedUserPassword: ' + cachedUserPassword);
     console.log('Found cachedTeamName: ' + cachedTeamName);
     console.log('Found cachedTeamId: ' + cachedTeamId);
     console.log('Found cachedUserNickname: ' + cachedUserNickName);
@@ -107,18 +105,20 @@ export async function authenticateUser() {
     //check if user doc exists in firebase
     let exists = await userDocExists(cachedUserId);
     if (exists) {
-      console.log('User doc exists in db.');
+      updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
+        retrieveUserDailyMetric(testCallback, ctx);
+      });
       window.showInformationMessage(
         'Welcome back, ' + cachedUserNickName + '!!',
       );
     } else {
-      console.log('Need to log in or register for a new account.');
-      signInOrSignUpUserWithUserInput();
-      //registerNewUserOrSigInWithUserInput();
+      signInOrSignUpUserWithUserInput().then(() => {
+        retrieveUserDailyMetric(testCallback, ctx);
+      });
     }
   }
 
-  await retrieveUserDailyMetric(testCallback, ctx);
+  //retrieveUserDailyMetric(testCallback, ctx);
 }
 
 /**
@@ -153,6 +153,7 @@ export async function registerNewUserOrSigInWithUserInput() {
           .showInputBox({
             placeHolder:
               'Enter your password (must be 6 characters long or more)',
+            password: true,
           })
           .then((inputPassword) => {
             password = inputPassword;
@@ -224,8 +225,7 @@ export async function signInOrSignUpUserWithUserInput() {
   let password = undefined;
   let completed = false;
 
-  //while (!completed) {
-  //forcing the user to always sign in
+  //prompt the user to sign in or create an account upon activating the extension
   window
     .showInformationMessage(
       'Please sign in or create a new account!',
@@ -315,8 +315,6 @@ export async function signInOrSignUpUserWithUserInput() {
           }
         });
     });
-  //completed = true;
-  //}
 }
 
 /**

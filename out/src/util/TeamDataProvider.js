@@ -28,6 +28,7 @@ class TeamDataProvider {
         this.onDidChangeTreeData = this
             ._onDidChangeTreeData.event;
         this.data = [
+            new TeamItem('🛡 Create your Team'),
             new TeamItem('🔰 Join team'),
             new TeamItem('📋 View team leaderboard'),
             new TeamItem('Get Team Info', [new TeamItem('')]),
@@ -69,7 +70,11 @@ exports.connectCloud9TeamInfoTreeView = (view) => {
     })));
 };
 exports.handleTeamInfoChangeSelection = (view, item) => {
-    if (item.label === '🔰 Join team') {
+    if (item.label === '🛡 Create your Team') {
+        console.log('create a team');
+        vscode_1.commands.executeCommand('cloud9.createTeam');
+    }
+    else if (item.label === '🔰 Join team') {
         console.log('join a team');
         vscode_1.commands.executeCommand('cloud9.joinTeam');
     }
@@ -82,10 +87,22 @@ exports.handleTeamInfoChangeSelection = (view, item) => {
         const ctx = Authentication_1.getExtensionContext();
         const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-        item.children = [
-            new TeamItem('TeamName', [new TeamItem(teamName + '')]),
-            new TeamItem('teamId', [new TeamItem(teamId + '')]),
-        ];
+        if (teamId == undefined || teamId == '') {
+            item.children = [
+                new TeamItem('TeamName', [
+                    new TeamItem('Empty (Please join a team first)'),
+                ]),
+                new TeamItem('teamId', [
+                    new TeamItem('Empty (Please join a team first)'),
+                ]),
+            ];
+        }
+        else {
+            item.children = [
+                new TeamItem('TeamName', [new TeamItem(teamName + '')]),
+                new TeamItem('teamId', [new TeamItem(teamId + '')]),
+            ];
+        }
         vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
     }
 };

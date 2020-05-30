@@ -48,6 +48,7 @@ export const GLOBAL_STATE_USER_PASSWORD = 'cachedUserPassword';
 export const GLOBAL_STATE_USER_TEAM_NAME = 'cachedUserTeamName';
 export const GLOBAL_STATE_USER_TEAM_ID = 'cachedUserTeamId';
 export const GLOBAL_STATE_USER_IS_TEAM_LEADER = 'cachedUserIsTeamLeader'; //bool
+export const GLOBAL_STATE_USER_TEAM_MEMBERS = 'cachedUserTeamMembers'; //maps
 
 // authentication options
 export const AUTH_SIGN_IN = 'Sign in';

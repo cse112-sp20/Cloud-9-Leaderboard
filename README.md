@@ -11,7 +11,7 @@
 
 <p align="center">Cloud 9 is an open source plugin for tracking developers'
 productivity by displaying metric scores on leaderboard. Cloud 9 is build
-on top of the open source <a href="https://www.software.com/code-time">Code time</a> vscode extension. 
+on top of the open source <a href="https://www.software.com/cloud9">Code time</a> vscode extension. 
 </p>
 
 <br />

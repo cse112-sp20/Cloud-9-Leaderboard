@@ -113,6 +113,7 @@ function activate(ctx) {
                 OnboardManager_1.onboardInit(ctx, intializePlugin /*successFunction*/);
             }, 1000 * secondDelay);
         }
+        console.log('BEfore calling authenticateUser');
         // sign the user in
         Authentication_1.authenticateUser();
         //await retrieveUserDailyMetric(testCallback, ctx);
@@ -221,14 +222,6 @@ function initializeIntervalJobs() {
             updateLiveshareTime();
         }
     }), one_min_millis);
-}
-function handlePauseMetricsEvent() {
-    TELEMETRY_ON = false;
-    Util_1.showStatus('Code Time Paused', 'Enable metrics to resume');
-}
-function handleEnableMetricsEvent() {
-    TELEMETRY_ON = true;
-    Util_1.showStatus('Code Time', null);
 }
 function updateLiveshareTime() {
     if (_ls) {
