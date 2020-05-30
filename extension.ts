@@ -166,11 +166,10 @@ export async function activate(ctx: ExtensionContext) {
     }, 1000 * secondDelay);
   }
 
-  console.log("BEfore calling authenticateUser");
+  console.log('BEfore calling authenticateUser');
 
   // sign the user in
   authenticateUser(ctx);
- 
 }
 
 function getRandomArbitrary(min, max) {

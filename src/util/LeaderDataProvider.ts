@@ -59,7 +59,12 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
       const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
       if (teamId == undefined || teamId == '') {
         this.data = [
-          new LeaderItem('No permission: Not in a team yet', undefined, undefined, this),
+          new LeaderItem(
+            'No permission: Not in a team yet',
+            undefined,
+            undefined,
+            this,
+          ),
         ];
       } else {
         this.data = [
@@ -136,7 +141,7 @@ export const handleLeaderInfoChangeSelection = (
     GLOBAL_STATE_USER_TEAM_MEMBERS,
   );
   if (item.label.startsWith('No permission:')) {
-    console.log('No permission selected')
+    console.log('No permission selected');
     if (ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
       console.log(item);
 
@@ -151,9 +156,8 @@ export const handleLeaderInfoChangeSelection = (
         topItem,
       ];
       commands.executeCommand('LeaderView.refreshEntry');
-    }
-    else{
-      console.log("Is not a leader");
+    } else {
+      console.log('Is not a leader');
     }
   } else if (item.label === 'Team members') {
     console.log('Team members');

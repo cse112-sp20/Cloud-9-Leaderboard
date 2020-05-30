@@ -84,7 +84,7 @@ export async function authenticateUser(ctx: ExtensionContext) {
     // case1: sign in or create new account
     window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
 
-    registerNewUserOrSigInWithUserInput().then(()=> {
+    registerNewUserOrSigInWithUserInput().then(() => {
       retrieveUserDailyMetric(testCallback, ctx);
     });
   } else {
@@ -104,9 +104,8 @@ export async function authenticateUser(ctx: ExtensionContext) {
         'Welcome back, ' + cachedUserNickName + '!!',
       );
     } else {
-      registerNewUserOrSigInWithUserInput().then(() =>{
-          retrieveUserDailyMetric(testCallback, ctx);
-
+      registerNewUserOrSigInWithUserInput().then(() => {
+        retrieveUserDailyMetric(testCallback, ctx);
       });
     }
   }
@@ -138,7 +137,7 @@ export async function registerNewUserOrSigInWithUserInput() {
           .showInputBox({
             placeHolder:
               'Enter your password (must be 6 characters long or more)',
-              password: true,
+            password: true,
           })
           .then((inputPassword) => {
             password = inputPassword;
