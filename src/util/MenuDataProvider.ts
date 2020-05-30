@@ -27,14 +27,14 @@ import {
 
 import {getExtensionContext} from './Authentication';
 
-const path = require("path");
+const path = require('path');
 
 const resourcePath: string = path.join(
   __filename,
-  "..",
-  "..",
-  "..",
-  "resources"
+  '..',
+  '..',
+  '..',
+  'resources',
 );
 
 export class MenuDataProvider implements TreeDataProvider<MenuItem> {
@@ -52,12 +52,7 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
   data: MenuItem[];
 
   constructor() {
-
-    
-
-
     this.data = [
-
       new MenuItem('📊 View personal stats'),
       new MenuItem('🌐 Leaderboard'),
     ];

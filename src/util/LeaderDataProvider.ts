@@ -24,7 +24,7 @@ import {getExtensionContext} from './Authentication';
 import {
   GLOBAL_STATE_USER_TEAM_MEMBERS,
   GLOBAL_STATE_USER_TEAM_ID,
-  GLOBAL_STATE_USER_IS_TEAM_LEADER
+  GLOBAL_STATE_USER_IS_TEAM_LEADER,
 } from './Constants';
 import {leaveTeam} from './Firestore';
 import CodeTimeSummary from '../../lib/model/CodeTimeSummary';
@@ -45,34 +45,34 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
   constructor() {
     const ctx = getExtensionContext();
-    if (
-      ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)
-
-    ){
-   
-
+    if (ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
       let childLeaderItem = new LeaderItem('');
 
       let topLeaderItem = new LeaderItem('Remove Team members', undefined, [
         childLeaderItem,
       ]);
       childLeaderItem.parent = topLeaderItem;
-      this.data = [new LeaderItem('Team members', undefined, [new LeaderItem('')]), topLeaderItem];
-
-
-    }
-    else{
-     
+      this.data = [
+        new LeaderItem('Team members', undefined, [new LeaderItem('')]),
+        topLeaderItem,
+      ];
+    } else {
       const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
-      if(teamId == undefined || teamId == '' ){
-        this.data = [new LeaderItem('Not in a team yet',undefined, undefined, this)];
+      if (teamId == undefined || teamId == '') {
+        this.data = [
+          new LeaderItem('Not in a team yet', undefined, undefined, this),
+        ];
+      } else {
+        this.data = [
+          new LeaderItem(
+            'No permission: Not team leader',
+            undefined,
+            undefined,
+            this,
+          ),
+        ];
       }
-      else{
-        this.data = [new LeaderItem('No permission: Not team leader',undefined, undefined, this)];
-      }
-     
-    };
-
+    }
   }
 
   bindView(menuTreeView: TreeView<LeaderItem>): void {
@@ -96,7 +96,12 @@ export class LeaderItem extends TreeItem {
   parent: LeaderItem | undefined;
   upperClass: LeaderDataProvider | undefined;
 
-  constructor(label: string, parent?: LeaderItem, children?: LeaderItem[], upperClass?: LeaderDataProvider) {
+  constructor(
+    label: string,
+    parent?: LeaderItem,
+    children?: LeaderItem[],
+    upperClass?: LeaderDataProvider,
+  ) {
     super(
       label,
       children === undefined
@@ -131,50 +136,43 @@ export const handleLeaderInfoChangeSelection = (
   const memberMaps: Map<string, Map<string, string>> = ctx.globalState.get(
     GLOBAL_STATE_USER_TEAM_MEMBERS,
   );
-  if(item.label.startsWith('No permission:')){
+  if (item.label.startsWith('No permission:')) {
+    if (ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
+      console.log(item);
 
+      let childItem = new LeaderItem('');
 
-if(ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)){
-
-  console.log(item);
-
-  let childItem = new LeaderItem('');
-
-  let topItem = new LeaderItem('Remove Team members', undefined, [
-    childItem,
-  ]);
-  childItem.parent = topItem;
-  item.upperClass.data = [new LeaderItem('Team members', undefined, [new LeaderItem('')]), topItem];
-  commands.executeCommand('LeaderView.refreshEntry');
-}
-
-
-
-
-    
-  }
-  else if (item.label === 'Team members'){
+      let topItem = new LeaderItem('Remove Team members', undefined, [
+        childItem,
+      ]);
+      childItem.parent = topItem;
+      item.upperClass.data = [
+        new LeaderItem('Team members', undefined, [new LeaderItem('')]),
+        topItem,
+      ];
+      commands.executeCommand('LeaderView.refreshEntry');
+    }
+  } else if (item.label === 'Team members') {
     console.log('Team members');
     item.children = [];
     console.log(memberMaps);
     for (let [key, value] of Object.entries(memberMaps)) {
-      item.children.push(new LeaderItem('User: ' + memberMaps[key]['name'], item, [new LeaderItem('')]));
+      item.children.push(
+        new LeaderItem('User: ' + memberMaps[key]['name'], item, [
+          new LeaderItem(''),
+        ]),
+      );
     }
     commands.executeCommand('LeaderView.refreshEntry');
-  }
-  else if(item.label.startsWith('User: ')){
-    
+  } else if (item.label.startsWith('User: ')) {
     console.log('Team members');
     item.children = [];
     console.log(memberMaps);
     for (let [key, value] of Object.entries(memberMaps)) {
-      item.children.push(new LeaderItem('Email: ' +key));
+      item.children.push(new LeaderItem('Email: ' + key));
     }
     commands.executeCommand('LeaderView.refreshEntry');
-
-
-  }
-  else if (item.label === 'Remove Team members') {
+  } else if (item.label === 'Remove Team members') {
     console.log('Team members selected');
 
     item.children = [];

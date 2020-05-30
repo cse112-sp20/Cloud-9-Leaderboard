@@ -30,33 +30,37 @@ export class DailyMetricDataProvider
 
   data: DailyMetricItem[];
   constructor(d) {
-
-    if(d == undefined){
+    if (d == undefined) {
       this.data = [
-        new DailyMetricItem('Keystrokes', [new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),]),
-        new DailyMetricItem('Lines Changed', [new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),]),
-        new DailyMetricItem('Time Interval', [new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),]),
-        new DailyMetricItem('Points', [new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),])
-      ]
-    }
-    else{
+        new DailyMetricItem('Keystrokes', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+        new DailyMetricItem('Lines Changed', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+        new DailyMetricItem('Time Interval', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+        new DailyMetricItem('Points', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+      ];
+    } else {
       console.log(d);
 
-    this.data = [];
+      this.data = [];
 
-    let tempList = [];
-    for (let key in d) {
-      tempList.push(
-        new DailyMetricItem(key, [
-          new DailyMetricItem('🚀 Today: ' + d[key] + ' (Latest Update)'),
-        ]),
-      );
+      let tempList = [];
+      for (let key in d) {
+        tempList.push(
+          new DailyMetricItem(key, [
+            new DailyMetricItem('🚀 Today: ' + d[key] + ' (Latest Update)'),
+          ]),
+        );
+      }
+
+      this.data = tempList;
     }
-
-    this.data = tempList;
-    }
-
-    
   }
 
   getChildren(

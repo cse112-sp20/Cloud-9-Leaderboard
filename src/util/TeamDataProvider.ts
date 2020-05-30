@@ -106,11 +106,10 @@ export const handleTeamInfoChangeSelection = (
   view: TreeView<TeamItem>,
   item: TeamItem,
 ) => {
-  if (item.label === '🛡 Create your Team'){
+  if (item.label === '🛡 Create your Team') {
     console.log('create a team');
     commands.executeCommand('cloud9.createTeam');
-  }
-  else if (item.label === '🔰 Join team') {
+  } else if (item.label === '🔰 Join team') {
     console.log('join a team');
     commands.executeCommand('cloud9.joinTeam');
   } else if (item.label === '📋 View team leaderboard') {
