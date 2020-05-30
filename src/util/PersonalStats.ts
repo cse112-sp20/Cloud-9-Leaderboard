@@ -207,7 +207,7 @@ async function writePersonalStatsFile(dates) {
     if (scoreDifference >= 0) {
       content += obj['dateStr'] + '  🟢🟢🟢🟢🟢' + '\n';
     } else {
-      content += obj['dateStr'] + '  🟥🟥🟥🟥🟥' + '\n';
+      content += obj['dateStr'] + '  🔴🔴🔴🔴🔴' + '\n';
       counter = 1;
     }
 
