@@ -27,7 +27,6 @@ import {
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
 } from './Constants';
 import {leaveTeam} from './Firestore';
-import CodeTimeSummary from '../../lib/model/CodeTimeSummary';
 
 export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
   private _onDidChangeTreeData: EventEmitter<
