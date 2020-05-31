@@ -169,6 +169,9 @@ function writeToFile(users, isTeam) {
             obj['totalKeystrokes'] = user['keystrokes'];
             obj['totalLinesChanged'] = user['linesChanged'];
             obj['totalTimeInterval'] = user['timeInterval'];
+            obj['today_keystrokes'] = user['today_keystrokes'];
+            obj['today_linesChanged'] = user['today_linesChanged'];
+            obj['today_timeInterval'] = user['today_timeInterval'];
             obj['score'] = parseFloat(user['cumulativePoints']).toFixed(3);
             scoreMap.push(obj);
         });
@@ -195,13 +198,22 @@ function writeToFile(users, isTeam) {
             let badges = '';
             if (isTeam) {
                 if (user.totalKeystrokes > 5000) {
-                    badges += '\uD83D\uDC8E ';
+                    badges += String.fromCodePoint(0x1f48e) + ' ';
                 }
-                if (user.totalLinesChanged > 0) {
-                    badges += '🔍 ';
+                if (user.totalLinesChanged > 2000) {
+                    badges += String.fromCodePoint(0x1f50e) + ' ';
                 }
-                if (user.totalTimeInterval > 0) {
-                    badges += '⌛ ';
+                if (user.totalTimeInterval > 200 * 60 * 60) {
+                    badges += String.fromCodePoint(0x1f525) + ' ';
+                }
+                if (user.today_keystrokes > 500) {
+                    badges += String.fromCodePoint(0x1f4aa) + ' ';
+                }
+                if (user.today_linesChanged > 200) {
+                    badges += String.fromCodePoint(0x1f94a) + ' ';
+                }
+                if (user.today_timeInterval > 6 * 60 * 60) {
+                    badges += String.fromCodePoint(0x1f388) + ' ';
                 }
             }
             if (cachedUserId == user.id) {
@@ -282,18 +294,30 @@ function writeToFile(users, isTeam) {
         leaderBoardContent += Constants_1.SECTION_BAR + '\n';
         console.log(scoreMap);
         leaderBoardContent +=
-            '\uD83E\uDD47'.padEnd(BADGE_LENGTH, ' ') + '- rank first \n';
+            String.fromCodePoint(0x1f947).padEnd(BADGE_LENGTH, ' ') + '- rank first \n';
         leaderBoardContent +=
-            '\uD83E\uDD48'.padEnd(BADGE_LENGTH, ' ') + '- rank second \n';
+            String.fromCodePoint(0x1f948).padEnd(BADGE_LENGTH, ' ') +
+                '- rank second \n';
         leaderBoardContent +=
-            '\uD83E\uDD49'.padEnd(BADGE_LENGTH, ' ') + '- rank third \n';
+            String.fromCodePoint(0x1f949).padEnd(BADGE_LENGTH, ' ') + '- rank third \n';
         leaderBoardContent +=
-            '\uD83D\uDC8E'.padEnd(BADGE_LENGTH, ' ') +
+            String.fromCodePoint(0x1f48e).padEnd(BADGE_LENGTH, ' ') +
                 '- reach 5000 total keystrokes \n';
         leaderBoardContent +=
-            '🔍'.padEnd(BADGE_LENGTH, ' ') + '- reach 2000 lines changed \n';
+            String.fromCodePoint(0x1f50e).padEnd(BADGE_LENGTH, ' ') +
+                '- reach 2000 total lines changed \n';
         leaderBoardContent +=
-            '⌛'.padEnd(BADGE_LENGTH, ' ') + '- spend 10 hours coding \n';
+            String.fromCodePoint(0x1f525).padEnd(BADGE_LENGTH, ' ') +
+                '- spend total of 200 hours coding \n';
+        leaderBoardContent +=
+            String.fromCodePoint(0x1f4aa).padEnd(BADGE_LENGTH, ' ') +
+                '- reach 500 keystrokes today\n';
+        leaderBoardContent +=
+            String.fromCodePoint(0x1f94a).padEnd(BADGE_LENGTH, ' ') +
+                '- reach 200 lines changed today \n';
+        leaderBoardContent +=
+            String.fromCodePoint(0x1f388).padEnd(BADGE_LENGTH, ' ') +
+                '- spend 6 hours coding today \n';
         fs.writeFileSync(leaderboardFile, leaderBoardContent, (err) => {
             if (err) {
                 console.error('Error writing leaderboard');
