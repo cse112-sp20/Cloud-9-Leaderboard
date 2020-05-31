@@ -70,7 +70,7 @@ npm run compile
   - Leaders also have the option of managing their team through appointing new leaders or removing members.
   - They can also set personal tasks(ex. Finishing a File) that can give additional points to users.
 
-Badges and Achievements
+### Badges and Achievements
 
 - Earn special badges that showcase progress on your coding!
 - Get achievements that help contribute to your personal score!
