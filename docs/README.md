@@ -21,18 +21,16 @@ git clone #TODO
 
 ## Features
 
+<img src="https://i.imgur.com/xp9BzSF.png" alt="drawing"/>
+
 ### Personal Statistics
 
 - Our extention tracks various statistics for many different types of actions performed within the VSCode editor through the help of Code-Time API.
 - Appears as a stylized text file for readability and ease of access
 - Tracks:
-
   - Time spent in the editor
-
   - Number of keystrokes typed
-
   - Number of lines added or removed
-
   - Personal score determined by the above stats
 
 ### Team Leaderboard
