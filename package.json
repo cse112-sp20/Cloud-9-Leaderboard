@@ -105,6 +105,14 @@
         "light": "resources/light/refresh.svg",
         "dark": "resources/dark/refresh.svg"
     }
+  },
+  {
+    "command": "TeamMenuView.refreshEntry",
+    "title": "Refresh",
+    "icon": {
+        "light": "resources/light/refresh.svg",
+        "dark": "resources/dark/refresh.svg"
+    }
   }
     ],
     "menus": {
@@ -122,6 +130,11 @@
         {
           "command": "MenuView.refreshEntry",
           "when": "view == MenuView",
+          "group": "navigation"
+        },
+        {
+          "command": "TeamMenuView.refreshEntry",
+          "when": "view == TeamMenuView",
           "group": "navigation"
         }
 

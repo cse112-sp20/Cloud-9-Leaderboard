@@ -91,6 +91,7 @@ function authenticateUser() {
                 vscode_1.window.showInformationMessage('Welcome back, ' + cachedUserNickName + '!!');
                 vscode_1.commands.executeCommand('MenuView.refreshEntry');
                 vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
             }
             else {
                 signInOrSignUpUserWithUserInput().then(() => {
@@ -253,6 +254,7 @@ function signInOrSignUpUserWithUserInput() {
                                 console.log('setting completed to true');
                                 vscode_1.commands.executeCommand('MenuView.refreshEntry');
                                 vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                                vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
                                 return;
                             }
                             //not logged in
@@ -278,6 +280,7 @@ function signInOrSignUpUserWithUserInput() {
                                 completed = true;
                                 vscode_1.commands.executeCommand('MenuView.refreshEntry');
                                 vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                                vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
                                 return;
                             }
                             //not created

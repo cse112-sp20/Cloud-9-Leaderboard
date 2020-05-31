@@ -623,6 +623,7 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
           ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME),
       );
       commands.executeCommand('LeaderView.refreshEntry');
+      commands.executeCommand('TeamMenuView.refreshEntry');
     })
     .catch((e) => {
       console.log(e.message);
@@ -707,6 +708,8 @@ export async function leaveTeam(userId, teamId) {
       ctx.globalState.update(GLOBAL_STATE_USER_TEAM_MEMBERS, newMembersMap);
       console.log('new members map: ');
       console.log(ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS));
+      commands.executeCommand('LeaderView.refreshEntry');
+      commands.executeCommand('TeamMenuView.refreshEntry');
     })
     .catch((e) => {
       console.log(e.message);

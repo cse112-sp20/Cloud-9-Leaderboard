@@ -114,6 +114,7 @@ export async function authenticateUser() {
 
       commands.executeCommand('MenuView.refreshEntry');
       commands.executeCommand('LeaderView.refreshEntry');
+      commands.executeCommand('TeamMenuView.refreshEntry');
     } else {
       signInOrSignUpUserWithUserInput().then(() => {
         retrieveUserDailyMetric(testCallback, ctx);
@@ -281,8 +282,8 @@ export async function signInOrSignUpUserWithUserInput() {
                     completed = true;
                     console.log('setting completed to true');
                     commands.executeCommand('MenuView.refreshEntry');
-
                     commands.executeCommand('LeaderView.refreshEntry');
+                    commands.executeCommand('TeamMenuView.refreshEntry');
                     return;
                   }
                   //not logged in
@@ -309,6 +310,7 @@ export async function signInOrSignUpUserWithUserInput() {
                     completed = true;
                     commands.executeCommand('MenuView.refreshEntry');
                     commands.executeCommand('LeaderView.refreshEntry');
+                    commands.executeCommand('TeamMenuView.refreshEntry');
                     return;
                   }
                   //not created

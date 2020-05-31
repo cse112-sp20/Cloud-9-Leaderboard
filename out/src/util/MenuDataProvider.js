@@ -41,7 +41,7 @@ class MenuDataProvider {
         const ctx = Authentication_2.getExtensionContext();
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID) !== undefined) {
             this.data = [
-                new MenuItem(`Welcome, ${ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME)}`),
+                new MenuItem(`Welcome, ${ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME)}!`),
                 new MenuItem('📊 View personal stats'),
                 new MenuItem('🌐 Leaderboard'),
             ];

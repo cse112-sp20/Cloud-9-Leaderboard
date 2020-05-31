@@ -43,6 +43,24 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
     ._onDidChangeTreeData.event;
 
   refresh(): void {
+    const ctx = getExtensionContext();
+    const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+
+    if (cachedTeamId === undefined || cachedTeamId === '') {
+      this.data = [
+        new TeamItem('🛡 Create your Team'),
+        new TeamItem('🔰 Join team'),
+      ];
+
+      console.log('NO team');
+    } else {
+      this.data = [
+        new TeamItem('🛡 Welcome back to your Team'),
+        new TeamItem('📋 View team leaderboard'),
+        new TeamItem('Get Team Info', [new TeamItem('')]),
+      ];
+    }
+
     this._onDidChangeTreeData.fire(null);
   }
 
@@ -53,8 +71,6 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
     this.data = [
       new TeamItem('🛡 Create your Team'),
       new TeamItem('🔰 Join team'),
-      new TeamItem('📋 View team leaderboard'),
-      new TeamItem('Get Team Info', [new TeamItem('')]),
     ];
   }
 

@@ -530,6 +530,7 @@ function joinTeamWithTeamId(teamId, isLeader) {
             vscode_1.window.showInformationMessage('Welcome to your new team: ' +
                 ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
             vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+            vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
         })
             .catch((e) => {
             console.log(e.message);
@@ -606,6 +607,8 @@ function leaveTeam(userId, teamId) {
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, newMembersMap);
             console.log('new members map: ');
             console.log(ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS));
+            vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+            vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
         })
             .catch((e) => {
             console.log(e.message);
