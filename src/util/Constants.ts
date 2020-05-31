@@ -52,6 +52,19 @@ export const timeMultiplier = 0.01;
 export const keystrokeMultplier = 1;
 export const linesMultiplier = 10;
 export const GLOBAL_STATE_USER_IS_TEAM_LEADER = 'cachedUserIsTeamLeader'; //bool
+export const GLOBAL_STATE_USER_TEAM_MEMBERS = 'cachedUserTeamMembers'; //maps
+
+// authentication options
+export const AUTH_SIGN_IN = 'Sign in';
+export const AUTH_CREATE_ACCOUNT = 'Create a new account';
+
+// firebase authentication error codes
+export const AUTH_ERR_CODE_EMAIL_USED = 'auth/email-already-in-use';
+export const AUTH_ERR_CODE_WRONG_PASSWORD = 'auth/wrong-password';
+export const AUTH_ERR_CODE_WEAK_PASSWORD = 'auth/weak-password';
+export const AUTH_ERR_CODE_USER_NOT_FOUND = 'auth/user-not-found';
+export const AUTH_ERR_CODE_INVALID_EMAIL = 'auth/invalid-email';
+
 export const MAX_USERNAME_LENGTH = 50;
 export const MAX_RANK_LENGTH = 6;
 export const SECTION_BAR = '\n'.padStart(80, '=');

@@ -48,6 +48,7 @@ const sinon = require('sinon');
 const firebase = require('firebase/app');
 import * as Mocha from 'mocha';
 import { expect } from 'chai';
+import { DailyMetricDataProvider, DailyMetricItem } from '../../src/util/DailyMetricDataProvider';
 
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
@@ -65,7 +66,7 @@ suite('authentication.ts', () => {
 
   test('authenticating user', () => {
     const ctx = getExtensionContext();
-    authenticateUser(ctx);
+    //authenticateUser();
   });
 
   test('registering new user with user input', () => {
@@ -335,4 +336,31 @@ suite('personalstats.ts', () => {
 suite('team.ts', () => {
   
 
+});
+
+suite('DailyMetricDataProvider', () => {
+  test('constructing new DailyMetricDataProvider on undefined obj', () => {
+    const metricProvider: DailyMetricDataProvider = new DailyMetricDataProvider(undefined);
+    
+    assert.equal(metricProvider.data.length, 4);
+  });
+
+  test('constructing new DailyMetricDataProvider on defined obj', () => {
+    const metricProvider: DailyMetricDataProvider = new DailyMetricDataProvider([]);
+    
+    assert.equal(metricProvider.data.length, 0);
+  });
+
+  test('constructing new DailyMetricItem wiht null children', () => {
+    const metricItem: DailyMetricItem = new DailyMetricItem("test", null);
+    
+    assert.equal(metricItem.children, null);
+  });
+
+  test('constructing new DailyMetricItem wiht null children', () => {
+    const testItem: DailyMetricItem[] = [new DailyMetricItem("test")];
+    const metricItem: DailyMetricItem = new DailyMetricItem("test", testItem);
+    
+    assert.equal(metricItem.children, testItem);
+  });
 });

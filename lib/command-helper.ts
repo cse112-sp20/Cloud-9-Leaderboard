@@ -39,6 +39,7 @@ import {
   joinTeam,
 } from '../src/util/Team';
 import {displayPersonalStats} from '../src/util/PersonalStats';
+import {leaveTeam} from '../src/util/FireStore';
 import {
   MenuDataProvider,
   MenuItem,
@@ -231,7 +232,6 @@ export function createCommands(
   // Cloud9: command used to create a new team
   cmds.push(
     commands.registerCommand('cloud9.createTeam', () => {
-      console.log('Cloud9: CREATE A NEW TEAM');
       createAndJoinTeam();
     }),
   );
@@ -239,7 +239,6 @@ export function createCommands(
   // Cloud9: command used to retrieve team code
   cmds.push(
     commands.registerCommand('cloud9.getTeamInfo', () => {
-      console.log('Cloud9: GET TEAM NAME AND ID');
       getTeamInfo();
     }),
   );
@@ -256,7 +255,6 @@ export function createCommands(
   cmds.push(
     commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
       console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
-      removeTeamNameAndId();
     }),
   );
 

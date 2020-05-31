@@ -149,11 +149,11 @@ async function writePersonalStatsFile(dates) {
   content +=
     'Each modified line:                                  +   10 points per line \n\n';
 
-  content += PERSONAL_STATISTIC_ROW_1;
-  content += PERSONAL_STATISTIC_ROW_2;
-  content += PERSONAL_STATISTIC_ROW_3;
-  content += PERSONAL_STATISTIC_ROW_4;
-  content += PERSONAL_STATISTIC_ROW_5;
+  // content += PERSONAL_STATISTIC_ROW_1;
+  // content += PERSONAL_STATISTIC_ROW_2;
+  // content += PERSONAL_STATISTIC_ROW_3;
+  // content += PERSONAL_STATISTIC_ROW_4;
+  // content += PERSONAL_STATISTIC_ROW_5;
 
   content += SECTION_BAR;
   content += 'Record\n';
@@ -185,8 +185,32 @@ async function writePersonalStatsFile(dates) {
   //     '\n';
   // });
 
+  let previousScore: number = -1;
+  let currentScore: number = 0;
+
+  let counter = 1;
+
+  let mapSize = scoreMap.length;
+
+  console.log(mapSize);
+
   scoreMap.map((obj, i) => {
-    content += obj['dateStr'] + '\n';
+    if (i + 1 >= mapSize) {
+      currentScore = +obj['points'];
+      previousScore = 0;
+    } else {
+      currentScore = +obj['points'];
+      previousScore = +scoreMap[i + 1]['points'];
+    }
+
+    let scoreDifference = currentScore - previousScore;
+    if (scoreDifference >= 0) {
+      content += obj['dateStr'] + ' 🟢🟢🟢🟢🟢' + '\n';
+    } else {
+      content += obj['dateStr'] + ' 🔴🔴🔴🔴🔴' + '\n';
+      counter = 1;
+    }
+
     content +=
       '___________________________________________________________________________________________\n';
     content +=

@@ -91,6 +91,7 @@ exports.deactivate = deactivate;
 function activate(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         vscode_1.window.showInformationMessage('Cloud9 Activated!');
+        console.log('Cloud9 activated');
         //store ref to extension context
         Authentication_1.storeExtensionContext(ctx);
         // add the code time commands
@@ -112,8 +113,9 @@ function activate(ctx) {
                 OnboardManager_1.onboardInit(ctx, intializePlugin /*successFunction*/);
             }, 1000 * secondDelay);
         }
+        console.log('BEfore calling authenticateUser');
         // sign the user in
-        Authentication_1.authenticateUser(ctx);
+        Authentication_1.authenticateUser();
         //await retrieveUserDailyMetric(testCallback, ctx);
     });
 }
@@ -220,14 +222,6 @@ function initializeIntervalJobs() {
             updateLiveshareTime();
         }
     }), one_min_millis);
-}
-function handlePauseMetricsEvent() {
-    TELEMETRY_ON = false;
-    Util_1.showStatus('Code Time Paused', 'Enable metrics to resume');
-}
-function handleEnableMetricsEvent() {
-    TELEMETRY_ON = true;
-    Util_1.showStatus('Code Time', null);
 }
 function updateLiveshareTime() {
     if (_ls) {

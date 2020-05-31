@@ -13,19 +13,27 @@ import {
   loginUserWithEmailAndPassword,
   retrieveUserDailyMetric,
   userDocExists,
+  updatePersistentStorageWithUserDocData,
 } from './Firestore';
 import {generateRandomEmail} from './Utility';
 import {
   DEFAULT_PASSWORD,
   GLOBAL_STATE_USER_ID,
   GLOBAL_STATE_USER_EMAIL,
-  GLOBAL_STATE_USER_PASSWORD,
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
   GLOBAL_STATE_USER_NICKNAME,
+  AUTH_ERR_CODE_EMAIL_USED,
+  AUTH_ERR_CODE_WEAK_PASSWORD,
+  AUTH_ERR_CODE_WRONG_PASSWORD,
+  AUTH_SIGN_IN,
+  AUTH_CREATE_ACCOUNT,
+  AUTH_ERR_CODE_USER_NOT_FOUND,
+  AUTH_ERR_CODE_INVALID_EMAIL,
 } from './Constants';
 import {getMaxListeners} from 'cluster';
+import {removeTeamNameAndId} from './Team';
 
 import {testCallback} from './DailyMetricDataProvider';
 
@@ -37,6 +45,7 @@ let extensionContext: ExtensionContext = undefined;
  * @param ctx vscode extension context
  */
 export function storeExtensionContext(ctx) {
+  console.log('storing extension context');
   extensionContext = ctx;
 }
 
@@ -54,47 +63,41 @@ export function getExtensionContext() {
 export function clearCachedUserId() {
   let ctx = getExtensionContext();
   ctx.globalState.update(GLOBAL_STATE_USER_ID, undefined);
-  ctx.globalState.update(GLOBAL_STATE_USER_EMAIL, undefined);
-  ctx.globalState.update(GLOBAL_STATE_USER_PASSWORD, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
+  ctx.globalState.update(GLOBAL_STATE_USER_NICKNAME, undefined);
 
   console.log(
     'After clearing persistent storage: ' + extensionContext.globalState,
   );
+
+  removeTeamNameAndId();
 }
 
 /**
  * authentication entry point
  * @param ctx
  */
-export async function authenticateUser(ctx: ExtensionContext) {
+export async function authenticateUser() {
   //stores the extension context
-  extensionContext = ctx;
+  const ctx = getExtensionContext();
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
-  const cachedUserEmail = ctx.globalState.get(GLOBAL_STATE_USER_EMAIL);
-  const cachedUserPassword = ctx.globalState.get(GLOBAL_STATE_USER_PASSWORD);
   const cachedUserNickName = ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME);
 
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
-  console.log('--AUTHENTICATION-- USER ID IS: ' + cachedUserId);
-
   if (cachedUserId === undefined) {
     // case1: sign in or create new account
     window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
-    console.log(
-      'No cachedUserId found. Need to sign in or create a new account.',
-    );
 
-    registerNewUserOrSigInWithUserInput();
+    signInOrSignUpUserWithUserInput().then(() => {
+      retrieveUserDailyMetric(testCallback, ctx);
+    });
   } else {
     // case2: existing user's id found
     console.log('Found cachedUserId: ' + cachedUserId);
-    console.log('Found cachedUserEmail: ' + cachedUserEmail);
-    console.log('Found cachedUserPassword: ' + cachedUserPassword);
     console.log('Found cachedTeamName: ' + cachedTeamName);
     console.log('Found cachedTeamId: ' + cachedTeamId);
     console.log('Found cachedUserNickname: ' + cachedUserNickName);
@@ -102,30 +105,20 @@ export async function authenticateUser(ctx: ExtensionContext) {
     //check if user doc exists in firebase
     let exists = await userDocExists(cachedUserId);
     if (exists) {
-      console.log('User doc exists in db.');
+      updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
+        retrieveUserDailyMetric(testCallback, ctx);
+      });
       window.showInformationMessage(
         'Welcome back, ' + cachedUserNickName + '!!',
       );
     } else {
-      console.log('Need to log in or register for a new account.');
-      registerNewUserOrSigInWithUserInput();
+      signInOrSignUpUserWithUserInput().then(() => {
+        retrieveUserDailyMetric(testCallback, ctx);
+      });
     }
-    //.then((result) => {
-    //   if (result==true) {
-    //     console.log('User doc exists in db');
-    //     //true, do nothing
-    //     window.showInformationMessage(
-    //       'Welcome back, ' + cachedUserNickName + '!!',
-    //     );
-    //   } else {
-    //     //false prompt user to sign in
-    //     console.log('Need to login or register for a new account.');
-    //     registerNewUserOrSigInWithUserInput();
-    //   }
-    // });
   }
 
-  await retrieveUserDailyMetric(testCallback, ctx);
+  //retrieveUserDailyMetric(testCallback, ctx);
 }
 
 /**
@@ -139,7 +132,15 @@ export async function registerNewUserOrSigInWithUserInput() {
 
   while (!completed) {
     //forcing the user to always sign in
-    window.showInformationMessage('Please sign in or create a new account.');
+    window
+      .showInformationMessage(
+        'Please sign in or create a new account.',
+        'Sign in',
+        'Create account',
+      )
+      .then(async (selection) => {
+        console.log(selection);
+      });
     //prompt for email and password
     await window
       .showInputBox({placeHolder: 'Enter your email'})
@@ -152,6 +153,7 @@ export async function registerNewUserOrSigInWithUserInput() {
           .showInputBox({
             placeHolder:
               'Enter your password (must be 6 characters long or more)',
+            password: true,
           })
           .then((inputPassword) => {
             password = inputPassword;
@@ -213,10 +215,107 @@ export async function registerNewUserOrSigInWithUserInput() {
           );
         }
       });
+    completed = true;
   }
 }
 
-export function passwordRecovery() {}
+export async function signInOrSignUpUserWithUserInput() {
+  const ctx = getExtensionContext();
+  let email = undefined;
+  let password = undefined;
+  let completed = false;
+
+  //prompt the user to sign in or create an account upon activating the extension
+  window
+    .showInformationMessage(
+      'Please sign in or create a new account!',
+      AUTH_SIGN_IN,
+      AUTH_CREATE_ACCOUNT,
+    )
+    .then(async (selection) => {
+      await window
+        .showInputBox({placeHolder: 'Enter your email: example@gmail.com'})
+        .then((inputEmail) => {
+          email = inputEmail;
+          console.log('user input email: ' + email);
+        })
+        .then(async () => {
+          await window
+            .showInputBox({
+              placeHolder:
+                'Enter your password (must be 6 characters long or more)',
+            })
+            .then((inputPassword) => {
+              password = inputPassword;
+              console.log('user input password: ' + password);
+            });
+        })
+        .then(async () => {
+          if (
+            email == undefined ||
+            password == undefined ||
+            email == '' ||
+            password == ''
+          ) {
+            window.showErrorMessage('Invalid email or password!');
+          } else {
+            if (selection == AUTH_SIGN_IN) {
+              await loginUserWithEmailAndPassword(email, password).then(
+                async (result) => {
+                  console.log(result.loggedIn);
+                  console.log(result.errorCode);
+                  if (result.loggedIn) {
+                    //successfully logged in
+                    window.showInformationMessage(
+                      'Welcome back, ' +
+                        ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
+                        '!!',
+                    );
+                    completed = true;
+                    console.log('setting completed to true');
+                    return;
+                  }
+                  //not logged in
+                  if (result.errorCode == AUTH_ERR_CODE_WRONG_PASSWORD) {
+                    window.showErrorMessage('Wrong password!');
+                  } else if (result.errorCode == AUTH_ERR_CODE_USER_NOT_FOUND) {
+                    window.showErrorMessage('User not found!');
+                  } else if (result.errorCode == AUTH_ERR_CODE_INVALID_EMAIL) {
+                    window.showErrorMessage('Invalid email!');
+                  }
+                },
+              );
+            } else if (selection == AUTH_CREATE_ACCOUNT) {
+              await createNewUserInFirebase(email, password).then(
+                async (result) => {
+                  console.log(result.created);
+                  console.log(result.errorCode);
+                  if (result.created) {
+                    window.showInformationMessage(
+                      'Welcome! Your nickname is: ' +
+                        ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
+                        '!!',
+                    );
+                    completed = true;
+                    return;
+                  }
+                  //not created
+                  if (result.errorCode == AUTH_ERR_CODE_EMAIL_USED) {
+                    window.showErrorMessage('Email already in use!');
+                  } else if (result.errorCode == AUTH_ERR_CODE_WEAK_PASSWORD) {
+                    window.showErrorMessage(
+                      'Password is too weak! Needs to be 6 characters long or more!',
+                    );
+                  } else if (result.errorCode == AUTH_ERR_CODE_INVALID_EMAIL) {
+                    window.showErrorMessage('Invalid email!');
+                  }
+                },
+              );
+            }
+          }
+        });
+    });
+}
 
 /**
  * not using this function

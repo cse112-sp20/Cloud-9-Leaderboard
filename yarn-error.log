@@ -92,14 +92,14 @@ npm manifest:
           "viewsContainers": {
               "activitybar": [
                   {
-                      "id": "code-time",
+                      "id": "cloud9",
                       "title": "Code Time",
                       "icon": "resources/dark/paw-outlined.svg"
                   }
               ]
           },
           "views": {
-              "code-time": [
+              "cloud9": [
                   {
                       "id": "kpm-options-tree",
                       "name": "Menu"

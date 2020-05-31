@@ -15,6 +15,7 @@ import {
   joinTeamWithTeamId,
   checkIfInTeam,
   leaveTeam,
+  fetchTeamMembersList,
 } from './Firestore';
 import {getExtensionContext} from './Authentication';
 import {
@@ -64,8 +65,6 @@ export async function removeTeamNameAndId() {
     window.showInformationMessage('Not in a team!');
     return;
   }
-
-  leaveTeam(userId, teamId);
 }
 
 /**
@@ -81,23 +80,15 @@ export async function getTeamInfo() {
   //check if is leader
   const isLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
 
-  if (teamName == '' && teamId == '') {
+  if (teamId == undefined || teamId == '') {
     window.showInformationMessage('No team info found.');
     return;
   }
 
   let messageStr = 'Your team name: ' + teamName + '\n';
 
-  //if(isLeader){
   messageStr += 'Your team ID: ' + teamId;
-  //}
-  window.showInformationMessage(messageStr);
 
-  if (isLeader) {
-    window.showInformationMessage('You are the leader of your team.');
-  } else {
-    window.showInformationMessage('You are a member of your team.');
-  }
   console.log(messageStr);
   return messageStr;
 }

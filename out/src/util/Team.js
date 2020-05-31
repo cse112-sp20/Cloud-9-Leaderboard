@@ -63,7 +63,6 @@ function removeTeamNameAndId() {
             vscode_1.window.showInformationMessage('Not in a team!');
             return;
         }
-        Firestore_1.leaveTeam(userId, teamId);
     });
 }
 exports.removeTeamNameAndId = removeTeamNameAndId;
@@ -78,21 +77,12 @@ function getTeamInfo() {
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
         //check if is leader
         const isLeader = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER);
-        if (teamName == '' && teamId == '') {
+        if (teamId == undefined || teamId == '') {
             vscode_1.window.showInformationMessage('No team info found.');
             return;
         }
         let messageStr = 'Your team name: ' + teamName + '\n';
-        //if(isLeader){
         messageStr += 'Your team ID: ' + teamId;
-        //}
-        vscode_1.window.showInformationMessage(messageStr);
-        if (isLeader) {
-            vscode_1.window.showInformationMessage('You are the leader of your team.');
-        }
-        else {
-            vscode_1.window.showInformationMessage('You are a member of your team.');
-        }
         console.log(messageStr);
         return messageStr;
     });

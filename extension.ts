@@ -133,6 +133,7 @@ export function deactivate(ctx: ExtensionContext) {
 
 export async function activate(ctx: ExtensionContext) {
   window.showInformationMessage('Cloud9 Activated!');
+  console.log('Cloud9 activated');
   //store ref to extension context
   storeExtensionContext(ctx);
 
@@ -166,8 +167,11 @@ export async function activate(ctx: ExtensionContext) {
     }, 1000 * secondDelay);
   }
 
+  console.log('BEfore calling authenticateUser');
+
   // sign the user in
-  authenticateUser(ctx);
+
+  authenticateUser();
   //await retrieveUserDailyMetric(testCallback, ctx);
 }
 
@@ -302,16 +306,6 @@ function initializeIntervalJobs() {
       updateLiveshareTime();
     }
   }, one_min_millis);
-}
-
-function handlePauseMetricsEvent() {
-  TELEMETRY_ON = false;
-  showStatus('Code Time Paused', 'Enable metrics to resume');
-}
-
-function handleEnableMetricsEvent() {
-  TELEMETRY_ON = true;
-  showStatus('Code Time', null);
 }
 
 function updateLiveshareTime() {

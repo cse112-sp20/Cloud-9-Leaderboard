@@ -17,11 +17,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerNewUserWithGeneratedCredential = exports.passwordRecovery = exports.registerNewUserOrSigInWithUserInput = exports.authenticateUser = exports.clearCachedUserId = exports.getExtensionContext = exports.storeExtensionContext = void 0;
+exports.registerNewUserWithGeneratedCredential = exports.signInOrSignUpUserWithUserInput = exports.registerNewUserOrSigInWithUserInput = exports.authenticateUser = exports.clearCachedUserId = exports.getExtensionContext = exports.storeExtensionContext = void 0;
 const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
 const Utility_1 = require("./Utility");
 const Constants_1 = require("./Constants");
+const Team_1 = require("./Team");
 const DailyMetricDataProvider_1 = require("./DailyMetricDataProvider");
 //export let cachedUserId = undefined;
 let extensionContext = undefined;
@@ -30,6 +31,7 @@ let extensionContext = undefined;
  * @param ctx vscode extension context
  */
 function storeExtensionContext(ctx) {
+    console.log('storing extension context');
     extensionContext = ctx;
 }
 exports.storeExtensionContext = storeExtensionContext;
@@ -47,68 +49,54 @@ exports.getExtensionContext = getExtensionContext;
 function clearCachedUserId() {
     let ctx = getExtensionContext();
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, undefined);
-    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_EMAIL, undefined);
-    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_PASSWORD, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
+    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_NICKNAME, undefined);
     console.log('After clearing persistent storage: ' + extensionContext.globalState);
+    Team_1.removeTeamNameAndId();
 }
 exports.clearCachedUserId = clearCachedUserId;
 /**
  * authentication entry point
  * @param ctx
  */
-function authenticateUser(ctx) {
+function authenticateUser() {
     return __awaiter(this, void 0, void 0, function* () {
         //stores the extension context
-        extensionContext = ctx;
+        const ctx = getExtensionContext();
         const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-        const cachedUserEmail = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_EMAIL);
-        const cachedUserPassword = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_PASSWORD);
         const cachedUserNickName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME);
         const cachedTeamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-        console.log('--AUTHENTICATION-- USER ID IS: ' + cachedUserId);
         if (cachedUserId === undefined) {
             // case1: sign in or create new account
             vscode_1.window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
-            console.log('No cachedUserId found. Need to sign in or create a new account.');
-            registerNewUserOrSigInWithUserInput();
+            signInOrSignUpUserWithUserInput().then(() => {
+                Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+            });
         }
         else {
             // case2: existing user's id found
             console.log('Found cachedUserId: ' + cachedUserId);
-            console.log('Found cachedUserEmail: ' + cachedUserEmail);
-            console.log('Found cachedUserPassword: ' + cachedUserPassword);
             console.log('Found cachedTeamName: ' + cachedTeamName);
             console.log('Found cachedTeamId: ' + cachedTeamId);
             console.log('Found cachedUserNickname: ' + cachedUserNickName);
             //check if user doc exists in firebase
             let exists = yield Firestore_1.userDocExists(cachedUserId);
             if (exists) {
-                console.log('User doc exists in db.');
+                Firestore_1.updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
+                    Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+                });
                 vscode_1.window.showInformationMessage('Welcome back, ' + cachedUserNickName + '!!');
             }
             else {
-                console.log('Need to log in or register for a new account.');
-                registerNewUserOrSigInWithUserInput();
+                signInOrSignUpUserWithUserInput().then(() => {
+                    Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+                });
             }
-            //.then((result) => {
-            //   if (result==true) {
-            //     console.log('User doc exists in db');
-            //     //true, do nothing
-            //     window.showInformationMessage(
-            //       'Welcome back, ' + cachedUserNickName + '!!',
-            //     );
-            //   } else {
-            //     //false prompt user to sign in
-            //     console.log('Need to login or register for a new account.');
-            //     registerNewUserOrSigInWithUserInput();
-            //   }
-            // });
         }
-        yield Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+        //retrieveUserDailyMetric(testCallback, ctx);
     });
 }
 exports.authenticateUser = authenticateUser;
@@ -123,7 +111,11 @@ function registerNewUserOrSigInWithUserInput() {
         let completed = false;
         while (!completed) {
             //forcing the user to always sign in
-            vscode_1.window.showInformationMessage('Please sign in or create a new account.');
+            vscode_1.window
+                .showInformationMessage('Please sign in or create a new account.', 'Sign in', 'Create account')
+                .then((selection) => __awaiter(this, void 0, void 0, function* () {
+                console.log(selection);
+            }));
             //prompt for email and password
             yield vscode_1.window
                 .showInputBox({ placeHolder: 'Enter your email' })
@@ -135,6 +127,7 @@ function registerNewUserOrSigInWithUserInput() {
                 yield vscode_1.window
                     .showInputBox({
                     placeHolder: 'Enter your password (must be 6 characters long or more)',
+                    password: true,
                 })
                     .then((inputPassword) => {
                     password = inputPassword;
@@ -182,12 +175,99 @@ function registerNewUserOrSigInWithUserInput() {
                     }));
                 }
             }));
+            completed = true;
         }
     });
 }
 exports.registerNewUserOrSigInWithUserInput = registerNewUserOrSigInWithUserInput;
-function passwordRecovery() { }
-exports.passwordRecovery = passwordRecovery;
+function signInOrSignUpUserWithUserInput() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const ctx = getExtensionContext();
+        let email = undefined;
+        let password = undefined;
+        let completed = false;
+        //prompt the user to sign in or create an account upon activating the extension
+        vscode_1.window
+            .showInformationMessage('Please sign in or create a new account!', Constants_1.AUTH_SIGN_IN, Constants_1.AUTH_CREATE_ACCOUNT)
+            .then((selection) => __awaiter(this, void 0, void 0, function* () {
+            yield vscode_1.window
+                .showInputBox({ placeHolder: 'Enter your email: example@gmail.com' })
+                .then((inputEmail) => {
+                email = inputEmail;
+                console.log('user input email: ' + email);
+            })
+                .then(() => __awaiter(this, void 0, void 0, function* () {
+                yield vscode_1.window
+                    .showInputBox({
+                    placeHolder: 'Enter your password (must be 6 characters long or more)',
+                })
+                    .then((inputPassword) => {
+                    password = inputPassword;
+                    console.log('user input password: ' + password);
+                });
+            }))
+                .then(() => __awaiter(this, void 0, void 0, function* () {
+                if (email == undefined ||
+                    password == undefined ||
+                    email == '' ||
+                    password == '') {
+                    vscode_1.window.showErrorMessage('Invalid email or password!');
+                }
+                else {
+                    if (selection == Constants_1.AUTH_SIGN_IN) {
+                        yield Firestore_1.loginUserWithEmailAndPassword(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
+                            console.log(result.loggedIn);
+                            console.log(result.errorCode);
+                            if (result.loggedIn) {
+                                //successfully logged in
+                                vscode_1.window.showInformationMessage('Welcome back, ' +
+                                    ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
+                                    '!!');
+                                completed = true;
+                                console.log('setting completed to true');
+                                return;
+                            }
+                            //not logged in
+                            if (result.errorCode == Constants_1.AUTH_ERR_CODE_WRONG_PASSWORD) {
+                                vscode_1.window.showErrorMessage('Wrong password!');
+                            }
+                            else if (result.errorCode == Constants_1.AUTH_ERR_CODE_USER_NOT_FOUND) {
+                                vscode_1.window.showErrorMessage('User not found!');
+                            }
+                            else if (result.errorCode == Constants_1.AUTH_ERR_CODE_INVALID_EMAIL) {
+                                vscode_1.window.showErrorMessage('Invalid email!');
+                            }
+                        }));
+                    }
+                    else if (selection == Constants_1.AUTH_CREATE_ACCOUNT) {
+                        yield Firestore_1.createNewUserInFirebase(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
+                            console.log(result.created);
+                            console.log(result.errorCode);
+                            if (result.created) {
+                                vscode_1.window.showInformationMessage('Welcome! Your nickname is: ' +
+                                    ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
+                                    '!!');
+                                completed = true;
+                                return;
+                            }
+                            //not created
+                            if (result.errorCode == Constants_1.AUTH_ERR_CODE_EMAIL_USED) {
+                                vscode_1.window.showErrorMessage('Email already in use!');
+                            }
+                            else if (result.errorCode == Constants_1.AUTH_ERR_CODE_WEAK_PASSWORD) {
+                                vscode_1.window.showErrorMessage('Password is too weak! Needs to be 6 characters long or more!');
+                            }
+                            else if (result.errorCode == Constants_1.AUTH_ERR_CODE_INVALID_EMAIL) {
+                                vscode_1.window.showErrorMessage('Invalid email!');
+                            }
+                        }));
+                    }
+                }
+            }));
+        }));
+    });
+}
+exports.signInOrSignUpUserWithUserInput = signInOrSignUpUserWithUserInput;
 /**
  * not using this function
  */

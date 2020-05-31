@@ -19,6 +19,7 @@ const PersonalStats_1 = require("../../src/util/PersonalStats");
 const sinon = require('sinon');
 const firebase = require('firebase/app');
 const chai_1 = require("chai");
+const DailyMetricDataProvider_1 = require("../../src/util/DailyMetricDataProvider");
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
 suite('authentication.ts', () => {
@@ -33,7 +34,7 @@ suite('authentication.ts', () => {
     });
     test('authenticating user', () => {
         const ctx = Authentication_1.getExtensionContext();
-        Authentication_1.authenticateUser(ctx);
+        //authenticateUser();
     });
     test('registering new user with user input', () => {
         const ctx = Authentication_1.getExtensionContext();
@@ -232,5 +233,24 @@ suite('personalstats.ts', () => {
     //integration test of personal stats displaying
 });
 suite('team.ts', () => {
+});
+suite('DailyMetricDataProvider', () => {
+    test('constructing new DailyMetricDataProvider on undefined obj', () => {
+        const metricProvider = new DailyMetricDataProvider_1.DailyMetricDataProvider(undefined);
+        assert.equal(metricProvider.data.length, 4);
+    });
+    test('constructing new DailyMetricDataProvider on defined obj', () => {
+        const metricProvider = new DailyMetricDataProvider_1.DailyMetricDataProvider([]);
+        assert.equal(metricProvider.data.length, 0);
+    });
+    test('constructing new DailyMetricItem wiht null children', () => {
+        const metricItem = new DailyMetricDataProvider_1.DailyMetricItem("test", null);
+        assert.equal(metricItem.children, null);
+    });
+    test('constructing new DailyMetricItem wiht null children', () => {
+        const testItem = [new DailyMetricDataProvider_1.DailyMetricItem("test")];
+        const metricItem = new DailyMetricDataProvider_1.DailyMetricItem("test", testItem);
+        assert.equal(metricItem.children, testItem);
+    });
 });
 //# sourceMappingURL=extension.test.js.map
