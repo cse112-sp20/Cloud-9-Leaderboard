@@ -6,6 +6,15 @@
   <br>
 </h1>
 
+<p align="center">
+  <a href="#About">About</a> •
+  <a href="#Installation">Installation</a> •
+  <a href="#Features">Features</a> •
+  <a href="#Team">Team</a> •
+  <a href="#Documentation and Structure">Documentation and Structure</a> •
+  <a href="#Credits">Credits</a>
+</p>
+
 ## About
 
 Remote work presents many challenges to both teams and individuals. The lack of a stable
