@@ -6,12 +6,14 @@
   <br>
 </h1>
 
+<h4 align="center">A leaderboard application built on top of <a href="https://www.software.com/code-time">Code Time</a>.</h4>
+
 <p align="center">
   <a href="#About">About</a> •
   <a href="#Installation">Installation</a> •
   <a href="#Features">Features</a> •
   <a href="#Team">Team</a> •
-  <a href="#Documentation and Structure">Documentation and Structure</a> •
+  <a href="#Documentation and Structure">Documentation/Structure</a> •
   <a href="#Credits">Credits</a>
 </p>
 
