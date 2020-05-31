@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchTeamMembersList = exports.userDocExists = exports.retrieveUserDailyMetric = exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.updatePersistentStorageWithUserDocData = exports.loginUserWithEmailAndPassword = void 0;
+exports.fetchTeamMembersList = exports.userDocExists = exports.retrieveUserUpdateDailyMetric = exports.retrieveUserDailyMetric = exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.getUserDocWithId = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.updatePersistentStorageWithUserDocData = exports.loginUserWithEmailAndPassword = void 0;
 const firebase = require('firebase/app');
 require('firebase/firestore');
 require('firebase/auth');
@@ -167,6 +167,7 @@ function updateStats(payload) {
                     })
                         .then(() => {
                         console.log('Successfully update stats');
+                        vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
                     })
                         .catch(() => {
                         console.log('Error updating stats');
@@ -528,6 +529,8 @@ function joinTeamWithTeamId(teamId, isLeader) {
             console.log('Successfully added team info to user doc.');
             vscode_1.window.showInformationMessage('Welcome to your new team: ' +
                 ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
+            vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+            vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
         })
             .catch((e) => {
             console.log(e.message);
@@ -604,6 +607,8 @@ function leaveTeam(userId, teamId) {
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, newMembersMap);
             console.log('new members map: ');
             console.log(ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS));
+            vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+            vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
         })
             .catch((e) => {
             console.log(e.message);
@@ -756,6 +761,40 @@ function retrieveUserDailyMetric(callback, c) {
     });
 }
 exports.retrieveUserDailyMetric = retrieveUserDailyMetric;
+function retrieveUserUpdateDailyMetric() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let db = firebase.firestore();
+        let user = db.collection(Constants_1.COLLECTION_ID_USERS);
+        const ctx = Authentication_1.getExtensionContext();
+        const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        let userDataMap;
+        console.log('****');
+        console.log(cachedUserId);
+        yield db
+            .collection(Constants_1.COLLECTION_ID_USERS)
+            .doc(cachedUserId)
+            .collection('dates')
+            .doc(new Date().toISOString().split('T')[0])
+            .get()
+            .then((userDoc) => {
+            if (userDoc.exists) {
+                // Convert to City object
+                console.log('user doc exist');
+                userDataMap = userDoc.data();
+            }
+            else {
+                console.log('userDoc does not exist');
+                userDataMap = undefined;
+            }
+        })
+            .catch((err) => {
+            console.log('Error getting documents', err);
+        });
+        console.log(userDataMap);
+        return userDataMap;
+    });
+}
+exports.retrieveUserUpdateDailyMetric = retrieveUserUpdateDailyMetric;
 /**
  * returns true if a document associated with the passed in ID exists in firebase
  * @param userId uid

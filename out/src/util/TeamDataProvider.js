@@ -29,12 +29,26 @@ class TeamDataProvider {
             ._onDidChangeTreeData.event;
         this.data = [
             new TeamItem('🛡 Create your Team'),
-            new TeamItem('🔰 Join team'),
-            new TeamItem('📋 View team leaderboard'),
-            new TeamItem('Get Team Info', [new TeamItem('')]),
+            new TeamItem('🔰 Join team')
         ];
     }
     refresh() {
+        const ctx = Authentication_1.getExtensionContext();
+        const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
+        if (cachedTeamId === undefined || cachedTeamId === '') {
+            this.data = [
+                new TeamItem('🛡 Create your Team'),
+                new TeamItem('🔰 Join team')
+            ];
+            console.log("NO team");
+        }
+        else {
+            this.data = [
+                new TeamItem('🛡 Welcome back to your Team'),
+                new TeamItem('📋 View team leaderboard'),
+                new TeamItem('Get Team Info', [new TeamItem('')]),
+            ];
+        }
         this._onDidChangeTreeData.fire(null);
     }
     bindView(menuTreeView) {

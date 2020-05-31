@@ -89,6 +89,9 @@ function authenticateUser() {
                     Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
                 });
                 vscode_1.window.showInformationMessage('Welcome back, ' + cachedUserNickName + '!!');
+                vscode_1.commands.executeCommand('MenuView.refreshEntry');
+                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
             }
             else {
                 signInOrSignUpUserWithUserInput().then(() => {
@@ -105,78 +108,101 @@ exports.authenticateUser = authenticateUser;
  */
 function registerNewUserOrSigInWithUserInput() {
     return __awaiter(this, void 0, void 0, function* () {
-        const ctx = getExtensionContext();
-        let email = null;
-        let password = null;
-        let completed = false;
-        while (!completed) {
-            //forcing the user to always sign in
-            vscode_1.window
-                .showInformationMessage('Please sign in or create a new account.', 'Sign in', 'Create account')
-                .then((selection) => __awaiter(this, void 0, void 0, function* () {
-                console.log(selection);
-            }));
-            //prompt for email and password
-            yield vscode_1.window
-                .showInputBox({ placeHolder: 'Enter your email' })
-                .then((inputEmail) => {
-                email = inputEmail;
-                console.log('user input email: ' + email);
-            })
-                .then(() => __awaiter(this, void 0, void 0, function* () {
-                yield vscode_1.window
-                    .showInputBox({
-                    placeHolder: 'Enter your password (must be 6 characters long or more)',
-                    password: true,
-                })
-                    .then((inputPassword) => {
-                    password = inputPassword;
-                    console.log('user input password: ' + password);
-                });
-            }))
-                .then(() => __awaiter(this, void 0, void 0, function* () {
-                if (email == undefined ||
-                    password == undefined ||
-                    email == '' ||
-                    password == '') {
-                    vscode_1.window.showInformationMessage('Invalid email or password! Please try again!');
-                }
-                else {
-                    //first try creating a new user account
-                    //if email is already in use, try logging them in with the credential
-                    yield Firestore_1.createNewUserInFirebase(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
-                        console.log(result.created);
-                        console.log(result.errorCode);
-                        if (result.created) {
-                            vscode_1.window.showInformationMessage('Successfully created new account, your nickname is ' +
-                                ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME));
-                        }
-                        //email already in use, now log the user in
-                        else if (result.errorCode == 'auth/email-already-in-use') {
-                            yield Firestore_1.loginUserWithEmailAndPassword(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
-                                console.log(result.loggedIn);
-                                console.log(result.errorCode);
-                                //successfully logged the user in, return
-                                if (result.loggedIn == true) {
-                                    completed = true;
-                                    vscode_1.window.showInformationMessage('Hello, ' +
-                                        ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
-                                        '!!');
-                                    return;
-                                }
-                                else if (result.errorCode == 'auth/wrong-password') {
-                                    vscode_1.window.showInformationMessage('Wrong password! Please try again!');
-                                }
-                            }));
-                        }
-                        else if (result.errorCode == 'auth/weak-password') {
-                            vscode_1.window.showInformationMessage('Password must to be 6 characters or longer! Please try again!');
-                        }
-                    }));
-                }
-            }));
-            completed = true;
-        }
+        // const ctx = getExtensionContext();
+        // let email = null;
+        // let password = null;
+        // let completed = false;
+        // while (!completed) {
+        //   //forcing the user to always sign in
+        //   window
+        //     .showInformationMessage(
+        //       'Please sign in or create a new account.',
+        //       'Sign in',
+        //       'Create account',
+        //     )
+        //     .then(async (selection) => {
+        //       console.log(selection);
+        //     });
+        //   //prompt for email and password
+        //   await window
+        //     .showInputBox({placeHolder: 'Enter your email'})
+        //     .then((inputEmail) => {
+        //       email = inputEmail;
+        //       console.log('user input email: ' + email);
+        //     })
+        //     .then(async () => {
+        //       await window
+        //         .showInputBox({
+        //           placeHolder:
+        //             'Enter your password (must be 6 characters long or more)',
+        //           password: true,
+        //         })
+        //         .then((inputPassword) => {
+        //           password = inputPassword;
+        //           console.log('user input password: ' + password);
+        //         });
+        //     })
+        //     .then(async () => {
+        //       if (
+        //         email == undefined ||
+        //         password == undefined ||
+        //         email == '' ||
+        //         password == ''
+        //       ) {
+        //         window.showInformationMessage(
+        //           'Invalid email or password! Please try again!',
+        //         );
+        //       } else {
+        //         //first try creating a new user account
+        //         //if email is already in use, try logging them in with the credential
+        //         await createNewUserInFirebase(email, password).then(
+        //           async (result) => {
+        //             console.log(result.created);
+        //             console.log(result.errorCode);
+        //             if (result.created) {
+        //               window.showInformationMessage(
+        //                 'Successfully created new account, your nickname is ' +
+        //                   ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME),
+        //               );
+        //               commands.executeCommand('MenuView.refreshEntry');
+        //             }
+        //             //email already in use, now log the user in
+        //             else if (result.errorCode == 'auth/email-already-in-use') {
+        //               await loginUserWithEmailAndPassword(email, password).then(
+        //                 async (result) => {
+        //                   console.log(result.loggedIn);
+        //                   console.log(result.errorCode);
+        //                   //successfully logged the user in, return
+        //                   if (result.loggedIn == true) {
+        //                     completed = true;
+        //                     window.showInformationMessage(
+        //                       'Hello, ' +
+        //                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
+        //                         '!!',
+        //                     );
+        //                     commands.executeCommand('MenuView.refreshEntry');
+        //                     commands.executeCommand('LeaderView.refreshEntry');
+        //                     return;
+        //                   } else if (result.errorCode == 'auth/wrong-password') {
+        //                     window.showInformationMessage(
+        //                       'Wrong password! Please try again!',
+        //                     );
+        //                   }
+        //                 },
+        //               );
+        //             } else if (result.errorCode == 'auth/weak-password') {
+        //               window.showInformationMessage(
+        //                 'Password must to be 6 characters or longer! Please try again!',
+        //               );
+        //             }
+        //           },
+        //         );
+        //       }
+        //     });
+        //   completed = true;
+        //   commands.executeCommand('MenuView.refreshEntry');
+        //   commands.executeCommand('LeaderView.refreshEntry');
+        // }
     });
 }
 exports.registerNewUserOrSigInWithUserInput = registerNewUserOrSigInWithUserInput;
@@ -200,6 +226,7 @@ function signInOrSignUpUserWithUserInput() {
                 yield vscode_1.window
                     .showInputBox({
                     placeHolder: 'Enter your password (must be 6 characters long or more)',
+                    password: true,
                 })
                     .then((inputPassword) => {
                     password = inputPassword;
@@ -225,6 +252,9 @@ function signInOrSignUpUserWithUserInput() {
                                     '!!');
                                 completed = true;
                                 console.log('setting completed to true');
+                                vscode_1.commands.executeCommand('MenuView.refreshEntry');
+                                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                                vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
                                 return;
                             }
                             //not logged in
@@ -248,6 +278,9 @@ function signInOrSignUpUserWithUserInput() {
                                     ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
                                     '!!');
                                 completed = true;
+                                vscode_1.commands.executeCommand('MenuView.refreshEntry');
+                                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                                vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
                                 return;
                             }
                             //not created

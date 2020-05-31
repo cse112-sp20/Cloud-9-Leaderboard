@@ -3,7 +3,7 @@ require('firebase/firestore');
 require('firebase/auth');
 //const admin = require("firebase-admin");
 
-import {window} from 'vscode';
+import {commands, window} from 'vscode';
 import {Leaderboard} from './Leaderboard';
 import {PersonalStats} from './PersonalStats';
 import {
@@ -204,6 +204,7 @@ export function updateStats(payload) {
                 })
                 .then(() => {
                   console.log('Successfully update stats');
+                  commands.executeCommand('DailyMetric.refreshEntry');
                 })
                 .catch(() => {
                   console.log('Error updating stats');
@@ -621,6 +622,8 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
         'Welcome to your new team: ' +
           ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME),
       );
+      commands.executeCommand('LeaderView.refreshEntry');
+      commands.executeCommand('TeamMenuView.refreshEntry');
     })
     .catch((e) => {
       console.log(e.message);
@@ -705,6 +708,8 @@ export async function leaveTeam(userId, teamId) {
       ctx.globalState.update(GLOBAL_STATE_USER_TEAM_MEMBERS, newMembersMap);
       console.log('new members map: ');
       console.log(ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS));
+      commands.executeCommand('LeaderView.refreshEntry');
+      commands.executeCommand('TeamMenuView.refreshEntry');
     })
     .catch((e) => {
       console.log(e.message);
@@ -867,6 +872,43 @@ export function retrieveUserDailyMetric(callback, c) {
       console.log('Error getting documents', err);
     });
 }
+
+export async function retrieveUserUpdateDailyMetric() {
+  let db = firebase.firestore();
+
+  let user = db.collection(COLLECTION_ID_USERS);
+
+  const ctx = getExtensionContext();
+  const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
+  let userDataMap;
+  console.log('****');
+  console.log(cachedUserId);
+  await db
+    .collection(COLLECTION_ID_USERS)
+    .doc(cachedUserId)
+    .collection('dates')
+    .doc(new Date().toISOString().split('T')[0])
+    .get()
+    .then((userDoc) => {
+      if (userDoc.exists) {
+        // Convert to City object
+        console.log('user doc exist');
+        userDataMap = userDoc.data();
+      } else {
+        console.log('userDoc does not exist');
+        userDataMap = undefined;
+      }
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
+
+  console.log(userDataMap);
+
+  return userDataMap;
+}
+
 /**
  * returns true if a document associated with the passed in ID exists in firebase
  * @param userId uid

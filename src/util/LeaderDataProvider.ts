@@ -36,6 +36,41 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
     ._onDidChangeTreeData.event;
 
   refresh(): void {
+    console.log('Refresh called');
+    const ctx = getExtensionContext();
+    if (ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
+      let childLeaderItem = new LeaderItem('');
+
+      let topLeaderItem = new LeaderItem('Remove Team members', undefined, [
+        childLeaderItem,
+      ]);
+      childLeaderItem.parent = topLeaderItem;
+      this.data = [
+        new LeaderItem('Team members', undefined, [new LeaderItem('')]),
+        topLeaderItem,
+      ];
+    } else {
+      const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+      if (teamId == undefined || teamId == '') {
+        this.data = [
+          new LeaderItem(
+            'No permission: Not in a team yet',
+            undefined,
+            undefined,
+            this,
+          ),
+        ];
+      } else {
+        this.data = [
+          new LeaderItem(
+            'No permission: Not team leader',
+            undefined,
+            undefined,
+            this,
+          ),
+        ];
+      }
+    }
     this._onDidChangeTreeData.fire(null);
   }
 
