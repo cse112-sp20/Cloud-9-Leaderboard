@@ -252,17 +252,44 @@ function retrieveTeamMemberStats(callback) {
                 Leaderboard_1.Leaderboard.addUser(doc.id, doc.data());
                 let currUser = {};
                 currUser['id'] = doc.id;
-                for (let key in doc.data()) {
-                    currUser[key] = doc.data()[key];
-                }
-                userMap.push(currUser);
-                // console.log(doc.id + "=>" + doc.data());
+                let today = new Date().toISOString().split('T')[0];
+                users
+                    .doc(doc.id)
+                    .collection('dates')
+                    .doc(today)
+                    .get()
+                    .then((doc2) => {
+                    let dailyUser = {};
+                    if (doc2.exists) {
+                        for (let key in doc2.data()) {
+                            dailyUser['today_' + key] = doc2.data()[key];
+                        }
+                    }
+                    return dailyUser;
+                })
+                    .then((dailyUser) => {
+                    currUser = Object.assign({}, dailyUser);
+                    for (let key in doc.data()) {
+                        currUser[key] = doc.data()[key];
+                    }
+                    userMap.push(currUser);
+                    return userMap;
+                })
+                    .then((userMap) => {
+                    console.log('Callback params');
+                    console.log(userMap);
+                    callback(userMap, true);
+                });
+                // for (let key in doc.data()) {
+                //   currUser[key] = doc.data()[key];
+                // }
+                // userMap.push(currUser);
             });
-            return userMap;
+            // return userMap;
         })
-            .then((userMap) => {
-            callback(userMap, true);
-        })
+            // .then((userMap) => {
+            //   callback(userMap, true);
+            // })
             .catch((err) => {
             console.log('Error getting documents', err);
         });
@@ -700,7 +727,7 @@ function retrieveUserDailyMetric(callback, c) {
     console.log('****');
     console.log(cachedUserId);
     if (cachedUserId == undefined) {
-        console.log("cached user id undefined when calling retrieve user daily metric");
+        console.log('cached user id undefined when calling retrieve user daily metric');
         callback(undefined, c);
         return;
     }
