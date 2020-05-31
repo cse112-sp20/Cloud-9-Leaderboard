@@ -1,4 +1,10 @@
-# Cloud 9 Leader-board
+<h1 align="center">
+  <br>
+  <a href="https://imgur.com/4nptTgZ"><img src="https://i.imgur.com/4nptTgZ.jpg" title="source: imgur.com" width = "200px" /></a>
+  <br>
+  Cloud 9 Leaderboard
+  <br>
+</h1>
 
 ## About
 
@@ -15,9 +21,17 @@ team on a group leaderboard.
 ## Installation
 
 In order to run this application, you must first open up a terminal and clone the repo:
-'''
-git clone #TODO
-'''
+```
+git clone https://github.com/cse112-sp20/Cloud-9-Leaderboard.git
+```
+Then you must install dependencies
+```
+npm install
+```
+Compile the dependencies and the project
+```
+npm run compile
+```
 
 ## Features
 
