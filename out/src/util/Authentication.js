@@ -225,7 +225,7 @@ function signInOrSignUpUserWithUserInput() {
                 yield vscode_1.window
                     .showInputBox({
                     placeHolder: 'Enter your password (must be 6 characters long or more)',
-                    password: true
+                    password: true,
                 })
                     .then((inputPassword) => {
                     password = inputPassword;

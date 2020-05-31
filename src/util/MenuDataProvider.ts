@@ -55,7 +55,7 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
     if (ctx.globalState.get(GLOBAL_STATE_USER_ID) !== undefined) {
       this.data = [
         new MenuItem(
-          `Welcome, ${ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME)}`,
+          `Welcome, ${ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME)}!`,
         ),
         new MenuItem('📊 View personal stats'),
         new MenuItem('🌐 Leaderboard'),

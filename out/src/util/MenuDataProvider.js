@@ -47,7 +47,7 @@ class MenuDataProvider {
             ];
         }
         else {
-            console.log("User not logged in");
+            console.log('User not logged in');
         }
         this._onDidChangeTreeData.fire(null);
     }
