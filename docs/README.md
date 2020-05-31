@@ -110,3 +110,10 @@ Badges and Achievements
 #### Jiachen Chen
 
 ## Documentation/Structure
+
+## Credits
+This application uses the following open source tools and software:
+
+- [Node.js](https://nodejs.org/)
+- [Code Time](https://www.software.com/code-time)
+- [Firebase](https://firebase.google.com/)
