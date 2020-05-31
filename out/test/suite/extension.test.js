@@ -20,6 +20,10 @@ const sinon = require('sinon');
 const firebase = require('firebase/app');
 const chai_1 = require("chai");
 const DailyMetricDataProvider_1 = require("../../src/util/DailyMetricDataProvider");
+const Team_1 = require("../../src/util/Team");
+const TeamDataProvider_1 = require("../../src/util/TeamDataProvider");
+const MenuDataProvider_1 = require("../../src/util/MenuDataProvider");
+const LeaderDataProvider_1 = require("../../src/util/LeaderDataProvider");
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
 suite('authentication.ts', () => {
@@ -233,6 +237,19 @@ suite('personalstats.ts', () => {
     //integration test of personal stats displaying
 });
 suite('team.ts', () => {
+    test('getTeamInfo with non empty team', () => __awaiter(void 0, void 0, void 0, function* () {
+        sinon.restore();
+        sinon.stub(Authentication_1.getExtensionContext().globalState, "get")
+            .withArgs(Constants_1.GLOBAL_STATE_USER_TEAM_ID).returns("teamId");
+        var result = yield Team_1.getTeamInfo();
+        assert.equal(result, 'Your team name: undefined\nYour team ID: teamId');
+    }));
+    test('getTeamInfo with empty team', () => __awaiter(void 0, void 0, void 0, function* () {
+        sinon.restore();
+        var result = yield Team_1.getTeamInfo();
+        assert.equal(result, undefined);
+    }));
+    //integration test for joinTeam
 });
 suite('DailyMetricDataProvider', () => {
     test('constructing new DailyMetricDataProvider on undefined obj', () => {
@@ -243,14 +260,64 @@ suite('DailyMetricDataProvider', () => {
         const metricProvider = new DailyMetricDataProvider_1.DailyMetricDataProvider([]);
         assert.equal(metricProvider.data.length, 0);
     });
-    test('constructing new DailyMetricItem wiht null children', () => {
+    test('constructing new DailyMetricItem with null children', () => {
         const metricItem = new DailyMetricDataProvider_1.DailyMetricItem("test", null);
         assert.equal(metricItem.children, null);
     });
-    test('constructing new DailyMetricItem wiht null children', () => {
+    test('constructing new DailyMetricItem with nonnull children', () => {
         const testItem = [new DailyMetricDataProvider_1.DailyMetricItem("test")];
         const metricItem = new DailyMetricDataProvider_1.DailyMetricItem("test", testItem);
         assert.equal(metricItem.children, testItem);
     });
+});
+suite('TeamDataProvider', () => {
+    test('constructing new TeamDataProvider', () => {
+        const teamDataProvider = new TeamDataProvider_1.TeamDataProvider();
+        assert.equal(teamDataProvider.data.length, 4);
+    });
+    test('constructing new TeamItem with null children', () => {
+        const teamItem = new TeamDataProvider_1.TeamItem("test", null);
+        assert.equal(teamItem.children, null);
+    });
+    test('constructing new TeamItem with nonnull children', () => {
+        const testItem = [new TeamDataProvider_1.TeamItem("test")];
+        const teamItem = new TeamDataProvider_1.TeamItem("test", testItem);
+        assert.equal(teamItem.children, testItem);
+    });
+    //integration test for handleTeamInfoChangeSelection
+});
+suite('MenuDataProvider', () => {
+    test('constructing new MenuDataProvider', () => {
+        const menuDataProvider = new MenuDataProvider_1.MenuDataProvider();
+        assert.equal(menuDataProvider.data.length, 2);
+    });
+    test('constructing new menuItem with null children', () => {
+        const menuItem = new MenuDataProvider_1.MenuItem("test", null);
+        assert.equal(menuItem.children, null);
+    });
+    test('constructing new menuItem with nonnull children', () => {
+        const testItem = [new MenuDataProvider_1.MenuItem("test")];
+        const menuItem = new MenuDataProvider_1.MenuItem("test", testItem);
+        assert.equal(menuItem.children, testItem);
+    });
+    //integration test for handleMenuInfoChangeSelection
+});
+suite('LeaderDataProvider', () => {
+    test('constructing new LeaderDataProvider', () => {
+        const leaderDataProvider = new LeaderDataProvider_1.LeaderDataProvider();
+        assert.equal(leaderDataProvider.data.length, 1);
+    });
+    test('constructing new leaderItem with null children', () => {
+        const leaderItem = new LeaderDataProvider_1.LeaderItem("test", null);
+        assert.equal(leaderItem.children, null);
+    });
+    test('constructing new leaderItem with nonnull children', () => {
+        const testChild = [undefined];
+        const testParent = undefined;
+        const leaderItem = new LeaderDataProvider_1.LeaderItem("test", undefined, testChild);
+        assert.equal(leaderItem.parent, testParent);
+        assert.equal(leaderItem.children, testChild);
+    });
+    //integration test for handeLeaderInfoChangeSelection
 });
 //# sourceMappingURL=extension.test.js.map
