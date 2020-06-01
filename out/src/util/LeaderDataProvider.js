@@ -55,7 +55,7 @@ class LeaderDataProvider {
         }
     }
     refresh() {
-        console.log("Leader refresh called");
+        console.log('Leader refresh called');
         const ctx = Authentication_1.getExtensionContext();
         if (!ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
             const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);

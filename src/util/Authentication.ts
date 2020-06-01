@@ -89,6 +89,8 @@ export async function authenticateUser() {
 
   const cachedTeamLeadId = ctx.globalState.get(FIELD_ID_TEAM_LEAD_USER_ID);
 
+  const isTeamLeadr = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
+
   if (cachedUserId === undefined) {
     // case1: sign in or create new account
     window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
@@ -104,6 +106,10 @@ export async function authenticateUser() {
     console.log('Found cachedUserNickname: ' + cachedUserNickName);
 
     console.log('Team lead id: ' + cachedTeamLeadId);
+
+    console.log("is team leade " + isTeamLeadr);
+
+    
 
     //check if user doc exists in firebase
     let exists = await userDocExists(cachedUserId);
