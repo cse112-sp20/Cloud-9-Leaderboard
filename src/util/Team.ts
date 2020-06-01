@@ -32,12 +32,7 @@ import {
  */
 export async function createAndJoinTeam() {
   //ID check
-  await checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
-    if (!loggedIn) {
-      window.showErrorMessage(AUTH_NOT_LOGGED_IN);
-      return;
-    }
-  });
+  await checkIfCachedUserIdExistsAndPrompt();
 
   const ctx = getExtensionContext();
 
@@ -73,15 +68,17 @@ export async function createAndJoinTeam() {
  * values retrieved from persistent storage
  */
 export async function getTeamInfo() {
-  await checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
-    if (!loggedIn) {
-      return;
-    }
-  });
+  await checkIfCachedUserIdExistsAndPrompt();
   const ctx = getExtensionContext();
 
   const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+  const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+
+  if (cachedUserId == undefined || cachedUserId == '') {
+    window.showErrorMessage(AUTH_NOT_LOGGED_IN);
+    return;
+  }
 
   if (teamId == undefined || teamId == '') {
     window.showInformationMessage('No team info found.');
@@ -101,12 +98,8 @@ export async function getTeamInfo() {
  */
 export async function joinTeam() {
   //ID check
-  await checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
-    if (!loggedIn) {
-      window.showErrorMessage(AUTH_NOT_LOGGED_IN);
-      return;
-    }
-  });
+  await checkIfCachedUserIdExistsAndPrompt();
+
   //first check if user is already in a team
   const inTeam = await checkIfInTeam();
   if (inTeam) {

@@ -117,7 +117,6 @@ function signInOrSignUpUserWithUserInput() {
             .showInformationMessage('Please sign in or create a new account!', Constants_1.AUTH_SIGN_IN, Constants_1.AUTH_CREATE_ACCOUNT)
             .then((selection) => __awaiter(this, void 0, void 0, function* () {
             if (selection == undefined) {
-                vscode_1.window.showInformationMessage('Sign in or sign up to unlock Cloud9 features!');
                 return;
             }
             yield vscode_1.window

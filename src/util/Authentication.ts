@@ -139,9 +139,6 @@ export async function signInOrSignUpUserWithUserInput() {
     )
     .then(async (selection) => {
       if (selection == undefined) {
-        window.showInformationMessage(
-          'Sign in or sign up to unlock Cloud9 features!',
-        );
         return;
       }
       await window

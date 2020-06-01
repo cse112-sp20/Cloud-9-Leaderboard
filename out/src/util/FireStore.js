@@ -466,7 +466,7 @@ function joinTeamWithTeamId(teamId, isLeader) {
         const userEmail = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_EMAIL);
         const userNickname = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME);
         if (userId === undefined || userId === '') {
-            console.log("ERROR");
+            console.log('ERROR');
         }
         else {
             console.log('userid: ' + userId);

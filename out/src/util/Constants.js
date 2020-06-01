@@ -49,7 +49,7 @@ exports.GLOBAL_STATE_USER_TEAM_MEMBERS = 'cachedUserTeamMembers'; //maps
 // authentication options
 exports.AUTH_SIGN_IN = 'Sign in';
 exports.AUTH_CREATE_ACCOUNT = 'Create a new account';
-exports.AUTH_NOT_LOGGED_IN = 'Please sign in or sign up to unlock Cloud9 features!';
+exports.AUTH_NOT_LOGGED_IN = 'You are not signed in!';
 // firebase authentication error codes
 exports.AUTH_ERR_CODE_EMAIL_USED = 'auth/email-already-in-use';
 exports.AUTH_ERR_CODE_WRONG_PASSWORD = 'auth/wrong-password';

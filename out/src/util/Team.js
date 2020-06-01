@@ -31,12 +31,7 @@ const Constants_1 = require("./Constants");
 function createAndJoinTeam() {
     return __awaiter(this, void 0, void 0, function* () {
         //ID check
-        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
-            if (!loggedIn) {
-                vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
-                return;
-            }
-        });
+        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt();
         const ctx = Authentication_1.getExtensionContext();
         const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         if (cachedUserId === undefined || cachedUserId === '') {
@@ -69,14 +64,15 @@ exports.createAndJoinTeam = createAndJoinTeam;
  */
 function getTeamInfo() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
-            if (!loggedIn) {
-                return;
-            }
-        });
+        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt();
         const ctx = Authentication_1.getExtensionContext();
         const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
+        const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        if (cachedUserId == undefined || cachedUserId == '') {
+            vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
+            return;
+        }
         if (teamId == undefined || teamId == '') {
             vscode_1.window.showInformationMessage('No team info found.');
             return;
@@ -95,12 +91,7 @@ exports.getTeamInfo = getTeamInfo;
 function joinTeam() {
     return __awaiter(this, void 0, void 0, function* () {
         //ID check
-        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
-            if (!loggedIn) {
-                vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
-                return;
-            }
-        });
+        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt();
         //first check if user is already in a team
         const inTeam = yield Firestore_1.checkIfInTeam();
         if (inTeam) {
