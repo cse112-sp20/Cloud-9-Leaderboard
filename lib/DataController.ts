@@ -332,8 +332,6 @@ async function userStatusFetchHandler(tryCountUntilFoundUser, interval) {
 
     const message = 'Successfully logged on to Code Time';
     window.showInformationMessage(message);
-
-   
   }
 }
 

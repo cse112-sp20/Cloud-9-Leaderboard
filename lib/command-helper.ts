@@ -10,11 +10,7 @@ import {
   connectCloud9TeamInfoTreeView,
 } from '../src/util/TeamDataProvider';
 
-
 import {KpmManager} from './managers/KpmManager';
-
-
-
 
 import {
   displayLeaderboard,
@@ -102,12 +98,6 @@ export function createCommands(
     ),
   );
 
-
-
-
-
-
-
   /*
    * CLOUD 9 LEADERBOARD COMMAND
    */
@@ -176,10 +166,6 @@ export function createCommands(
       logOut();
     }),
   );
-
-  
-
-
 
   cmds.push(workspace.onDidChangeConfiguration((e) => updatePreferences()));
 

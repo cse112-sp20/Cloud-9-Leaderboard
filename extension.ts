@@ -208,12 +208,6 @@ export async function intializePlugin(
   // add the interval jobs
   initializeIntervalJobs();
 
-
-
-
-  
-
-
   const initializedVscodePlugin = getItem('vscode_CtInit');
   if (!initializedVscodePlugin) {
     setItem('vscode_CtInit', true);
@@ -224,14 +218,10 @@ export async function intializePlugin(
     // send a heartbeat that the plugin as been installed
     // (or the user has deleted the session.json and restarted the IDE)
     sendHeartbeat('INSTALLED', serverIsOnline);
-
   }
 
   // initialize the day check timer
   SummaryManager.getInstance().updateSessionSummaryFromServer();
-
-
-
 }
 
 // add the interval jobs
@@ -245,10 +235,4 @@ function initializeIntervalJobs() {
     const isonline = await serverIsAvailable();
     await getHistoricalCommits(isonline);
   }, thirty_min_millis);
-
-
-
-
-
 }
-
