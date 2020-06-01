@@ -42,32 +42,30 @@ export async function createAndJoinTeam() {
   const ctx = getExtensionContext();
 
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
- 
-  if(cachedUserId === undefined || cachedUserId === ''){
+
+  if (cachedUserId === undefined || cachedUserId === '') {
     window.showErrorMessage(AUTH_NOT_LOGGED_IN);
-  }else{
-//first check if already in team
-const inTeam = await checkIfInTeam();
+  } else {
+    //first check if already in team
+    const inTeam = await checkIfInTeam();
 
-if (inTeam) {
-  window.showInformationMessage('You have already joined a team!');
-  return;
-}
-
-window.showInformationMessage('Enter a name for your new team!');
-
-await window
-  .showInputBox({placeHolder: 'Enter a new team name'})
-  .then(async (teamName) => {
-    if (teamName == undefined || teamName == '') {
-      window.showInformationMessage('Please enter a valid team name!');
+    if (inTeam) {
+      window.showInformationMessage('You have already joined a team!');
       return;
     }
-    addNewTeamToDbAndJoin(teamName);
-  });
-  }
 
-  
+    window.showInformationMessage('Enter a name for your new team!');
+
+    await window
+      .showInputBox({placeHolder: 'Enter a new team name'})
+      .then(async (teamName) => {
+        if (teamName == undefined || teamName == '') {
+          window.showInformationMessage('Please enter a valid team name!');
+          return;
+        }
+        addNewTeamToDbAndJoin(teamName);
+      });
+  }
 }
 
 /**
@@ -119,21 +117,18 @@ export async function joinTeam() {
   const ctx = getExtensionContext();
 
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
- 
-  if(cachedUserId === undefined || cachedUserId === ''){
+
+  if (cachedUserId === undefined || cachedUserId === '') {
     window.showErrorMessage(AUTH_NOT_LOGGED_IN);
-  }else{
-
-
+  } else {
     await window
-    .showInputBox({placeHolder: 'Enter a team code'})
-    .then(async (teamCode) => {
-      if (teamCode == undefined) {
-        window.showInformationMessage('Please enter a valid team name!');
-        return;
-      }
-      joinTeamWithTeamId(teamCode, false);
-    });
+      .showInputBox({placeHolder: 'Enter a team code'})
+      .then(async (teamCode) => {
+        if (teamCode == undefined) {
+          window.showInformationMessage('Please enter a valid team name!');
+          return;
+        }
+        joinTeamWithTeamId(teamCode, false);
+      });
   }
-  
 }

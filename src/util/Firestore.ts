@@ -540,14 +540,14 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
   const userEmail = ctx.globalState.get(GLOBAL_STATE_USER_EMAIL);
   const userNickname = ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME);
 
-  if(userId === undefined || userId === ''){
-    console.log("ERROR");
-  }else{
+  if (userId === undefined || userId === '') {
+    console.log('ERROR');
+  } else {
     console.log('userid: ' + userId);
     console.log('userEmail: ' + userEmail);
     //get team doc reference
     let teamDoc = db.collection(COLLECTION_ID_TEAMS).doc(teamId);
-  
+
     //get the team name
     let teamName = '';
     console.log('team name is: ' + teamName);
@@ -557,10 +557,10 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
       teamName = data.teamName;
     });
     console.log('team name: ' + teamName);
-  
+
     //get team members collection
     let teamMembersCollection = teamDoc.collection(COLLECTION_ID_TEAM_MEMBERS);
-  
+
     //add this user to members collection
     let addUserToMembers = await teamMembersCollection
       .doc(userId)
@@ -577,10 +577,10 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
         console.log(e.message);
         console.log('Error adding user to team members collection.');
       });
-  
+
     //get reference to user doc
     let userDoc = db.collection(COLLECTION_ID_USERS).doc(userId);
-  
+
     //add team info to user doc and update persistent storage
     let updateUser = await userDoc
       .update({
@@ -614,7 +614,6 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
         console.log('Error updating user doc.');
       });
   }
- 
 }
 
 /**
