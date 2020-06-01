@@ -94,8 +94,10 @@ export async function updatePersistentStorageWithUserDocData(userId) {
               if (teamDoc.exists) {
                 const teamDocData = teamDoc.data();
 
-                console.log("teamDc data user id: " + teamDocData.teamLeadUserId);
-                console.log("user id :" + userId);
+                console.log(
+                  'teamDc data user id: ' + teamDocData.teamLeadUserId,
+                );
+                console.log('user id :' + userId);
                 if (teamDocData.teamLeadUserId == userId) {
                   console.log('Is team leader');
                   ctx.globalState.update(
@@ -118,21 +120,20 @@ export async function updatePersistentStorageWithUserDocData(userId) {
                     ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS),
                   );
 
-             //     commands.executeCommand('LeaderView.refreshEntry');
+                  //     commands.executeCommand('LeaderView.refreshEntry');
                 } else {
                   console.log('Is not team leader');
                   ctx.globalState.update(
                     GLOBAL_STATE_USER_IS_TEAM_LEADER,
                     false,
                   );
-           //       commands.executeCommand('LeaderView.refreshEntry');
+                  //       commands.executeCommand('LeaderView.refreshEntry');
                 }
               }
-            }).then(
-              () => {
-                commands.executeCommand('LeaderView.refreshEntry');
-              }
-            )
+            })
+            .then(() => {
+              commands.executeCommand('LeaderView.refreshEntry');
+            })
             .catch((e) => {
               console.log(e.message);
             });
@@ -140,11 +141,11 @@ export async function updatePersistentStorageWithUserDocData(userId) {
         } else {
           ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
           ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
-        //  commands.executeCommand('LeaderView.refreshEntry');
+          //  commands.executeCommand('LeaderView.refreshEntry');
         }
 
         console.log(ctx.globalState);
-    //    commands.executeCommand('LeaderView.refreshEntry');
+        //    commands.executeCommand('LeaderView.refreshEntry');
       }
     })
     .catch((e) => {
@@ -535,9 +536,9 @@ export async function addNewTeamToDbAndJoin(teamName) {
           })
           .then(() => {
             //add this user to team, isLeader = true
-            joinTeamWithTeamId(teamId, true).then(()=> {
-        //      commands.executeCommand('LeaderView.refreshEntry');
-        commands.executeCommand('TeamMenuView.refreshEntry');
+            joinTeamWithTeamId(teamId, true).then(() => {
+              //      commands.executeCommand('LeaderView.refreshEntry');
+              commands.executeCommand('TeamMenuView.refreshEntry');
             });
           });
       }
@@ -624,7 +625,6 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
           'Welcome to your new team: ' +
             ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME),
         );
-        
       })
       .catch((e) => {
         console.log(e.message);
