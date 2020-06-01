@@ -105,7 +105,6 @@ export async function authenticateUser() {
     console.log('Found cachedTeamId: ' + cachedTeamId);
     console.log('Found cachedUserNickname: ' + cachedUserNickName);
 
-    console.log('Team lead id: ' + cachedTeamLeadId);
 
     console.log("is team leade " + isTeamLeadr);
 
