@@ -291,6 +291,7 @@ export async function signInOrSignUpUserWithUserInput() {
                     commands.executeCommand('MenuView.refreshEntry');
                     commands.executeCommand('LeaderView.refreshEntry');
                     commands.executeCommand('TeamMenuView.refreshEntry');
+                    commands.executeCommand('DailyMetric.refreshEntry');
                     return;
                   }
                   //not logged in
@@ -303,6 +304,10 @@ export async function signInOrSignUpUserWithUserInput() {
                   }
                 },
               );
+              commands.executeCommand('MenuView.refreshEntry');
+                    commands.executeCommand('LeaderView.refreshEntry');
+                    commands.executeCommand('TeamMenuView.refreshEntry');
+              commands.executeCommand('DailyMetric.refreshEntry');
             } else if (selection == AUTH_CREATE_ACCOUNT) {
               await createNewUserInFirebase(email, password).then(
                 async (result) => {

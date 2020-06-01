@@ -259,6 +259,7 @@ function signInOrSignUpUserWithUserInput() {
                                 vscode_1.commands.executeCommand('MenuView.refreshEntry');
                                 vscode_1.commands.executeCommand('LeaderView.refreshEntry');
                                 vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
+                                vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
                                 return;
                             }
                             //not logged in
@@ -272,6 +273,10 @@ function signInOrSignUpUserWithUserInput() {
                                 vscode_1.window.showErrorMessage('Invalid email!');
                             }
                         }));
+                        vscode_1.commands.executeCommand('MenuView.refreshEntry');
+                        vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                        vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
+                        vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
                     }
                     else if (selection == Constants_1.AUTH_CREATE_ACCOUNT) {
                         yield Firestore_1.createNewUserInFirebase(email, password).then((result) => __awaiter(this, void 0, void 0, function* () {
