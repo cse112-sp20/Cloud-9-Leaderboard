@@ -94,8 +94,7 @@ export async function updatePersistentStorageWithUserDocData(userId) {
               if (teamDoc.exists) {
                 const teamDocData = teamDoc.data();
                 if (teamDocData.teamLeadUserId == userId) {
-
-                  console.log("Is team leader");
+                  console.log('Is team leader');
                   ctx.globalState.update(
                     GLOBAL_STATE_USER_IS_TEAM_LEADER,
                     true,
@@ -117,10 +116,8 @@ export async function updatePersistentStorageWithUserDocData(userId) {
                   );
 
                   commands.executeCommand('LeaderView.refreshEntry');
-
                 } else {
-
-                  console.log("Is not team leader");
+                  console.log('Is not team leader');
                   ctx.globalState.update(
                     GLOBAL_STATE_USER_IS_TEAM_LEADER,
                     false,
