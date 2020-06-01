@@ -791,7 +791,7 @@ export async function retrieveUserStats(callback) {
     .limit(15)
     .get()
     .then((snapshot) => {
-      snapshot.forEach((doc) => {     
+      snapshot.forEach((doc) => {
         PersonalStats.addDayStats(doc.id, doc.data());
         let currDate = {};
         currDate['date'] = doc.id;
