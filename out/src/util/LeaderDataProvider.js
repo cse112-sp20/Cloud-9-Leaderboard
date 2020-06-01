@@ -56,18 +56,7 @@ class LeaderDataProvider {
     }
     refresh() {
         const ctx = Authentication_1.getExtensionContext();
-        if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
-            let childLeaderItem = new LeaderItem('');
-            let topLeaderItem = new LeaderItem('Remove Team members', undefined, [
-                childLeaderItem,
-            ]);
-            childLeaderItem.parent = topLeaderItem;
-            this.data = [
-                new LeaderItem('Team members', undefined, [new LeaderItem('')]),
-                topLeaderItem,
-            ];
-        }
-        else {
+        if (!ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
             const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
             if (teamId == undefined || teamId == '') {
                 this.data = [
@@ -143,6 +132,9 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
                 new LeaderItem(''),
             ]));
         }
+        if (item.children.length === 0) {
+            item.children.push(new LeaderItem('Empty: No team member yet', item));
+        }
         vscode_1.commands.executeCommand('LeaderView.refreshEntry');
     }
     else if (item.label.startsWith('User: ')) {
@@ -157,6 +149,9 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
         for (let [key, value] of Object.entries(memberMaps)) {
             item.children.push(new LeaderItem('Remove member: ' + key, item));
         }
+        if (item.children.length === 0) {
+            item.children.push(new LeaderItem('Empty: No team member yet', item));
+        }
         // item.children = [
         //   new LeaderItem('etyuan@ucsd.edu', item),
         //   new LeaderItem('Member: aihsieh@ucsd.edu', item),
@@ -164,12 +159,16 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
         vscode_1.commands.executeCommand('LeaderView.refreshEntry');
     }
     else if (item.label.startsWith('Remove member: ')) {
-        let selectedMemberEmail = item.label.substring(8);
+        let selectedMemberEmail = item.label.substring(15);
         vscode_1.window
             .showInformationMessage(`Are you sure you want to remove ${selectedMemberEmail}?`, 'yes', 'no')
             .then((input) => {
             if (input === 'yes') {
                 const member = memberMaps[selectedMemberEmail];
+                console.log(selectedMemberEmail);
+                console.log(memberMaps);
+                console.log("t");
+                console.log(member);
                 const memberId = member['id'];
                 const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
                 Firestore_1.leaveTeam(memberId, teamId).then(() => {

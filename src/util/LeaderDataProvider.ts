@@ -37,18 +37,7 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
   refresh(): void {
     const ctx = getExtensionContext();
-    if (ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
-      let childLeaderItem = new LeaderItem('');
-
-      let topLeaderItem = new LeaderItem('Remove Team members', undefined, [
-        childLeaderItem,
-      ]);
-      childLeaderItem.parent = topLeaderItem;
-      this.data = [
-        new LeaderItem('Team members', undefined, [new LeaderItem('')]),
-        topLeaderItem,
-      ];
-    } else {
+    if (!ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
       const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
       if (teamId == undefined || teamId == '') {
         this.data = [
@@ -200,6 +189,12 @@ export const handleLeaderInfoChangeSelection = (
         ]),
       );
     }
+
+    if(item.children.length === 0){
+      item.children.push( new LeaderItem('Empty: No team member yet', item));
+    }
+
+
     commands.executeCommand('LeaderView.refreshEntry');
   } else if (item.label.startsWith('User: ')) {
     item.children = [];
@@ -214,13 +209,17 @@ export const handleLeaderInfoChangeSelection = (
       item.children.push(new LeaderItem('Remove member: ' + key, item));
     }
 
+
+    if(item.children.length === 0){
+      item.children.push( new LeaderItem('Empty: No team member yet', item));
+    }
     // item.children = [
     //   new LeaderItem('etyuan@ucsd.edu', item),
     //   new LeaderItem('Member: aihsieh@ucsd.edu', item),
     // ];
     commands.executeCommand('LeaderView.refreshEntry');
   } else if (item.label.startsWith('Remove member: ')) {
-    let selectedMemberEmail = item.label.substring(8);
+    let selectedMemberEmail = item.label.substring(15);
 
     window
       .showInformationMessage(
@@ -231,6 +230,12 @@ export const handleLeaderInfoChangeSelection = (
       .then((input) => {
         if (input === 'yes') {
           const member = memberMaps[selectedMemberEmail];
+          console.log(selectedMemberEmail);
+          console.log(memberMaps);
+          console.log("t");
+          console.log(member);
+
+
           const memberId = member['id'];
           const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
