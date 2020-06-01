@@ -70,6 +70,7 @@ function authenticateUser() {
         const cachedUserNickName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME);
         const cachedTeamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
+        const cachedTeamLeadId = ctx.globalState.get(Constants_1.FIELD_ID_TEAM_LEAD_USER_ID);
         if (cachedUserId === undefined) {
             // case1: sign in or create new account
             vscode_1.window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
@@ -83,6 +84,7 @@ function authenticateUser() {
             console.log('Found cachedTeamName: ' + cachedTeamName);
             console.log('Found cachedTeamId: ' + cachedTeamId);
             console.log('Found cachedUserNickname: ' + cachedUserNickName);
+            console.log('Team lead id: ' + cachedTeamLeadId);
             //check if user doc exists in firebase
             let exists = yield Firestore_1.userDocExists(cachedUserId);
             if (exists) {

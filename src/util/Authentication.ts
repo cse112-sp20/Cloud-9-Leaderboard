@@ -29,6 +29,7 @@ import {
   AUTH_ERR_CODE_USER_NOT_FOUND,
   AUTH_ERR_CODE_INVALID_EMAIL,
   GLOBAL_STATE_USER_TEAM_MEMBERS,
+  FIELD_ID_TEAM_LEAD_USER_ID,
 } from './Constants';
 import {testCallback} from './DailyMetricDataProvider';
 
@@ -86,6 +87,8 @@ export async function authenticateUser() {
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
+  const cachedTeamLeadId = ctx.globalState.get(FIELD_ID_TEAM_LEAD_USER_ID);
+
   if (cachedUserId === undefined) {
     // case1: sign in or create new account
     window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
@@ -99,6 +102,8 @@ export async function authenticateUser() {
     console.log('Found cachedTeamName: ' + cachedTeamName);
     console.log('Found cachedTeamId: ' + cachedTeamId);
     console.log('Found cachedUserNickname: ' + cachedUserNickName);
+
+    console.log('Team lead id: ' + cachedTeamLeadId);
 
     //check if user doc exists in firebase
     let exists = await userDocExists(cachedUserId);

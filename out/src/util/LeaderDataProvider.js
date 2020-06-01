@@ -167,7 +167,7 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
                 const member = memberMaps[selectedMemberEmail];
                 console.log(selectedMemberEmail);
                 console.log(memberMaps);
-                console.log("t");
+                console.log('t');
                 console.log(member);
                 const memberId = member['id'];
                 const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
