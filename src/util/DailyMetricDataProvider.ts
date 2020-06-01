@@ -29,6 +29,14 @@ import {GLOBAL_STATE_USER_ID} from './Constants';
 
 import {retrieveUserUpdateDailyMetric} from './Firestore';
 
+
+const displayHeaderMap = {
+  "keystrokes": "Keystrokes",
+  "linesChanged": "Lines Changed",
+  "timeInterval": "Time Interval",
+  "points": "Total Points"
+}
+
 export class DailyMetricDataProvider
   implements TreeDataProvider<DailyMetricItem> {
   private _onDidChangeTreeData: EventEmitter<
@@ -61,6 +69,9 @@ export class DailyMetricDataProvider
     }else{
       retrieveUserUpdateDailyMetric().then((userDocument) => {
         console.log(userDocument);
+        var today = new Date();
+
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         this.data = [];
   
         let tempList = [];
@@ -71,9 +82,9 @@ export class DailyMetricDataProvider
   
           console.log('key: ' + key);
           tempList.push(
-            new DailyMetricItem(key, [
+            new DailyMetricItem(displayHeaderMap[key], [
               new DailyMetricItem(
-                '🚀 Today: ' + userDocument[key] + ' (Latest Update)',
+                '🚀 Today: ' + userDocument[key] + ' (Update: ' + time + ')',
               ),
             ]),
           );
@@ -110,6 +121,11 @@ export class DailyMetricDataProvider
     } else {
       console.log(d);
 
+      var today = new Date();
+
+var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+
       this.data = [];
 
       let tempList = [];
@@ -119,8 +135,8 @@ export class DailyMetricDataProvider
         }
 
         tempList.push(
-          new DailyMetricItem(key, [
-            new DailyMetricItem('🚀 Today: ' + d[key] + ' (Latest Update)'),
+          new DailyMetricItem(displayHeaderMap[key], [
+            new DailyMetricItem('🚀 Today: ' + d[key] + ' (Update: ' + time + ')'),
           ]),
         );
       }

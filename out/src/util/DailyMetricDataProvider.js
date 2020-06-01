@@ -14,6 +14,12 @@ const vscode_1 = require("vscode");
 const Authentication_1 = require("./Authentication");
 const Constants_1 = require("./Constants");
 const Firestore_1 = require("./Firestore");
+const displayHeaderMap = {
+    "keystrokes": "Keystrokes",
+    "linesChanged": "Lines Changed",
+    "timeInterval": "Time Interval",
+    "points": "Total Points"
+};
 class DailyMetricDataProvider {
     constructor(d) {
         this._onDidChangeTreeData = new vscode_1.EventEmitter();
@@ -37,14 +43,16 @@ class DailyMetricDataProvider {
         }
         else {
             console.log(d);
+            var today = new Date();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
             this.data = [];
             let tempList = [];
             for (let key in d) {
                 if (key === 'teamId') {
                     continue;
                 }
-                tempList.push(new DailyMetricItem(key, [
-                    new DailyMetricItem('🚀 Today: ' + d[key] + ' (Latest Update)'),
+                tempList.push(new DailyMetricItem(displayHeaderMap[key], [
+                    new DailyMetricItem('🚀 Today: ' + d[key] + ' (Update: ' + time + ')'),
                 ]));
             }
             this.data = tempList;
@@ -72,6 +80,8 @@ class DailyMetricDataProvider {
         else {
             Firestore_1.retrieveUserUpdateDailyMetric().then((userDocument) => {
                 console.log(userDocument);
+                var today = new Date();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                 this.data = [];
                 let tempList = [];
                 for (let key in userDocument) {
@@ -79,8 +89,8 @@ class DailyMetricDataProvider {
                         continue;
                     }
                     console.log('key: ' + key);
-                    tempList.push(new DailyMetricItem(key, [
-                        new DailyMetricItem('🚀 Today: ' + userDocument[key] + ' (Latest Update)'),
+                    tempList.push(new DailyMetricItem(displayHeaderMap[key], [
+                        new DailyMetricItem('🚀 Today: ' + userDocument[key] + ' (Update: ' + time + ')'),
                     ]));
                 }
                 this.data = tempList;
