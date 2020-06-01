@@ -55,7 +55,6 @@ class LeaderDataProvider {
         }
     }
     refresh() {
-        console.log('Refresh called');
         const ctx = Authentication_1.getExtensionContext();
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
             let childLeaderItem = new LeaderItem('');
@@ -121,9 +120,7 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
     const ctx = Authentication_1.getExtensionContext();
     const memberMaps = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS);
     if (item.label.startsWith('No permission:')) {
-        console.log('No permission selected');
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
-            console.log(item);
             let childItem = new LeaderItem('');
             let topItem = new LeaderItem('Remove Team members', undefined, [
                 childItem,
@@ -140,9 +137,7 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
         }
     }
     else if (item.label === 'Team members') {
-        console.log('Team members');
         item.children = [];
-        console.log(memberMaps);
         for (let [key, value] of Object.entries(memberMaps)) {
             item.children.push(new LeaderItem('User: ' + memberMaps[key]['name'], item, [
                 new LeaderItem(''),
@@ -151,21 +146,17 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
         vscode_1.commands.executeCommand('LeaderView.refreshEntry');
     }
     else if (item.label.startsWith('User: ')) {
-        console.log('Team members');
         item.children = [];
-        console.log(memberMaps);
         for (let [key, value] of Object.entries(memberMaps)) {
             item.children.push(new LeaderItem('Email: ' + key));
         }
         vscode_1.commands.executeCommand('LeaderView.refreshEntry');
     }
     else if (item.label === 'Remove Team members') {
-        console.log('Team members selected');
         item.children = [];
         for (let [key, value] of Object.entries(memberMaps)) {
             item.children.push(new LeaderItem('Remove member: ' + key, item));
         }
-        console.log(item.children);
         // item.children = [
         //   new LeaderItem('etyuan@ucsd.edu', item),
         //   new LeaderItem('Member: aihsieh@ucsd.edu', item),

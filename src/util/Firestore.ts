@@ -309,66 +309,77 @@ export async function retrieveTeamMemberStats(callback) {
 
   if (!cachedTeamID) {
     window.showErrorMessage('Please Join a team first!');
+  }else{
+    let userMap = [];
+
+    if(users === undefined){
+      console.log("user undefined")
+    }
+    else {
+  
+      users
+      .where('teamCode', '==', cachedTeamID)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.empty) {
+          console.log('No matching documents.');
+          return userMap;
+        }
+  
+        snapshot.forEach((doc) => {
+          Leaderboard.addUser(doc.id, doc.data());
+          let currUser = {};
+          currUser['id'] = doc.id;
+          let today = new Date().toISOString().split('T')[0];
+  
+          users
+            .doc(doc.id)
+            .collection('dates')
+            .doc(today)
+            .get()
+            .then((doc2) => {
+              let dailyUser = {};
+              if (doc2.exists) {
+                for (let key in doc2.data()) {
+                  dailyUser['today_' + key] = doc2.data()[key];
+                }
+              }
+              return dailyUser;
+            })
+            .then((dailyUser) => {
+              currUser = {...dailyUser};
+              for (let key in doc.data()) {
+                currUser[key] = doc.data()[key];
+              }
+              userMap.push(currUser);
+              return userMap;
+            })
+            .then((userMap) => {
+              console.log('Callback params');
+              console.log(userMap);
+              callback(userMap, true);
+            });
+  
+          // for (let key in doc.data()) {
+          //   currUser[key] = doc.data()[key];
+          // }
+          // userMap.push(currUser);
+        });
+  
+        // return userMap;
+      })
+      // .then((userMap) => {
+      //   callback(userMap, true);
+      // })
+      .catch((err) => {
+        console.log('Error getting documents', err);
+      });
+  
+    }
   }
 
-  let userMap = [];
-  users
-    .where('teamCode', '==', cachedTeamID)
-    .get()
-    .then((snapshot) => {
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-        return userMap;
-      }
+ 
 
-      snapshot.forEach((doc) => {
-        Leaderboard.addUser(doc.id, doc.data());
-        let currUser = {};
-        currUser['id'] = doc.id;
-        let today = new Date().toISOString().split('T')[0];
-
-        users
-          .doc(doc.id)
-          .collection('dates')
-          .doc(today)
-          .get()
-          .then((doc2) => {
-            let dailyUser = {};
-            if (doc2.exists) {
-              for (let key in doc2.data()) {
-                dailyUser['today_' + key] = doc2.data()[key];
-              }
-            }
-            return dailyUser;
-          })
-          .then((dailyUser) => {
-            currUser = {...dailyUser};
-            for (let key in doc.data()) {
-              currUser[key] = doc.data()[key];
-            }
-            userMap.push(currUser);
-            return userMap;
-          })
-          .then((userMap) => {
-            console.log('Callback params');
-            console.log(userMap);
-            callback(userMap, true);
-          });
-
-        // for (let key in doc.data()) {
-        //   currUser[key] = doc.data()[key];
-        // }
-        // userMap.push(currUser);
-      });
-
-      // return userMap;
-    })
-    // .then((userMap) => {
-    //   callback(userMap, true);
-    // })
-    .catch((err) => {
-      console.log('Error getting documents', err);
-    });
 }
 
 export async function retrieveAllUserStats(callback) {

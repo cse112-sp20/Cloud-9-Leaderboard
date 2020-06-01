@@ -37,7 +37,6 @@ class MenuDataProvider {
         ];
     }
     refresh() {
-        console.log('Refresh called**************************');
         const ctx = Authentication_2.getExtensionContext();
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID) !== undefined) {
             this.data = [

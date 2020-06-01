@@ -42,7 +42,6 @@ class DailyMetricDataProvider {
             ];
         }
         else {
-            console.log(d);
             var today = new Date();
             var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
             this.data = [];
@@ -61,7 +60,6 @@ class DailyMetricDataProvider {
     refresh() {
         const ctx = Authentication_1.getExtensionContext();
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID) === undefined) {
-            console.log("USer id set to undefined");
             this.data = [
                 new DailyMetricItem('Keystrokes', [
                     new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
@@ -80,7 +78,6 @@ class DailyMetricDataProvider {
         }
         else {
             Firestore_1.retrieveUserUpdateDailyMetric().then((userDocument) => {
-                console.log(userDocument);
                 var today = new Date();
                 var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                 this.data = [];
@@ -89,13 +86,11 @@ class DailyMetricDataProvider {
                     if (key === 'teamId') {
                         continue;
                     }
-                    console.log('key: ' + key);
                     tempList.push(new DailyMetricItem(displayHeaderMap[key], [
                         new DailyMetricItem('🚀 Today: ' + userDocument[key] + ' (Update: ' + time + ')'),
                     ]));
                 }
                 this.data = tempList;
-                console.log('Refresh daily metric called');
             });
         }
         this._onDidChangeTreeData.fire(null);
