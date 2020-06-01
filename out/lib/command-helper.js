@@ -1,21 +1,9 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCommands = void 0;
 const vscode_1 = require("vscode");
 const DataController_1 = require("./DataController");
 const TeamDataProvider_1 = require("../src/util/TeamDataProvider");
-const MenuManager_1 = require("./menu/MenuManager");
-const Util_1 = require("./Util");
-const FileManager_1 = require("./managers/FileManager");
 const Leaderboard_1 = require("../src/util/Leaderboard");
 const Authentication_1 = require("../src/util/Authentication");
 const Team_1 = require("../src/util/Team");
@@ -50,58 +38,6 @@ function createCommands(kpmController) {
     cloud9TeamTreeProvider.bindView(cloud9TeamTreeView);
     cmds.push(TeamDataProvider_1.connectCloud9TeamInfoTreeView(cloud9TeamTreeView));
     cmds.push(vscode_1.commands.registerCommand('TeamMenuView.refreshEntry', () => cloud9TeamTreeProvider.refresh()));
-    // TEAM TREE: INVITE MEMBER
-    cmds.push(vscode_1.commands.registerCommand('codetime.inviteTeamMember', (item) => __awaiter(this, void 0, void 0, function* () {
-        // the identifier will be in the value
-        const identifier = item.value;
-        // email will be the description
-        const email = item.description;
-        const name = item.label;
-        const msg = `Send invitation to ${email}?`;
-        const selection = yield vscode_1.window.showInformationMessage(msg, { modal: true }, ...['YES']);
-        if (selection && selection === 'YES') {
-            DataController_1.sendTeamInvite(identifier, [email]);
-        }
-    })));
-    // SEND OFFLINE DATA
-    cmds.push(vscode_1.commands.registerCommand('codetime.sendOfflineData', () => {
-        FileManager_1.sendOfflineData();
-    }));
-    // SHOW ASCII DASHBOARD
-    cmds.push(vscode_1.commands.registerCommand('codetime.softwareKpmDashboard', () => {
-        DataController_1.handleKpmClickedEvent();
-    }));
-    // OPEN SPECIFIED FILE IN EDITOR
-    cmds.push(vscode_1.commands.registerCommand('codetime.openFileInEditor', (file) => {
-        Util_1.openFileInEditor(file);
-    }));
-    // REFRESH MENU
-    cmds.push(vscode_1.commands.registerCommand('codetime.toggleStatusBar', () => {
-        Util_1.toggleStatusBar();
-        setTimeout(() => {
-            vscode_1.commands.executeCommand('codetime.refreshCodetimeMenuTree');
-        }, 500);
-    }));
-    // LAUNCH EMAIL LOGIN
-    cmds.push(vscode_1.commands.registerCommand('codetime.codeTimeLogin', () => {
-        Util_1.launchLogin('software');
-    }));
-    // LAUNCH GOOGLE LOGIN
-    cmds.push(vscode_1.commands.registerCommand('codetime.googleLogin', () => {
-        Util_1.launchLogin('google');
-    }));
-    // LAUNCH GITHUB LOGIN
-    cmds.push(vscode_1.commands.registerCommand('codetime.githubLogin', () => {
-        Util_1.launchLogin('github');
-    }));
-    // DISPLAY README MD
-    cmds.push(vscode_1.commands.registerCommand('codetime.displayReadme', () => {
-        Util_1.displayReadmeIfNotExists(true /*override*/);
-    }));
-    // DISPLAY CODE TIME METRICS REPORT
-    cmds.push(vscode_1.commands.registerCommand('codetime.codeTimeMetrics', () => {
-        MenuManager_1.displayCodeTimeMetricsDashboard();
-    }));
     /*
      * CLOUD 9 LEADERBOARD COMMAND
      */
@@ -147,23 +83,6 @@ function createCommands(kpmController) {
     cmds.push(vscode_1.commands.registerCommand('cloud9.logOut', () => {
         console.log('Cloud9: LOG OUT FROM CLOUD9');
         Authentication_1.logOut();
-    }));
-    // LAUNCH COMMIT URL
-    cmds.push(vscode_1.commands.registerCommand('codetime.launchCommitUrl', (commitLink) => {
-        Util_1.launchWebUrl(commitLink);
-    }));
-    // DISPLAY PALETTE MENU
-    cmds.push(vscode_1.commands.registerCommand('codetime.softwarePaletteMenu', () => {
-        MenuManager_1.showMenuOptions();
-    }));
-    cmds.push(vscode_1.commands.registerCommand('codetime.viewSoftwareTop40', () => {
-        Util_1.launchWebUrl('https://api.software.com/music/top40');
-    }));
-    cmds.push(vscode_1.commands.registerCommand('codetime.codeTimeStatusToggle', () => {
-        Util_1.handleCodeTimeStatusToggle();
-    }));
-    cmds.push(vscode_1.commands.registerCommand('codetime.sendFeedback', () => {
-        Util_1.launchWebUrl('mailto:cody@software.com');
     }));
     cmds.push(vscode_1.workspace.onDidChangeConfiguration((e) => DataController_1.updatePreferences()));
     return vscode_1.Disposable.from(...cmds);

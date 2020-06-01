@@ -333,9 +333,7 @@ async function userStatusFetchHandler(tryCountUntilFoundUser, interval) {
     const message = 'Successfully logged on to Code Time';
     window.showInformationMessage(message);
 
-    commands.executeCommand('codetime.sendOfflineData');
-
-    commands.executeCommand('codetime.refreshTreeViews');
+   
   }
 }
 
