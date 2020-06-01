@@ -163,9 +163,6 @@ function intializePlugin(ctx, createdAnonUser) {
             // send a heartbeat that the plugin as been installed
             // (or the user has deleted the session.json and restarted the IDE)
             DataController_1.sendHeartbeat('INSTALLED', serverIsOnline);
-            setTimeout(() => {
-                vscode_1.commands.executeCommand('codetime.displayTree');
-            }, 1200);
         }
         // initialize the day check timer
         SummaryManager_1.SummaryManager.getInstance().updateSessionSummaryFromServer();
@@ -182,7 +179,6 @@ function intializePlugin(ctx, createdAnonUser) {
             }
             statusBarItem.tooltip = tooltip;
             // statusBarItem.command = "codetime.softwarePaletteMenu";
-            statusBarItem.command = 'codetime.displayTree';
             statusBarItem.show();
             // update the status bar
             SessionSummaryData_1.updateStatusBarWithSummaryData();

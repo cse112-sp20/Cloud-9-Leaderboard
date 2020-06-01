@@ -240,9 +240,6 @@ export async function intializePlugin(
     // (or the user has deleted the session.json and restarted the IDE)
     sendHeartbeat('INSTALLED', serverIsOnline);
 
-    setTimeout(() => {
-      commands.executeCommand('codetime.displayTree');
-    }, 1200);
   }
 
   // initialize the day check timer
@@ -262,7 +259,7 @@ export async function intializePlugin(
     }
     statusBarItem.tooltip = tooltip;
     // statusBarItem.command = "codetime.softwarePaletteMenu";
-    statusBarItem.command = 'codetime.displayTree';
+    
     statusBarItem.show();
 
     // update the status bar
