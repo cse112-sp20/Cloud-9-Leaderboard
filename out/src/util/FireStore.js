@@ -85,8 +85,10 @@ function updatePersistentStorageWithUserDocData(userId) {
                         .then((teamDoc) => __awaiter(this, void 0, void 0, function* () {
                         if (teamDoc.exists) {
                             const teamDocData = teamDoc.data();
+                            console.log("teamDc data user id: " + teamDocData.teamLeadUserId);
+                            console.log("user id :" + userId);
                             if (teamDocData.teamLeadUserId == userId) {
-                                console.log("Is team leader");
+                                console.log('Is team leader');
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, true);
                                 //store team member data in persistent storage
                                 let members = yield fetchTeamMembersList(teamId);
@@ -94,24 +96,29 @@ function updatePersistentStorageWithUserDocData(userId) {
                                 console.log('updating team member list to persistent storage.');
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, members);
                                 console.log(ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS));
-                                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                                //     commands.executeCommand('LeaderView.refreshEntry');
                             }
                             else {
-                                console.log("Is not team leader");
+                                console.log('Is not team leader');
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
-                                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                                //       commands.executeCommand('LeaderView.refreshEntry');
                             }
                         }
-                    }))
+                    })).then(() => {
+                        vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                    })
                         .catch((e) => {
                         console.log(e.message);
                     });
+                    //  commands.executeCommand('LeaderView.refreshEntry');
                 }
                 else {
                     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
                     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, undefined);
+                    //  commands.executeCommand('LeaderView.refreshEntry');
                 }
                 console.log(ctx.globalState);
+                //    commands.executeCommand('LeaderView.refreshEntry');
             }
         }))
             .catch((e) => {
@@ -449,7 +456,10 @@ function addNewTeamToDbAndJoin(teamName) {
                 })
                     .then(() => {
                     //add this user to team, isLeader = true
-                    joinTeamWithTeamId(teamId, true);
+                    joinTeamWithTeamId(teamId, true).then(() => {
+                        //      commands.executeCommand('LeaderView.refreshEntry');
+                        vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
+                    });
                 });
             }
         });
@@ -521,8 +531,6 @@ function joinTeamWithTeamId(teamId, isLeader) {
                 console.log('Successfully added team info to user doc.');
                 vscode_1.window.showInformationMessage('Welcome to your new team: ' +
                     ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
-                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
-                vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
             })
                 .catch((e) => {
                 console.log(e.message);
@@ -584,7 +592,7 @@ function leaveTeam(userId, teamId) {
             ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, newMembersMap);
             console.log('new members map: ');
             console.log(ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS));
-            vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+            //commands.executeCommand('LeaderView.refreshEntry');
             vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
         })
             .catch((e) => {

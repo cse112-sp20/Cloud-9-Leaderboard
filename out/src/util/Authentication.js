@@ -88,7 +88,7 @@ function authenticateUser() {
             //check if user doc exists in firebase
             let exists = yield Firestore_1.userDocExists(cachedUserId);
             if (exists) {
-                console.log("user doc exists");
+                console.log('user doc exists');
                 Firestore_1.updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
                     Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
                 });

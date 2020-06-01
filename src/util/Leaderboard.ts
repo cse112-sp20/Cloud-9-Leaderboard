@@ -250,6 +250,10 @@ async function writeToFile(users, isTeam) {
       }
     }
 
+    console.log("cacheduserid: " + cachedUserId);
+    console.log("user id :" + user.name);
+
+
     if (cachedUserId == user.id) {
       username = user.name;
 
@@ -283,6 +287,9 @@ async function writeToFile(users, isTeam) {
     ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME) !== undefined
       ? ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME)
       : '______';
+
+
+  console.log("username is :" + username);
 
   leaderBoardContent += 'Username \t : \t ' + username + '\n';
   leaderBoardContent += 'Teamname \t : \t ' + teamname + '\n\n';
