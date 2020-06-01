@@ -51,7 +51,7 @@ class DailyMetricDataProvider {
                     continue;
                 }
                 tempList.push(new DailyMetricItem(displayHeaderMap[key], [
-                    new DailyMetricItem('🚀 Today: ' + d[key] + ' (Update: ' + time + ')'),
+                    new DailyMetricItem('🚀 Today: ' + d[key] + ' (Updated: ' + time + ')'),
                 ]));
             }
             this.data = tempList;
@@ -91,7 +91,7 @@ class DailyMetricDataProvider {
                         continue;
                     }
                     tempList.push(new DailyMetricItem(displayHeaderMap[key], [
-                        new DailyMetricItem('🚀 Today: ' + userDocument[key] + ' (Update: ' + time + ')'),
+                        new DailyMetricItem('🚀 Today: ' + userDocument[key] + ' (Updated: ' + time + ')'),
                     ]));
                 }
                 this.data = tempList;

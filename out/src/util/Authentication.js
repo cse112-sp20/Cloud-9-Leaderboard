@@ -88,11 +88,12 @@ function authenticateUser() {
             //check if user doc exists in firebase
             let exists = yield Firestore_1.userDocExists(cachedUserId);
             if (exists) {
+                console.log("user doc exists");
                 Firestore_1.updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
                     Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
                 });
                 vscode_1.window.showInformationMessage('Welcome back, ' + cachedUserNickName + '!!');
-                console.log("is team leade " + isTeamLeadr);
+                console.log('is team leade ' + isTeamLeadr);
                 vscode_1.commands.executeCommand('MenuView.refreshEntry');
                 vscode_1.commands.executeCommand('LeaderView.refreshEntry');
                 vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');

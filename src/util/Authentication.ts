@@ -108,6 +108,7 @@ export async function authenticateUser() {
     //check if user doc exists in firebase
     let exists = await userDocExists(cachedUserId);
     if (exists) {
+      console.log("user doc exists");
       updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
         retrieveUserDailyMetric(testCallback, ctx);
       });

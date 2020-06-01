@@ -86,6 +86,7 @@ function updatePersistentStorageWithUserDocData(userId) {
                         if (teamDoc.exists) {
                             const teamDocData = teamDoc.data();
                             if (teamDocData.teamLeadUserId == userId) {
+                                console.log("Is team leader");
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, true);
                                 //store team member data in persistent storage
                                 let members = yield fetchTeamMembersList(teamId);
@@ -93,9 +94,12 @@ function updatePersistentStorageWithUserDocData(userId) {
                                 console.log('updating team member list to persistent storage.');
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, members);
                                 console.log(ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS));
+                                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
                             }
                             else {
+                                console.log("Is not team leader");
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
+                                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
                             }
                         }
                     }))
