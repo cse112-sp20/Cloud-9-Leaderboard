@@ -132,9 +132,11 @@ function createCommands(kpmController) {
     //     window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
     //   }),
     // );
-    cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
-        console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
-    }));
+    // cmds.push(
+    //   commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
+    //     console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
+    //   }),
+    // );
     // Cloud9: command used to join a new team
     cmds.push(vscode_1.commands.registerCommand('cloud9.joinTeam', () => {
         console.log('Cloud9: JOIN A TEAM');
@@ -142,9 +144,9 @@ function createCommands(kpmController) {
     }));
     // Cloud9: command used to clear the cached id (for debugging and testing only)
     // ***can be used to sign the user out***
-    cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearUserId', () => {
-        console.log('Cloud9: DEBUG CLEAR CACHED ID');
-        Authentication_1.clearCachedUserId();
+    cmds.push(vscode_1.commands.registerCommand('cloud9.logOut', () => {
+        console.log('Cloud9: LOG OUT FROM CLOUD9');
+        Authentication_1.logOut();
     }));
     // LAUNCH COMMIT URL
     cmds.push(vscode_1.commands.registerCommand('codetime.launchCommitUrl', (commitLink) => {

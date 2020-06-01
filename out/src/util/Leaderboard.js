@@ -70,8 +70,7 @@ exports.getTeamLeaderboardFile = getTeamLeaderboardFile;
 function displayLeaderboard() {
     return __awaiter(this, void 0, void 0, function* () {
         //ID check
-        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt()
-            .then((loggedIn) => {
+        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
             if (!loggedIn) {
                 vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
                 return;

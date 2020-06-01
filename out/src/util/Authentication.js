@@ -17,12 +17,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerNewUserWithGeneratedCredential = exports.checkIfCachedUserIdExistsAndPrompt = exports.signInOrSignUpUserWithUserInput = exports.registerNewUserOrSigInWithUserInput = exports.authenticateUser = exports.clearCachedUserId = exports.getExtensionContext = exports.storeExtensionContext = void 0;
+exports.registerNewUserWithGeneratedCredential = exports.checkIfCachedUserIdExistsAndPrompt = exports.signInOrSignUpUserWithUserInput = exports.registerNewUserOrSigInWithUserInput = exports.authenticateUser = exports.logOut = exports.getExtensionContext = exports.storeExtensionContext = void 0;
 const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
 const Utility_1 = require("./Utility");
 const Constants_1 = require("./Constants");
-const Team_1 = require("./Team");
 const DailyMetricDataProvider_1 = require("./DailyMetricDataProvider");
 let extensionContext = undefined;
 /**
@@ -45,17 +44,18 @@ exports.getExtensionContext = getExtensionContext;
  * *****for debugging purpose only******
  * removes extensionContext data
  */
-function clearCachedUserId() {
+function logOut() {
     let ctx = getExtensionContext();
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_NICKNAME, undefined);
-    console.log('After clearing persistent storage: ' + extensionContext.globalState);
-    Team_1.removeTeamNameAndId();
+    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, undefined);
+    console.log('Logging out: ' + extensionContext.globalState);
+    vscode_1.window.showInformationMessage('Goodbye!');
 }
-exports.clearCachedUserId = clearCachedUserId;
+exports.logOut = logOut;
 /**
  * authentication entry point
  * @param ctx
@@ -316,8 +316,7 @@ function checkIfCachedUserIdExistsAndPrompt() {
             loggedIn = true;
         }
         else {
-            yield signInOrSignUpUserWithUserInput()
-                .then(() => __awaiter(this, void 0, void 0, function* () {
+            yield signInOrSignUpUserWithUserInput().then(() => __awaiter(this, void 0, void 0, function* () {
                 cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
                 if (cachedUserId != undefined) {
                     loggedIn = true;

@@ -629,6 +629,8 @@ function checkIfInTeam() {
     return __awaiter(this, void 0, void 0, function* () {
         const ctx = Authentication_1.getExtensionContext();
         const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        if (userId == undefined)
+            return false;
         let inTeam = false;
         yield db
             .collection(Constants_1.COLLECTION_ID_USERS)
@@ -837,6 +839,8 @@ function fetchTeamMembersList(teamId) {
     return __awaiter(this, void 0, void 0, function* () {
         const ctx = Authentication_1.getExtensionContext();
         const leaderId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        if (leaderId == undefined)
+            return;
         let members = new Map();
         //let members = [];
         yield db

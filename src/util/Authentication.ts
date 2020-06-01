@@ -31,6 +31,7 @@ import {
   AUTH_CREATE_ACCOUNT,
   AUTH_ERR_CODE_USER_NOT_FOUND,
   AUTH_ERR_CODE_INVALID_EMAIL,
+  GLOBAL_STATE_USER_TEAM_MEMBERS,
 } from './Constants';
 import {removeTeamNameAndId} from './Team';
 import {testCallback} from './DailyMetricDataProvider';
@@ -57,19 +58,17 @@ export function getExtensionContext() {
  * *****for debugging purpose only******
  * removes extensionContext data
  */
-export function clearCachedUserId() {
+export function logOut() {
   let ctx = getExtensionContext();
   ctx.globalState.update(GLOBAL_STATE_USER_ID, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_NICKNAME, undefined);
+  ctx.globalState.update(GLOBAL_STATE_USER_TEAM_MEMBERS, undefined);
 
-  console.log(
-    'After clearing persistent storage: ' + extensionContext.globalState,
-  );
-
-  removeTeamNameAndId();
+  console.log('Logging out: ' + extensionContext.globalState);
+  window.showInformationMessage('Goodbye!');
 }
 
 /**
