@@ -15,11 +15,8 @@ import {
   userDocExists,
   updatePersistentStorageWithUserDocData,
 } from './Firestore';
-import {generateRandomEmail} from './Utility';
 import {
-  DEFAULT_PASSWORD,
   GLOBAL_STATE_USER_ID,
-  GLOBAL_STATE_USER_EMAIL,
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
@@ -33,7 +30,6 @@ import {
   AUTH_ERR_CODE_INVALID_EMAIL,
   GLOBAL_STATE_USER_TEAM_MEMBERS,
 } from './Constants';
-import {removeTeamNameAndId} from './Team';
 import {testCallback} from './DailyMetricDataProvider';
 
 let extensionContext: ExtensionContext = undefined;
@@ -55,7 +51,7 @@ export function getExtensionContext() {
 }
 
 /**
- * *****for debugging purpose only******
+ *
  * removes extensionContext data
  */
 export function logOut() {
@@ -117,107 +113,6 @@ export async function authenticateUser() {
       });
     }
   }
-}
-
-/**
- * prompt the user to enter an email and password and sign in or create a new account for them
- */
-export async function registerNewUserOrSigInWithUserInput() {
-  // const ctx = getExtensionContext();
-  // let email = null;
-  // let password = null;
-  // let completed = false;
-  // while (!completed) {
-  //   //forcing the user to always sign in
-  //   window
-  //     .showInformationMessage(
-  //       'Please sign in or create a new account.',
-  //       'Sign in',
-  //       'Create account',
-  //     )
-  //     .then(async (selection) => {
-  //       console.log(selection);
-  //     });
-  //   //prompt for email and password
-  //   await window
-  //     .showInputBox({placeHolder: 'Enter your email'})
-  //     .then((inputEmail) => {
-  //       email = inputEmail;
-  //       console.log('user input email: ' + email);
-  //     })
-  //     .then(async () => {
-  //       await window
-  //         .showInputBox({
-  //           placeHolder:
-  //             'Enter your password (must be 6 characters long or more)',
-  //           password: true,
-  //         })
-  //         .then((inputPassword) => {
-  //           password = inputPassword;
-  //           console.log('user input password: ' + password);
-  //         });
-  //     })
-  //     .then(async () => {
-  //       if (
-  //         email == undefined ||
-  //         password == undefined ||
-  //         email == '' ||
-  //         password == ''
-  //       ) {
-  //         window.showInformationMessage(
-  //           'Invalid email or password! Please try again!',
-  //         );
-  //       } else {
-  //         //first try creating a new user account
-  //         //if email is already in use, try logging them in with the credential
-  //         await createNewUserInFirebase(email, password).then(
-  //           async (result) => {
-  //             console.log(result.created);
-  //             console.log(result.errorCode);
-  //             if (result.created) {
-  //               window.showInformationMessage(
-  //                 'Successfully created new account, your nickname is ' +
-  //                   ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME),
-  //               );
-  //               commands.executeCommand('MenuView.refreshEntry');
-  //             }
-  //             //email already in use, now log the user in
-  //             else if (result.errorCode == 'auth/email-already-in-use') {
-  //               await loginUserWithEmailAndPassword(email, password).then(
-  //                 async (result) => {
-  //                   console.log(result.loggedIn);
-  //                   console.log(result.errorCode);
-  //                   //successfully logged the user in, return
-  //                   if (result.loggedIn == true) {
-  //                     completed = true;
-  //                     window.showInformationMessage(
-  //                       'Hello, ' +
-  //                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
-  //                         '!!',
-  //                     );
-  //                     commands.executeCommand('MenuView.refreshEntry');
-  //                     commands.executeCommand('LeaderView.refreshEntry');
-  //                     return;
-  //                   } else if (result.errorCode == 'auth/wrong-password') {
-  //                     window.showInformationMessage(
-  //                       'Wrong password! Please try again!',
-  //                     );
-  //                   }
-  //                 },
-  //               );
-  //             } else if (result.errorCode == 'auth/weak-password') {
-  //               window.showInformationMessage(
-  //                 'Password must to be 6 characters or longer! Please try again!',
-  //               );
-  //             }
-  //           },
-  //         );
-  //       }
-  //     });
-  //   completed = true;
-  //   commands.executeCommand('MenuView.refreshEntry');
-  //   commands.executeCommand('LeaderView.refreshEntry');
-  // }
 }
 
 /**
@@ -350,12 +245,4 @@ export async function checkIfCachedUserIdExistsAndPrompt() {
     });
   }
   return loggedIn;
-}
-/**
- * not using this function
- */
-export async function registerNewUserWithGeneratedCredential() {
-  const email = generateRandomEmail();
-
-  await createNewUserInFirebase(email, DEFAULT_PASSWORD);
 }

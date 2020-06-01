@@ -14,7 +14,6 @@ import {
   addNewTeamToDbAndJoin,
   joinTeamWithTeamId,
   checkIfInTeam,
-  leaveTeam,
 } from './Firestore';
 import {
   getExtensionContext,
@@ -23,11 +22,8 @@ import {
 import {
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_TEAM_ID,
-  GLOBAL_STATE_USER_IS_TEAM_LEADER,
-  GLOBAL_STATE_USER_ID,
   AUTH_NOT_LOGGED_IN,
 } from './Constants';
-import {testCallback} from './DailyMetricDataProvider';
 
 /**
  * prompts the user to enter a team name and updates the firebase 2
@@ -61,22 +57,6 @@ export async function createAndJoinTeam() {
       }
       addNewTeamToDbAndJoin(teamName);
     });
-}
-
-/**
- * DEBUG: REMOVE CACHED TEAM NAME AND ID
- * leave the team
- */
-export async function removeTeamNameAndId() {
-  // const ctx = getExtensionContext();
-  // const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
-  // const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
-  // console.log('team id: ' + teamId);
-  // console.log('user id: ' + userId);
-  // if (teamId == undefined) {
-  //   window.showInformationMessage('Not in a team!');
-  //   return;
-  // }
 }
 
 /**

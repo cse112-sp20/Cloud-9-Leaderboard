@@ -19,7 +19,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.joinTeam = exports.getTeamInfo = exports.removeTeamNameAndId = exports.createAndJoinTeam = void 0;
+exports.joinTeam = exports.getTeamInfo = exports.createAndJoinTeam = void 0;
 const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
 const Authentication_1 = require("./Authentication");
@@ -56,24 +56,6 @@ function createAndJoinTeam() {
     });
 }
 exports.createAndJoinTeam = createAndJoinTeam;
-/**
- * DEBUG: REMOVE CACHED TEAM NAME AND ID
- * leave the team
- */
-function removeTeamNameAndId() {
-    return __awaiter(this, void 0, void 0, function* () {
-        // const ctx = getExtensionContext();
-        // const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
-        // const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
-        // console.log('team id: ' + teamId);
-        // console.log('user id: ' + userId);
-        // if (teamId == undefined) {
-        //   window.showInformationMessage('Not in a team!');
-        //   return;
-        // }
-    });
-}
-exports.removeTeamNameAndId = removeTeamNameAndId;
 /**
  * returns user's team name and ID
  * values retrieved from persistent storage

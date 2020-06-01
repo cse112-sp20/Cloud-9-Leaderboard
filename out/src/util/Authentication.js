@@ -17,10 +17,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerNewUserWithGeneratedCredential = exports.checkIfCachedUserIdExistsAndPrompt = exports.signInOrSignUpUserWithUserInput = exports.registerNewUserOrSigInWithUserInput = exports.authenticateUser = exports.logOut = exports.getExtensionContext = exports.storeExtensionContext = void 0;
+exports.checkIfCachedUserIdExistsAndPrompt = exports.signInOrSignUpUserWithUserInput = exports.authenticateUser = exports.logOut = exports.getExtensionContext = exports.storeExtensionContext = void 0;
 const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
-const Utility_1 = require("./Utility");
 const Constants_1 = require("./Constants");
 const DailyMetricDataProvider_1 = require("./DailyMetricDataProvider");
 let extensionContext = undefined;
@@ -41,7 +40,7 @@ function getExtensionContext() {
 }
 exports.getExtensionContext = getExtensionContext;
 /**
- * *****for debugging purpose only******
+ *
  * removes extensionContext data
  */
 function logOut() {
@@ -101,109 +100,6 @@ function authenticateUser() {
     });
 }
 exports.authenticateUser = authenticateUser;
-/**
- * prompt the user to enter an email and password and sign in or create a new account for them
- */
-function registerNewUserOrSigInWithUserInput() {
-    return __awaiter(this, void 0, void 0, function* () {
-        // const ctx = getExtensionContext();
-        // let email = null;
-        // let password = null;
-        // let completed = false;
-        // while (!completed) {
-        //   //forcing the user to always sign in
-        //   window
-        //     .showInformationMessage(
-        //       'Please sign in or create a new account.',
-        //       'Sign in',
-        //       'Create account',
-        //     )
-        //     .then(async (selection) => {
-        //       console.log(selection);
-        //     });
-        //   //prompt for email and password
-        //   await window
-        //     .showInputBox({placeHolder: 'Enter your email'})
-        //     .then((inputEmail) => {
-        //       email = inputEmail;
-        //       console.log('user input email: ' + email);
-        //     })
-        //     .then(async () => {
-        //       await window
-        //         .showInputBox({
-        //           placeHolder:
-        //             'Enter your password (must be 6 characters long or more)',
-        //           password: true,
-        //         })
-        //         .then((inputPassword) => {
-        //           password = inputPassword;
-        //           console.log('user input password: ' + password);
-        //         });
-        //     })
-        //     .then(async () => {
-        //       if (
-        //         email == undefined ||
-        //         password == undefined ||
-        //         email == '' ||
-        //         password == ''
-        //       ) {
-        //         window.showInformationMessage(
-        //           'Invalid email or password! Please try again!',
-        //         );
-        //       } else {
-        //         //first try creating a new user account
-        //         //if email is already in use, try logging them in with the credential
-        //         await createNewUserInFirebase(email, password).then(
-        //           async (result) => {
-        //             console.log(result.created);
-        //             console.log(result.errorCode);
-        //             if (result.created) {
-        //               window.showInformationMessage(
-        //                 'Successfully created new account, your nickname is ' +
-        //                   ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME),
-        //               );
-        //               commands.executeCommand('MenuView.refreshEntry');
-        //             }
-        //             //email already in use, now log the user in
-        //             else if (result.errorCode == 'auth/email-already-in-use') {
-        //               await loginUserWithEmailAndPassword(email, password).then(
-        //                 async (result) => {
-        //                   console.log(result.loggedIn);
-        //                   console.log(result.errorCode);
-        //                   //successfully logged the user in, return
-        //                   if (result.loggedIn == true) {
-        //                     completed = true;
-        //                     window.showInformationMessage(
-        //                       'Hello, ' +
-        //                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
-        //                         '!!',
-        //                     );
-        //                     commands.executeCommand('MenuView.refreshEntry');
-        //                     commands.executeCommand('LeaderView.refreshEntry');
-        //                     return;
-        //                   } else if (result.errorCode == 'auth/wrong-password') {
-        //                     window.showInformationMessage(
-        //                       'Wrong password! Please try again!',
-        //                     );
-        //                   }
-        //                 },
-        //               );
-        //             } else if (result.errorCode == 'auth/weak-password') {
-        //               window.showInformationMessage(
-        //                 'Password must to be 6 characters or longer! Please try again!',
-        //               );
-        //             }
-        //           },
-        //         );
-        //       }
-        //     });
-        //   completed = true;
-        //   commands.executeCommand('MenuView.refreshEntry');
-        //   commands.executeCommand('LeaderView.refreshEntry');
-        // }
-    });
-}
-exports.registerNewUserOrSigInWithUserInput = registerNewUserOrSigInWithUserInput;
 /**
  * prompts the user to sign in or sign up with input email and password
  */
@@ -328,14 +224,4 @@ function checkIfCachedUserIdExistsAndPrompt() {
     });
 }
 exports.checkIfCachedUserIdExistsAndPrompt = checkIfCachedUserIdExistsAndPrompt;
-/**
- * not using this function
- */
-function registerNewUserWithGeneratedCredential() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const email = Utility_1.generateRandomEmail();
-        yield Firestore_1.createNewUserInFirebase(email, Constants_1.DEFAULT_PASSWORD);
-    });
-}
-exports.registerNewUserWithGeneratedCredential = registerNewUserWithGeneratedCredential;
 //# sourceMappingURL=Authentication.js.map

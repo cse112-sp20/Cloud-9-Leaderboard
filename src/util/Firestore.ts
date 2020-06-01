@@ -26,7 +26,6 @@ import {
 import {getExtensionContext} from './Authentication';
 import {processMetric, scoreCalculation} from './Metric';
 import {generateRandomName} from './Utility';
-import {connectCloud9LeaderTreeView} from './LeaderDataProvider';
 
 // Initialize Firebase
 if (!firebase.apps.length) {
@@ -290,8 +289,6 @@ export function updateStats(payload) {
 }
 
 export async function retrieveTeamMemberStats(callback) {
-  //ID check
-
   let db = firebase.firestore();
 
   let users = db.collection(COLLECTION_ID_USERS);
@@ -300,6 +297,7 @@ export async function retrieveTeamMemberStats(callback) {
 
   if (!cachedTeamID) {
     window.showErrorMessage('Please Join a team first!');
+    return;
   }
 
   let userMap = [];
@@ -398,7 +396,6 @@ export async function retrieveAllUserStats(callback) {
  */
 
 export async function createNewUserInFirebase(email, password) {
-  let ctx = getExtensionContext();
   if (email == null) {
     console.log('email is null');
     return {created: false, errorCode: 'Email is invalid!'};
@@ -471,37 +468,12 @@ async function addNewUserDocToDb(userId, email) {
     .set(DEFAULT_USER_DOC)
     .then(() => {
       console.log("Added user's doc for today:" + today);
-      let data = getUserDocWithId(userId);
-      console.log(data);
     })
     .catch(() => {
       console.log('Error adding new user: ' + userId + ' doc to db.');
     });
 
   await updatePersistentStorageWithUserDocData(userId);
-}
-
-/**
- * Retrieve the user doc from database
- * @param userId
- */
-
-export async function getUserDocWithId(userId) {
-  console.log('Getting user doc from db...');
-
-  await db
-    .collection(COLLECTION_ID_USERS)
-    .doc(userId)
-    .get()
-    .then((doc) => {
-      console.log('Retrieved user: (' + userId + ') doc from db.');
-      //console.log(doc.data());
-      return doc.data();
-    })
-    .catch(() => {
-      console.log('Error getting user: (' + userId + ') doc from db.');
-      return undefined;
-    });
 }
 
 /**
@@ -655,7 +627,7 @@ export async function leaveTeam(userId, teamId) {
 
   // get team lead id
   let teamLeadId = '';
-  let teamDocData = await teamDoc.get().then((doc) => {
+  await teamDoc.get().then((doc) => {
     let data = doc.data();
     console.log(data);
     teamLeadId = data.teamLeadUserId;
@@ -670,7 +642,7 @@ export async function leaveTeam(userId, teamId) {
   let userDoc = db.collection(COLLECTION_ID_USERS).doc(userId);
 
   //remove user from team member collection
-  let removeMember = await teamMembersCollection.doc(userId).delete();
+  await teamMembersCollection.doc(userId).delete();
 
   //if the user is the leader, update team doc field
   if (teamLeadId == userId) {
@@ -681,29 +653,12 @@ export async function leaveTeam(userId, teamId) {
   }
 
   //remove team info from user doc
-  let removeTeamInfo = await userDoc
+  await userDoc
     .update({
       teamCode: '',
       teamName: '',
     })
     .then(() => {
-      //update persistent storage
-      // const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
-      // ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
-      // ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
-      // ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
-      // console.log(
-      //   'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID),
-      // );
-      // console.log(
-      //   'cachedTeamName: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME),
-      // );
-      // console.log(
-      //   'is leader? ' + ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER),
-      // );
-      // console.log('Successfully removed from team.');
-      // window.showInformationMessage('Left your team: ' + teamName);
-
       //update leader's persistent storage
       let membersMap = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS);
       console.log('old members map: ');
@@ -762,41 +717,6 @@ export async function checkIfInTeam() {
   return inTeam;
 }
 
-// /**
-//  * checks via db if the user is the leader of their team
-//  */
-// export async function checkIfIsTeamLeader(){
-//   let isLeader = false;
-
-//   const ctx = getExtensionContext();
-//   const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
-//   const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
-
-//   if(teamId == undefined || teamId ==''){
-//     console.log('no cached team id');
-//     return isLeader;
-//   }else{
-//     await db.collection(COLLECTION_ID_TEAMS)
-//       .doc(teamId)
-//       .get()
-//       .then((teamDoc) => {
-//         if(teamDoc.exists){
-//           let teamDocData = teamDoc.data();
-//           if(teamDocData.teamLeadUserId == userId){
-//             isLeader = true;
-//           }
-//         }
-//       })
-//       .then(() => {
-//         console.log('isLeader? ' + isLeader);
-//         return isLeader;
-//       });
-//   }
-//   console.log('end of checkIfIsLeader: ' + isLeader);
-//   return isLeader;
-
-// }
-
 export async function retrieveUserStats(callback) {
   let db = firebase.firestore();
 
@@ -844,7 +764,6 @@ export function retrieveUserDailyMetric(callback, c) {
   const ctx = getExtensionContext();
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
-  let userDataMap = [];
   console.log('****');
   console.log(cachedUserId);
 
@@ -882,14 +801,10 @@ export function retrieveUserDailyMetric(callback, c) {
 export async function retrieveUserUpdateDailyMetric() {
   let db = firebase.firestore();
 
-  let user = db.collection(COLLECTION_ID_USERS);
-
   const ctx = getExtensionContext();
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
   let userDataMap;
-  console.log('****');
-  console.log(cachedUserId);
   await db
     .collection(COLLECTION_ID_USERS)
     .doc(cachedUserId)
@@ -946,13 +861,15 @@ export async function userDocExists(userId) {
   return exists;
 }
 
+/**
+ * retrieve a map of team members from db
+ */
 export async function fetchTeamMembersList(teamId) {
   const ctx = getExtensionContext();
   const leaderId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   if (leaderId == undefined) return;
 
   let members = new Map<string, Map<string, string>>();
-  //let members = [];
   await db
     .collection(COLLECTION_ID_USERS)
     .where('teamCode', '==', teamId)
@@ -971,7 +888,6 @@ export async function fetchTeamMembersList(teamId) {
           member['id'] = memberId;
           member['email'] = memberData.email;
           member['name'] = memberData.name;
-          //members.push(member);
           members[member['email']] = member;
         }
       });
