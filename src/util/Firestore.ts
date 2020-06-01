@@ -729,6 +729,7 @@ export async function leaveTeam(userId, teamId) {
 export async function checkIfInTeam() {
   const ctx = getExtensionContext();
   const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+  if (userId == undefined) return false;
 
   let inTeam = false;
   await db
@@ -948,6 +949,7 @@ export async function userDocExists(userId) {
 export async function fetchTeamMembersList(teamId) {
   const ctx = getExtensionContext();
   const leaderId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+  if (leaderId == undefined) return;
 
   let members = new Map<string, Map<string, string>>();
   //let members = [];
