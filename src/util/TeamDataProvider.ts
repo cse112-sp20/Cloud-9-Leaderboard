@@ -49,6 +49,8 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
   refresh(): void {
     const ctx = getExtensionContext();
     const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+    const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
+    const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
     if (cachedTeamId === undefined || cachedTeamId === '') {
       this.data = [
@@ -61,7 +63,10 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
       this.data = [
         new TeamItem('🛡 Welcome back to your Team'),
         new TeamItem('📋 View team leaderboard'),
-        new TeamItem('Get Team Info', [new TeamItem('')]),
+        new TeamItem('Get Team Info', [
+          new TeamItem('TeamName', [new TeamItem(teamName + '')]),
+          new TeamItem('teamId', [new TeamItem(teamId + '')]),
+        ]),
       ];
     }
 
