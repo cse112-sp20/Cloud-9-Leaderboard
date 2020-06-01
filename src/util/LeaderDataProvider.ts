@@ -190,10 +190,9 @@ export const handleLeaderInfoChangeSelection = (
       );
     }
 
-    if(item.children.length === 0){
-      item.children.push( new LeaderItem('Empty: No team member yet', item));
+    if (item.children.length === 0) {
+      item.children.push(new LeaderItem('Empty: No team member yet', item));
     }
-
 
     commands.executeCommand('LeaderView.refreshEntry');
   } else if (item.label.startsWith('User: ')) {
@@ -209,9 +208,8 @@ export const handleLeaderInfoChangeSelection = (
       item.children.push(new LeaderItem('Remove member: ' + key, item));
     }
 
-
-    if(item.children.length === 0){
-      item.children.push( new LeaderItem('Empty: No team member yet', item));
+    if (item.children.length === 0) {
+      item.children.push(new LeaderItem('Empty: No team member yet', item));
     }
     // item.children = [
     //   new LeaderItem('etyuan@ucsd.edu', item),
@@ -232,9 +230,8 @@ export const handleLeaderInfoChangeSelection = (
           const member = memberMaps[selectedMemberEmail];
           console.log(selectedMemberEmail);
           console.log(memberMaps);
-          console.log("t");
+          console.log('t');
           console.log(member);
-
 
           const memberId = member['id'];
           const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
