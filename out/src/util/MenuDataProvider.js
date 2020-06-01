@@ -43,7 +43,7 @@ class MenuDataProvider {
                 new MenuItem(`Welcome, ${ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME)}!`),
                 new MenuItem('📊 View personal stats'),
                 new MenuItem('🌐 Leaderboard'),
-                new MenuItem('💻 Log out account')
+                new MenuItem('💻 Log out account'),
             ];
         }
         else {

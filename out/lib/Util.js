@@ -255,7 +255,8 @@ function setItem(key, value) {
     const content = JSON.stringify(jsonObj);
     const sessionFile = getSoftwareSessionFile();
     fs.writeFileSync(sessionFile, content, (err) => {
-        if (err) { }
+        if (err) {
+        }
     });
 }
 exports.setItem = setItem;
@@ -599,8 +600,7 @@ function getExtensionDisplayName() {
                     extensionDisplayName = data.displayName;
                 }
             }
-            catch (e) {
-            }
+            catch (e) { }
         }
     }
     if (!extensionDisplayName) {
@@ -629,8 +629,7 @@ function getExtensionName() {
                     extensionName = data.name;
                 }
             }
-            catch (e) {
-            }
+            catch (e) { }
         }
     }
     if (!extensionName) {
@@ -646,8 +645,7 @@ function logEvent(message) {
     }
 }
 exports.logEvent = logEvent;
-function logIt(message) {
-}
+function logIt(message) { }
 exports.logIt = logIt;
 function getSoftwareSessionAsJson() {
     let data = null;
@@ -1230,8 +1228,7 @@ function getFileDataArray(file) {
                 payloads = jsonData;
             }
         }
-        catch (e) {
-        }
+        catch (e) { }
     }
     return payloads;
 }

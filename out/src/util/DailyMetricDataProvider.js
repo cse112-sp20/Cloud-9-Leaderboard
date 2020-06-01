@@ -15,10 +15,10 @@ const Authentication_1 = require("./Authentication");
 const Constants_1 = require("./Constants");
 const Firestore_1 = require("./Firestore");
 const displayHeaderMap = {
-    "keystrokes": "Keystrokes",
-    "linesChanged": "Lines Changed",
-    "timeInterval": "Time Interval",
-    "points": "Total Points"
+    keystrokes: 'Keystrokes',
+    linesChanged: 'Lines Changed',
+    timeInterval: 'Time Interval',
+    points: 'Total Points',
 };
 class DailyMetricDataProvider {
     constructor(d) {
@@ -43,7 +43,7 @@ class DailyMetricDataProvider {
         }
         else {
             var today = new Date();
-            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
             this.data = [];
             let tempList = [];
             for (let key in d) {
@@ -79,7 +79,11 @@ class DailyMetricDataProvider {
         else {
             Firestore_1.retrieveUserUpdateDailyMetric().then((userDocument) => {
                 var today = new Date();
-                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var time = today.getHours() +
+                    ':' +
+                    today.getMinutes() +
+                    ':' +
+                    today.getSeconds();
                 this.data = [];
                 let tempList = [];
                 for (let key in userDocument) {
