@@ -57,7 +57,7 @@ function logOut() {
     vscode_1.commands.executeCommand('MenuView.refreshEntry');
     vscode_1.commands.executeCommand('LeaderView.refreshEntry');
     vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
-    // commands.executeCommand('TeamMenuView.refreshEntry');
+    vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
 }
 exports.logOut = logOut;
 /**

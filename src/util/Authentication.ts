@@ -76,7 +76,7 @@ export function logOut() {
 
   commands.executeCommand('DailyMetric.refreshEntry');
 
-  // commands.executeCommand('TeamMenuView.refreshEntry');
+  commands.executeCommand('TeamMenuView.refreshEntry');
  
 }
 
