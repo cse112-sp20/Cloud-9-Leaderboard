@@ -274,8 +274,8 @@ export function setItem(key, value) {
 
   const sessionFile = getSoftwareSessionFile();
   fs.writeFileSync(sessionFile, content, (err) => {
-    if (err){}
-     
+    if (err) {
+    }
   });
 }
 
@@ -572,7 +572,6 @@ export function openFileInEditor(file) {
         if (error.message) {
           window.showErrorMessage(error.message);
         } else {
-        
         }
       });
     },
@@ -583,7 +582,6 @@ export function openFileInEditor(file) {
       ) {
         window.showErrorMessage(`Cannot open ${file}.  File not found.`);
       } else {
-       
       }
     },
   );
@@ -607,9 +605,7 @@ export function getExtensionDisplayName() {
         if (data) {
           extensionDisplayName = data.displayName;
         }
-      } catch (e) {
-      
-      }
+      } catch (e) {}
     }
   }
   if (!extensionDisplayName) {
@@ -636,9 +632,7 @@ export function getExtensionName() {
         if (data) {
           extensionName = data.name;
         }
-      } catch (e) {
-   
-      }
+      } catch (e) {}
     }
   }
   if (!extensionName) {
@@ -654,9 +648,7 @@ export function logEvent(message) {
   }
 }
 
-export function logIt(message) {
-  
-}
+export function logIt(message) {}
 
 export function getSoftwareSessionAsJson() {
   let data = null;
@@ -668,7 +660,6 @@ export function getSoftwareSessionAsJson() {
       try {
         data = JSON.parse(cleanJsonString(content));
       } catch (e) {
-      
         // error trying to read the session file, delete it
         deleteFile(sessionFile);
         data = {};
@@ -1214,7 +1205,6 @@ export function getFileDataAsJson(file) {
       try {
         data = JSON.parse(cleanJsonString(content));
       } catch (e) {
-      
         // error trying to read the session file, delete it
         deleteFile(file);
       }
@@ -1234,9 +1224,7 @@ export function getFileDataArray(file) {
       } else {
         payloads = jsonData;
       }
-    } catch (e) {
-   
-    }
+    } catch (e) {}
   }
   return payloads;
 }

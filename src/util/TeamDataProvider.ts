@@ -57,8 +57,6 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
         new TeamItem('🛡 Create your Team'),
         new TeamItem('🔰 Join team'),
       ];
-
-
     } else {
       this.data = [
         new TeamItem('🛡 Welcome back to your Team'),
@@ -132,16 +130,12 @@ export const handleTeamInfoChangeSelection = (
   item: TeamItem,
 ) => {
   if (item.label === '🛡 Create your Team') {
-
     commands.executeCommand('cloud9.createTeam');
   } else if (item.label === '🔰 Join team') {
-
     commands.executeCommand('cloud9.joinTeam');
   } else if (item.label === '📋 View team leaderboard') {
-
     commands.executeCommand('cloud9.teamLeaderboard');
   } else if (item.label === 'Get Team Info') {
-  
     const ctx = getExtensionContext();
     const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
     const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);

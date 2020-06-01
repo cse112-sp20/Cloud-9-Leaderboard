@@ -73,11 +73,9 @@ export function logOut() {
   commands.executeCommand('MenuView.refreshEntry');
   commands.executeCommand('LeaderView.refreshEntry');
 
-
   commands.executeCommand('DailyMetric.refreshEntry');
 
   commands.executeCommand('TeamMenuView.refreshEntry');
- 
 }
 
 /**
@@ -305,8 +303,8 @@ export async function signInOrSignUpUserWithUserInput() {
                 },
               );
               commands.executeCommand('MenuView.refreshEntry');
-                    commands.executeCommand('LeaderView.refreshEntry');
-                    commands.executeCommand('TeamMenuView.refreshEntry');
+              commands.executeCommand('LeaderView.refreshEntry');
+              commands.executeCommand('TeamMenuView.refreshEntry');
               commands.executeCommand('DailyMetric.refreshEntry');
             } else if (selection == AUTH_CREATE_ACCOUNT) {
               await createNewUserInFirebase(email, password).then(

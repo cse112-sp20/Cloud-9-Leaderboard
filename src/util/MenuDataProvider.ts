@@ -49,7 +49,6 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
     ._onDidChangeTreeData.event;
 
   refresh(): void {
-    
     const ctx = getExtensionContext();
 
     if (ctx.globalState.get(GLOBAL_STATE_USER_ID) !== undefined) {
@@ -59,18 +58,16 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
         ),
         new MenuItem('📊 View personal stats'),
         new MenuItem('🌐 Leaderboard'),
-        new MenuItem('💻 Log out account')
+        new MenuItem('💻 Log out account'),
       ];
     } else {
-
       this.data = [
         new MenuItem('Sign in / Create Account'),
         new MenuItem('📊 View personal stats'),
         new MenuItem('🌐 Leaderboard'),
       ];
-     
     }
-   
+
     this._onDidChangeTreeData.fire(null);
   }
 
@@ -139,9 +136,7 @@ export const handleMenuChangeSelection = (
     commands.executeCommand('cloud9.personalStats');
   } else if (item.label === '🌐 Leaderboard') {
     commands.executeCommand('cloud9.leaderboard');
-  } else if(item.label === '💻 Log out account'){
-
-
+  } else if (item.label === '💻 Log out account') {
     commands.executeCommand('cloud9.logOut');
   }
 };
