@@ -274,8 +274,8 @@ export function setItem(key, value) {
 
   const sessionFile = getSoftwareSessionFile();
   fs.writeFileSync(sessionFile, content, (err) => {
-    if (err)
-      logIt(`Error writing to the Software session file: ${err.message}`);
+    if (err){}
+     
   });
 }
 
@@ -572,7 +572,7 @@ export function openFileInEditor(file) {
         if (error.message) {
           window.showErrorMessage(error.message);
         } else {
-          logIt(error);
+        
         }
       });
     },
@@ -583,7 +583,7 @@ export function openFileInEditor(file) {
       ) {
         window.showErrorMessage(`Cannot open ${file}.  File not found.`);
       } else {
-        logIt(error);
+       
       }
     },
   );
@@ -608,7 +608,7 @@ export function getExtensionDisplayName() {
           extensionDisplayName = data.displayName;
         }
       } catch (e) {
-        logIt(`unable to read ext info name: ${e.message}`);
+      
       }
     }
   }
@@ -637,7 +637,7 @@ export function getExtensionName() {
           extensionName = data.name;
         }
       } catch (e) {
-        logIt(`unable to read ext info name: ${e.message}`);
+   
       }
     }
   }
@@ -655,7 +655,7 @@ export function logEvent(message) {
 }
 
 export function logIt(message) {
-  console.log(`${getExtensionName()}: ${message}`);
+  
 }
 
 export function getSoftwareSessionAsJson() {
@@ -668,7 +668,7 @@ export function getSoftwareSessionAsJson() {
       try {
         data = JSON.parse(cleanJsonString(content));
       } catch (e) {
-        logIt(`unable to read session info: ${e.message}`);
+      
         // error trying to read the session file, delete it
         deleteFile(sessionFile);
         data = {};
@@ -1214,7 +1214,7 @@ export function getFileDataAsJson(file) {
       try {
         data = JSON.parse(cleanJsonString(content));
       } catch (e) {
-        logIt(`unable to read session info: ${e.message}`);
+      
         // error trying to read the session file, delete it
         deleteFile(file);
       }
@@ -1235,7 +1235,7 @@ export function getFileDataArray(file) {
         payloads = jsonData;
       }
     } catch (e) {
-      logIt(`Error reading file array data: ${e.message}`);
+   
     }
   }
   return payloads;

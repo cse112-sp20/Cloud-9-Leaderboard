@@ -214,6 +214,7 @@ export function updateStats(payload) {
                 .catch(() => {
                   console.log('Error updating stats');
                 });
+                commands.executeCommand('DailyMetric.refreshEntry');
             } else {
               db.collection(COLLECTION_ID_USERS)
                 .doc(id)
@@ -227,10 +228,12 @@ export function updateStats(payload) {
                 })
                 .then(() => {
                   console.log('Added new entry');
+                   commands.executeCommand('DailyMetric.refreshEntry');
                 })
                 .catch(() => {
                   console.log('ERRRRR');
                 });
+                commands.executeCommand('DailyMetric.refreshEntry');
             }
 
             db.collection(COLLECTION_ID_USERS)
@@ -249,7 +252,9 @@ export function updateStats(payload) {
                   parseInt(metricObj['timeInterval']),
                 ),
               });
+              commands.executeCommand('DailyMetric.refreshEntry');
           });
+          commands.executeCommand('DailyMetric.refreshEntry');
       } else {
         //Update to firebase if no stats found
         db.collection(COLLECTION_ID_USERS)
@@ -264,6 +269,7 @@ export function updateStats(payload) {
           })
           .then(() => {
             console.log('Added new entry');
+            commands.executeCommand('DailyMetric.refreshEntry');
           })
           .catch(() => {
             console.log('ERRRRR');
@@ -285,7 +291,10 @@ export function updateStats(payload) {
               parseInt(metricObj['timeInterval']),
             ),
           });
+
+          commands.executeCommand('DailyMetric.refreshEntry');
       }
+      commands.executeCommand('DailyMetric.refreshEntry');
     });
 }
 

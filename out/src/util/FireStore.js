@@ -177,6 +177,7 @@ function updateStats(payload) {
                         .catch(() => {
                         console.log('Error updating stats');
                     });
+                    vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
                 }
                 else {
                     db.collection(Constants_1.COLLECTION_ID_USERS)
@@ -191,10 +192,12 @@ function updateStats(payload) {
                     })
                         .then(() => {
                         console.log('Added new entry');
+                        vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
                     })
                         .catch(() => {
                         console.log('ERRRRR');
                     });
+                    vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
                 }
                 db.collection(Constants_1.COLLECTION_ID_USERS)
                     .doc(id)
@@ -204,7 +207,9 @@ function updateStats(payload) {
                     linesChanged: firebase.firestore.FieldValue.increment(parseInt(metricObj['linesChanged'])),
                     timeInterval: firebase.firestore.FieldValue.increment(parseInt(metricObj['timeInterval'])),
                 });
+                vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
             });
+            vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
         }
         else {
             //Update to firebase if no stats found
@@ -220,6 +225,7 @@ function updateStats(payload) {
             })
                 .then(() => {
                 console.log('Added new entry');
+                vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
             })
                 .catch(() => {
                 console.log('ERRRRR');
@@ -232,7 +238,9 @@ function updateStats(payload) {
                 linesChanged: firebase.firestore.FieldValue.increment(parseInt(metricObj['linesChanged'])),
                 timeInterval: firebase.firestore.FieldValue.increment(parseInt(metricObj['timeInterval'])),
             });
+            vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
         }
+        vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
     });
 }
 exports.updateStats = updateStats;
