@@ -76,6 +76,7 @@ class DailyMetricDataProvider {
                     new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
                 ]),
             ];
+            return;
         }
         else {
             Firestore_1.retrieveUserUpdateDailyMetric().then((userDocument) => {

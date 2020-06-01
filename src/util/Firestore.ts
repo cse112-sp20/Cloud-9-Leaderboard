@@ -814,7 +814,10 @@ export async function retrieveUserStats(callback) {
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   let dateMap = [];
 
-  user
+  if(db === undefined || user === undefined  || cachedUserId === undefined){
+    console.log("retrieveUserStats undefined");
+  }else{
+    user
     .doc(cachedUserId)
     .collection('dates')
     .orderBy(firebase.firestore.FieldPath.documentId())
@@ -843,6 +846,9 @@ export async function retrieveUserStats(callback) {
     .catch((err) => {
       console.log('Error getting documents', err);
     });
+  }
+
+  
 }
 
 export function retrieveUserDailyMetric(callback, c) {
@@ -864,7 +870,8 @@ export function retrieveUserDailyMetric(callback, c) {
     callback(undefined, c);
     return;
   }
-  user
+  else{
+    user
     .doc(cachedUserId)
     .collection('dates')
     .doc(new Date().toISOString().split('T')[0])
@@ -886,6 +893,8 @@ export function retrieveUserDailyMetric(callback, c) {
     .catch((err) => {
       console.log('Error getting documents', err);
     });
+  }
+  
 }
 
 export async function retrieveUserUpdateDailyMetric() {

@@ -49,7 +49,7 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
     ._onDidChangeTreeData.event;
 
   refresh(): void {
-    console.log('Refresh called**************************');
+    
     const ctx = getExtensionContext();
 
     if (ctx.globalState.get(GLOBAL_STATE_USER_ID) !== undefined) {

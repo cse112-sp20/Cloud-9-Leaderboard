@@ -51,7 +51,7 @@ export class DailyMetricDataProvider
 
     if(ctx.globalState.get(GLOBAL_STATE_USER_ID) === undefined){
 
-      console.log("USer id set to undefined");
+     
       this.data = [
         new DailyMetricItem('Keystrokes', [
           new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
@@ -66,9 +66,10 @@ export class DailyMetricDataProvider
           new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
         ]),
       ];
+      return;
     }else{
       retrieveUserUpdateDailyMetric().then((userDocument) => {
-        console.log(userDocument);
+  
         var today = new Date();
 
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -80,7 +81,7 @@ export class DailyMetricDataProvider
             continue;
           }
   
-          console.log('key: ' + key);
+
           tempList.push(
             new DailyMetricItem(displayHeaderMap[key], [
               new DailyMetricItem(
@@ -92,7 +93,7 @@ export class DailyMetricDataProvider
   
         this.data = tempList;
   
-        console.log('Refresh daily metric called');
+    
         
       });
     }
@@ -119,7 +120,7 @@ export class DailyMetricDataProvider
         ]),
       ];
     } else {
-      console.log(d);
+
 
       var today = new Date();
 

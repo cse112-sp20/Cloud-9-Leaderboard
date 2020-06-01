@@ -707,33 +707,38 @@ function retrieveUserStats(callback) {
         const ctx = Authentication_1.getExtensionContext();
         const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         let dateMap = [];
-        user
-            .doc(cachedUserId)
-            .collection('dates')
-            .orderBy(firebase.firestore.FieldPath.documentId())
-            .limit(15)
-            .get()
-            .then((snapshot) => {
-            snapshot.forEach((doc) => {
-                PersonalStats_1.PersonalStats.addDayStats(doc.id, doc.data());
-                let currDate = {};
-                currDate['date'] = doc.id;
-                for (let key in doc.data()) {
-                    currDate[key] = doc.data()[key];
-                }
-                dateMap.push(currDate);
-                // console.log(doc.id + "=>" + doc.data());
+        if (db === undefined || user === undefined || cachedUserId === undefined) {
+            console.log("retrieveUserStats undefined");
+        }
+        else {
+            user
+                .doc(cachedUserId)
+                .collection('dates')
+                .orderBy(firebase.firestore.FieldPath.documentId())
+                .limit(15)
+                .get()
+                .then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    PersonalStats_1.PersonalStats.addDayStats(doc.id, doc.data());
+                    let currDate = {};
+                    currDate['date'] = doc.id;
+                    for (let key in doc.data()) {
+                        currDate[key] = doc.data()[key];
+                    }
+                    dateMap.push(currDate);
+                    // console.log(doc.id + "=>" + doc.data());
+                });
+                console.log('*************');
+                console.log(dateMap);
+                return dateMap;
+            })
+                .then((dateMap) => {
+                callback(dateMap);
+            })
+                .catch((err) => {
+                console.log('Error getting documents', err);
             });
-            console.log('*************');
-            console.log(dateMap);
-            return dateMap;
-        })
-            .then((dateMap) => {
-            callback(dateMap);
-        })
-            .catch((err) => {
-            console.log('Error getting documents', err);
-        });
+        }
     });
 }
 exports.retrieveUserStats = retrieveUserStats;
@@ -750,29 +755,31 @@ function retrieveUserDailyMetric(callback, c) {
         callback(undefined, c);
         return;
     }
-    user
-        .doc(cachedUserId)
-        .collection('dates')
-        .doc(new Date().toISOString().split('T')[0])
-        .get()
-        .then((userDoc) => {
-        if (userDoc.exists) {
-            // Convert to City object
-            return userDoc.data();
-        }
-        else {
-            console.log('userDoc does not exist');
-            return undefined;
-        }
-    })
-        .then((dataMap) => {
-        console.log('data map');
-        console.log(dataMap);
-        callback(dataMap, c);
-    })
-        .catch((err) => {
-        console.log('Error getting documents', err);
-    });
+    else {
+        user
+            .doc(cachedUserId)
+            .collection('dates')
+            .doc(new Date().toISOString().split('T')[0])
+            .get()
+            .then((userDoc) => {
+            if (userDoc.exists) {
+                // Convert to City object
+                return userDoc.data();
+            }
+            else {
+                console.log('userDoc does not exist');
+                return undefined;
+            }
+        })
+            .then((dataMap) => {
+            console.log('data map');
+            console.log(dataMap);
+            callback(dataMap, c);
+        })
+            .catch((err) => {
+            console.log('Error getting documents', err);
+        });
+    }
 }
 exports.retrieveUserDailyMetric = retrieveUserDailyMetric;
 function retrieveUserUpdateDailyMetric() {
