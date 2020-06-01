@@ -32,12 +32,9 @@ import {
   AUTH_ERR_CODE_USER_NOT_FOUND,
   AUTH_ERR_CODE_INVALID_EMAIL,
 } from './Constants';
-import {getMaxListeners} from 'cluster';
 import {removeTeamNameAndId} from './Team';
-
 import {testCallback} from './DailyMetricDataProvider';
 
-//export let cachedUserId = undefined;
 let extensionContext: ExtensionContext = undefined;
 
 /**
@@ -80,7 +77,6 @@ export function clearCachedUserId() {
  * @param ctx
  */
 export async function authenticateUser() {
-  //stores the extension context
   const ctx = getExtensionContext();
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   const cachedUserNickName = ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME);
@@ -116,13 +112,12 @@ export async function authenticateUser() {
       commands.executeCommand('LeaderView.refreshEntry');
       commands.executeCommand('TeamMenuView.refreshEntry');
     } else {
+      // user doc does not exist, prompt user to sign in or sign up
       signInOrSignUpUserWithUserInput().then(() => {
         retrieveUserDailyMetric(testCallback, ctx);
       });
     }
   }
-
-  //retrieveUserDailyMetric(testCallback, ctx);
 }
 
 /**
@@ -226,11 +221,13 @@ export async function registerNewUserOrSigInWithUserInput() {
   // }
 }
 
+/**
+ * prompts the user to sign in or sign up with input email and password
+ */
 export async function signInOrSignUpUserWithUserInput() {
   const ctx = getExtensionContext();
   let email = undefined;
   let password = undefined;
-  let completed = false;
 
   //prompt the user to sign in or create an account upon activating the extension
   window
@@ -240,11 +237,16 @@ export async function signInOrSignUpUserWithUserInput() {
       AUTH_CREATE_ACCOUNT,
     )
     .then(async (selection) => {
+      if (selection == undefined) {
+        window.showInformationMessage(
+          'Sign in or sign up to unlock Cloud9 features!',
+        );
+        return;
+      }
       await window
         .showInputBox({placeHolder: 'Enter your email: example@gmail.com'})
         .then((inputEmail) => {
           email = inputEmail;
-          console.log('user input email: ' + email);
         })
         .then(async () => {
           await window
@@ -255,7 +257,6 @@ export async function signInOrSignUpUserWithUserInput() {
             })
             .then((inputPassword) => {
               password = inputPassword;
-              console.log('user input password: ' + password);
             });
         })
         .then(async () => {
@@ -279,8 +280,6 @@ export async function signInOrSignUpUserWithUserInput() {
                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
                         '!!',
                     );
-                    completed = true;
-                    console.log('setting completed to true');
                     commands.executeCommand('MenuView.refreshEntry');
                     commands.executeCommand('LeaderView.refreshEntry');
                     commands.executeCommand('TeamMenuView.refreshEntry');
@@ -307,7 +306,6 @@ export async function signInOrSignUpUserWithUserInput() {
                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
                         '!!',
                     );
-                    completed = true;
                     commands.executeCommand('MenuView.refreshEntry');
                     commands.executeCommand('LeaderView.refreshEntry');
                     commands.executeCommand('TeamMenuView.refreshEntry');
@@ -322,6 +320,8 @@ export async function signInOrSignUpUserWithUserInput() {
                     );
                   } else if (result.errorCode == AUTH_ERR_CODE_INVALID_EMAIL) {
                     window.showErrorMessage('Invalid email!');
+                  } else {
+                    window.showErrorMessage(result.errorCode);
                   }
                 },
               );
@@ -331,6 +331,27 @@ export async function signInOrSignUpUserWithUserInput() {
     });
 }
 
+/**
+ * if user id is not found in persistent storage, prompt the user to sign in or sign up
+ * return whether the id is found (after the prompt)
+ */
+export async function checkIfCachedUserIdExistsAndPrompt() {
+  const ctx = getExtensionContext();
+  let cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+  let loggedIn = false;
+  if (cachedUserId != undefined) {
+    loggedIn = true;
+  } else {
+    await signInOrSignUpUserWithUserInput().then(async () => {
+      cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+      if (cachedUserId != undefined) {
+        loggedIn = true;
+        await retrieveUserDailyMetric(testCallback, ctx);
+      }
+    });
+  }
+  return loggedIn;
+}
 /**
  * not using this function
  */

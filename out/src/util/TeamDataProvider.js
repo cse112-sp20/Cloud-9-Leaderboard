@@ -29,7 +29,7 @@ class TeamDataProvider {
             ._onDidChangeTreeData.event;
         this.data = [
             new TeamItem('🛡 Create your Team'),
-            new TeamItem('🔰 Join team')
+            new TeamItem('🔰 Join team'),
         ];
     }
     refresh() {
@@ -38,9 +38,9 @@ class TeamDataProvider {
         if (cachedTeamId === undefined || cachedTeamId === '') {
             this.data = [
                 new TeamItem('🛡 Create your Team'),
-                new TeamItem('🔰 Join team')
+                new TeamItem('🔰 Join team'),
             ];
-            console.log("NO team");
+            console.log('NO team');
         }
         else {
             this.data = [

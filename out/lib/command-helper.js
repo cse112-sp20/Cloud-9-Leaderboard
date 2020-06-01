@@ -125,11 +125,13 @@ function createCommands(kpmController) {
         Team_1.getTeamInfo();
     }));
     //password recovery
-    cmds.push(vscode_1.commands.registerCommand('cloud9.resetPassword', () => {
-        console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
-        //doing nothing rn
-        vscode_1.window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
-    }));
+    // cmds.push(
+    //   commands.registerCommand('cloud9.resetPassword', () => {
+    //     console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
+    //     //doing nothing rn
+    //     window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
+    //   }),
+    // );
     cmds.push(vscode_1.commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {
         console.log('cloud9: CLEAR CACHED TEAM NAME AND ID');
     }));

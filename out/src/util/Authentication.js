@@ -17,14 +17,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerNewUserWithGeneratedCredential = exports.signInOrSignUpUserWithUserInput = exports.registerNewUserOrSigInWithUserInput = exports.authenticateUser = exports.clearCachedUserId = exports.getExtensionContext = exports.storeExtensionContext = void 0;
+exports.registerNewUserWithGeneratedCredential = exports.checkIfCachedUserIdExistsAndPrompt = exports.signInOrSignUpUserWithUserInput = exports.registerNewUserOrSigInWithUserInput = exports.authenticateUser = exports.clearCachedUserId = exports.getExtensionContext = exports.storeExtensionContext = void 0;
 const vscode_1 = require("vscode");
 const Firestore_1 = require("./Firestore");
 const Utility_1 = require("./Utility");
 const Constants_1 = require("./Constants");
 const Team_1 = require("./Team");
 const DailyMetricDataProvider_1 = require("./DailyMetricDataProvider");
-//export let cachedUserId = undefined;
 let extensionContext = undefined;
 /**
  * stores the extension context
@@ -63,7 +62,6 @@ exports.clearCachedUserId = clearCachedUserId;
  */
 function authenticateUser() {
     return __awaiter(this, void 0, void 0, function* () {
-        //stores the extension context
         const ctx = getExtensionContext();
         const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         const cachedUserNickName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME);
@@ -94,12 +92,12 @@ function authenticateUser() {
                 vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
             }
             else {
+                // user doc does not exist, prompt user to sign in or sign up
                 signInOrSignUpUserWithUserInput().then(() => {
                     Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
                 });
             }
         }
-        //retrieveUserDailyMetric(testCallback, ctx);
     });
 }
 exports.authenticateUser = authenticateUser;
@@ -206,21 +204,26 @@ function registerNewUserOrSigInWithUserInput() {
     });
 }
 exports.registerNewUserOrSigInWithUserInput = registerNewUserOrSigInWithUserInput;
+/**
+ * prompts the user to sign in or sign up with input email and password
+ */
 function signInOrSignUpUserWithUserInput() {
     return __awaiter(this, void 0, void 0, function* () {
         const ctx = getExtensionContext();
         let email = undefined;
         let password = undefined;
-        let completed = false;
         //prompt the user to sign in or create an account upon activating the extension
         vscode_1.window
             .showInformationMessage('Please sign in or create a new account!', Constants_1.AUTH_SIGN_IN, Constants_1.AUTH_CREATE_ACCOUNT)
             .then((selection) => __awaiter(this, void 0, void 0, function* () {
+            if (selection == undefined) {
+                vscode_1.window.showInformationMessage('Sign in or sign up to unlock Cloud9 features!');
+                return;
+            }
             yield vscode_1.window
                 .showInputBox({ placeHolder: 'Enter your email: example@gmail.com' })
                 .then((inputEmail) => {
                 email = inputEmail;
-                console.log('user input email: ' + email);
             })
                 .then(() => __awaiter(this, void 0, void 0, function* () {
                 yield vscode_1.window
@@ -230,7 +233,6 @@ function signInOrSignUpUserWithUserInput() {
                 })
                     .then((inputPassword) => {
                     password = inputPassword;
-                    console.log('user input password: ' + password);
                 });
             }))
                 .then(() => __awaiter(this, void 0, void 0, function* () {
@@ -250,8 +252,6 @@ function signInOrSignUpUserWithUserInput() {
                                 vscode_1.window.showInformationMessage('Welcome back, ' +
                                     ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
                                     '!!');
-                                completed = true;
-                                console.log('setting completed to true');
                                 vscode_1.commands.executeCommand('MenuView.refreshEntry');
                                 vscode_1.commands.executeCommand('LeaderView.refreshEntry');
                                 vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
@@ -277,7 +277,6 @@ function signInOrSignUpUserWithUserInput() {
                                 vscode_1.window.showInformationMessage('Welcome! Your nickname is: ' +
                                     ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
                                     '!!');
-                                completed = true;
                                 vscode_1.commands.executeCommand('MenuView.refreshEntry');
                                 vscode_1.commands.executeCommand('LeaderView.refreshEntry');
                                 vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
@@ -293,6 +292,9 @@ function signInOrSignUpUserWithUserInput() {
                             else if (result.errorCode == Constants_1.AUTH_ERR_CODE_INVALID_EMAIL) {
                                 vscode_1.window.showErrorMessage('Invalid email!');
                             }
+                            else {
+                                vscode_1.window.showErrorMessage(result.errorCode);
+                            }
                         }));
                     }
                 }
@@ -301,6 +303,32 @@ function signInOrSignUpUserWithUserInput() {
     });
 }
 exports.signInOrSignUpUserWithUserInput = signInOrSignUpUserWithUserInput;
+/**
+ * if user id is not found in persistent storage, prompt the user to sign in or sign up
+ * return whether the id is found (after the prompt)
+ */
+function checkIfCachedUserIdExistsAndPrompt() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const ctx = getExtensionContext();
+        let cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        let loggedIn = false;
+        if (cachedUserId != undefined) {
+            loggedIn = true;
+        }
+        else {
+            yield signInOrSignUpUserWithUserInput()
+                .then(() => __awaiter(this, void 0, void 0, function* () {
+                cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+                if (cachedUserId != undefined) {
+                    loggedIn = true;
+                    yield Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+                }
+            }));
+        }
+        return loggedIn;
+    });
+}
+exports.checkIfCachedUserIdExistsAndPrompt = checkIfCachedUserIdExistsAndPrompt;
 /**
  * not using this function
  */

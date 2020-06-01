@@ -61,6 +61,13 @@ function displayPersonalStats() {
     return __awaiter(this, void 0, void 0, function* () {
         // 1st write the code time metrics dashboard file
         // await writeLeaderboard();
+        //ID check
+        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
+            if (!loggedIn) {
+                vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
+                return;
+            }
+        });
         yield Firestore_1.retrieveUserStats(writePersonalStatsFile);
         let filePath = getPersonalStatsFile();
         try {

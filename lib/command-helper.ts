@@ -32,12 +32,7 @@ import {
 } from '../src/util/Leaderboard';
 
 import {clearCachedUserId} from '../src/util/Authentication';
-import {
-  createAndJoinTeam,
-  getTeamInfo,
-  removeTeamNameAndId,
-  joinTeam,
-} from '../src/util/Team';
+import {createAndJoinTeam, getTeamInfo, joinTeam} from '../src/util/Team';
 import {displayPersonalStats} from '../src/util/PersonalStats';
 import {leaveTeam} from '../src/util/FireStore';
 import {
@@ -244,13 +239,13 @@ export function createCommands(
   );
 
   //password recovery
-  cmds.push(
-    commands.registerCommand('cloud9.resetPassword', () => {
-      console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
-      //doing nothing rn
-      window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
-    }),
-  );
+  // cmds.push(
+  //   commands.registerCommand('cloud9.resetPassword', () => {
+  //     console.log('Cloud9: PASSWORD RECOVERY--TO BE IMPLEMENTED');
+  //     //doing nothing rn
+  //     window.showInformationMessage('PASSWORD RECOVERY--TO BE IMPLEMENTED');
+  //   }),
+  // );
 
   cmds.push(
     commands.registerCommand('cloud9.debugClearTeamNameAndId', () => {

@@ -26,6 +26,7 @@ import {
 import {getExtensionContext} from './Authentication';
 import {processMetric, scoreCalculation} from './Metric';
 import {generateRandomName} from './Utility';
+import {connectCloud9LeaderTreeView} from './LeaderDataProvider';
 
 // Initialize Firebase
 if (!firebase.apps.length) {
@@ -154,13 +155,17 @@ export async function updatePersistentStorageWithUserDocData(userId) {
  */
 
 export function updateStats(payload) {
+  const ctx = getExtensionContext();
+  const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+  //ID check, if not found, return immediately
+  if (cachedUserId == undefined) {
+    console.log('User ID not found, returning.');
+    return;
+  }
   console.log('Firestore.ts, updateStats');
 
   let metricObj = processMetric(payload);
   console.log(metricObj);
-
-  const ctx = getExtensionContext();
-  const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
   let id = cachedUserId;
   console.log('cached id is ' + id);
@@ -285,6 +290,8 @@ export function updateStats(payload) {
 }
 
 export async function retrieveTeamMemberStats(callback) {
+  //ID check
+
   let db = firebase.firestore();
 
   let users = db.collection(COLLECTION_ID_USERS);
@@ -391,15 +398,14 @@ export async function retrieveAllUserStats(callback) {
  */
 
 export async function createNewUserInFirebase(email, password) {
-  console.log('Creating new user...');
   let ctx = getExtensionContext();
   if (email == null) {
     console.log('email is null');
-    return {created: false, errorCode: 'email is null'};
+    return {created: false, errorCode: 'Email is invalid!'};
   }
   if (password == null) {
     console.log('password is null');
-    return {created: false, errorCode: 'password is null'};
+    return {created: false, errorCode: 'Password is invalid!'};
   }
 
   let created = false;
@@ -412,7 +418,6 @@ export async function createNewUserInFirebase(email, password) {
       console.log('Adding new user with ID: ' + currentUserId);
 
       await addNewUserDocToDb(currentUserId, email);
-      //window.showInformationMessage('Successfully created new account!');
 
       created = true;
       errorCode = 'no error';

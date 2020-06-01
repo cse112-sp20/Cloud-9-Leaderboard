@@ -15,10 +15,14 @@ import {getSoftwareDir, isWindows} from '../../lib/Util';
 import {retrieveAllUserStats, retrieveTeamMemberStats} from './Firestore';
 import {scoreCalculation} from './Metric';
 import {stat} from 'fs';
-import {getExtensionContext} from './Authentication';
+import {
+  getExtensionContext,
+  checkIfCachedUserIdExistsAndPrompt,
+} from './Authentication';
 import {
   GLOBAL_STATE_USER_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
+  AUTH_NOT_LOGGED_IN,
   MAX_USERNAME_LENGTH,
   MAX_RANK_LENGTH,
   SECTION_BAR,
@@ -73,6 +77,13 @@ export function getTeamLeaderboardFile() {
 }
 
 export async function displayLeaderboard() {
+  //ID check
+  await checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
+    if (!loggedIn) {
+      window.showErrorMessage(AUTH_NOT_LOGGED_IN);
+      return;
+    }
+  });
   // 1st write the code time metrics dashboard file
   // await writeLeaderboard();
   await retrieveAllUserStats(writeToFile);
@@ -107,6 +118,13 @@ export async function displayLeaderboard() {
 }
 
 export async function displayTeamLeaderboard() {
+  //ID check
+  await checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
+    if (!loggedIn) {
+      window.showErrorMessage(AUTH_NOT_LOGGED_IN);
+      return;
+    }
+  });
   // 1st write the code time metrics dashboard file
   // await writeLeaderboard();
   await retrieveTeamMemberStats(writeToFile);

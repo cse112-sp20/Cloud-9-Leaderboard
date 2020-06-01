@@ -24,7 +24,10 @@ import {
   Disposable,
 } from 'vscode';
 
-import {getExtensionContext} from './Authentication';
+import {
+  getExtensionContext,
+  checkIfCachedUserIdExistsAndPrompt,
+} from './Authentication';
 
 import {getTeamInfo} from './Team';
 
@@ -33,6 +36,7 @@ import {
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
   GLOBAL_STATE_USER_ID,
+  AUTH_NOT_LOGGED_IN,
 } from './Constants';
 
 export class TeamDataProvider implements TreeDataProvider<TeamItem> {

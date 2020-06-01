@@ -26,9 +26,17 @@ const Authentication_1 = require("./Authentication");
 const Constants_1 = require("./Constants");
 /**
  * prompts the user to enter a team name and updates the firebase 2
+ * @pre-condition: userid exists
  */
 function createAndJoinTeam() {
     return __awaiter(this, void 0, void 0, function* () {
+        //ID check
+        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
+            if (!loggedIn) {
+                vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
+                return;
+            }
+        });
         //first check if already in team
         const inTeam = yield Firestore_1.checkIfInTeam();
         if (inTeam) {
@@ -54,15 +62,15 @@ exports.createAndJoinTeam = createAndJoinTeam;
  */
 function removeTeamNameAndId() {
     return __awaiter(this, void 0, void 0, function* () {
-        const ctx = Authentication_1.getExtensionContext();
-        const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-        const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-        console.log('team id: ' + teamId);
-        console.log('user id: ' + userId);
-        if (teamId == undefined) {
-            vscode_1.window.showInformationMessage('Not in a team!');
-            return;
-        }
+        // const ctx = getExtensionContext();
+        // const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+        // const userId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+        // console.log('team id: ' + teamId);
+        // console.log('user id: ' + userId);
+        // if (teamId == undefined) {
+        //   window.showInformationMessage('Not in a team!');
+        //   return;
+        // }
     });
 }
 exports.removeTeamNameAndId = removeTeamNameAndId;
@@ -72,11 +80,14 @@ exports.removeTeamNameAndId = removeTeamNameAndId;
  */
 function getTeamInfo() {
     return __awaiter(this, void 0, void 0, function* () {
+        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
+            if (!loggedIn) {
+                return;
+            }
+        });
         const ctx = Authentication_1.getExtensionContext();
         const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-        //check if is leader
-        const isLeader = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER);
         if (teamId == undefined || teamId == '') {
             vscode_1.window.showInformationMessage('No team info found.');
             return;
@@ -84,6 +95,7 @@ function getTeamInfo() {
         let messageStr = 'Your team name: ' + teamName + '\n';
         messageStr += 'Your team ID: ' + teamId;
         console.log(messageStr);
+        vscode_1.window.showInformationMessage(messageStr, { modal: true });
         return messageStr;
     });
 }
@@ -93,6 +105,13 @@ exports.getTeamInfo = getTeamInfo;
  */
 function joinTeam() {
     return __awaiter(this, void 0, void 0, function* () {
+        //ID check
+        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
+            if (!loggedIn) {
+                vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
+                return;
+            }
+        });
         //first check if user is already in a team
         const inTeam = yield Firestore_1.checkIfInTeam();
         if (inTeam) {

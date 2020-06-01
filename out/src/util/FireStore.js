@@ -132,11 +132,16 @@ exports.updatePersistentStorageWithUserDocData = updatePersistentStorageWithUser
  * @since  x.x.x
  */
 function updateStats(payload) {
+    const ctx = Authentication_1.getExtensionContext();
+    const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+    //ID check, if not found, return immediately
+    if (cachedUserId == undefined) {
+        console.log('User ID not found, returning.');
+        return;
+    }
     console.log('Firestore.ts, updateStats');
     let metricObj = Metric_1.processMetric(payload);
     console.log(metricObj);
-    const ctx = Authentication_1.getExtensionContext();
-    const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
     let id = cachedUserId;
     console.log('cached id is ' + id);
     vscode_1.window.showInformationMessage('Updated Stats!');
@@ -233,6 +238,7 @@ function updateStats(payload) {
 exports.updateStats = updateStats;
 function retrieveTeamMemberStats(callback) {
     return __awaiter(this, void 0, void 0, function* () {
+        //ID check
         let db = firebase.firestore();
         let users = db.collection(Constants_1.COLLECTION_ID_USERS);
         const ctx = Authentication_1.getExtensionContext();
@@ -331,15 +337,14 @@ exports.retrieveAllUserStats = retrieveAllUserStats;
  */
 function createNewUserInFirebase(email, password) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('Creating new user...');
         let ctx = Authentication_1.getExtensionContext();
         if (email == null) {
             console.log('email is null');
-            return { created: false, errorCode: 'email is null' };
+            return { created: false, errorCode: 'Email is invalid!' };
         }
         if (password == null) {
             console.log('password is null');
-            return { created: false, errorCode: 'password is null' };
+            return { created: false, errorCode: 'Password is invalid!' };
         }
         let created = false;
         let errorCode = undefined;
@@ -349,7 +354,6 @@ function createNewUserInFirebase(email, password) {
             const currentUserId = auth.currentUser.uid;
             console.log('Adding new user with ID: ' + currentUserId);
             yield addNewUserDocToDb(currentUserId, email);
-            //window.showInformationMessage('Successfully created new account!');
             created = true;
             errorCode = 'no error';
         }))
