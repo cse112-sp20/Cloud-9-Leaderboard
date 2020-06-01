@@ -105,11 +105,6 @@ export async function authenticateUser() {
     console.log('Found cachedTeamId: ' + cachedTeamId);
     console.log('Found cachedUserNickname: ' + cachedUserNickName);
 
-
-    console.log("is team leade " + isTeamLeadr);
-
-    
-
     //check if user doc exists in firebase
     let exists = await userDocExists(cachedUserId);
     if (exists) {
@@ -119,7 +114,7 @@ export async function authenticateUser() {
       window.showInformationMessage(
         'Welcome back, ' + cachedUserNickName + '!!',
       );
-
+      console.log('is team leade ' + isTeamLeadr);
       commands.executeCommand('MenuView.refreshEntry');
       commands.executeCommand('LeaderView.refreshEntry');
       commands.executeCommand('TeamMenuView.refreshEntry');

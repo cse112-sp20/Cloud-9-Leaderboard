@@ -85,8 +85,6 @@ function authenticateUser() {
             console.log('Found cachedTeamName: ' + cachedTeamName);
             console.log('Found cachedTeamId: ' + cachedTeamId);
             console.log('Found cachedUserNickname: ' + cachedUserNickName);
-            console.log('Team lead id: ' + cachedTeamLeadId);
-            console.log("is team leade " + isTeamLeadr);
             //check if user doc exists in firebase
             let exists = yield Firestore_1.userDocExists(cachedUserId);
             if (exists) {
@@ -94,6 +92,7 @@ function authenticateUser() {
                     Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
                 });
                 vscode_1.window.showInformationMessage('Welcome back, ' + cachedUserNickName + '!!');
+                console.log("is team leade " + isTeamLeadr);
                 vscode_1.commands.executeCommand('MenuView.refreshEntry');
                 vscode_1.commands.executeCommand('LeaderView.refreshEntry');
                 vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
