@@ -48,13 +48,19 @@ import {
 const sinon = require('sinon');
 const firebase = require('firebase/app');
 import * as Mocha from 'mocha';
-import { expect } from 'chai';
-import { DailyMetricDataProvider, DailyMetricItem } from '../../src/util/DailyMetricDataProvider';
-import { getTeamInfo } from '../../src/util/Team';
-import { TeamDataProvider, TeamItem } from '../../src/util/TeamDataProvider';
-import { TreeItem } from 'vscode';
-import { MenuDataProvider, MenuItem } from '../../src/util/MenuDataProvider';
-import { LeaderItem, LeaderDataProvider } from '../../src/util/LeaderDataProvider';
+import {expect} from 'chai';
+import {
+  DailyMetricDataProvider,
+  DailyMetricItem,
+} from '../../src/util/DailyMetricDataProvider';
+import {getTeamInfo} from '../../src/util/Team';
+import {TeamDataProvider, TeamItem} from '../../src/util/TeamDataProvider';
+import {TreeItem} from 'vscode';
+import {MenuDataProvider, MenuItem} from '../../src/util/MenuDataProvider';
+import {
+  LeaderItem,
+  LeaderDataProvider,
+} from '../../src/util/LeaderDataProvider';
 
 // The module 'assert' provides assertion methods from node
 const assert = require('chai').assert;
@@ -186,8 +192,10 @@ suite('firestore.ts', () => {
   });
 
   test('addNewUserDocToDb', async () => {
-    var spy = sinon.spy(firebase.firestore().collection(COLLECTION_ID_USERS)
-    .doc('test'), 'set');
+    var spy = sinon.spy(
+      firebase.firestore().collection(COLLECTION_ID_USERS).doc('test'),
+      'set',
+    );
     await addNewUserDocToDb('testEmail', 'testPassword').then(() => {
       expect(spy.calledOnce);
       /*expect(spy.args[0]).to.equal({
@@ -239,27 +247,25 @@ suite('firestore.ts', () => {
       .withArgs(testId, 'testPassword')
       .returns(Promise.resolve());
 
-    var successful = await createNewUserInFirebase(
-      testId,
-      "testPassword"
-    );
+    var successful = await createNewUserInFirebase(testId, 'testPassword');
     assert.equal(successful.created, true); // works!!
   });
 
   test('addNewTeamToDbAndJoin', async () => {});
   test('joinTeamWithTeamId', async () => {});
-  test('leaveTeam', async () => {
-    
-  });
+  test('leaveTeam', async () => {});
 
   test('checkIfInTeam', async () => {
     const ctx = getExtensionContext();
-    sinon.stub(ctx.globalState, "get").withArgs(GLOBAL_STATE_USER_ID).returns("testId");
+    sinon
+      .stub(ctx.globalState, 'get')
+      .withArgs(GLOBAL_STATE_USER_ID)
+      .returns('testId');
     var result = {};
     result['team'] = 'ted';
     sinon
       .stub(
-        firebase.firestore().collection(COLLECTION_ID_USERS).doc("testId"),
+        firebase.firestore().collection(COLLECTION_ID_USERS).doc('testId'),
         'get',
       )
       .returns(Promise.resolve(result));
@@ -270,17 +276,23 @@ suite('firestore.ts', () => {
 
   test('retrieveUserStats', async () => {
     sinon.stub(getExtensionContext().globalState, 'get').returns('test');
-    var input = [{'id': 1}, {'id': 2}, {'id': 3}, {'id': 7}];
+    var input = [{id: 1}, {id: 2}, {id: 3}, {id: 7}];
     sinon
       .stub(
-        firebase.firestore().collection(COLLECTION_ID_USERS).doc('test').collection('dates')
-        .orderBy(firebase.firestore.FieldPath.documentId())
-        .limit(15),
-        'get').returns(Promise.resolve(input));
+        firebase
+          .firestore()
+          .collection(COLLECTION_ID_USERS)
+          .doc('test')
+          .collection('dates')
+          .orderBy(firebase.firestore.FieldPath.documentId())
+          .limit(15),
+        'get',
+      )
+      .returns(Promise.resolve(input));
     await retrieveUserStats(function (dateMap) {
       //assert.equal(dateMap, [{date: 1},{date: 2},{date: 3},{date: 7}]);
       assert.equal(dateMap, dateMap);
-    }); 
+    });
   });
 
   test('retrieveAllUserStats', async () => {
@@ -289,27 +301,30 @@ suite('firestore.ts', () => {
     var result = {};
     result['team'] = 'ted';
     sinon
-      .stub(
-        firebase.firestore().collection(COLLECTION_ID_USERS),
-        'get').returns(Promise.resolve(result));
+      .stub(firebase.firestore().collection(COLLECTION_ID_USERS), 'get')
+      .returns(Promise.resolve(result));
     await retrieveAllUserStats(function (userMap, res) {
-      assert.equal(res,false);
+      assert.equal(res, false);
       assert.equal(userMap.length != 0, true);
     });
   });
 
   test('retrieveTeamMemberStats', async () => {
-    var input = [{'id': 1}, {'id': 2}, {'id': 3}, {'id': 7}];
+    var input = [{id: 1}, {id: 2}, {id: 3}, {id: 7}];
     sinon
       .stub(
-        firebase.firestore().collection(COLLECTION_ID_USERS)
-        .where('teamCode', '==', 'test'),
-        'get').returns(Promise.resolve(input));
+        firebase
+          .firestore()
+          .collection(COLLECTION_ID_USERS)
+          .where('teamCode', '==', 'test'),
+        'get',
+      )
+      .returns(Promise.resolve(input));
     await retrieveTeamMemberStats(function (dateMap, res) {
       //assert.equal(dateMap, [{date: 1},{date: 2},{date: 3},{date: 7}]);
       assert.equal(dateMap, dateMap);
       assert.equal(res, true);
-    }); 
+    });
   });
 });
 
@@ -342,16 +357,18 @@ suite('personalstats.ts', () => {
 suite('team.ts', () => {
   test('getTeamInfo with non empty team', async () => {
     sinon.restore();
-    sinon.stub(getExtensionContext().globalState, "get")
-    .withArgs(GLOBAL_STATE_USER_TEAM_ID).returns("teamId");
+    sinon
+      .stub(getExtensionContext().globalState, 'get')
+      .withArgs(GLOBAL_STATE_USER_TEAM_ID)
+      .returns('teamId');
 
-    var result = await getTeamInfo();  
+    var result = await getTeamInfo();
     assert.equal(result, 'Your team name: undefined\nYour team ID: teamId');
   });
 
   test('getTeamInfo with empty team', async () => {
     sinon.restore();
-    var result = await getTeamInfo();  
+    var result = await getTeamInfo();
     assert.equal(result, undefined);
   });
 
@@ -360,27 +377,31 @@ suite('team.ts', () => {
 
 suite('DailyMetricDataProvider', () => {
   test('constructing new DailyMetricDataProvider on undefined obj', () => {
-    const metricProvider: DailyMetricDataProvider = new DailyMetricDataProvider(undefined);
-    
+    const metricProvider: DailyMetricDataProvider = new DailyMetricDataProvider(
+      undefined,
+    );
+
     assert.equal(metricProvider.data.length, 4);
   });
 
   test('constructing new DailyMetricDataProvider on defined obj', () => {
-    const metricProvider: DailyMetricDataProvider = new DailyMetricDataProvider([]);
-    
+    const metricProvider: DailyMetricDataProvider = new DailyMetricDataProvider(
+      [],
+    );
+
     assert.equal(metricProvider.data.length, 0);
   });
 
   test('constructing new DailyMetricItem with null children', () => {
-    const metricItem: DailyMetricItem = new DailyMetricItem("test", null);
-    
+    const metricItem: DailyMetricItem = new DailyMetricItem('test', null);
+
     assert.equal(metricItem.children, null);
   });
 
   test('constructing new DailyMetricItem with nonnull children', () => {
-    const testItem: DailyMetricItem[] = [new DailyMetricItem("test")];
-    const metricItem: DailyMetricItem = new DailyMetricItem("test", testItem);
-    
+    const testItem: DailyMetricItem[] = [new DailyMetricItem('test')];
+    const metricItem: DailyMetricItem = new DailyMetricItem('test', testItem);
+
     assert.equal(metricItem.children, testItem);
   });
 });
@@ -388,20 +409,20 @@ suite('DailyMetricDataProvider', () => {
 suite('TeamDataProvider', () => {
   test('constructing new TeamDataProvider', () => {
     const teamDataProvider: TeamDataProvider = new TeamDataProvider();
-    
+
     assert.equal(teamDataProvider.data.length, 4);
   });
 
   test('constructing new TeamItem with null children', () => {
-    const teamItem: TeamItem = new TeamItem("test", null);
-    
+    const teamItem: TeamItem = new TeamItem('test', null);
+
     assert.equal(teamItem.children, null);
   });
 
   test('constructing new TeamItem with nonnull children', () => {
-    const testItem: TeamItem[] = [new TeamItem("test")];
-    const teamItem: TeamItem = new TeamItem("test", testItem);
-    
+    const testItem: TeamItem[] = [new TeamItem('test')];
+    const teamItem: TeamItem = new TeamItem('test', testItem);
+
     assert.equal(teamItem.children, testItem);
   });
 
@@ -411,20 +432,20 @@ suite('TeamDataProvider', () => {
 suite('MenuDataProvider', () => {
   test('constructing new MenuDataProvider', () => {
     const menuDataProvider: MenuDataProvider = new MenuDataProvider();
-    
+
     assert.equal(menuDataProvider.data.length, 2);
   });
 
   test('constructing new menuItem with null children', () => {
-    const menuItem: MenuItem = new MenuItem("test", null);
-    
+    const menuItem: MenuItem = new MenuItem('test', null);
+
     assert.equal(menuItem.children, null);
   });
 
   test('constructing new menuItem with nonnull children', () => {
-    const testItem: MenuItem[] = [new MenuItem("test")];
-    const menuItem: MenuItem = new MenuItem("test", testItem);
-    
+    const testItem: MenuItem[] = [new MenuItem('test')];
+    const menuItem: MenuItem = new MenuItem('test', testItem);
+
     assert.equal(menuItem.children, testItem);
   });
 
@@ -434,20 +455,20 @@ suite('MenuDataProvider', () => {
 suite('LeaderDataProvider', () => {
   test('constructing new LeaderDataProvider', () => {
     const leaderDataProvider: LeaderDataProvider = new LeaderDataProvider();
-    
+
     assert.equal(leaderDataProvider.data.length, 1);
   });
 
   test('constructing new leaderItem with null children', () => {
-    const leaderItem: LeaderItem = new LeaderItem("test", null);
-    
+    const leaderItem: LeaderItem = new LeaderItem('test', null);
+
     assert.equal(leaderItem.children, null);
   });
 
   test('constructing new leaderItem with nonnull children', () => {
     const testChild: LeaderItem[] = [undefined];
     const testParent: LeaderItem = undefined;
-    const leaderItem: LeaderItem = new LeaderItem("test", undefined, testChild);
+    const leaderItem: LeaderItem = new LeaderItem('test', undefined, testChild);
 
     assert.equal(leaderItem.parent, testParent);
     assert.equal(leaderItem.children, testChild);
