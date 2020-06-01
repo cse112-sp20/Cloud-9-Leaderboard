@@ -37,22 +37,29 @@ function createAndJoinTeam() {
                 return;
             }
         });
-        //first check if already in team
-        const inTeam = yield Firestore_1.checkIfInTeam();
-        if (inTeam) {
-            vscode_1.window.showInformationMessage('You have already joined a team!');
-            return;
+        const ctx = Authentication_1.getExtensionContext();
+        const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        if (cachedUserId === undefined || cachedUserId === '') {
+            vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
         }
-        vscode_1.window.showInformationMessage('Enter a name for your new team!');
-        yield vscode_1.window
-            .showInputBox({ placeHolder: 'Enter a new team name' })
-            .then((teamName) => __awaiter(this, void 0, void 0, function* () {
-            if (teamName == undefined || teamName == '') {
-                vscode_1.window.showInformationMessage('Please enter a valid team name!');
+        else {
+            //first check if already in team
+            const inTeam = yield Firestore_1.checkIfInTeam();
+            if (inTeam) {
+                vscode_1.window.showInformationMessage('You have already joined a team!');
                 return;
             }
-            Firestore_1.addNewTeamToDbAndJoin(teamName);
-        }));
+            vscode_1.window.showInformationMessage('Enter a name for your new team!');
+            yield vscode_1.window
+                .showInputBox({ placeHolder: 'Enter a new team name' })
+                .then((teamName) => __awaiter(this, void 0, void 0, function* () {
+                if (teamName == undefined || teamName == '') {
+                    vscode_1.window.showInformationMessage('Please enter a valid team name!');
+                    return;
+                }
+                Firestore_1.addNewTeamToDbAndJoin(teamName);
+            }));
+        }
     });
 }
 exports.createAndJoinTeam = createAndJoinTeam;
@@ -100,15 +107,22 @@ function joinTeam() {
             vscode_1.window.showInformationMessage('You have already joined a team!');
             return;
         }
-        yield vscode_1.window
-            .showInputBox({ placeHolder: 'Enter a team code' })
-            .then((teamCode) => __awaiter(this, void 0, void 0, function* () {
-            if (teamCode == undefined) {
-                vscode_1.window.showInformationMessage('Please enter a valid team name!');
-                return;
-            }
-            Firestore_1.joinTeamWithTeamId(teamCode, false);
-        }));
+        const ctx = Authentication_1.getExtensionContext();
+        const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
+        if (cachedUserId === undefined || cachedUserId === '') {
+            vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
+        }
+        else {
+            yield vscode_1.window
+                .showInputBox({ placeHolder: 'Enter a team code' })
+                .then((teamCode) => __awaiter(this, void 0, void 0, function* () {
+                if (teamCode == undefined) {
+                    vscode_1.window.showInformationMessage('Please enter a valid team name!');
+                    return;
+                }
+                Firestore_1.joinTeamWithTeamId(teamCode, false);
+            }));
+        }
     });
 }
 exports.joinTeam = joinTeam;

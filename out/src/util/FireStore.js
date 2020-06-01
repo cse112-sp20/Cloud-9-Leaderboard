@@ -465,61 +465,66 @@ function joinTeamWithTeamId(teamId, isLeader) {
         const userId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         const userEmail = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_EMAIL);
         const userNickname = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME);
-        console.log('userid: ' + userId);
-        console.log('userEmail: ' + userEmail);
-        //get team doc reference
-        let teamDoc = db.collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamId);
-        //get the team name
-        let teamName = '';
-        console.log('team name is: ' + teamName);
-        yield teamDoc.get().then((doc) => {
-            const data = doc.data();
-            console.log(data);
-            teamName = data.teamName;
-        });
-        console.log('team name: ' + teamName);
-        //get team members collection
-        let teamMembersCollection = teamDoc.collection(Constants_1.COLLECTION_ID_TEAM_MEMBERS);
-        //add this user to members collection
-        let addUserToMembers = yield teamMembersCollection
-            .doc(userId)
-            .set({
-            email: userEmail,
-            nickname: userNickname,
-        })
-            .then(() => {
-            console.log('Successfully added ' + userNickname + ' to team members collection.');
-        })
-            .catch((e) => {
-            console.log(e.message);
-            console.log('Error adding user to team members collection.');
-        });
-        //get reference to user doc
-        let userDoc = db.collection(Constants_1.COLLECTION_ID_USERS).doc(userId);
-        //add team info to user doc and update persistent storage
-        let updateUser = yield userDoc
-            .update({
-            teamCode: teamId,
-            isLeader: isLeader,
-            teamName: teamName,
-        })
-            .then(() => {
-            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, teamId);
-            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, isLeader); //whether this user is the creator/leader
-            ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, teamName);
-            console.log('cachedTeamId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID));
-            console.log('cachedTeamName: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
-            console.log('is leader? ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER));
-            console.log('Successfully added team info to user doc.');
-            vscode_1.window.showInformationMessage('Welcome to your new team: ' +
-                ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
-            vscode_1.commands.executeCommand('LeaderView.refreshEntry');
-            vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
-        })
-            .catch((e) => {
-            console.log(e.message);
-            console.log('Error updating user doc.');
-        });
+        if (userId === undefined || userId === '') {
+            console.log("ERROR");
+        }
+        else {
+            console.log('userid: ' + userId);
+            console.log('userEmail: ' + userEmail);
+            //get team doc reference
+            let teamDoc = db.collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamId);
+            //get the team name
+            let teamName = '';
+            console.log('team name is: ' + teamName);
+            yield teamDoc.get().then((doc) => {
+                const data = doc.data();
+                console.log(data);
+                teamName = data.teamName;
+            });
+            console.log('team name: ' + teamName);
+            //get team members collection
+            let teamMembersCollection = teamDoc.collection(Constants_1.COLLECTION_ID_TEAM_MEMBERS);
+            //add this user to members collection
+            let addUserToMembers = yield teamMembersCollection
+                .doc(userId)
+                .set({
+                email: userEmail,
+                nickname: userNickname,
+            })
+                .then(() => {
+                console.log('Successfully added ' + userNickname + ' to team members collection.');
+            })
+                .catch((e) => {
+                console.log(e.message);
+                console.log('Error adding user to team members collection.');
+            });
+            //get reference to user doc
+            let userDoc = db.collection(Constants_1.COLLECTION_ID_USERS).doc(userId);
+            //add team info to user doc and update persistent storage
+            let updateUser = yield userDoc
+                .update({
+                teamCode: teamId,
+                isLeader: isLeader,
+                teamName: teamName,
+            })
+                .then(() => {
+                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, teamId);
+                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, isLeader); //whether this user is the creator/leader
+                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, teamName);
+                console.log('cachedTeamId: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID));
+                console.log('cachedTeamName: ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
+                console.log('is leader? ' + ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER));
+                console.log('Successfully added team info to user doc.');
+                vscode_1.window.showInformationMessage('Welcome to your new team: ' +
+                    ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME));
+                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
+            })
+                .catch((e) => {
+                console.log(e.message);
+                console.log('Error updating user doc.');
+            });
+        }
     });
 }
 exports.joinTeamWithTeamId = joinTeamWithTeamId;

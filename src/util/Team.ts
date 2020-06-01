@@ -20,6 +20,7 @@ import {
   checkIfCachedUserIdExistsAndPrompt,
 } from './Authentication';
 import {
+  GLOBAL_STATE_USER_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_TEAM_ID,
   AUTH_NOT_LOGGED_IN,
@@ -38,25 +39,35 @@ export async function createAndJoinTeam() {
     }
   });
 
-  //first check if already in team
-  const inTeam = await checkIfInTeam();
+  const ctx = getExtensionContext();
 
-  if (inTeam) {
-    window.showInformationMessage('You have already joined a team!');
-    return;
+  const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+ 
+  if(cachedUserId === undefined || cachedUserId === ''){
+    window.showErrorMessage(AUTH_NOT_LOGGED_IN);
+  }else{
+//first check if already in team
+const inTeam = await checkIfInTeam();
+
+if (inTeam) {
+  window.showInformationMessage('You have already joined a team!');
+  return;
+}
+
+window.showInformationMessage('Enter a name for your new team!');
+
+await window
+  .showInputBox({placeHolder: 'Enter a new team name'})
+  .then(async (teamName) => {
+    if (teamName == undefined || teamName == '') {
+      window.showInformationMessage('Please enter a valid team name!');
+      return;
+    }
+    addNewTeamToDbAndJoin(teamName);
+  });
   }
 
-  window.showInformationMessage('Enter a name for your new team!');
-
-  await window
-    .showInputBox({placeHolder: 'Enter a new team name'})
-    .then(async (teamName) => {
-      if (teamName == undefined || teamName == '') {
-        window.showInformationMessage('Please enter a valid team name!');
-        return;
-      }
-      addNewTeamToDbAndJoin(teamName);
-    });
+  
 }
 
 /**
@@ -105,7 +116,16 @@ export async function joinTeam() {
     return;
   }
 
-  await window
+  const ctx = getExtensionContext();
+
+  const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+ 
+  if(cachedUserId === undefined || cachedUserId === ''){
+    window.showErrorMessage(AUTH_NOT_LOGGED_IN);
+  }else{
+
+
+    await window
     .showInputBox({placeHolder: 'Enter a team code'})
     .then(async (teamCode) => {
       if (teamCode == undefined) {
@@ -114,4 +134,6 @@ export async function joinTeam() {
       }
       joinTeamWithTeamId(teamCode, false);
     });
+  }
+  
 }
