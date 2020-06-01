@@ -69,6 +69,15 @@ export function logOut() {
 
   console.log('Logging out: ' + extensionContext.globalState);
   window.showInformationMessage('Goodbye!');
+
+  commands.executeCommand('MenuView.refreshEntry');
+  commands.executeCommand('LeaderView.refreshEntry');
+
+
+  commands.executeCommand('DailyMetric.refreshEntry');
+
+  // commands.executeCommand('TeamMenuView.refreshEntry');
+ 
 }
 
 /**

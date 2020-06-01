@@ -54,6 +54,10 @@ function logOut() {
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, undefined);
     console.log('Logging out: ' + extensionContext.globalState);
     vscode_1.window.showInformationMessage('Goodbye!');
+    vscode_1.commands.executeCommand('MenuView.refreshEntry');
+    vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+    vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
+    // commands.executeCommand('TeamMenuView.refreshEntry');
 }
 exports.logOut = logOut;
 /**

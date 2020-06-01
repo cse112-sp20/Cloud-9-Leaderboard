@@ -44,10 +44,15 @@ class MenuDataProvider {
                 new MenuItem(`Welcome, ${ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME)}!`),
                 new MenuItem('📊 View personal stats'),
                 new MenuItem('🌐 Leaderboard'),
+                new MenuItem('💻 Log out account')
             ];
         }
         else {
-            console.log('User not logged in');
+            this.data = [
+                new MenuItem('Sign in / Create Account'),
+                new MenuItem('📊 View personal stats'),
+                new MenuItem('🌐 Leaderboard'),
+            ];
         }
         this._onDidChangeTreeData.fire(null);
     }
@@ -92,6 +97,9 @@ exports.handleMenuChangeSelection = (view, item) => {
     }
     else if (item.label === '🌐 Leaderboard') {
         vscode_1.commands.executeCommand('cloud9.leaderboard');
+    }
+    else if (item.label === '💻 Log out account') {
+        vscode_1.commands.executeCommand('cloud9.logOut');
     }
 };
 //# sourceMappingURL=MenuDataProvider.js.map

@@ -24,6 +24,9 @@ import {
   Disposable,
 } from 'vscode';
 
+import {getExtensionContext} from './Authentication';
+import {GLOBAL_STATE_USER_ID} from './Constants';
+
 import {retrieveUserUpdateDailyMetric} from './Firestore';
 
 export class DailyMetricDataProvider
@@ -35,31 +38,56 @@ export class DailyMetricDataProvider
     ._onDidChangeTreeData.event;
 
   refresh(): void {
-    retrieveUserUpdateDailyMetric().then((userDocument) => {
-      console.log(userDocument);
-      this.data = [];
 
-      let tempList = [];
-      for (let key in userDocument) {
-        if (key === 'teamId') {
-          continue;
+    const ctx = getExtensionContext();
+
+    if(ctx.globalState.get(GLOBAL_STATE_USER_ID) === undefined){
+
+      console.log("USer id set to undefined");
+      this.data = [
+        new DailyMetricItem('Keystrokes', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+        new DailyMetricItem('Lines Changed', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+        new DailyMetricItem('Time Interval', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+        new DailyMetricItem('Points', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+      ];
+    }else{
+      retrieveUserUpdateDailyMetric().then((userDocument) => {
+        console.log(userDocument);
+        this.data = [];
+  
+        let tempList = [];
+        for (let key in userDocument) {
+          if (key === 'teamId') {
+            continue;
+          }
+  
+          console.log('key: ' + key);
+          tempList.push(
+            new DailyMetricItem(key, [
+              new DailyMetricItem(
+                '🚀 Today: ' + userDocument[key] + ' (Latest Update)',
+              ),
+            ]),
+          );
         }
+  
+        this.data = tempList;
+  
+        console.log('Refresh daily metric called');
+        
+      });
+    }
 
-        console.log('key: ' + key);
-        tempList.push(
-          new DailyMetricItem(key, [
-            new DailyMetricItem(
-              '🚀 Today: ' + userDocument[key] + ' (Latest Update)',
-            ),
-          ]),
-        );
-      }
-
-      this.data = tempList;
-
-      console.log('Refresh daily metric called');
-      this._onDidChangeTreeData.fire(null);
-    });
+    this._onDidChangeTreeData.fire(null);
+   
   }
 
   data: DailyMetricItem[];
