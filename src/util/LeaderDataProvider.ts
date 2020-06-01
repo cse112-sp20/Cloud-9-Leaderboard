@@ -36,7 +36,10 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
     ._onDidChangeTreeData.event;
 
   refresh(): void {
+    console.log("Leader refresh called")
     const ctx = getExtensionContext();
+
+ 
     if (!ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
       const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
       if (teamId == undefined || teamId == '') {
@@ -58,6 +61,59 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
           ),
         ];
       }
+    }
+    else{
+      
+      
+
+      const ctx = getExtensionContext();
+      const memberMaps: Map<string, Map<string, string>> = ctx.globalState.get(
+        GLOBAL_STATE_USER_TEAM_MEMBERS,
+      );
+
+      let memberFetchLists = [];
+
+      for (let [key, value] of Object.entries(memberMaps)) {
+
+        memberFetchLists.push(new LeaderItem('Email: ' + key));
+      }
+
+      if (memberFetchLists.length === 0) {
+        memberFetchLists.push(new LeaderItem('Empty: No team member yet'));
+      }
+  
+
+
+      let removeMemberFetchLists: LeaderItem[] = [];
+      let childLeaderItem = new LeaderItem('');
+
+      for (let [key, value] of Object.entries(memberMaps)) {
+
+        childLeaderItem = new LeaderItem('Remove member: ' + key);
+
+        removeMemberFetchLists.push(childLeaderItem);
+      }
+
+      if (removeMemberFetchLists.length === 0) {
+        removeMemberFetchLists.push(new LeaderItem('Empty: No team member yet'));
+      }
+  
+
+
+      let topLeaderItem = new LeaderItem('Remove Team members', undefined, removeMemberFetchLists);
+
+      for(var val of removeMemberFetchLists){
+        val.parent = topLeaderItem;
+      }
+
+      this.data = [
+        new LeaderItem('Team members', undefined, memberFetchLists),
+        topLeaderItem,
+      ];
+
+
+
+
     }
     this._onDidChangeTreeData.fire(null);
   }
@@ -228,10 +284,7 @@ export const handleLeaderInfoChangeSelection = (
       .then((input) => {
         if (input === 'yes') {
           const member = memberMaps[selectedMemberEmail];
-          console.log(selectedMemberEmail);
-          console.log(memberMaps);
-          console.log('t');
-          console.log(member);
+         
 
           const memberId = member['id'];
           const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
