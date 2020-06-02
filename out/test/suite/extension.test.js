@@ -123,8 +123,7 @@ suite('firestore.ts', () => {
         //need to run app and see codetime payload to continue
     }));
     test('addNewUserDocToDb', () => __awaiter(void 0, void 0, void 0, function* () {
-        var spy = sinon.spy(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS)
-            .doc('test'), 'set');
+        var spy = sinon.spy(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc('test'), 'set');
         yield FireStore_1.addNewUserDocToDb('testEmail', 'testPassword').then(() => {
             chai_1.expect(spy.calledOnce);
             /*expect(spy.args[0]).to.equal({
@@ -163,20 +162,22 @@ suite('firestore.ts', () => {
             .stub(firebase.auth(), 'createUserWithEmailAndPassword')
             .withArgs(testId, 'testPassword')
             .returns(Promise.resolve());
-        var successful = yield FireStore_1.createNewUserInFirebase(testId, "testPassword");
+        var successful = yield FireStore_1.createNewUserInFirebase(testId, 'testPassword');
         assert.equal(successful.created, true); // works!!
     }));
     test('addNewTeamToDbAndJoin', () => __awaiter(void 0, void 0, void 0, function* () { }));
     test('joinTeamWithTeamId', () => __awaiter(void 0, void 0, void 0, function* () { }));
-    test('leaveTeam', () => __awaiter(void 0, void 0, void 0, function* () {
-    }));
+    test('leaveTeam', () => __awaiter(void 0, void 0, void 0, function* () { }));
     test('checkIfInTeam', () => __awaiter(void 0, void 0, void 0, function* () {
         const ctx = Authentication_1.getExtensionContext();
-        sinon.stub(ctx.globalState, "get").withArgs(Constants_1.GLOBAL_STATE_USER_ID).returns("testId");
+        sinon
+            .stub(ctx.globalState, 'get')
+            .withArgs(Constants_1.GLOBAL_STATE_USER_ID)
+            .returns('testId');
         var result = {};
         result['team'] = 'ted';
         sinon
-            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc("testId"), 'get')
+            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc('testId'), 'get')
             .returns(Promise.resolve(result));
         var output = yield FireStore_1.checkIfInTeam();
         assert.equal(output, false);
@@ -184,11 +185,16 @@ suite('firestore.ts', () => {
     }));
     test('retrieveUserStats', () => __awaiter(void 0, void 0, void 0, function* () {
         sinon.stub(Authentication_1.getExtensionContext().globalState, 'get').returns('test');
-        var input = [{ 'id': 1 }, { 'id': 2 }, { 'id': 3 }, { 'id': 7 }];
+        var input = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 7 }];
         sinon
-            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc('test').collection('dates')
+            .stub(firebase
+            .firestore()
+            .collection(Constants_1.COLLECTION_ID_USERS)
+            .doc('test')
+            .collection('dates')
             .orderBy(firebase.firestore.FieldPath.documentId())
-            .limit(15), 'get').returns(Promise.resolve(input));
+            .limit(15), 'get')
+            .returns(Promise.resolve(input));
         yield FireStore_1.retrieveUserStats(function (dateMap) {
             //assert.equal(dateMap, [{date: 1},{date: 2},{date: 3},{date: 7}]);
             assert.equal(dateMap, dateMap);
@@ -200,17 +206,21 @@ suite('firestore.ts', () => {
         var result = {};
         result['team'] = 'ted';
         sinon
-            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS), 'get').returns(Promise.resolve(result));
+            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS), 'get')
+            .returns(Promise.resolve(result));
         yield FireStore_1.retrieveAllUserStats(function (userMap, res) {
             assert.equal(res, false);
             assert.equal(userMap.length != 0, true);
         });
     }));
     test('retrieveTeamMemberStats', () => __awaiter(void 0, void 0, void 0, function* () {
-        var input = [{ 'id': 1 }, { 'id': 2 }, { 'id': 3 }, { 'id': 7 }];
+        var input = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 7 }];
         sinon
-            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS)
-            .where('teamCode', '==', 'test'), 'get').returns(Promise.resolve(input));
+            .stub(firebase
+            .firestore()
+            .collection(Constants_1.COLLECTION_ID_USERS)
+            .where('teamCode', '==', 'test'), 'get')
+            .returns(Promise.resolve(input));
         yield FireStore_1.retrieveTeamMemberStats(function (dateMap, res) {
             //assert.equal(dateMap, [{date: 1},{date: 2},{date: 3},{date: 7}]);
             assert.equal(dateMap, dateMap);
@@ -239,8 +249,10 @@ suite('personalstats.ts', () => {
 suite('team.ts', () => {
     test('getTeamInfo with non empty team', () => __awaiter(void 0, void 0, void 0, function* () {
         sinon.restore();
-        sinon.stub(Authentication_1.getExtensionContext().globalState, "get")
-            .withArgs(Constants_1.GLOBAL_STATE_USER_TEAM_ID).returns("teamId");
+        sinon
+            .stub(Authentication_1.getExtensionContext().globalState, 'get')
+            .withArgs(Constants_1.GLOBAL_STATE_USER_TEAM_ID)
+            .returns('teamId');
         var result = yield Team_1.getTeamInfo();
         assert.equal(result, 'Your team name: undefined\nYour team ID: teamId');
     }));
@@ -261,12 +273,12 @@ suite('DailyMetricDataProvider', () => {
         assert.equal(metricProvider.data.length, 0);
     });
     test('constructing new DailyMetricItem with null children', () => {
-        const metricItem = new DailyMetricDataProvider_1.DailyMetricItem("test", null);
+        const metricItem = new DailyMetricDataProvider_1.DailyMetricItem('test', null);
         assert.equal(metricItem.children, null);
     });
     test('constructing new DailyMetricItem with nonnull children', () => {
-        const testItem = [new DailyMetricDataProvider_1.DailyMetricItem("test")];
-        const metricItem = new DailyMetricDataProvider_1.DailyMetricItem("test", testItem);
+        const testItem = [new DailyMetricDataProvider_1.DailyMetricItem('test')];
+        const metricItem = new DailyMetricDataProvider_1.DailyMetricItem('test', testItem);
         assert.equal(metricItem.children, testItem);
     });
 });
@@ -276,12 +288,12 @@ suite('TeamDataProvider', () => {
         assert.equal(teamDataProvider.data.length, 4);
     });
     test('constructing new TeamItem with null children', () => {
-        const teamItem = new TeamDataProvider_1.TeamItem("test", null);
+        const teamItem = new TeamDataProvider_1.TeamItem('test', null);
         assert.equal(teamItem.children, null);
     });
     test('constructing new TeamItem with nonnull children', () => {
-        const testItem = [new TeamDataProvider_1.TeamItem("test")];
-        const teamItem = new TeamDataProvider_1.TeamItem("test", testItem);
+        const testItem = [new TeamDataProvider_1.TeamItem('test')];
+        const teamItem = new TeamDataProvider_1.TeamItem('test', testItem);
         assert.equal(teamItem.children, testItem);
     });
     //integration test for handleTeamInfoChangeSelection
@@ -292,12 +304,12 @@ suite('MenuDataProvider', () => {
         assert.equal(menuDataProvider.data.length, 2);
     });
     test('constructing new menuItem with null children', () => {
-        const menuItem = new MenuDataProvider_1.MenuItem("test", null);
+        const menuItem = new MenuDataProvider_1.MenuItem('test', null);
         assert.equal(menuItem.children, null);
     });
     test('constructing new menuItem with nonnull children', () => {
-        const testItem = [new MenuDataProvider_1.MenuItem("test")];
-        const menuItem = new MenuDataProvider_1.MenuItem("test", testItem);
+        const testItem = [new MenuDataProvider_1.MenuItem('test')];
+        const menuItem = new MenuDataProvider_1.MenuItem('test', testItem);
         assert.equal(menuItem.children, testItem);
     });
     //integration test for handleMenuInfoChangeSelection
@@ -308,13 +320,13 @@ suite('LeaderDataProvider', () => {
         assert.equal(leaderDataProvider.data.length, 1);
     });
     test('constructing new leaderItem with null children', () => {
-        const leaderItem = new LeaderDataProvider_1.LeaderItem("test", null);
+        const leaderItem = new LeaderDataProvider_1.LeaderItem('test', null);
         assert.equal(leaderItem.children, null);
     });
     test('constructing new leaderItem with nonnull children', () => {
         const testChild = [undefined];
         const testParent = undefined;
-        const leaderItem = new LeaderDataProvider_1.LeaderItem("test", undefined, testChild);
+        const leaderItem = new LeaderDataProvider_1.LeaderItem('test', undefined, testChild);
         assert.equal(leaderItem.parent, testParent);
         assert.equal(leaderItem.children, testChild);
     });

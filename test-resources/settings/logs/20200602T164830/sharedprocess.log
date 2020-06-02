@@ -1,0 +1,2 @@
+[2020-06-02 16:48:34.266] [sharedprocess] [info] main {"machineId":"2085179db7695421fbe71d1bdc0e39ac8dd8e41db57509c9fb68fcb7798d24e2","windowId":2}
+[2020-06-02 16:48:34.489] [sharedprocess] [error] [File Watcher (node.js)] Error: ENOENT: no such file or directory, stat 'c:\Users\garza\Cloud-9-Leaderboard\test-resources\settings\User\snippets'

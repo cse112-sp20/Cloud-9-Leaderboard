@@ -41,7 +41,8 @@
     "compile": "tsc -p ./",
     "lint": "tslint -p ./",
     "watch": "tsc -watch -p ./",
-    "test": "mocha ./out/test/runTest.js"
+    "test": "mocha ./out/test/runTest.js",
+    "ui-test": "extest setup-and-run ./out/test/suite/uitest.js"
   },
   "contributes": {
     "commands": [
