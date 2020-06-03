@@ -5,9 +5,7 @@ import {
 } from '../../src/util/Utility';
 import {
   getExtensionContext,
-  clearCachedUserId,
   authenticateUser,
-  registerNewUserWithGeneratedCredential,
 } from '../../src/util/Authentication';
 import {
   Leaderboard,
@@ -18,7 +16,6 @@ import {scoreCalculation, processMetric} from '../../src/util/Metric';
 import {
   loginUserWithEmailAndPassword,
   createNewUserInFirebase,
-  getUserDocWithId,
   addNewTeamToDbAndJoin,
   joinTeamWithTeamId,
   leaveTeam,
@@ -70,24 +67,9 @@ suite('authentication.ts', () => {
     assert.typeOf(result, 'object');
   });
 
-  test('clearing cached user id', () => {
-    clearCachedUserId();
-    const ctx = getExtensionContext();
-    assert.equal(ctx.globalState.get(GLOBAL_STATE_USER_ID), undefined);
-  });
-
   test('authenticating user', () => {
     const ctx = getExtensionContext();
     //authenticateUser();
-  });
-
-  test('registering new user with user input', () => {
-    const ctx = getExtensionContext();
-    //registerNewUserWithUserInput(ctx);
-  });
-
-  test('registering new user with generated credentials', () => {
-    registerNewUserWithGeneratedCredential();
   });
 });
 
@@ -202,36 +184,6 @@ suite('firestore.ts', () => {
         name: generateRandomName(),
         ...DEFAULT_USER_DOC_TOP,
       })*/
-    });
-  });
-
-  test('getUserDocWithId', async () => {
-    var result = {};
-    result['data'] = 'yaya';
-    sinon
-      .stub(
-        firebase.firestore().collection(COLLECTION_ID_USERS).doc(testId),
-        'get',
-      )
-      .returns(Promise.resolve(result));
-
-    getUserDocWithId(testId).then((res) => {
-      assert.equal(result, res);
-    });
-  });
-
-  test('getUserDocWithId', async () => {
-    var result = {};
-    result['data'] = 'yaya';
-    sinon
-      .stub(
-        firebase.firestore().collection(COLLECTION_ID_USERS).doc(testId),
-        'get',
-      )
-      .returns(Promise.resolve(result));
-
-    getUserDocWithId(testId).then((res) => {
-      assert.equal(result, res);
     });
   });
 

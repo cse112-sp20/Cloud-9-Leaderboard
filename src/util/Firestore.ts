@@ -740,24 +740,6 @@ export async function retrieveUserStats(callback) {
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   let dateMap = [];
 
-<<<<<<< HEAD
-  user
-    .doc(cachedUserId) //changed from cachedUserId to "testing" for testing purposes
-    .collection('dates')
-    .orderBy(firebase.firestore.FieldPath.documentId())
-    .limit(15)
-    .get()
-    .then((snapshot) => {
-      snapshot.forEach((doc) => {
-        PersonalStats.addDayStats(doc.id, doc.data());
-        let currDate = {};
-        currDate['date'] = doc.id;
-        for (let key in doc.data()) {
-          currDate[key] = doc.data()[key];
-        }
-        dateMap.push(currDate);
-        //console.log(doc.id + "=>" + doc.data());
-=======
   if (db === undefined || user === undefined || cachedUserId === undefined) {
     console.log('retrieveUserStats undefined');
   } else {
@@ -789,7 +771,6 @@ export async function retrieveUserStats(callback) {
       })
       .catch((err) => {
         console.log('Error getting documents', err);
->>>>>>> 1ce6a0eb705eeb9a1ec26e6d2660da76dd532ee9
       });
   }
 }
