@@ -29,24 +29,28 @@ class TeamDataProvider {
             ._onDidChangeTreeData.event;
         this.data = [
             new TeamItem('🛡 Create your Team'),
-            new TeamItem('🔰 Join team')
+            new TeamItem('🔰 Join team'),
         ];
     }
     refresh() {
         const ctx = Authentication_1.getExtensionContext();
         const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
+        const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
+        const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
         if (cachedTeamId === undefined || cachedTeamId === '') {
             this.data = [
                 new TeamItem('🛡 Create your Team'),
-                new TeamItem('🔰 Join team')
+                new TeamItem('🔰 Join team'),
             ];
-            console.log("NO team");
         }
         else {
             this.data = [
                 new TeamItem('🛡 Welcome back to your Team'),
                 new TeamItem('📋 View team leaderboard'),
-                new TeamItem('Get Team Info', [new TeamItem('')]),
+                new TeamItem('Get Team Info', [
+                    new TeamItem('TeamName', [new TeamItem(teamName + '')]),
+                    new TeamItem('teamId', [new TeamItem(teamId + '')]),
+                ]),
             ];
         }
         this._onDidChangeTreeData.fire(null);
@@ -85,19 +89,15 @@ exports.connectCloud9TeamInfoTreeView = (view) => {
 };
 exports.handleTeamInfoChangeSelection = (view, item) => {
     if (item.label === '🛡 Create your Team') {
-        console.log('create a team');
         vscode_1.commands.executeCommand('cloud9.createTeam');
     }
     else if (item.label === '🔰 Join team') {
-        console.log('join a team');
         vscode_1.commands.executeCommand('cloud9.joinTeam');
     }
     else if (item.label === '📋 View team leaderboard') {
-        console.log('View team leaderboard');
         vscode_1.commands.executeCommand('cloud9.teamLeaderboard');
     }
     else if (item.label === 'Get Team Info') {
-        console.log('Get Team Info');
         const ctx = Authentication_1.getExtensionContext();
         const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);

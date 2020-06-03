@@ -24,7 +24,10 @@ import {
   Disposable,
 } from 'vscode';
 
-import {getExtensionContext} from './Authentication';
+import {
+  getExtensionContext,
+  checkIfCachedUserIdExistsAndPrompt,
+} from './Authentication';
 
 import {getTeamInfo} from './Team';
 
@@ -33,6 +36,7 @@ import {
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
   GLOBAL_STATE_USER_ID,
+  AUTH_NOT_LOGGED_IN,
 } from './Constants';
 
 export class TeamDataProvider implements TreeDataProvider<TeamItem> {
@@ -45,19 +49,22 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
   refresh(): void {
     const ctx = getExtensionContext();
     const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+    const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
+    const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
     if (cachedTeamId === undefined || cachedTeamId === '') {
       this.data = [
         new TeamItem('🛡 Create your Team'),
         new TeamItem('🔰 Join team'),
       ];
-
-      console.log('NO team');
     } else {
       this.data = [
         new TeamItem('🛡 Welcome back to your Team'),
         new TeamItem('📋 View team leaderboard'),
-        new TeamItem('Get Team Info', [new TeamItem('')]),
+        new TeamItem('Get Team Info', [
+          new TeamItem('TeamName', [new TeamItem(teamName + '')]),
+          new TeamItem('teamId', [new TeamItem(teamId + '')]),
+        ]),
       ];
     }
 
@@ -123,16 +130,12 @@ export const handleTeamInfoChangeSelection = (
   item: TeamItem,
 ) => {
   if (item.label === '🛡 Create your Team') {
-    console.log('create a team');
     commands.executeCommand('cloud9.createTeam');
   } else if (item.label === '🔰 Join team') {
-    console.log('join a team');
     commands.executeCommand('cloud9.joinTeam');
   } else if (item.label === '📋 View team leaderboard') {
-    console.log('View team leaderboard');
     commands.executeCommand('cloud9.teamLeaderboard');
   } else if (item.label === 'Get Team Info') {
-    console.log('Get Team Info');
     const ctx = getExtensionContext();
     const teamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
     const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);

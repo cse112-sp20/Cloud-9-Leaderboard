@@ -15,11 +15,8 @@ import {
   userDocExists,
   updatePersistentStorageWithUserDocData,
 } from './Firestore';
-import {generateRandomEmail} from './Utility';
 import {
-  DEFAULT_PASSWORD,
   GLOBAL_STATE_USER_ID,
-  GLOBAL_STATE_USER_EMAIL,
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
@@ -31,13 +28,11 @@ import {
   AUTH_CREATE_ACCOUNT,
   AUTH_ERR_CODE_USER_NOT_FOUND,
   AUTH_ERR_CODE_INVALID_EMAIL,
+  GLOBAL_STATE_USER_TEAM_MEMBERS,
+  FIELD_ID_TEAM_LEAD_USER_ID,
 } from './Constants';
-import {getMaxListeners} from 'cluster';
-import {removeTeamNameAndId} from './Team';
-
 import {testCallback} from './DailyMetricDataProvider';
 
-//export let cachedUserId = undefined;
 let extensionContext: ExtensionContext = undefined;
 
 /**
@@ -57,22 +52,27 @@ export function getExtensionContext() {
 }
 
 /**
- * *****for debugging purpose only******
+ *
  * removes extensionContext data
  */
-export function clearCachedUserId() {
+export function logOut() {
   let ctx = getExtensionContext();
   ctx.globalState.update(GLOBAL_STATE_USER_ID, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_NICKNAME, undefined);
+  ctx.globalState.update(GLOBAL_STATE_USER_TEAM_MEMBERS, undefined);
 
-  console.log(
-    'After clearing persistent storage: ' + extensionContext.globalState,
-  );
+  console.log('Logging out: ' + extensionContext.globalState);
+  window.showInformationMessage('Goodbye!');
 
-  removeTeamNameAndId();
+  commands.executeCommand('MenuView.refreshEntry');
+  commands.executeCommand('LeaderView.refreshEntry');
+
+  commands.executeCommand('DailyMetric.refreshEntry');
+
+  commands.executeCommand('TeamMenuView.refreshEntry');
 }
 
 /**
@@ -80,13 +80,16 @@ export function clearCachedUserId() {
  * @param ctx
  */
 export async function authenticateUser() {
-  //stores the extension context
   const ctx = getExtensionContext();
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   const cachedUserNickName = ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME);
 
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+
+  const cachedTeamLeadId = ctx.globalState.get(FIELD_ID_TEAM_LEAD_USER_ID);
+
+  const isTeamLeadr = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
 
   if (cachedUserId === undefined) {
     // case1: sign in or create new account
@@ -105,132 +108,33 @@ export async function authenticateUser() {
     //check if user doc exists in firebase
     let exists = await userDocExists(cachedUserId);
     if (exists) {
+      console.log('user doc exists');
       updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
         retrieveUserDailyMetric(testCallback, ctx);
       });
       window.showInformationMessage(
         'Welcome back, ' + cachedUserNickName + '!!',
       );
-
+      console.log('is team leade ' + isTeamLeadr);
       commands.executeCommand('MenuView.refreshEntry');
       commands.executeCommand('LeaderView.refreshEntry');
       commands.executeCommand('TeamMenuView.refreshEntry');
     } else {
+      // user doc does not exist, prompt user to sign in or sign up
       signInOrSignUpUserWithUserInput().then(() => {
         retrieveUserDailyMetric(testCallback, ctx);
       });
     }
   }
-
-  //retrieveUserDailyMetric(testCallback, ctx);
 }
 
 /**
- * prompt the user to enter an email and password and sign in or create a new account for them
+ * prompts the user to sign in or sign up with input email and password
  */
-export async function registerNewUserOrSigInWithUserInput() {
-  // const ctx = getExtensionContext();
-  // let email = null;
-  // let password = null;
-  // let completed = false;
-  // while (!completed) {
-  //   //forcing the user to always sign in
-  //   window
-  //     .showInformationMessage(
-  //       'Please sign in or create a new account.',
-  //       'Sign in',
-  //       'Create account',
-  //     )
-  //     .then(async (selection) => {
-  //       console.log(selection);
-  //     });
-  //   //prompt for email and password
-  //   await window
-  //     .showInputBox({placeHolder: 'Enter your email'})
-  //     .then((inputEmail) => {
-  //       email = inputEmail;
-  //       console.log('user input email: ' + email);
-  //     })
-  //     .then(async () => {
-  //       await window
-  //         .showInputBox({
-  //           placeHolder:
-  //             'Enter your password (must be 6 characters long or more)',
-  //           password: true,
-  //         })
-  //         .then((inputPassword) => {
-  //           password = inputPassword;
-  //           console.log('user input password: ' + password);
-  //         });
-  //     })
-  //     .then(async () => {
-  //       if (
-  //         email == undefined ||
-  //         password == undefined ||
-  //         email == '' ||
-  //         password == ''
-  //       ) {
-  //         window.showInformationMessage(
-  //           'Invalid email or password! Please try again!',
-  //         );
-  //       } else {
-  //         //first try creating a new user account
-  //         //if email is already in use, try logging them in with the credential
-  //         await createNewUserInFirebase(email, password).then(
-  //           async (result) => {
-  //             console.log(result.created);
-  //             console.log(result.errorCode);
-  //             if (result.created) {
-  //               window.showInformationMessage(
-  //                 'Successfully created new account, your nickname is ' +
-  //                   ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME),
-  //               );
-  //               commands.executeCommand('MenuView.refreshEntry');
-  //             }
-  //             //email already in use, now log the user in
-  //             else if (result.errorCode == 'auth/email-already-in-use') {
-  //               await loginUserWithEmailAndPassword(email, password).then(
-  //                 async (result) => {
-  //                   console.log(result.loggedIn);
-  //                   console.log(result.errorCode);
-  //                   //successfully logged the user in, return
-  //                   if (result.loggedIn == true) {
-  //                     completed = true;
-  //                     window.showInformationMessage(
-  //                       'Hello, ' +
-  //                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
-  //                         '!!',
-  //                     );
-  //                     commands.executeCommand('MenuView.refreshEntry');
-  //                     commands.executeCommand('LeaderView.refreshEntry');
-  //                     return;
-  //                   } else if (result.errorCode == 'auth/wrong-password') {
-  //                     window.showInformationMessage(
-  //                       'Wrong password! Please try again!',
-  //                     );
-  //                   }
-  //                 },
-  //               );
-  //             } else if (result.errorCode == 'auth/weak-password') {
-  //               window.showInformationMessage(
-  //                 'Password must to be 6 characters or longer! Please try again!',
-  //               );
-  //             }
-  //           },
-  //         );
-  //       }
-  //     });
-  //   completed = true;
-  //   commands.executeCommand('MenuView.refreshEntry');
-  //   commands.executeCommand('LeaderView.refreshEntry');
-  // }
-}
-
 export async function signInOrSignUpUserWithUserInput() {
   const ctx = getExtensionContext();
   let email = undefined;
   let password = undefined;
-  let completed = false;
 
   //prompt the user to sign in or create an account upon activating the extension
   window
@@ -240,11 +144,13 @@ export async function signInOrSignUpUserWithUserInput() {
       AUTH_CREATE_ACCOUNT,
     )
     .then(async (selection) => {
+      if (selection == undefined) {
+        return;
+      }
       await window
         .showInputBox({placeHolder: 'Enter your email: example@gmail.com'})
         .then((inputEmail) => {
           email = inputEmail;
-          console.log('user input email: ' + email);
         })
         .then(async () => {
           await window
@@ -255,7 +161,6 @@ export async function signInOrSignUpUserWithUserInput() {
             })
             .then((inputPassword) => {
               password = inputPassword;
-              console.log('user input password: ' + password);
             });
         })
         .then(async () => {
@@ -279,11 +184,10 @@ export async function signInOrSignUpUserWithUserInput() {
                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
                         '!!',
                     );
-                    completed = true;
-                    console.log('setting completed to true');
                     commands.executeCommand('MenuView.refreshEntry');
                     commands.executeCommand('LeaderView.refreshEntry');
                     commands.executeCommand('TeamMenuView.refreshEntry');
+                    commands.executeCommand('DailyMetric.refreshEntry');
                     return;
                   }
                   //not logged in
@@ -296,6 +200,10 @@ export async function signInOrSignUpUserWithUserInput() {
                   }
                 },
               );
+              commands.executeCommand('MenuView.refreshEntry');
+              commands.executeCommand('LeaderView.refreshEntry');
+              commands.executeCommand('TeamMenuView.refreshEntry');
+              commands.executeCommand('DailyMetric.refreshEntry');
             } else if (selection == AUTH_CREATE_ACCOUNT) {
               await createNewUserInFirebase(email, password).then(
                 async (result) => {
@@ -307,7 +215,6 @@ export async function signInOrSignUpUserWithUserInput() {
                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
                         '!!',
                     );
-                    completed = true;
                     commands.executeCommand('MenuView.refreshEntry');
                     commands.executeCommand('LeaderView.refreshEntry');
                     commands.executeCommand('TeamMenuView.refreshEntry');
@@ -322,6 +229,8 @@ export async function signInOrSignUpUserWithUserInput() {
                     );
                   } else if (result.errorCode == AUTH_ERR_CODE_INVALID_EMAIL) {
                     window.showErrorMessage('Invalid email!');
+                  } else {
+                    window.showErrorMessage(result.errorCode);
                   }
                 },
               );
@@ -332,10 +241,23 @@ export async function signInOrSignUpUserWithUserInput() {
 }
 
 /**
- * not using this function
+ * if user id is not found in persistent storage, prompt the user to sign in or sign up
+ * return whether the id is found (after the prompt)
  */
-export async function registerNewUserWithGeneratedCredential() {
-  const email = generateRandomEmail();
-
-  await createNewUserInFirebase(email, DEFAULT_PASSWORD);
+export async function checkIfCachedUserIdExistsAndPrompt() {
+  const ctx = getExtensionContext();
+  let cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+  let loggedIn = false;
+  if (cachedUserId != undefined) {
+    loggedIn = true;
+  } else {
+    await signInOrSignUpUserWithUserInput().then(async () => {
+      cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
+      if (cachedUserId != undefined) {
+        loggedIn = true;
+        await retrieveUserDailyMetric(testCallback, ctx);
+      }
+    });
+  }
+  return loggedIn;
 }

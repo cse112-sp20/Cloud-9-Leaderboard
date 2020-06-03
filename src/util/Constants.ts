@@ -53,7 +53,7 @@ export const GLOBAL_STATE_USER_TEAM_MEMBERS = 'cachedUserTeamMembers'; //maps
 // authentication options
 export const AUTH_SIGN_IN = 'Sign in';
 export const AUTH_CREATE_ACCOUNT = 'Create a new account';
-
+export const AUTH_NOT_LOGGED_IN = 'You are not signed in!';
 // firebase authentication error codes
 export const AUTH_ERR_CODE_EMAIL_USED = 'auth/email-already-in-use';
 export const AUTH_ERR_CODE_WRONG_PASSWORD = 'auth/wrong-password';

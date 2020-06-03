@@ -24,7 +24,17 @@ import {
   Disposable,
 } from 'vscode';
 
+import {getExtensionContext} from './Authentication';
+import {GLOBAL_STATE_USER_ID} from './Constants';
+
 import {retrieveUserUpdateDailyMetric} from './Firestore';
+
+const displayHeaderMap = {
+  keystrokes: 'Keystrokes',
+  linesChanged: 'Lines Changed',
+  timeInterval: 'Time Interval',
+  points: 'Total Points',
+};
 
 export class DailyMetricDataProvider
   implements TreeDataProvider<DailyMetricItem> {
@@ -35,31 +45,56 @@ export class DailyMetricDataProvider
     ._onDidChangeTreeData.event;
 
   refresh(): void {
-    retrieveUserUpdateDailyMetric().then((userDocument) => {
-      console.log(userDocument);
-      this.data = [];
+    const ctx = getExtensionContext();
 
-      let tempList = [];
-      for (let key in userDocument) {
-        if (key === 'teamId') {
-          continue;
+    if (ctx.globalState.get(GLOBAL_STATE_USER_ID) === undefined) {
+      this.data = [
+        new DailyMetricItem('Keystrokes', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+        new DailyMetricItem('Lines Changed', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+        new DailyMetricItem('Time Interval', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+        new DailyMetricItem('Points', [
+          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        ]),
+      ];
+      return;
+    } else {
+      retrieveUserUpdateDailyMetric().then((userDocument) => {
+        var today = new Date();
+
+        var time =
+          today.getHours() +
+          ':' +
+          today.getMinutes() +
+          ':' +
+          today.getSeconds();
+        this.data = [];
+
+        let tempList = [];
+        for (let key in userDocument) {
+          if (key === 'teamId') {
+            continue;
+          }
+
+          tempList.push(
+            new DailyMetricItem(displayHeaderMap[key], [
+              new DailyMetricItem(
+                '🚀 Today: ' + userDocument[key] + ' (Updated: ' + time + ')',
+              ),
+            ]),
+          );
         }
 
-        console.log('key: ' + key);
-        tempList.push(
-          new DailyMetricItem(key, [
-            new DailyMetricItem(
-              '🚀 Today: ' + userDocument[key] + ' (Latest Update)',
-            ),
-          ]),
-        );
-      }
+        this.data = tempList;
+      });
+    }
 
-      this.data = tempList;
-
-      console.log('Refresh daily metric called');
-      this._onDidChangeTreeData.fire(null);
-    });
+    this._onDidChangeTreeData.fire(null);
   }
 
   data: DailyMetricItem[];
@@ -80,7 +115,10 @@ export class DailyMetricDataProvider
         ]),
       ];
     } else {
-      console.log(d);
+      var today = new Date();
+
+      var time =
+        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
 
       this.data = [];
 
@@ -91,8 +129,10 @@ export class DailyMetricDataProvider
         }
 
         tempList.push(
-          new DailyMetricItem(key, [
-            new DailyMetricItem('🚀 Today: ' + d[key] + ' (Latest Update)'),
+          new DailyMetricItem(displayHeaderMap[key], [
+            new DailyMetricItem(
+              '🚀 Today: ' + d[key] + ' (Updated: ' + time + ')',
+            ),
           ]),
         );
       }

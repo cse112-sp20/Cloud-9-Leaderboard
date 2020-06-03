@@ -15,9 +15,13 @@ import {getSoftwareDir, isWindows} from '../../lib/Util';
 import {retrieveUserStats} from './Firestore';
 import {scoreCalculation, calculateStats} from './Metric';
 import {stat} from 'fs';
-import {getExtensionContext} from './Authentication';
+import {
+  getExtensionContext,
+  checkIfCachedUserIdExistsAndPrompt,
+} from './Authentication';
 import {
   GLOBAL_STATE_USER_ID,
+  AUTH_NOT_LOGGED_IN,
   MAX_USERNAME_LENGTH,
   MAX_RANK_LENGTH,
   SECTION_BAR,
@@ -76,6 +80,13 @@ export function getPersonalStatsFile() {
 export async function displayPersonalStats() {
   // 1st write the code time metrics dashboard file
   // await writeLeaderboard();
+  //ID check
+  await checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
+    if (!loggedIn) {
+      window.showErrorMessage(AUTH_NOT_LOGGED_IN);
+      return;
+    }
+  });
   await retrieveUserStats(writePersonalStatsFile);
 
   let filePath = getPersonalStatsFile();

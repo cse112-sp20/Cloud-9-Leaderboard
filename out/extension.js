@@ -20,11 +20,9 @@ const Util_1 = require("./lib/Util");
 const HttpClient_1 = require("./lib/http/HttpClient");
 const KpmRepoManager_1 = require("./lib/repo/KpmRepoManager");
 const LiveshareManager_1 = require("./lib/LiveshareManager");
-const vsls = require("vsls/vscode");
 const command_helper_1 = require("./lib/command-helper");
 const KpmManager_1 = require("./lib/managers/KpmManager");
 const SummaryManager_1 = require("./lib/managers/SummaryManager");
-const SessionSummaryData_1 = require("./lib/storage/SessionSummaryData");
 const WallClockManager_1 = require("./lib/managers/WallClockManager");
 const EventManager_1 = require("./lib/managers/EventManager");
 const FileManager_1 = require("./lib/managers/FileManager");
@@ -139,22 +137,6 @@ function intializePlugin(ctx, createdAnonUser) {
         yield DataController_1.initializePreferences(serverIsOnline);
         // add the interval jobs
         initializeIntervalJobs();
-        // in 30 seconds
-        setTimeout(() => {
-            vscode_1.commands.executeCommand('codetime.sendOfflineData');
-        }, 1000 * 30);
-        // in 2 minutes task
-        setTimeout(() => {
-            KpmRepoManager_1.getHistoricalCommits(serverIsOnline);
-        }, one_min_millis * 2);
-        // in 4 minutes task
-        setTimeout(() => {
-            FileManager_1.sendOfflineEvents();
-        }, one_min_millis * 3);
-        initializeLiveshare();
-        // get the login status
-        // {loggedIn: true|false}
-        yield DataController_1.isLoggedIn();
         const initializedVscodePlugin = Util_1.getItem('vscode_CtInit');
         if (!initializedVscodePlugin) {
             Util_1.setItem('vscode_CtInit', true);
@@ -163,30 +145,9 @@ function intializePlugin(ctx, createdAnonUser) {
             // send a heartbeat that the plugin as been installed
             // (or the user has deleted the session.json and restarted the IDE)
             DataController_1.sendHeartbeat('INSTALLED', serverIsOnline);
-            setTimeout(() => {
-                vscode_1.commands.executeCommand('codetime.displayTree');
-            }, 1200);
         }
         // initialize the day check timer
         SummaryManager_1.SummaryManager.getInstance().updateSessionSummaryFromServer();
-        // show the readme if it doesn't exist
-        Util_1.displayReadmeIfNotExists();
-        // show the status bar text info
-        setTimeout(() => {
-            statusBarItem = vscode_1.window.createStatusBarItem(vscode_1.StatusBarAlignment.Right, 10);
-            // add the name to the tooltip if we have it
-            const name = Util_1.getItem('name');
-            let tooltip = 'Click to see more from Code Time';
-            if (name) {
-                tooltip = `${tooltip} (${name})`;
-            }
-            statusBarItem.tooltip = tooltip;
-            // statusBarItem.command = "codetime.softwarePaletteMenu";
-            statusBarItem.command = 'codetime.displayTree';
-            statusBarItem.show();
-            // update the status bar
-            SessionSummaryData_1.updateStatusBarWithSummaryData();
-        }, 0);
     });
 }
 exports.intializePlugin = intializePlugin;
@@ -200,64 +161,5 @@ function initializeIntervalJobs() {
         const isonline = yield HttpClient_1.serverIsAvailable();
         yield KpmRepoManager_1.getHistoricalCommits(isonline);
     }), thirty_min_millis);
-    twenty_minute_interval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
-        yield FileManager_1.sendOfflineEvents();
-        // this will get the login status if the window is focused
-        // and they're currently not a logged in
-        if (vscode_1.window.state.focused) {
-            const name = Util_1.getItem('name');
-            // but only if checkStatus is true
-            if (!name) {
-                DataController_1.isLoggedIn();
-            }
-        }
-    }), one_min_millis * 20);
-    // every 15 minute tasks
-    fifteen_minute_interval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
-        vscode_1.commands.executeCommand('codetime.sendOfflineData');
-    }), one_min_millis * 15);
-    // update liveshare in the offline kpm data if it has been initiated
-    liveshare_update_interval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
-        if (vscode_1.window.state.focused) {
-            updateLiveshareTime();
-        }
-    }), one_min_millis);
-}
-function updateLiveshareTime() {
-    if (_ls) {
-        let nowSec = Util_1.nowInSecs();
-        let diffSeconds = nowSec - parseInt(_ls['start'], 10);
-        SessionSummaryData_1.setSessionSummaryLiveshareMinutes(diffSeconds * 60);
-    }
-}
-function initializeLiveshare() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const liveshare = yield vsls.getApi();
-        if (liveshare) {
-            // {access: number, id: string, peerNumber: number, role: number, user: json}
-            Util_1.logIt(`liveshare version - ${liveshare['apiVersion']}`);
-            liveshare.onDidChangeSession((event) => __awaiter(this, void 0, void 0, function* () {
-                let nowSec = Util_1.nowInSecs();
-                let offsetSec = Util_1.getOffsetSeconds();
-                let localNow = nowSec - offsetSec;
-                if (!_ls) {
-                    _ls = Object.assign({}, event.session);
-                    _ls['apiVesion'] = liveshare['apiVersion'];
-                    _ls['start'] = nowSec;
-                    _ls['local_start'] = localNow;
-                    _ls['end'] = 0;
-                    yield LiveshareManager_1.manageLiveshareSession(_ls);
-                }
-                else if (_ls && (!event || !event['id'])) {
-                    updateLiveshareTime();
-                    // close the session on our end
-                    _ls['end'] = nowSec;
-                    _ls['local_end'] = localNow;
-                    yield LiveshareManager_1.manageLiveshareSession(_ls);
-                    _ls = null;
-                }
-            }));
-        }
-    });
 }
 //# sourceMappingURL=extension.js.map

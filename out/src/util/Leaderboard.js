@@ -69,6 +69,13 @@ function getTeamLeaderboardFile() {
 exports.getTeamLeaderboardFile = getTeamLeaderboardFile;
 function displayLeaderboard() {
     return __awaiter(this, void 0, void 0, function* () {
+        //ID check
+        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
+            if (!loggedIn) {
+                vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
+                return;
+            }
+        });
         // 1st write the code time metrics dashboard file
         // await writeLeaderboard();
         yield Firestore_1.retrieveAllUserStats(writeToFile);
@@ -104,6 +111,13 @@ function displayLeaderboard() {
 exports.displayLeaderboard = displayLeaderboard;
 function displayTeamLeaderboard() {
     return __awaiter(this, void 0, void 0, function* () {
+        //ID check
+        yield Authentication_1.checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
+            if (!loggedIn) {
+                vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
+                return;
+            }
+        });
         // 1st write the code time metrics dashboard file
         // await writeLeaderboard();
         yield Firestore_1.retrieveTeamMemberStats(writeToFile);
@@ -216,6 +230,8 @@ function writeToFile(users, isTeam) {
                     badges += String.fromCodePoint(0x1f388) + ' ';
                 }
             }
+            console.log("cacheduserid: " + cachedUserId);
+            console.log("user id :" + user.name);
             if (cachedUserId == user.id) {
                 username = user.name;
                 rankNumberSection = i + 1 + ' ' + rankNumberSection;
@@ -246,6 +262,7 @@ function writeToFile(users, isTeam) {
             ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME) !== undefined
                 ? ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME)
                 : '______';
+        console.log("username is :" + username);
         leaderBoardContent += 'Username \t : \t ' + username + '\n';
         leaderBoardContent += 'Teamname \t : \t ' + teamname + '\n\n';
         leaderBoardContent += Constants_1.SECTION_BAR;
