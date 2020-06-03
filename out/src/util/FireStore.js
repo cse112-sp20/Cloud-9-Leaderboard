@@ -85,8 +85,8 @@ function updatePersistentStorageWithUserDocData(userId) {
                         .then((teamDoc) => __awaiter(this, void 0, void 0, function* () {
                         if (teamDoc.exists) {
                             const teamDocData = teamDoc.data();
-                            console.log("teamDc data user id: " + teamDocData.teamLeadUserId);
-                            console.log("user id :" + userId);
+                            console.log('teamDc data user id: ' + teamDocData.teamLeadUserId);
+                            console.log('user id :' + userId);
                             if (teamDocData.teamLeadUserId == userId) {
                                 console.log('Is team leader');
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, true);
@@ -104,7 +104,8 @@ function updatePersistentStorageWithUserDocData(userId) {
                                 //       commands.executeCommand('LeaderView.refreshEntry');
                             }
                         }
-                    })).then(() => {
+                    }))
+                        .then(() => {
                         vscode_1.commands.executeCommand('LeaderView.refreshEntry');
                     })
                         .catch((e) => {

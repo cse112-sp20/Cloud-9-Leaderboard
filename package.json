@@ -37,11 +37,11 @@
   },
   "main": "./out/extension",
   "scripts": {
-    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "lint": "tslint -p ./",
     "watch": "tsc -watch -p ./",
-    "test": "mocha ./out/test/runTest.js"
+    "test": "mocha ./out/test/runTest.js",
+    "deploy": "vsce publish -p $vscode_token"
   },
   "contributes": {
     "commands": [
