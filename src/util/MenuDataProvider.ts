@@ -45,8 +45,6 @@ const resourcePath: string = path.join(
  * Menu data provider
  */
 export class MenuDataProvider implements TreeDataProvider<MenuItem> {
-
-  
   private _onDidChangeTreeData: EventEmitter<
     MenuItem | undefined
   > = new EventEmitter<MenuItem | undefined>();
@@ -95,7 +93,7 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
 
   /**
    * Binds view
-   * @param menuTreeView 
+   * @param menuTreeView
    */
   bindView(menuTreeView: TreeView<MenuItem>): void {
     this.view = menuTreeView;
@@ -103,8 +101,8 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
 
   /**
    * Gets children
-   * @param [task] 
-   * @returns children 
+   * @param [task]
+   * @returns children
    */
   getChildren(task?: MenuItem | undefined): ProviderResult<MenuItem[]> {
     if (task === undefined) {
@@ -115,8 +113,8 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
 
   /**
    * Gets tree item
-   * @param task 
-   * @returns tree item 
+   * @param task
+   * @returns tree item
    */
   getTreeItem(task: MenuItem): TreeItem | Thenable<TreeItem> {
     return task;
@@ -131,8 +129,8 @@ export class MenuItem extends TreeItem {
 
   /**
    * Creates an instance of menu item.
-   * @param label 
-   * @param [children] 
+   * @param label
+   * @param [children]
    */
   constructor(label: string, children?: MenuItem[]) {
     super(
@@ -147,7 +145,7 @@ export class MenuItem extends TreeItem {
 
 /**
  * Connect menu data provider treeview with change selectioin.
- * @param view 
+ * @param view
  */
 export const connectCloud9MenuTreeView = (view: TreeView<MenuItem>) => {
   return Disposable.from(
@@ -165,8 +163,8 @@ export const connectCloud9MenuTreeView = (view: TreeView<MenuItem>) => {
 
 /**
  * Handles for menu treeview item selections
- * @param view 
- * @param item 
+ * @param view
+ * @param item
  */
 export const handleMenuChangeSelection = (
   view: TreeView<MenuItem>,

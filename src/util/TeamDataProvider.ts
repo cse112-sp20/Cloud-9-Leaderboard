@@ -92,7 +92,7 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
 
   /**
    * Binds view
-   * @param menuTreeView 
+   * @param menuTreeView
    */
   bindView(menuTreeView: TreeView<TeamItem>): void {
     this.view = menuTreeView;
@@ -100,8 +100,8 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
 
   /**
    * Gets children
-   * @param [task] 
-   * @returns children 
+   * @param [task]
+   * @returns children
    */
   getChildren(task?: TeamItem | undefined): ProviderResult<TeamItem[]> {
     if (task === undefined) {
@@ -112,8 +112,8 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
 
   /**
    * Gets tree item
-   * @param task 
-   * @returns tree item 
+   * @param task
+   * @returns tree item
    */
   getTreeItem(task: TeamItem): TreeItem | Thenable<TreeItem> {
     return task;
@@ -139,7 +139,7 @@ export class TeamItem extends TreeItem {
 
 /**
  * Connect team info provider treeview with change selectioin.
- * @param view 
+ * @param view
  */
 export const connectCloud9TeamInfoTreeView = (view: TreeView<TeamItem>) => {
   return Disposable.from(
@@ -155,11 +155,10 @@ export const connectCloud9TeamInfoTreeView = (view: TreeView<TeamItem>) => {
   );
 };
 
-
 /**
  * Handles for team info treeview item selections
- * @param view 
- * @param item 
+ * @param view
+ * @param item
  */
 export const handleTeamInfoChangeSelection = (
   view: TreeView<TeamItem>,

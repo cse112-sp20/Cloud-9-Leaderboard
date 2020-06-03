@@ -37,7 +37,7 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
   > = new EventEmitter<LeaderItem | undefined>();
   readonly onDidChangeTreeData: Event<LeaderItem | undefined> = this
     ._onDidChangeTreeData.event;
-  
+
   /**
    * Refreshs leader data provider
    */
@@ -163,7 +163,7 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
   /**
    * Params leader data provider
-   * @param menuTreeView 
+   * @param menuTreeView
    */
   bindView(menuTreeView: TreeView<LeaderItem>): void {
     this.view = menuTreeView;
@@ -171,8 +171,8 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
   /**
    * Gets children
-   * @param [task] 
-   * @returns children 
+   * @param [task]
+   * @returns children
    */
   getChildren(task?: LeaderItem | undefined): ProviderResult<LeaderItem[]> {
     if (task === undefined) {
@@ -183,8 +183,8 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
   /**
    * Gets tree item
-   * @param task 
-   * @returns tree item 
+   * @param task
+   * @returns tree item
    */
   getTreeItem(task: LeaderItem): TreeItem | Thenable<TreeItem> {
     return task;
@@ -201,10 +201,10 @@ export class LeaderItem extends TreeItem {
 
   /**
    * Creates an instance of leader item.
-   * @param label 
-   * @param [parent] 
-   * @param [children] 
-   * @param [upperClass] 
+   * @param label
+   * @param [parent]
+   * @param [children]
+   * @param [upperClass]
    */
   constructor(
     label: string,
@@ -224,7 +224,6 @@ export class LeaderItem extends TreeItem {
   }
 }
 
-
 export const connectCloud9LeaderTreeView = (view: TreeView<LeaderItem>) => {
   return Disposable.from(
     view.onDidChangeSelection(async (e) => {
@@ -238,7 +237,6 @@ export const connectCloud9LeaderTreeView = (view: TreeView<LeaderItem>) => {
     }),
   );
 };
-
 
 export const handleLeaderInfoChangeSelection = (
   view: TreeView<LeaderItem>,

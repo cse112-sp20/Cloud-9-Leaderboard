@@ -28,7 +28,6 @@ export const DEFAULT_USER_DOC_TOP = {
   teamName: '',
 };
 
-
 export const DEFAULT_TEAM_DOC = {
   // teamName: '',
   // teamMembersId: {},

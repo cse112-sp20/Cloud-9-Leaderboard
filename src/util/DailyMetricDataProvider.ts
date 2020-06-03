@@ -49,7 +49,7 @@ export class DailyMetricDataProvider
 
   /**
    * Refreshs daily metric data provider
-   * @returns refresh 
+   * @returns refresh
    */
   refresh(): void {
     const ctx = getExtensionContext();
@@ -108,7 +108,7 @@ export class DailyMetricDataProvider
 
   /**
    * Creates an instance of daily metric data provider.
-   * @param d 
+   * @param d
    */
   constructor(d) {
     if (d == undefined) {
@@ -155,8 +155,8 @@ export class DailyMetricDataProvider
 
   /**
    * Gets children
-   * @param [task] 
-   * @returns children 
+   * @param [task]
+   * @returns children
    */
   getChildren(
     task?: DailyMetricItem | undefined,
@@ -169,8 +169,8 @@ export class DailyMetricDataProvider
 
   /**
    * Gets tree item
-   * @param task 
-   * @returns tree item 
+   * @param task
+   * @returns tree item
    */
   getTreeItem(task: DailyMetricItem): TreeItem | Thenable<TreeItem> {
     return task;
@@ -196,8 +196,8 @@ class DailyMetricItem extends TreeItem {
 
 /**
  * Constructs daily metric data
- * @param data 
- * @param ctx 
+ * @param data
+ * @param ctx
  */
 export function constructDailyMetricData(data, ctx) {
   let cloud9DailyMetricDataProvier = new DailyMetricDataProvider(data);
