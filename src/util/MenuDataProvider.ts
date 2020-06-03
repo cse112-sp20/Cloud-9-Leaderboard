@@ -25,6 +25,10 @@ import {
   FileType,
 } from 'vscode';
 
+import {GLOBAL_STATE_USER_ID, GLOBAL_STATE_USER_NICKNAME} from './Constants';
+
+import {signInOrSignUpUserWithUserInput} from './Authentication';
+
 import {getExtensionContext} from './Authentication';
 
 const path = require('path');
@@ -45,6 +49,25 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
     ._onDidChangeTreeData.event;
 
   refresh(): void {
+    const ctx = getExtensionContext();
+
+    if (ctx.globalState.get(GLOBAL_STATE_USER_ID) !== undefined) {
+      this.data = [
+        new MenuItem(
+          `Welcome, ${ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME)}!`,
+        ),
+        new MenuItem('📊 View personal stats'),
+        new MenuItem('🌐 Leaderboard'),
+        new MenuItem('💻 Log out account'),
+      ];
+    } else {
+      this.data = [
+        new MenuItem('Sign in / Create Account'),
+        new MenuItem('📊 View personal stats'),
+        new MenuItem('🌐 Leaderboard'),
+      ];
+    }
+
     this._onDidChangeTreeData.fire(null);
   }
 
@@ -53,6 +76,7 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
 
   constructor() {
     this.data = [
+      new MenuItem('Sign in / Create Account'),
       new MenuItem('📊 View personal stats'),
       new MenuItem('🌐 Leaderboard'),
     ];
@@ -106,9 +130,13 @@ export const handleMenuChangeSelection = (
   view: TreeView<MenuItem>,
   item: MenuItem,
 ) => {
-  if (item.label === '📊 View personal stats') {
+  if (item.label === 'Sign in / Create Account') {
+    signInOrSignUpUserWithUserInput();
+  } else if (item.label === '📊 View personal stats') {
     commands.executeCommand('cloud9.personalStats');
   } else if (item.label === '🌐 Leaderboard') {
     commands.executeCommand('cloud9.leaderboard');
+  } else if (item.label === '💻 Log out account') {
+    commands.executeCommand('cloud9.logOut');
   }
 };

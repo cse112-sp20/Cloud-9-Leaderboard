@@ -59,12 +59,8 @@
         "title": "Cloud9 DEBUG: Clear User Id"
       },
       {
-        "command": "cloud9.debugClearTeamNameAndId",
-        "title": "Cloud9 DEBUG: Clear Team name and ID"
-      },
-      {
-        "command": "cloud9.resetPassword",
-        "title": "Cloud9: Reset my password"
+        "command": "cloud9.logOut",
+        "title": "Cloud9: Log out from Cloud9"
       },
       {
         "command": "cloud9.leaderboard",
@@ -81,8 +77,64 @@
       {
         "command": "cloud9.personalStats",
         "title": "Cloud9: See your most recent stats"
+      },
+      {
+        "command": "LeaderView.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      },
+      {
+        "command": "DailyMetric.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      },
+      {
+        "command": "MenuView.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      },
+      {
+        "command": "TeamMenuView.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "LeaderView.refreshEntry",
+          "when": "view == LeaderView",
+          "group": "navigation"
+        },
+        {
+          "command": "DailyMetric.refreshEntry",
+          "when": "view == DailyMetric",
+          "group": "navigation"
+        },
+        {
+          "command": "MenuView.refreshEntry",
+          "when": "view == MenuView",
+          "group": "navigation"
+        },
+        {
+          "command": "TeamMenuView.refreshEntry",
+          "when": "view == TeamMenuView",
+          "group": "navigation"
+        }
+      ]
+    },
     "configuration": {
       "type": "object",
       "title": "Code Time",

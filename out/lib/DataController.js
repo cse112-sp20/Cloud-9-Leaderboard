@@ -296,8 +296,6 @@ function userStatusFetchHandler(tryCountUntilFoundUser, interval) {
             sendHeartbeat(`STATE_CHANGE:LOGGED_IN:true`, serverIsOnline);
             const message = 'Successfully logged on to Code Time';
             vscode_1.window.showInformationMessage(message);
-            vscode_1.commands.executeCommand('codetime.sendOfflineData');
-            vscode_1.commands.executeCommand('codetime.refreshTreeViews');
         }
     });
 }

@@ -255,8 +255,8 @@ function setItem(key, value) {
     const content = JSON.stringify(jsonObj);
     const sessionFile = getSoftwareSessionFile();
     fs.writeFileSync(sessionFile, content, (err) => {
-        if (err)
-            logIt(`Error writing to the Software session file: ${err.message}`);
+        if (err) {
+        }
     });
 }
 exports.setItem = setItem;
@@ -568,7 +568,6 @@ function openFileInEditor(file) {
                 vscode_1.window.showErrorMessage(error.message);
             }
             else {
-                logIt(error);
             }
         });
     }, (error) => {
@@ -577,7 +576,6 @@ function openFileInEditor(file) {
             vscode_1.window.showErrorMessage(`Cannot open ${file}.  File not found.`);
         }
         else {
-            logIt(error);
         }
     });
 }
@@ -602,9 +600,7 @@ function getExtensionDisplayName() {
                     extensionDisplayName = data.displayName;
                 }
             }
-            catch (e) {
-                logIt(`unable to read ext info name: ${e.message}`);
-            }
+            catch (e) { }
         }
     }
     if (!extensionDisplayName) {
@@ -633,9 +629,7 @@ function getExtensionName() {
                     extensionName = data.name;
                 }
             }
-            catch (e) {
-                logIt(`unable to read ext info name: ${e.message}`);
-            }
+            catch (e) { }
         }
     }
     if (!extensionName) {
@@ -651,9 +645,7 @@ function logEvent(message) {
     }
 }
 exports.logEvent = logEvent;
-function logIt(message) {
-    console.log(`${getExtensionName()}: ${message}`);
-}
+function logIt(message) { }
 exports.logIt = logIt;
 function getSoftwareSessionAsJson() {
     let data = null;
@@ -665,7 +657,6 @@ function getSoftwareSessionAsJson() {
                 data = JSON.parse(cleanJsonString(content));
             }
             catch (e) {
-                logIt(`unable to read session info: ${e.message}`);
                 // error trying to read the session file, delete it
                 deleteFile(sessionFile);
                 data = {};
@@ -1216,7 +1207,6 @@ function getFileDataAsJson(file) {
                 data = JSON.parse(cleanJsonString(content));
             }
             catch (e) {
-                logIt(`unable to read session info: ${e.message}`);
                 // error trying to read the session file, delete it
                 deleteFile(file);
             }
@@ -1238,9 +1228,7 @@ function getFileDataArray(file) {
                 payloads = jsonData;
             }
         }
-        catch (e) {
-            logIt(`Error reading file array data: ${e.message}`);
-        }
+        catch (e) { }
     }
     return payloads;
 }
