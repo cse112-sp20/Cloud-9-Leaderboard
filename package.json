@@ -8,6 +8,7 @@
     "name": "UCSDCSE112SP19Team9"
   },
   "license": "SEE LICENSE IN LICENSE",
+  "icon": "./images/app-icon-with-word.PNG",
   "galleryBanner": {
     "color": "#384356",
     "theme": "dark"
