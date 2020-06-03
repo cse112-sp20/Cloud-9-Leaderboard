@@ -42,7 +42,7 @@
     "lint": "tslint -p ./",
     "watch": "tsc -watch -p ./",
     "test": "mocha ./out/test/runTest.js",
-    "deploy": "vsce publish -p $vscode_token"
+    "deploy": "vsce publish minor -p $vscode_token"
   },
   "contributes": {
     "commands": [
