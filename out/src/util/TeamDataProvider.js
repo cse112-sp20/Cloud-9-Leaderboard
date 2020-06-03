@@ -22,7 +22,13 @@ exports.handleTeamInfoChangeSelection = exports.connectCloud9TeamInfoTreeView = 
 const vscode_1 = require("vscode");
 const Authentication_1 = require("./Authentication");
 const Constants_1 = require("./Constants");
+/**
+ * Team data provider
+ */
 class TeamDataProvider {
+    /**
+     * Creates an instance of team data provider.
+     */
     constructor() {
         this._onDidChangeTreeData = new vscode_1.EventEmitter();
         this.onDidChangeTreeData = this
@@ -32,6 +38,9 @@ class TeamDataProvider {
             new TeamItem('🔰 Join team'),
         ];
     }
+    /**
+     * Refreshs team data provider
+     */
     refresh() {
         const ctx = Authentication_1.getExtensionContext();
         const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
@@ -55,20 +64,37 @@ class TeamDataProvider {
         }
         this._onDidChangeTreeData.fire(null);
     }
+    /**
+     * Binds view
+     * @param menuTreeView
+     */
     bindView(menuTreeView) {
         this.view = menuTreeView;
     }
+    /**
+     * Gets children
+     * @param [task]
+     * @returns children
+     */
     getChildren(task) {
         if (task === undefined) {
             return this.data;
         }
         return task.children;
     }
+    /**
+     * Gets tree item
+     * @param task
+     * @returns tree item
+     */
     getTreeItem(task) {
         return task;
     }
 }
 exports.TeamDataProvider = TeamDataProvider;
+/**
+ * Team item
+ */
 class TeamItem extends vscode_1.TreeItem {
     constructor(label, children) {
         super(label, children === undefined
@@ -78,6 +104,10 @@ class TeamItem extends vscode_1.TreeItem {
     }
 }
 exports.TeamItem = TeamItem;
+/**
+ * Connect team info provider treeview with change selectioin.
+ * @param view
+ */
 exports.connectCloud9TeamInfoTreeView = (view) => {
     return vscode_1.Disposable.from(view.onDidChangeSelection((e) => __awaiter(void 0, void 0, void 0, function* () {
         if (!e.selection || e.selection.length === 0) {
@@ -87,6 +117,11 @@ exports.connectCloud9TeamInfoTreeView = (view) => {
         exports.handleTeamInfoChangeSelection(view, item);
     })));
 };
+/**
+ * Handles for team info treeview item selections
+ * @param view
+ * @param item
+ */
 exports.handleTeamInfoChangeSelection = (view, item) => {
     if (item.label === '🛡 Create your Team') {
         vscode_1.commands.executeCommand('cloud9.createTeam');

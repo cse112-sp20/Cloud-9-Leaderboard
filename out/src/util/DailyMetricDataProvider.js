@@ -9,7 +9,7 @@
  * @author AuthorName.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testCallback = exports.DailyMetricDataProvider = void 0;
+exports.constructDailyMetricData = exports.DailyMetricDataProvider = void 0;
 const vscode_1 = require("vscode");
 const Authentication_1 = require("./Authentication");
 const Constants_1 = require("./Constants");
@@ -20,7 +20,14 @@ const displayHeaderMap = {
     timeInterval: 'Time Interval',
     points: 'Total Points',
 };
+/**
+ * Daily metric data provider
+ */
 class DailyMetricDataProvider {
+    /**
+     * Creates an instance of daily metric data provider.
+     * @param d
+     */
     constructor(d) {
         this._onDidChangeTreeData = new vscode_1.EventEmitter();
         this.onDidChangeTreeData = this
@@ -57,6 +64,10 @@ class DailyMetricDataProvider {
             this.data = tempList;
         }
     }
+    /**
+     * Refreshs daily metric data provider
+     * @returns refresh
+     */
     refresh() {
         const ctx = Authentication_1.getExtensionContext();
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID) === undefined) {
@@ -99,17 +110,30 @@ class DailyMetricDataProvider {
         }
         this._onDidChangeTreeData.fire(null);
     }
+    /**
+     * Gets children
+     * @param [task]
+     * @returns children
+     */
     getChildren(task) {
         if (task === undefined) {
             return this.data;
         }
         return task.children;
     }
+    /**
+     * Gets tree item
+     * @param task
+     * @returns tree item
+     */
     getTreeItem(task) {
         return task;
     }
 }
 exports.DailyMetricDataProvider = DailyMetricDataProvider;
+/**
+ * Daily metric item
+ */
 class DailyMetricItem extends vscode_1.TreeItem {
     constructor(label, children) {
         super(label, children === undefined
@@ -118,10 +142,10 @@ class DailyMetricItem extends vscode_1.TreeItem {
         this.children = children;
     }
 }
-function testCallback(data, ctx) {
+function constructDailyMetricData(data, ctx) {
     let cloud9DailyMetricDataProvier = new DailyMetricDataProvider(data);
     vscode_1.window.registerTreeDataProvider('DailyMetric', cloud9DailyMetricDataProvier);
     vscode_1.commands.registerCommand('DailyMetric.refreshEntry', () => cloud9DailyMetricDataProvier.refresh());
 }
-exports.testCallback = testCallback;
+exports.constructDailyMetricData = constructDailyMetricData;
 //# sourceMappingURL=DailyMetricDataProvider.js.map

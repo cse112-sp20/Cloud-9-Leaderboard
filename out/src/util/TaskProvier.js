@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testCallback = exports.DailyMetricDataProvider = void 0;
+exports.constructDailyMetricData = exports.DailyMetricDataProvider = void 0;
 const vscode_1 = require("vscode");
 class DailyMetricDataProvider {
     constructor(d) {
@@ -31,8 +31,8 @@ class DailyMetricItem extends vscode_1.TreeItem {
         this.children = children;
     }
 }
-function testCallback(data, ctx) {
+function constructDailyMetricData(data, ctx) {
     vscode_1.window.registerTreeDataProvider('DailyMetric', new DailyMetricDataProvider(data));
 }
-exports.testCallback = testCallback;
+exports.constructDailyMetricData = constructDailyMetricData;
 //# sourceMappingURL=TaskProvier.js.map

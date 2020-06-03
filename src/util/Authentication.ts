@@ -31,7 +31,7 @@ import {
   GLOBAL_STATE_USER_TEAM_MEMBERS,
   FIELD_ID_TEAM_LEAD_USER_ID,
 } from './Constants';
-import {testCallback} from './DailyMetricDataProvider';
+import {constructDailyMetricData} from './DailyMetricDataProvider';
 
 let extensionContext: ExtensionContext = undefined;
 
@@ -96,7 +96,7 @@ export async function authenticateUser() {
     window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
 
     signInOrSignUpUserWithUserInput().then(() => {
-      retrieveUserDailyMetric(testCallback, ctx);
+      retrieveUserDailyMetric(constructDailyMetricData, ctx);
     });
   } else {
     // case2: existing user's id found
@@ -110,7 +110,7 @@ export async function authenticateUser() {
     if (exists) {
       console.log('user doc exists');
       updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
-        retrieveUserDailyMetric(testCallback, ctx);
+        retrieveUserDailyMetric(constructDailyMetricData, ctx);
       });
       window.showInformationMessage(
         'Welcome back, ' + cachedUserNickName + '!!',
@@ -122,7 +122,7 @@ export async function authenticateUser() {
     } else {
       // user doc does not exist, prompt user to sign in or sign up
       signInOrSignUpUserWithUserInput().then(() => {
-        retrieveUserDailyMetric(testCallback, ctx);
+        retrieveUserDailyMetric(constructDailyMetricData, ctx);
       });
     }
   }
@@ -255,7 +255,7 @@ export async function checkIfCachedUserIdExistsAndPrompt() {
       cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
       if (cachedUserId != undefined) {
         loggedIn = true;
-        await retrieveUserDailyMetric(testCallback, ctx);
+        await retrieveUserDailyMetric(constructDailyMetricData, ctx);
       }
     });
   }

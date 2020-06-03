@@ -1,11 +1,11 @@
 "use strict";
 /**
  * File that contains method and class that enable displaying
- * leader's team mangement info
+ * leader's team mangement info in treeview.
  *
  * Contain LeaderDataProvider and LeaderItem class.
  *
- * @file   This files defines the MyClass class.
+ * @file   This files defines the LeaderDataProvider and LeaderItem class.
  * @author AuthorName.
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -23,7 +23,13 @@ const vscode_1 = require("vscode");
 const Authentication_1 = require("./Authentication");
 const Constants_1 = require("./Constants");
 const Firestore_1 = require("./Firestore");
+/**
+ * Class that defines leaderdataprovider wh
+ */
 class LeaderDataProvider {
+    /**
+     * Creates an instance of leader data provider.
+     */
     constructor() {
         this._onDidChangeTreeData = new vscode_1.EventEmitter();
         this.onDidChangeTreeData = this
@@ -54,6 +60,9 @@ class LeaderDataProvider {
             }
         }
     }
+    /**
+     * Refreshs leader data provider
+     */
     refresh() {
         console.log('Leader refresh called');
         const ctx = Authentication_1.getExtensionContext();
@@ -102,21 +111,45 @@ class LeaderDataProvider {
         }
         this._onDidChangeTreeData.fire(null);
     }
+    /**
+     * Params leader data provider
+     * @param menuTreeView
+     */
     bindView(menuTreeView) {
         this.view = menuTreeView;
     }
+    /**
+     * Gets children
+     * @param [task]
+     * @returns children
+     */
     getChildren(task) {
         if (task === undefined) {
             return this.data;
         }
         return task.children;
     }
+    /**
+     * Gets tree item
+     * @param task
+     * @returns tree item
+     */
     getTreeItem(task) {
         return task;
     }
 }
 exports.LeaderDataProvider = LeaderDataProvider;
+/**
+ * Leader item
+ */
 class LeaderItem extends vscode_1.TreeItem {
+    /**
+     * Creates an instance of leader item.
+     * @param label
+     * @param [parent]
+     * @param [children]
+     * @param [upperClass]
+     */
     constructor(label, parent, children, upperClass) {
         super(label, children === undefined
             ? vscode_1.TreeItemCollapsibleState.None

@@ -1,10 +1,10 @@
 /**
  * File that contains method and class that enable displaying
- * leader's team mangement info
+ * leader's team mangement info in treeview.
  *
  * Contain LeaderDataProvider and LeaderItem class.
  *
- * @file   This files defines the MyClass class.
+ * @file   This files defines the LeaderDataProvider and LeaderItem class.
  * @author AuthorName.
  */
 
@@ -28,13 +28,19 @@ import {
 } from './Constants';
 import {leaveTeam} from './Firestore';
 
+/**
+ * Class that defines leaderdataprovider wh
+ */
 export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
   private _onDidChangeTreeData: EventEmitter<
     LeaderItem | undefined
   > = new EventEmitter<LeaderItem | undefined>();
   readonly onDidChangeTreeData: Event<LeaderItem | undefined> = this
     ._onDidChangeTreeData.event;
-
+  
+  /**
+   * Refreshs leader data provider
+   */
   refresh(): void {
     console.log('Leader refresh called');
     const ctx = getExtensionContext();
@@ -115,6 +121,9 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
   private view: TreeView<LeaderItem>;
   data: LeaderItem[];
 
+  /**
+   * Creates an instance of leader data provider.
+   */
   constructor() {
     const ctx = getExtensionContext();
     if (ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
@@ -152,10 +161,19 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
     }
   }
 
+  /**
+   * Params leader data provider
+   * @param menuTreeView 
+   */
   bindView(menuTreeView: TreeView<LeaderItem>): void {
     this.view = menuTreeView;
   }
 
+  /**
+   * Gets children
+   * @param [task] 
+   * @returns children 
+   */
   getChildren(task?: LeaderItem | undefined): ProviderResult<LeaderItem[]> {
     if (task === undefined) {
       return this.data;
@@ -163,16 +181,31 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
     return task.children;
   }
 
+  /**
+   * Gets tree item
+   * @param task 
+   * @returns tree item 
+   */
   getTreeItem(task: LeaderItem): TreeItem | Thenable<TreeItem> {
     return task;
   }
 }
 
+/**
+ * Leader item
+ */
 export class LeaderItem extends TreeItem {
   children: LeaderItem[] | undefined;
   parent: LeaderItem | undefined;
   upperClass: LeaderDataProvider | undefined;
 
+  /**
+   * Creates an instance of leader item.
+   * @param label 
+   * @param [parent] 
+   * @param [children] 
+   * @param [upperClass] 
+   */
   constructor(
     label: string,
     parent?: LeaderItem,
@@ -191,6 +224,7 @@ export class LeaderItem extends TreeItem {
   }
 }
 
+
 export const connectCloud9LeaderTreeView = (view: TreeView<LeaderItem>) => {
   return Disposable.from(
     view.onDidChangeSelection(async (e) => {
@@ -204,6 +238,7 @@ export const connectCloud9LeaderTreeView = (view: TreeView<LeaderItem>) => {
     }),
   );
 };
+
 
 export const handleLeaderInfoChangeSelection = (
   view: TreeView<LeaderItem>,

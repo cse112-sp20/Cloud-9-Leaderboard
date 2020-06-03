@@ -172,7 +172,7 @@ export async function activate(ctx: ExtensionContext) {
   // sign the user in
 
   authenticateUser();
-  //await retrieveUserDailyMetric(testCallback, ctx);
+  //await retrieveUserDailyMetric(constructDailyMetricData, ctx);
 }
 
 function getRandomArbitrary(min, max) {

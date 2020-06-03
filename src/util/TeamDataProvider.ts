@@ -39,6 +39,9 @@ import {
   AUTH_NOT_LOGGED_IN,
 } from './Constants';
 
+/**
+ * Team data provider
+ */
 export class TeamDataProvider implements TreeDataProvider<TeamItem> {
   private _onDidChangeTreeData: EventEmitter<
     TeamItem | undefined
@@ -46,6 +49,9 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
   readonly onDidChangeTreeData: Event<TeamItem | undefined> = this
     ._onDidChangeTreeData.event;
 
+  /**
+   * Refreshs team data provider
+   */
   refresh(): void {
     const ctx = getExtensionContext();
     const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
@@ -74,6 +80,9 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
   private view: TreeView<TeamItem>;
   data: TeamItem[];
 
+  /**
+   * Creates an instance of team data provider.
+   */
   constructor() {
     this.data = [
       new TeamItem('🛡 Create your Team'),
@@ -81,10 +90,19 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
     ];
   }
 
+  /**
+   * Binds view
+   * @param menuTreeView 
+   */
   bindView(menuTreeView: TreeView<TeamItem>): void {
     this.view = menuTreeView;
   }
 
+  /**
+   * Gets children
+   * @param [task] 
+   * @returns children 
+   */
   getChildren(task?: TeamItem | undefined): ProviderResult<TeamItem[]> {
     if (task === undefined) {
       return this.data;
@@ -92,11 +110,19 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
     return task.children;
   }
 
+  /**
+   * Gets tree item
+   * @param task 
+   * @returns tree item 
+   */
   getTreeItem(task: TeamItem): TreeItem | Thenable<TreeItem> {
     return task;
   }
 }
 
+/**
+ * Team item
+ */
 export class TeamItem extends TreeItem {
   children: TeamItem[] | undefined;
 
@@ -111,6 +137,10 @@ export class TeamItem extends TreeItem {
   }
 }
 
+/**
+ * Connect team info provider treeview with change selectioin.
+ * @param view 
+ */
 export const connectCloud9TeamInfoTreeView = (view: TreeView<TeamItem>) => {
   return Disposable.from(
     view.onDidChangeSelection(async (e) => {
@@ -125,6 +155,12 @@ export const connectCloud9TeamInfoTreeView = (view: TreeView<TeamItem>) => {
   );
 };
 
+
+/**
+ * Handles for team info treeview item selections
+ * @param view 
+ * @param item 
+ */
 export const handleTeamInfoChangeSelection = (
   view: TreeView<TeamItem>,
   item: TeamItem,

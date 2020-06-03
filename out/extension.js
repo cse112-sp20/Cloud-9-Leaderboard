@@ -114,7 +114,7 @@ function activate(ctx) {
         console.log('BEfore calling authenticateUser');
         // sign the user in
         Authentication_1.authenticateUser();
-        //await retrieveUserDailyMetric(testCallback, ctx);
+        //await retrieveUserDailyMetric(constructDailyMetricData, ctx);
     });
 }
 exports.activate = activate;

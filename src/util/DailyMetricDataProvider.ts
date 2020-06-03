@@ -4,7 +4,7 @@
  *
  * Contain DailyMetricData Provider and DailyMetricItem class.
  *
- * @file   This files defines the MyClass class.
+ * @file   This files defines DailyMetricData Provider, Daily Metric Item class.
  * @author AuthorName.
  */
 
@@ -36,6 +36,9 @@ const displayHeaderMap = {
   points: 'Total Points',
 };
 
+/**
+ * Daily metric data provider
+ */
 export class DailyMetricDataProvider
   implements TreeDataProvider<DailyMetricItem> {
   private _onDidChangeTreeData: EventEmitter<
@@ -44,6 +47,10 @@ export class DailyMetricDataProvider
   readonly onDidChangeTreeData: Event<DailyMetricItem | undefined> = this
     ._onDidChangeTreeData.event;
 
+  /**
+   * Refreshs daily metric data provider
+   * @returns refresh 
+   */
   refresh(): void {
     const ctx = getExtensionContext();
 
@@ -98,6 +105,11 @@ export class DailyMetricDataProvider
   }
 
   data: DailyMetricItem[];
+
+  /**
+   * Creates an instance of daily metric data provider.
+   * @param d 
+   */
   constructor(d) {
     if (d == undefined) {
       this.data = [
@@ -141,6 +153,11 @@ export class DailyMetricDataProvider
     }
   }
 
+  /**
+   * Gets children
+   * @param [task] 
+   * @returns children 
+   */
   getChildren(
     task?: DailyMetricItem | undefined,
   ): ProviderResult<DailyMetricItem[]> {
@@ -150,10 +167,19 @@ export class DailyMetricDataProvider
     return task.children;
   }
 
+  /**
+   * Gets tree item
+   * @param task 
+   * @returns tree item 
+   */
   getTreeItem(task: DailyMetricItem): TreeItem | Thenable<TreeItem> {
     return task;
   }
 }
+
+/**
+ * Daily metric item
+ */
 class DailyMetricItem extends TreeItem {
   children: DailyMetricItem[] | undefined;
 
@@ -168,7 +194,12 @@ class DailyMetricItem extends TreeItem {
   }
 }
 
-export function testCallback(data, ctx) {
+/**
+ * Constructs daily metric data
+ * @param data 
+ * @param ctx 
+ */
+export function constructDailyMetricData(data, ctx) {
   let cloud9DailyMetricDataProvier = new DailyMetricDataProvider(data);
 
   window.registerTreeDataProvider('DailyMetric', cloud9DailyMetricDataProvier);

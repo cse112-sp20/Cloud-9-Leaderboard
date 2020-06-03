@@ -76,7 +76,7 @@ function authenticateUser() {
             // case1: sign in or create new account
             vscode_1.window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
             signInOrSignUpUserWithUserInput().then(() => {
-                Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+                Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.constructDailyMetricData, ctx);
             });
         }
         else {
@@ -90,7 +90,7 @@ function authenticateUser() {
             if (exists) {
                 console.log('user doc exists');
                 Firestore_1.updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
-                    Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+                    Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.constructDailyMetricData, ctx);
                 });
                 vscode_1.window.showInformationMessage('Welcome back, ' + cachedUserNickName + '!!');
                 console.log('is team leade ' + isTeamLeadr);
@@ -101,7 +101,7 @@ function authenticateUser() {
             else {
                 // user doc does not exist, prompt user to sign in or sign up
                 signInOrSignUpUserWithUserInput().then(() => {
-                    Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+                    Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.constructDailyMetricData, ctx);
                 });
             }
         }
@@ -228,7 +228,7 @@ function checkIfCachedUserIdExistsAndPrompt() {
                 cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
                 if (cachedUserId != undefined) {
                     loggedIn = true;
-                    yield Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.testCallback, ctx);
+                    yield Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.constructDailyMetricData, ctx);
                 }
             }));
         }

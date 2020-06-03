@@ -25,7 +25,13 @@ const Authentication_1 = require("./Authentication");
 const Authentication_2 = require("./Authentication");
 const path = require('path');
 const resourcePath = path.join(__filename, '..', '..', '..', 'resources');
+/**
+ * Menu data provider
+ */
 class MenuDataProvider {
+    /**
+     * Creates an instance of menu data provider.
+     */
     constructor() {
         this._onDidChangeTreeData = new vscode_1.EventEmitter();
         this.onDidChangeTreeData = this
@@ -36,6 +42,9 @@ class MenuDataProvider {
             new MenuItem('🌐 Leaderboard'),
         ];
     }
+    /**
+     * Refreshs menu data provider
+     */
     refresh() {
         const ctx = Authentication_2.getExtensionContext();
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID) !== undefined) {
@@ -55,21 +64,43 @@ class MenuDataProvider {
         }
         this._onDidChangeTreeData.fire(null);
     }
+    /**
+     * Binds view
+     * @param menuTreeView
+     */
     bindView(menuTreeView) {
         this.view = menuTreeView;
     }
+    /**
+     * Gets children
+     * @param [task]
+     * @returns children
+     */
     getChildren(task) {
         if (task === undefined) {
             return this.data;
         }
         return task.children;
     }
+    /**
+     * Gets tree item
+     * @param task
+     * @returns tree item
+     */
     getTreeItem(task) {
         return task;
     }
 }
 exports.MenuDataProvider = MenuDataProvider;
+/**
+ * Menu item
+ */
 class MenuItem extends vscode_1.TreeItem {
+    /**
+     * Creates an instance of menu item.
+     * @param label
+     * @param [children]
+     */
     constructor(label, children) {
         super(label, children === undefined
             ? vscode_1.TreeItemCollapsibleState.None
@@ -78,6 +109,10 @@ class MenuItem extends vscode_1.TreeItem {
     }
 }
 exports.MenuItem = MenuItem;
+/**
+ * Connect menu data provider treeview with change selectioin.
+ * @param view
+ */
 exports.connectCloud9MenuTreeView = (view) => {
     return vscode_1.Disposable.from(view.onDidChangeSelection((e) => __awaiter(void 0, void 0, void 0, function* () {
         if (!e.selection || e.selection.length === 0) {
@@ -87,6 +122,11 @@ exports.connectCloud9MenuTreeView = (view) => {
         exports.handleMenuChangeSelection(view, item);
     })));
 };
+/**
+ * Handles for menu treeview item selections
+ * @param view
+ * @param item
+ */
 exports.handleMenuChangeSelection = (view, item) => {
     if (item.label === 'Sign in / Create Account') {
         Authentication_1.signInOrSignUpUserWithUserInput();

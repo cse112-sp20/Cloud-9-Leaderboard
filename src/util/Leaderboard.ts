@@ -34,6 +34,9 @@ import {
 } from './Constants';
 const fs = require('fs');
 
+/**
+ * Leaderboard
+ */
 export class Leaderboard {
   private static users: Array<Object>;
 
