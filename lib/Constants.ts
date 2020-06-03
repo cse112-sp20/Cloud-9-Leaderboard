@@ -6,7 +6,7 @@ export const DEFAULT_DURATION = 60;
 export const DEFAULT_DURATION_MILLIS = DEFAULT_DURATION * 1000;
 export const CODE_TIME_PLUGIN_ID = 2;
 export const DEFAULT_SESSION_THRESHOLD_SECONDS = 60 * 15;
-export const CODE_TIME_EXT_ID = 'cse112team9.cloud9';
+export const CODE_TIME_EXT_ID = 'CSE112.cloud9';
 export const CODE_TIME_TYPE = 'codetime';
 
 // API ENDPOINT

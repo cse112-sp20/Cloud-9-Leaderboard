@@ -1,3 +1,13 @@
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @link   URL
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ */
+
 export const firebaseConfig = {
   apiKey: 'AIzaSyAk7NlFSVbRfiwJvWLt7KBQArDTJpcmnO8',
   authDomain: 'cloud-9-4cd71.firebaseapp.com',

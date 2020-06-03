@@ -1,7 +1,12 @@
-const firebase = require('firebase/app');
-require('firebase/firestore');
-require('firebase/auth');
-//const admin = require("firebase-admin");
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @link   URL
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ */
 
 import {commands, window} from 'vscode';
 import {Leaderboard} from './Leaderboard';
@@ -26,6 +31,10 @@ import {
 import {getExtensionContext} from './Authentication';
 import {processMetric, scoreCalculation} from './Metric';
 import {generateRandomName} from './Utility';
+
+const firebase = require('firebase/app');
+require('firebase/firestore');
+require('firebase/auth');
 
 // Initialize Firebase
 if (!firebase.apps.length) {

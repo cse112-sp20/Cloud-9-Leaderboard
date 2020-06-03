@@ -5,7 +5,7 @@
  *
  * Contain DailyMetricData Provider and DailyMetricItem class.
  *
- * @file   This files defines the MyClass class.
+ * @file   This files defines DailyMetricData Provider, Daily Metric Item class.
  * @author AuthorName.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -142,6 +142,11 @@ class DailyMetricItem extends vscode_1.TreeItem {
         this.children = children;
     }
 }
+/**
+ * Constructs daily metric data
+ * @param data
+ * @param ctx
+ */
 function constructDailyMetricData(data, ctx) {
     let cloud9DailyMetricDataProvier = new DailyMetricDataProvider(data);
     vscode_1.window.registerTreeDataProvider('DailyMetric', cloud9DailyMetricDataProvier);

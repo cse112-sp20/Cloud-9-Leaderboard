@@ -1,4 +1,13 @@
 "use strict";
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @link   URL
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,10 +19,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchTeamMembersList = exports.userDocExists = exports.retrieveUserUpdateDailyMetric = exports.retrieveUserDailyMetric = exports.retrieveUserStats = exports.checkIfInTeam = exports.leaveTeam = exports.joinTeamWithTeamId = exports.addNewTeamToDbAndJoin = exports.createNewUserInFirebase = exports.retrieveAllUserStats = exports.retrieveTeamMemberStats = exports.updateStats = exports.updatePersistentStorageWithUserDocData = exports.loginUserWithEmailAndPassword = void 0;
-const firebase = require('firebase/app');
-require('firebase/firestore');
-require('firebase/auth');
-//const admin = require("firebase-admin");
 const vscode_1 = require("vscode");
 const Leaderboard_1 = require("./Leaderboard");
 const PersonalStats_1 = require("./PersonalStats");
@@ -21,6 +26,9 @@ const Constants_1 = require("./Constants");
 const Authentication_1 = require("./Authentication");
 const Metric_1 = require("./Metric");
 const Utility_1 = require("./Utility");
+const firebase = require('firebase/app');
+require('firebase/firestore');
+require('firebase/auth');
 // Initialize Firebase
 if (!firebase.apps.length) {
     firebase.initializeApp(Constants_1.firebaseConfig);

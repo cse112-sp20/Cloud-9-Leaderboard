@@ -1,5 +1,4 @@
 "use strict";
-// Copyright (c) 2018 Software. All Rights Reserved.
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -11,8 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.intializePlugin = exports.activate = exports.deactivate = exports.getStatusBarItem = exports.isTelemetryOn = void 0;
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @link   URL
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ */
 const vscode_1 = require("vscode");
 const DataController_1 = require("./lib/DataController");
 const OnboardManager_1 = require("./lib/user/OnboardManager");

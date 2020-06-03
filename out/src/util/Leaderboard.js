@@ -27,6 +27,9 @@ const Firestore_1 = require("./Firestore");
 const Authentication_1 = require("./Authentication");
 const Constants_1 = require("./Constants");
 const fs = require('fs');
+/**
+ * Leaderboard
+ */
 class Leaderboard {
     constructor() { }
     static addUser(userId, userObj) {

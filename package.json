@@ -2,7 +2,7 @@
   "name": "cloud9",
   "displayName": "Cloud9",
   "version": "1.0.0",
-  "publisher": "cse112team9",
+  "publisher": "CSE112",
   "description": "Cloud9 is an open source vscode extenion that provides programming metrics right in Visual Studio Code.",
   "author": {
     "name": "UCSDCSE112SP19Team9"
@@ -37,7 +37,6 @@
   },
   "main": "./out/extension",
   "scripts": {
-    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "lint": "tslint -p ./",
     "watch": "tsc -watch -p ./",

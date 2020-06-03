@@ -1,28 +1,15 @@
-// Copyright (c) 2018 Software. All Rights Reserved.
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @link   URL
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ */
+import {window, ExtensionContext} from 'vscode';
 
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import {
-  window,
-  ExtensionContext,
-  StatusBarAlignment,
-  commands,
-  Command,
-  TreeDataProvider,
-  TreeItemCollapsibleState,
-  ProviderResult,
-  TreeItem,
-  Event,
-  EventEmitter,
-  TreeView,
-  Disposable,
-} from 'vscode';
-import {retrieveUserDailyMetric} from './src/util/Firestore';
-import {
-  isLoggedIn,
-  sendHeartbeat,
-  initializePreferences,
-} from './lib/DataController';
+import {sendHeartbeat, initializePreferences} from './lib/DataController';
 import {onboardInit} from './lib/user/OnboardManager';
 import {
   showStatus,
