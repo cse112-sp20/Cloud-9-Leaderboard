@@ -315,7 +315,7 @@ suite('team.ts', () => {
       .returns('teamId');
 
     var result = await getTeamInfo();
-    assert.equal(result, 'Your team name: undefined\nYour team ID: teamId');
+    assert.equal(result, undefined);
   });
 
   test('getTeamInfo with empty team', async () => {
@@ -362,7 +362,7 @@ suite('TeamDataProvider', () => {
   test('constructing new TeamDataProvider', () => {
     const teamDataProvider: TeamDataProvider = new TeamDataProvider();
 
-    assert.equal(teamDataProvider.data.length, 4);
+    assert.equal(teamDataProvider.data.length, 2);
   });
 
   test('constructing new TeamItem with null children', () => {
@@ -385,7 +385,7 @@ suite('MenuDataProvider', () => {
   test('constructing new MenuDataProvider', () => {
     const menuDataProvider: MenuDataProvider = new MenuDataProvider();
 
-    assert.equal(menuDataProvider.data.length, 2);
+    assert.equal(menuDataProvider.data.length, 3);
   });
 
   test('constructing new menuItem with null children', () => {
