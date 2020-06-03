@@ -222,7 +222,7 @@ suite('team.ts', () => {
             .withArgs(Constants_1.GLOBAL_STATE_USER_TEAM_ID)
             .returns('teamId');
         var result = yield Team_1.getTeamInfo();
-        assert.equal(result, 'Your team name: undefined\nYour team ID: teamId');
+        assert.equal(result, undefined);
     }));
     test('getTeamInfo with empty team', () => __awaiter(void 0, void 0, void 0, function* () {
         sinon.restore();
@@ -253,7 +253,7 @@ suite('DailyMetricDataProvider', () => {
 suite('TeamDataProvider', () => {
     test('constructing new TeamDataProvider', () => {
         const teamDataProvider = new TeamDataProvider_1.TeamDataProvider();
-        assert.equal(teamDataProvider.data.length, 4);
+        assert.equal(teamDataProvider.data.length, 2);
     });
     test('constructing new TeamItem with null children', () => {
         const teamItem = new TeamDataProvider_1.TeamItem('test', null);
@@ -269,7 +269,7 @@ suite('TeamDataProvider', () => {
 suite('MenuDataProvider', () => {
     test('constructing new MenuDataProvider', () => {
         const menuDataProvider = new MenuDataProvider_1.MenuDataProvider();
-        assert.equal(menuDataProvider.data.length, 2);
+        assert.equal(menuDataProvider.data.length, 3);
     });
     test('constructing new menuItem with null children', () => {
         const menuItem = new MenuDataProvider_1.MenuItem('test', null);

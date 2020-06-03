@@ -13,6 +13,7 @@ describe('Hello World Example UI Tests', () => {
         const control = await activityBar.getViewControl('Cloud9');
 
         const view = await control.openView();
+        //view
     });
 });
 
