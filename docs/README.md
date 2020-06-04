@@ -15,6 +15,7 @@
 <p align="center">
   <a href="#About">About</a> •
   <a href="#Installation">Installation</a> •
+  <a href="#Getting Started">Getting Started</a> •
   <a href="#Features">Features</a> •
   <a href="#Team">Team</a> •
   <a href="#Documentation/Structure">Documentation/Structure</a> •
@@ -52,9 +53,12 @@ OR
 ## Getting Started
 
 ### How to Create An Account
-1. Navigate to the Cloud 9 in VSCode
-2. Click on the Sign In/Create Account
-3. Input your preferred email and password
+1. Navigate to the Cloud 9 Icon in the VSCode Activity Bar
+2. Click on the Sign In/Create Account Menu Item
+3. Click on the Create Account Button from the Popup
+4. Input your preferred email and password
+
+<a href="https://imgur.com/00RuCBM"><img src="https://i.imgur.com/00RuCBM.gif" title="source: imgur.com" /></a>
 <br>
 
 :tada: Congrats you are now logged into Cloud 9 Leaderboard! :tada:
