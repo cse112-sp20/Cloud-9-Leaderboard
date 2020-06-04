@@ -9,11 +9,7 @@
  */
 
 import {
-  window,
-  ExtensionContext,
-  StatusBarAlignment,
   commands,
-  Command,
   TreeDataProvider,
   TreeItemCollapsibleState,
   ProviderResult,
@@ -22,7 +18,6 @@ import {
   EventEmitter,
   TreeView,
   Disposable,
-  FileType,
 } from 'vscode';
 
 import {GLOBAL_STATE_USER_ID, GLOBAL_STATE_USER_NICKNAME} from './Constants';
@@ -30,16 +25,6 @@ import {GLOBAL_STATE_USER_ID, GLOBAL_STATE_USER_NICKNAME} from './Constants';
 import {signInOrSignUpUserWithUserInput} from './Authentication';
 
 import {getExtensionContext} from './Authentication';
-
-const path = require('path');
-
-const resourcePath: string = path.join(
-  __filename,
-  '..',
-  '..',
-  '..',
-  'resources',
-);
 
 /**
  * Menu data provider
