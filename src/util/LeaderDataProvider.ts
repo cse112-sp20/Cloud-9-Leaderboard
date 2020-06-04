@@ -70,15 +70,13 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
         ];
       }
     } else {
-      console.log("Is team leader 73");
+      console.log('Is team leader 73');
       const ctx = getExtensionContext();
       const memberMaps: Map<string, Map<string, string>> = ctx.globalState.get(
         GLOBAL_STATE_USER_TEAM_MEMBERS,
       );
 
-
-
-      console.log("line 81");
+      console.log('line 81');
 
       let memberFetchLists = [];
 
@@ -87,18 +85,16 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
       }
 
       if (memberFetchLists.length === 0) {
-        console.log("empty");
+        console.log('empty');
         memberFetchLists.push(new LeaderItem('Empty: No team member yet'));
       }
 
-      console.log("line 94");
-
+      console.log('line 94');
 
       let removeMemberFetchLists: LeaderItem[] = [];
       let childLeaderItem = new LeaderItem('');
 
-      console.log("line 100");
-
+      console.log('line 100');
 
       for (let [key, value] of Object.entries(memberMaps)) {
         childLeaderItem = new LeaderItem('Remove member: ' + key);
@@ -106,10 +102,10 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
         removeMemberFetchLists.push(childLeaderItem);
       }
 
-      console.log("powell");
+      console.log('powell');
 
       if (removeMemberFetchLists.length === 0) {
-        console.log("remove empty");
+        console.log('remove empty');
         removeMemberFetchLists.push(
           new LeaderItem('Empty: No team member yet'),
         );
@@ -129,8 +125,6 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
         new LeaderItem('Team members', undefined, memberFetchLists),
         topLeaderItem,
       ];
-
-
 
       console.log(this.data);
     }

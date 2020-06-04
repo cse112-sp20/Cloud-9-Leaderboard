@@ -98,25 +98,24 @@ export async function updatePersistentStorageWithUserDocData(userId) {
         ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, userData.teamCode);
         ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, userData.teamName);
         ctx.globalState.update(GLOBAL_STATE_USER_EMAIL, userData.email);
-        ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, userData.isTeamLeader);
+        ctx.globalState.update(
+          GLOBAL_STATE_USER_IS_TEAM_LEADER,
+          userData.isTeamLeader,
+        );
 
         const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
-        const isTeamLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
+        const isTeamLeader = ctx.globalState.get(
+          GLOBAL_STATE_USER_IS_TEAM_LEADER,
+        );
 
         console.log('teamId: ' + teamId);
 
         console.log('team leader???', isTeamLeader);
 
-
-        if(isTeamLeader && teamId !== undefined && teamId !== ''){
+        if (isTeamLeader && teamId !== undefined && teamId !== '') {
           let members = await fetchTeamMembersList(teamId);
-          ctx.globalState.update(
-            GLOBAL_STATE_USER_TEAM_MEMBERS,
-            members,
-          );
-          console.log(
-            ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS),
-          );
+          ctx.globalState.update(GLOBAL_STATE_USER_TEAM_MEMBERS, members);
+          console.log(ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS));
           //commands.executeCommand('LeaderView.refreshEntry');
         }
       }
@@ -288,7 +287,7 @@ export function updateStats(payload) {
 
 /**
  * Retrieves team member stats
- * @param callback 
+ * @param callback
  */
 export async function retrieveTeamMemberStats(callback) {
   let db = firebase.firestore();
@@ -362,7 +361,7 @@ export async function retrieveTeamMemberStats(callback) {
 
 /**
  * Retrieves all user stats
- * @param callback 
+ * @param callback
  */
 export async function retrieveAllUserStats(callback) {
   let db = firebase.firestore();
@@ -395,13 +394,11 @@ export async function retrieveAllUserStats(callback) {
     });
 }
 
-
-
 /**
  * Create new user credential and add new doc to db
- * @param email 
- * @param password 
- * @returns  
+ * @param email
+ * @param password
+ * @returns
  */
 export async function createNewUserInFirebase(email, password) {
   if (email == null) {

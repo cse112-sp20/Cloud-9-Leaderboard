@@ -36,7 +36,7 @@ export const DEFAULT_USER_DOC_TOP = {
   teamCode: '',
   cumulativePoints: 0,
   teamName: '',
-  isTeamLeader: false
+  isTeamLeader: false,
 };
 
 export const DEFAULT_TEAM_DOC = {
