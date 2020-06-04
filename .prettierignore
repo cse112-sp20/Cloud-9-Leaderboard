@@ -9,3 +9,4 @@ README.md
 .github/workflows*
 docs/assets/*
 *.js
+_config.yml
