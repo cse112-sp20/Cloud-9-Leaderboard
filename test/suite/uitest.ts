@@ -1,13 +1,7 @@
-import { SideBarView, EditorView, InputBox, CustomTreeSection, ActivityBar, Workbench, Notification, WebDriver, VSBrowser, ViewControl } from 'vscode-extension-tester';
-import { expect } from 'chai';
+import { SideBarView, EditorView, InputBox, CustomTreeSection, ActivityBar, Workbench, Notification, WebDriver, VSBrowser, ViewControl, TextEditor } from 'vscode-extension-tester';
 const assert = require('chai').assert;
 
 describe('Hello World Example UI Tests', () => {
-    let driver: WebDriver;
-
-    before(() => {
-        //driver = VSBrowser.instance.driver;
-    });
 
     it('Create a Team', async () => {
         const activityBar = new ActivityBar();
@@ -35,13 +29,25 @@ describe('Hello World Example UI Tests', () => {
         await input.confirm(); // press enter
         assert.equal((await (await new Workbench().getNotifications())[0].getMessage()) == '', false);
 
-         //View personal stats
-         await (await menuInfo.findItem('📊 View personal stats')).click();
-         const editorView = new EditorView();
-         const editor = await editorView.openEditor('personal_statistics.txt');
-         console.log(await editor.getTitle() + "; " + await editor.getText());
-         //assert(await editor.isDisplayed(), true);
-         //assert(await editor.getTitle(), "personal_statistics.txt");
+        //View personal stats
+        console.log('1');
+        await (await menuInfo.findItem('📊 View personal stats')).click();
+        console.log('2');
+        const personalStats = new TextEditor()
+        console.log('3');
+        const personalStatsTitle = await personalStats.getTitle();
+        console.log('4');
+        assert(personalStatsTitle, "personal_statistics.txt");
+    
+
+        console.log('5');
+        await (await menuInfo.findItem('🌐 Leaderboard')).click();
+        console.log('6');
+        const globalStats = await new EditorView().openEditor('leaderboard.txt');        
+        console.log('7');
+        assert(await globalStats.getTitle() == "", false);
+        console.log('8');
+        //console.log(await globalStats.getText()); 
 
         //const teamInfo = await new SideBarView().getContent().getSection('Team Info') as CustomTreeSection;
         //Clicking an item in a

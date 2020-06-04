@@ -12,10 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const vscode_extension_tester_1 = require("vscode-extension-tester");
 const assert = require('chai').assert;
 describe('Hello World Example UI Tests', () => {
-    let driver;
-    before(() => {
-        //driver = VSBrowser.instance.driver;
-    });
     it('Create a Team', () => __awaiter(void 0, void 0, void 0, function* () {
         const activityBar = new vscode_extension_tester_1.ActivityBar();
         const control = yield activityBar.getViewControl('Cloud9');
@@ -37,12 +33,22 @@ describe('Hello World Example UI Tests', () => {
         yield input.confirm(); // press enter
         assert.equal((yield (yield new vscode_extension_tester_1.Workbench().getNotifications())[0].getMessage()) == '', false);
         //View personal stats
+        console.log('1');
         yield (yield menuInfo.findItem('📊 View personal stats')).click();
-        const editorView = new vscode_extension_tester_1.EditorView();
-        const editor = yield editorView.openEditor('personal_statistics.txt');
-        console.log((yield editor.getTitle()) + "; " + (yield editor.getText()));
-        //assert(await editor.isDisplayed(), true);
-        //assert(await editor.getTitle(), "personal_statistics.txt");
+        console.log('2');
+        const personalStats = new vscode_extension_tester_1.TextEditor();
+        console.log('3');
+        const personalStatsTitle = yield personalStats.getTitle();
+        console.log('4');
+        assert(personalStatsTitle, "personal_statistics.txt");
+        console.log('5');
+        yield (yield menuInfo.findItem('🌐 Leaderboard')).click();
+        console.log('6');
+        const globalStats = yield new vscode_extension_tester_1.EditorView().openEditor('leaderboard.txt');
+        console.log('7');
+        assert((yield globalStats.getTitle()) == "", false);
+        console.log('8');
+        //console.log(await globalStats.getText()); 
         //const teamInfo = await new SideBarView().getContent().getSection('Team Info') as CustomTreeSection;
         //Clicking an item in a
         //await (await teamInfo.findItem('🛡 Create your Team')).click();
