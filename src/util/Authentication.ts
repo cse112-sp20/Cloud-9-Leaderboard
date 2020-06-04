@@ -1,10 +1,9 @@
 /**
- * Summary. (use period)
+ * This file contains functions for authenticating users: 
+ * log in, sign up, and log out.
  *
- * Description. (use period)
- *
- * @file   This files defines the MyClass class.
- * @author AuthorName.
+ * @file   Authentication.ts
+ * @author Tina Hsieh
  */
 
 import {window, commands, ExtensionContext} from 'vscode';
@@ -52,10 +51,10 @@ export function getExtensionContext() {
 }
 
 /**
- *
- * removes extensionContext data
+ * Log the user out
  */
 export function logOut() {
+  //reset all fields in extension context's global state 
   let ctx = getExtensionContext();
   ctx.globalState.update(GLOBAL_STATE_USER_ID, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
@@ -67,6 +66,7 @@ export function logOut() {
   console.log('Logging out: ' + extensionContext.globalState);
   window.showInformationMessage('Goodbye!');
 
+  //reload treeview content to reflect the logout event 
   commands.executeCommand('MenuView.refreshEntry');
   commands.executeCommand('LeaderView.refreshEntry');
 
@@ -87,9 +87,7 @@ export async function authenticateUser() {
   const cachedTeamName = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_NAME);
   const cachedTeamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
-  const cachedTeamLeadId = ctx.globalState.get(FIELD_ID_TEAM_LEAD_USER_ID);
-
-  const isTeamLeadr = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
+  const isTeamLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
 
   if (cachedUserId === undefined) {
     // case1: sign in or create new account
@@ -115,7 +113,7 @@ export async function authenticateUser() {
       window.showInformationMessage(
         'Welcome back, ' + cachedUserNickName + '!!',
       );
-      console.log('is team leade ' + isTeamLeadr);
+      console.log('is team leader ' + isTeamLeader);
       commands.executeCommand('MenuView.refreshEntry');
       // commands.executeCommand('LeaderView.refreshEntry');
       commands.executeCommand('TeamMenuView.refreshEntry');
@@ -136,7 +134,7 @@ export async function signInOrSignUpUserWithUserInput() {
   let email = undefined;
   let password = undefined;
 
-  //prompt the user to sign in or create an account upon activating the extension
+  //prompt the user to sign in or create an account
   window
     .showInformationMessage(
       'Please sign in or create a new account!',
@@ -147,6 +145,7 @@ export async function signInOrSignUpUserWithUserInput() {
       if (selection == undefined) {
         return;
       }
+      // prompt for user input 
       await window
         .showInputBox({placeHolder: 'Enter your email: example@gmail.com'})
         .then((inputEmail) => {
@@ -157,7 +156,7 @@ export async function signInOrSignUpUserWithUserInput() {
             .showInputBox({
               placeHolder:
                 'Enter your password (must be 6 characters long or more)',
-              password: true,
+              password: true, //hiding user's input password 
             })
             .then((inputPassword) => {
               password = inputPassword;
@@ -172,25 +171,24 @@ export async function signInOrSignUpUserWithUserInput() {
           ) {
             window.showErrorMessage('Invalid email or password!');
           } else {
-            if (selection == AUTH_SIGN_IN) {
+            if (selection == AUTH_SIGN_IN) { //user chose to sign in to an existing account
               await loginUserWithEmailAndPassword(email, password).then(
                 async (result) => {
                   console.log(result.loggedIn);
                   console.log(result.errorCode);
-                  if (result.loggedIn) {
-                    //successfully logged in
+                  if (result.loggedIn) { // successfully logged the user in
                     window.showInformationMessage(
                       'Welcome back, ' +
                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
                         '!!',
                     );
+                    // reload the treeview content 
                     commands.executeCommand('MenuView.refreshEntry');
-                    //    commands.executeCommand('LeaderView.refreshEntry');
                     commands.executeCommand('TeamMenuView.refreshEntry');
                     commands.executeCommand('DailyMetric.refreshEntry');
                     return;
                   }
-                  //not logged in
+                  // failed to log the user in, print out error message 
                   if (result.errorCode == AUTH_ERR_CODE_WRONG_PASSWORD) {
                     window.showErrorMessage('Wrong password!');
                   } else if (result.errorCode == AUTH_ERR_CODE_USER_NOT_FOUND) {
@@ -200,27 +198,28 @@ export async function signInOrSignUpUserWithUserInput() {
                   }
                 },
               );
+              //reload treeview content 
               commands.executeCommand('MenuView.refreshEntry');
-              //     commands.executeCommand('LeaderView.refreshEntry');
               commands.executeCommand('TeamMenuView.refreshEntry');
               commands.executeCommand('DailyMetric.refreshEntry');
-            } else if (selection == AUTH_CREATE_ACCOUNT) {
+            } else if (selection == AUTH_CREATE_ACCOUNT) { //user chose to create a new account 
               await createNewUserInFirebase(email, password).then(
                 async (result) => {
                   console.log(result.created);
                   console.log(result.errorCode);
-                  if (result.created) {
+                  if (result.created) { // successfully created a new account for user
+                    // welcome them with generated name
                     window.showInformationMessage(
                       'Welcome! Your nickname is: ' +
                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
                         '!!',
                     );
+                    //reload treeview content 
                     commands.executeCommand('MenuView.refreshEntry');
-                    //     commands.executeCommand('LeaderView.refreshEntry');
                     commands.executeCommand('TeamMenuView.refreshEntry');
                     return;
                   }
-                  //not created
+                  // failed to create a new account for user, print the error message 
                   if (result.errorCode == AUTH_ERR_CODE_EMAIL_USED) {
                     window.showErrorMessage('Email already in use!');
                   } else if (result.errorCode == AUTH_ERR_CODE_WEAK_PASSWORD) {
@@ -250,7 +249,7 @@ export async function checkIfCachedUserIdExistsAndPrompt() {
   let loggedIn = false;
   if (cachedUserId != undefined) {
     loggedIn = true;
-  } else {
+  } else {// no cached user ID in persistent storage, prompt the user to sign in or sign up 
     await signInOrSignUpUserWithUserInput().then(async () => {
       cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
       if (cachedUserId != undefined) {

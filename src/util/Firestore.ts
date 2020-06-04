@@ -1,11 +1,10 @@
 /**
- * Summary. (use period)
+ * This file contains functions that interact with firebase collections and documents.
  *
- * Description. (use period)
+ * 
  *
- * @link   URL
- * @file   This files defines the MyClass class.
- * @author AuthorName.
+ * @file   Firestore.ts
+ * @author Howard Lin, Ethan Yuan, Tina Hsieh
  */
 
 import {commands, window} from 'vscode';
@@ -45,9 +44,12 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 /**
- *
- * @param email login user with email and password
- * @param password
+ * login user with email and password to an existing account
+ * @param email the user's input email 
+ * @param password the user's input password
+ * @returns 
+ *  loggedIn - whether the user is successfully logged in 
+ *  errorCode - the error message/code when the user is is not successfully logged in 
  */
 export async function loginUserWithEmailAndPassword(email, password) {
   let loggedIn = false;
@@ -56,15 +58,8 @@ export async function loginUserWithEmailAndPassword(email, password) {
     .signInWithEmailAndPassword(email, password)
     .then(async (userCred) => {
       console.log('logging user in: ' + userCred.user.uid);
-      await updatePersistentStorageWithUserDocData(userCred.user.uid).then(
-        () => {
-          const ctx = getExtensionContext();
-
-          console.log(ctx.globalState);
-          console.log('64');
-        },
-      );
-
+      //update user's persistent storage with data from firebase
+      await updatePersistentStorageWithUserDocData(userCred.user.uid);
       loggedIn = true;
       errorCode = 'no error';
     })
@@ -112,11 +107,12 @@ export async function updatePersistentStorageWithUserDocData(userId) {
 
         console.log('team leader???', isTeamLeader);
 
+        // if the user is the in a team and also the leader, 
+        // retrieve a list of team members and store in persistent storage 
         if (isTeamLeader && teamId !== undefined && teamId !== '') {
           let members = await fetchTeamMembersList(teamId);
           ctx.globalState.update(GLOBAL_STATE_USER_TEAM_MEMBERS, members);
           console.log(ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS));
-          //commands.executeCommand('LeaderView.refreshEntry');
         }
       }
     })
@@ -130,17 +126,6 @@ export async function updatePersistentStorageWithUserDocData(userId) {
  * Whenever new payload from codetime is posted to their api,
  * we will update our database
  */
-/**
- * Summary. (use period)
- *
- * Description. (use period)
- *
- * @link   URL
- * @file   This files defines the MyClass class.
- * @author AuthorName.
- * @since  x.x.x
- */
-
 export function updateStats(payload) {
   const ctx = getExtensionContext();
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
@@ -395,12 +380,15 @@ export async function retrieveAllUserStats(callback) {
 }
 
 /**
- * Create new user credential and add new doc to db
- * @param email
- * @param password
+ * Create new user credential with email and pasword and add new doc to db
+ * @param email the user's input email 
+ * @param password the user's input password 
  * @returns
+ *  created - whether the new account is successfully created 
+ *  errorCode - the error message when the account is not created 
  */
 export async function createNewUserInFirebase(email, password) {
+  //null inputs check 
   if (email == null) {
     console.log('email is null');
     return {created: false, errorCode: 'Email is invalid!'};
@@ -419,6 +407,7 @@ export async function createNewUserInFirebase(email, password) {
       const currentUserId = auth.currentUser.uid;
       console.log('Adding new user with ID: ' + currentUserId);
 
+      //function call to add a new user document to firebase 
       await addNewUserDocToDb(currentUserId, email);
 
       created = true;
@@ -437,8 +426,9 @@ export async function createNewUserInFirebase(email, password) {
 }
 
 /**
- * Add a new user doc to database
+ * Add a new user doc to database with user ID and email 
  * @param userId
+ * @returns nothing 
  */
 async function addNewUserDocToDb(userId, email) {
   console.log('Adding doc to db for new user...');
@@ -448,8 +438,9 @@ async function addNewUserDocToDb(userId, email) {
     return;
   }
 
-  let today = new Date().toISOString().split('T')[0];
-  const generatedName = generateRandomName();
+  let today = new Date().toISOString().split('T')[0]; // for daily stats 
+  const generatedName = generateRandomName(); // a randomly generated nick name for this user 
+  //add a new user doc to the Users collection in firebase 
   db.collection(COLLECTION_ID_USERS)
     .doc(userId)
     .set({
@@ -465,6 +456,7 @@ async function addNewUserDocToDb(userId, email) {
       console.log('Error creating new entry');
     });
 
+  // add a new daily (today) stats doc for this user 
   db.collection(COLLECTION_ID_USERS)
     .doc(userId)
     .collection('dates')
@@ -481,14 +473,14 @@ async function addNewUserDocToDb(userId, email) {
 }
 
 /**
- * creates a new team (if not in db already)
- * @param input the new team's name
+ * Adds new team to db and let the user join the team as the leader 
+ * @param teamName name of team 
+ * @returns  nothing 
  */
 export async function addNewTeamToDbAndJoin(teamName) {
   if (teamName == '' || teamName == undefined) {
     return;
   }
-
   const cachedUserId = getExtensionContext().globalState.get(
     GLOBAL_STATE_USER_ID,
   );
@@ -500,6 +492,7 @@ export async function addNewTeamToDbAndJoin(teamName) {
   newTeamDoc['teamName'] = teamName;
   newTeamDoc['teamLeadUserId'] = cachedUserId;
 
+  //add new team doc to Leaderboards collection
   await db
     .collection(COLLECTION_ID_TEAMS)
     .doc(teamName)
@@ -508,8 +501,6 @@ export async function addNewTeamToDbAndJoin(teamName) {
       if (doc.exists) {
         console.log('Team already exists!');
       } else {
-        //create this team and add user as a member
-
         // Add a new document to db for this team
         db.collection(COLLECTION_ID_TEAMS)
           .add(newTeamDoc)
@@ -521,7 +512,6 @@ export async function addNewTeamToDbAndJoin(teamName) {
           .then(() => {
             //add this user to team, isLeader = true
             joinTeamWithTeamId(teamId, true).then(() => {
-              //      commands.executeCommand('LeaderView.refreshEntry');
               commands.executeCommand('TeamMenuView.refreshEntry');
             });
           });
@@ -544,14 +534,15 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
   const userNickname = ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME);
 
   if (userId === undefined || userId === '') {
-    console.log('ERROR');
+    console.log('User ID is invalid.');
+    return;
   } else {
     console.log('userid: ' + userId);
     console.log('userEmail: ' + userEmail);
     //get team doc reference
     let teamDoc = db.collection(COLLECTION_ID_TEAMS).doc(teamId);
 
-    //get the team name
+    //get the team name from firebase
     let teamName = '';
     console.log('team name is: ' + teamName);
     await teamDoc.get().then((doc) => {
@@ -593,7 +584,7 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
       })
       .then(() => {
         ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, teamId);
-        ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, isLeader); //whether this user is the creator/leader
+        ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, isLeader);
         ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, teamName);
         console.log(
           'cachedTeamId: ' + ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID),
@@ -619,8 +610,8 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
 
 /**
  * remove member from team in db, only leader is allowed to call this function
- * @param userId
- * @param teamId
+ * @param userId the user's document id 
+ * @param teamId the team's document id 
  */
 export async function leaveTeam(userId, teamId) {
   //get reference to extension context
@@ -667,17 +658,17 @@ export async function leaveTeam(userId, teamId) {
       teamCode: '',
       teamName: '',
     })
-    .then(() => {
+    .then(async () => {
       //update leader's persistent storage
       let membersMap = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS);
       console.log('old members map: ');
       console.log(membersMap);
 
-      let newMembersMap = fetchTeamMembersList(teamId);
+      //update members map
+      let newMembersMap = await fetchTeamMembersList(teamId);
       ctx.globalState.update(GLOBAL_STATE_USER_TEAM_MEMBERS, newMembersMap);
       console.log('new members map: ');
       console.log(ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS));
-      //commands.executeCommand('LeaderView.refreshEntry');
       commands.executeCommand('TeamMenuView.refreshEntry');
     })
     .catch((e) => {
@@ -701,6 +692,7 @@ export async function checkIfInTeam() {
     .doc(userId)
     .get()
     .then((userDoc) => {
+      //look for team info in the user's document
       if (userDoc.exists) {
         const data = userDoc.data();
         const teamField = data.teamCode;
@@ -859,7 +851,7 @@ export async function retrieveUserUpdateDailyMetric() {
 
 /**
  * returns true if a document associated with the passed in ID exists in firebase
- * @param userId uid
+ * @param userId the uid to check 
  */
 export async function userDocExists(userId) {
   if (userId == undefined || userId == '') return false;
@@ -896,6 +888,7 @@ export async function fetchTeamMembersList(teamId) {
   const leaderId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   if (leaderId == undefined) return;
 
+  //map of members in the team 
   let members = new Map<string, Map<string, string>>();
   await db
     .collection(COLLECTION_ID_USERS)
@@ -906,7 +899,7 @@ export async function fetchTeamMembersList(teamId) {
         console.log('Empty team.');
         return members;
       }
-
+      //for each member, keep a map fro them 
       snapshot.forEach((memberDoc) => {
         const memberId = memberDoc.id;
         if (memberId != leaderId) {

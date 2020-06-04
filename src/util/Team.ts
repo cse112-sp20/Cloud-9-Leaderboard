@@ -1,12 +1,8 @@
 /**
- * Summary. (use period)
+ * This file contains functions for team management. 
+ * Functions from Firestore.ts are called to update/retrieve data on firebase.
  *
- * Description. (use period)
- *
- * @link   URL
- * @file   This files defines the MyClass class.
- * @author AuthorName.
- * @since  x.x.x
+ * @file   Team.ts
  */
 
 import {window} from 'vscode';
@@ -27,8 +23,8 @@ import {
 } from './Constants';
 
 /**
- * prompts the user to enter a team name and updates the firebase 2
- * @pre-condition: userid exists
+ * prompts the user to enter a team name and updates the firebase
+ * @return nothing
  */
 export async function createAndJoinTeam() {
   //ID check
@@ -40,17 +36,19 @@ export async function createAndJoinTeam() {
 
   if (cachedUserId === undefined || cachedUserId === '') {
     window.showErrorMessage(AUTH_NOT_LOGGED_IN);
+    return;
   } else {
-    //first check if already in team
+    // First check if already in team
     const inTeam = await checkIfInTeam();
 
+    // If the user is already in a team, they cannot create a new team 
     if (inTeam) {
       window.showInformationMessage('You have already joined a team!');
       return;
     }
 
     window.showInformationMessage('Enter a name for your new team!');
-
+    //prompt the user to enter a name for their team and create a new doc for the team 
     await window
       .showInputBox({placeHolder: 'Enter a new team name'})
       .then(async (teamName) => {
@@ -58,6 +56,7 @@ export async function createAndJoinTeam() {
           window.showInformationMessage('Please enter a valid team name!');
           return;
         }
+        //function call to add a firebase document for this new team 
         addNewTeamToDbAndJoin(teamName);
       });
   }
