@@ -35,17 +35,19 @@ team on a group leaderboard.
 
 ## Installation
 
-In order to run this application, you must first open up a terminal and clone the repo:
+<a href="https://imgur.com/pgemzR9"><img src="https://i.imgur.com/pgemzR9l.gif" title="source: imgur.com" /></a>
+
+### Installation Options
+1. Navigate to the Extention Tab of VSCode and type in 
 ```
-git clone https://github.com/cse112-sp20/Cloud-9-Leaderboard.git
+Cloud9
 ```
-Then you must install dependencies
+OR
+<br>
+
+2. Download from the VSCode Marketplace:<br>
 ```
-npm install
-```
-Compile the dependencies and the project
-```
-npm run compile
+ https://marketplace.visualstudio.com/items?itemName=CSE112.cloud9
 ```
 
 ## Features
@@ -115,7 +117,7 @@ npm run compile
 
 #### Patrick Pajarillaga
 
-<img src="https://imgur.com/JrU9EBF" alt="drawing" width="100"/>
+<a href="https://imgur.com/JrU9EBF" ><img src="https://i.imgur.com/JrU9EBF.png" title="source: imgur.com" width="100px" /></a>
 <p>Patrick is a 3rd year computer sciences with interests in topics of machine learning and augmented reality. His hobbies include gaming on his PC or going to various concerts scattered around the city.</p>
 
 
