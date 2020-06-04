@@ -201,7 +201,7 @@ function writeToFile(users, isTeam) {
         let teamname = '';
         scoreMap.map((user, i) => {
             let rankNumberSection = '';
-            console.log("User id: " + user.id);
+            console.log('User id: ' + user.id);
             if (i == 0) {
                 rankNumberSection += '\uD83E\uDD47 ';
             }

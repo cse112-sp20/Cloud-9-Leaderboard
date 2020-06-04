@@ -35,6 +35,7 @@ exports.DEFAULT_USER_DOC_TOP = {
     teamCode: '',
     cumulativePoints: 0,
     teamName: '',
+    isTeamLeader: false
 };
 exports.DEFAULT_TEAM_DOC = {
 // teamName: '',
