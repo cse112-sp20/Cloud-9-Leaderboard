@@ -18,6 +18,8 @@ on top of the open source <a href="https://www.software.com/cloud9">Code time</a
 
 # Developer guide
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fabae287380947778e50e11ab095b7bc)](https://app.codacy.com/gh/cse112-sp20/Cloud-9-Leaderboard?utm_source=github.com&utm_medium=referral&utm_content=cse112-sp20/Cloud-9-Leaderboard&utm_campaign=Badge_Grade_Settings)
+
 ### Things to remember:
 
 - **Create your own feature branch based off `dev`** (if the code you are writing is only dependent on the code in `dev`)<br/> 
