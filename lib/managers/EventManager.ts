@@ -1,8 +1,8 @@
-import {CodeTimeEvent} from '../model/models';
-import {logIt, getPluginEventsFile, getNowTimes, getHostname} from '../Util';
+import {CodeTimeEvent} from "../model/models";
+import {logIt, getPluginEventsFile, getNowTimes, getHostname} from "../Util";
 
-const fs = require('fs');
-const os = require('os');
+const fs = require("fs");
+const os = require("os");
 
 export class EventManager {
   private static instance: EventManager;

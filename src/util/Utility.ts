@@ -15,7 +15,7 @@ import {
   adjectives,
   colors,
   animals,
-} from 'unique-names-generator';
+} from "unique-names-generator";
 
 /**
  * Random anonymous name generator
@@ -41,11 +41,11 @@ export function getRandomInt(ceil) {
 export function generateRandomEmail() {
   const EMAIL_LEN = 28;
   const CHAR_SET =
-    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-  let email = '';
+  let email = "";
   while (email.length < EMAIL_LEN) {
     email += CHAR_SET[getRandomInt(CHAR_SET.length)];
   }
-  return email + '@cloud9.com';
+  return email + "@cloud9.com";
 }

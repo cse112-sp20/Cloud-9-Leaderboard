@@ -5,23 +5,23 @@ import {
   getFileDataArray,
   getNowTimes,
   getActiveProjectWorkspace,
-} from '../Util';
-import {getResourceInfo} from '../repo/KpmRepoManager';
-import {WorkspaceFolder} from 'vscode';
-import {NO_PROJ_NAME, UNTITLED} from '../Constants';
-import CodeTimeSummary from '../model/CodeTimeSummary';
-import Project from '../model/Project';
-import TimeData from '../model/TimeData';
+} from "../Util";
+import {getResourceInfo} from "../repo/KpmRepoManager";
+import {WorkspaceFolder} from "vscode";
+import {NO_PROJ_NAME, UNTITLED} from "../Constants";
+import CodeTimeSummary from "../model/CodeTimeSummary";
+import Project from "../model/Project";
+import TimeData from "../model/TimeData";
 
-const fs = require('fs');
-const moment = require('moment-timezone');
+const fs = require("fs");
+const moment = require("moment-timezone");
 
 export function getTimeDataSummaryFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += '\\projectTimeData.json';
+    file += "\\projectTimeData.json";
   } else {
-    file += '/projectTimeData.json';
+    file += "/projectTimeData.json";
   }
   return file;
 }

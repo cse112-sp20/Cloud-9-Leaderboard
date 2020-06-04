@@ -19,14 +19,14 @@ import {
   TreeView,
   Disposable,
   window,
-} from 'vscode';
-import {getExtensionContext} from './Authentication';
+} from "vscode";
+import {getExtensionContext} from "./Authentication";
 import {
   GLOBAL_STATE_USER_TEAM_MEMBERS,
   GLOBAL_STATE_USER_TEAM_ID,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
-} from './Constants';
-import {leaveTeam} from './Firestore';
+} from "./Constants";
+import {leaveTeam} from "./Firestore";
 
 /**
  * Class that defines leaderdataprovider wh
@@ -48,10 +48,10 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
     if (!isTeamLeader) {
       const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
-      if (teamId == undefined || teamId == '') {
+      if (teamId == undefined || teamId == "") {
         this.data = [
           new LeaderItem(
-            'No permission: Not in a team yet',
+            "No permission: Not in a team yet",
             undefined,
             undefined,
             this,
@@ -60,7 +60,7 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
       } else {
         this.data = [
           new LeaderItem(
-            'No permission: Not team leader',
+            "No permission: Not team leader",
             undefined,
             undefined,
             this,
@@ -77,20 +77,20 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
       if (memberMaps !== undefined) {
         for (let [key, value] of Object.entries(memberMaps)) {
-          memberFetchLists.push(new LeaderItem('Email: ' + key));
+          memberFetchLists.push(new LeaderItem("Email: " + key));
         }
       }
 
       if (memberFetchLists.length === 0) {
-        memberFetchLists.push(new LeaderItem('Empty: No team member yet'));
+        memberFetchLists.push(new LeaderItem("Empty: No team member yet"));
       }
 
       let removeMemberFetchLists: LeaderItem[] = [];
-      let childLeaderItem = new LeaderItem('');
+      let childLeaderItem = new LeaderItem("");
 
       if (memberMaps !== undefined) {
         for (let [key, value] of Object.entries(memberMaps)) {
-          childLeaderItem = new LeaderItem('Remove member: ' + key);
+          childLeaderItem = new LeaderItem("Remove member: " + key);
 
           removeMemberFetchLists.push(childLeaderItem);
         }
@@ -98,12 +98,12 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
       if (removeMemberFetchLists.length === 0) {
         removeMemberFetchLists.push(
-          new LeaderItem('Empty: No team member yet'),
+          new LeaderItem("Empty: No team member yet"),
         );
       }
 
       let topLeaderItem = new LeaderItem(
-        'Remove Team members',
+        "Remove Team members",
         undefined,
         removeMemberFetchLists,
       );
@@ -113,7 +113,7 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
       }
 
       this.data = [
-        new LeaderItem('Team members', undefined, memberFetchLists),
+        new LeaderItem("Team members", undefined, memberFetchLists),
         topLeaderItem,
       ];
     }
@@ -129,22 +129,22 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
   constructor() {
     const ctx = getExtensionContext();
     if (ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
-      let childLeaderItem = new LeaderItem('');
+      let childLeaderItem = new LeaderItem("");
 
-      let topLeaderItem = new LeaderItem('Remove Team members', undefined, [
+      let topLeaderItem = new LeaderItem("Remove Team members", undefined, [
         childLeaderItem,
       ]);
       childLeaderItem.parent = topLeaderItem;
       this.data = [
-        new LeaderItem('Team members', undefined, [new LeaderItem('')]),
+        new LeaderItem("Team members", undefined, [new LeaderItem("")]),
         topLeaderItem,
       ];
     } else {
       const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
-      if (teamId == undefined || teamId == '') {
+      if (teamId == undefined || teamId == "") {
         this.data = [
           new LeaderItem(
-            'No permission: Not in a team yet',
+            "No permission: Not in a team yet",
             undefined,
             undefined,
             this,
@@ -153,7 +153,7 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
       } else {
         this.data = [
           new LeaderItem(
-            'No permission: Not team leader',
+            "No permission: Not team leader",
             undefined,
             undefined,
             this,
@@ -258,75 +258,75 @@ export const handleLeaderInfoChangeSelection = (
   const memberMaps: Map<string, Map<string, string>> = ctx.globalState.get(
     GLOBAL_STATE_USER_TEAM_MEMBERS,
   );
-  if (item.label.startsWith('No permission:')) {
+  if (item.label.startsWith("No permission:")) {
     if (ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
-      let childItem = new LeaderItem('');
+      let childItem = new LeaderItem("");
 
-      let topItem = new LeaderItem('Remove Team members', undefined, [
+      let topItem = new LeaderItem("Remove Team members", undefined, [
         childItem,
       ]);
       childItem.parent = topItem;
       item.upperClass.data = [
-        new LeaderItem('Team members', undefined, [new LeaderItem('')]),
+        new LeaderItem("Team members", undefined, [new LeaderItem("")]),
         topItem,
       ];
-      commands.executeCommand('LeaderView.refreshEntry');
+      commands.executeCommand("LeaderView.refreshEntry");
     }
-  } else if (item.label === 'Team members') {
+  } else if (item.label === "Team members") {
     if (memberMaps !== undefined) {
       item.children = [];
 
       for (let [key, value] of Object.entries(memberMaps)) {
         item.children.push(
-          new LeaderItem('User: ' + memberMaps[key]['name'], item, [
-            new LeaderItem(''),
+          new LeaderItem("User: " + memberMaps[key]["name"], item, [
+            new LeaderItem(""),
           ]),
         );
       }
 
       if (item.children.length === 0) {
-        item.children.push(new LeaderItem('Empty: No team member yet', item));
+        item.children.push(new LeaderItem("Empty: No team member yet", item));
       }
 
-      commands.executeCommand('LeaderView.refreshEntry');
+      commands.executeCommand("LeaderView.refreshEntry");
     }
-  } else if (item.label.startsWith('User: ')) {
+  } else if (item.label.startsWith("User: ")) {
     if (memberMaps !== undefined) {
       item.children = [];
 
       for (let [key, value] of Object.entries(memberMaps)) {
-        item.children.push(new LeaderItem('Email: ' + key));
+        item.children.push(new LeaderItem("Email: " + key));
       }
-      commands.executeCommand('LeaderView.refreshEntry');
+      commands.executeCommand("LeaderView.refreshEntry");
     }
-  } else if (item.label === 'Remove Team members') {
+  } else if (item.label === "Remove Team members") {
     if (memberMaps !== undefined) {
       item.children = [];
       for (let [key, value] of Object.entries(memberMaps)) {
-        item.children.push(new LeaderItem('Remove member: ' + key, item));
+        item.children.push(new LeaderItem("Remove member: " + key, item));
       }
 
       if (item.children.length === 0) {
-        item.children.push(new LeaderItem('Empty: No team member yet', item));
+        item.children.push(new LeaderItem("Empty: No team member yet", item));
       }
 
-      commands.executeCommand('LeaderView.refreshEntry');
+      commands.executeCommand("LeaderView.refreshEntry");
     }
-  } else if (item.label.startsWith('Remove member: ')) {
+  } else if (item.label.startsWith("Remove member: ")) {
     if (memberMaps !== undefined) {
       let selectedMemberEmail = item.label.substring(15);
 
       window
         .showInformationMessage(
           `Are you sure you want to remove ${selectedMemberEmail}?`,
-          'yes',
-          'no',
+          "yes",
+          "no",
         )
         .then((input) => {
-          if (input === 'yes') {
+          if (input === "yes") {
             const member = memberMaps[selectedMemberEmail];
 
-            const memberId = member['id'];
+            const memberId = member["id"];
             const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
 
             leaveTeam(memberId, teamId).then(() => {
@@ -336,15 +336,15 @@ export const handleLeaderInfoChangeSelection = (
               item.parent.children = [];
               for (let [key, value] of Object.entries(newMemberMaps)) {
                 item.parent.children.push(
-                  new LeaderItem('Member: ' + key, item),
+                  new LeaderItem("Member: " + key, item),
                 );
               }
 
-              commands.executeCommand('LeaderView.refreshEntry');
-              window.showInformationMessage('Successfully remove');
+              commands.executeCommand("LeaderView.refreshEntry");
+              window.showInformationMessage("Successfully remove");
             });
           } else {
-            window.showInformationMessage('Removal canceled');
+            window.showInformationMessage("Removal canceled");
           }
         });
     }

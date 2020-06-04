@@ -22,18 +22,18 @@ import {
   EventEmitter,
   TreeView,
   Disposable,
-} from 'vscode';
+} from "vscode";
 
-import {getExtensionContext} from './Authentication';
-import {GLOBAL_STATE_USER_ID} from './Constants';
+import {getExtensionContext} from "./Authentication";
+import {GLOBAL_STATE_USER_ID} from "./Constants";
 
-import {retrieveUserUpdateDailyMetric} from './Firestore';
+import {retrieveUserUpdateDailyMetric} from "./Firestore";
 
 const displayHeaderMap = {
-  keystrokes: 'Keystrokes',
-  linesChanged: 'Lines Changed',
-  timeInterval: 'Time Interval',
-  points: 'Total Points',
+  keystrokes: "Keystrokes",
+  linesChanged: "Lines Changed",
+  timeInterval: "Time Interval",
+  points: "Total Points",
 };
 
 /**
@@ -56,17 +56,17 @@ export class DailyMetricDataProvider
 
     if (ctx.globalState.get(GLOBAL_STATE_USER_ID) === undefined) {
       this.data = [
-        new DailyMetricItem('Keystrokes', [
-          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        new DailyMetricItem("Keystrokes", [
+          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
         ]),
-        new DailyMetricItem('Lines Changed', [
-          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        new DailyMetricItem("Lines Changed", [
+          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
         ]),
-        new DailyMetricItem('Time Interval', [
-          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        new DailyMetricItem("Time Interval", [
+          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
         ]),
-        new DailyMetricItem('Points', [
-          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        new DailyMetricItem("Points", [
+          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
         ]),
       ];
       return;
@@ -76,22 +76,22 @@ export class DailyMetricDataProvider
 
         var time =
           today.getHours() +
-          ':' +
+          ":" +
           today.getMinutes() +
-          ':' +
+          ":" +
           today.getSeconds();
         this.data = [];
 
         let tempList = [];
         for (let key in userDocument) {
-          if (key === 'teamId') {
+          if (key === "teamId") {
             continue;
           }
 
           tempList.push(
             new DailyMetricItem(displayHeaderMap[key], [
               new DailyMetricItem(
-                '🚀 Today: ' + userDocument[key] + ' (Updated: ' + time + ')',
+                "🚀 Today: " + userDocument[key] + " (Updated: " + time + ")",
               ),
             ]),
           );
@@ -113,37 +113,37 @@ export class DailyMetricDataProvider
   constructor(d) {
     if (d == undefined) {
       this.data = [
-        new DailyMetricItem('Keystrokes', [
-          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        new DailyMetricItem("Keystrokes", [
+          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
         ]),
-        new DailyMetricItem('Lines Changed', [
-          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        new DailyMetricItem("Lines Changed", [
+          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
         ]),
-        new DailyMetricItem('Time Interval', [
-          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        new DailyMetricItem("Time Interval", [
+          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
         ]),
-        new DailyMetricItem('Points', [
-          new DailyMetricItem('🚀 Today: ' + '0' + ' (No data yet)'),
+        new DailyMetricItem("Points", [
+          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
         ]),
       ];
     } else {
       var today = new Date();
 
       var time =
-        today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
       this.data = [];
 
       let tempList = [];
       for (let key in d) {
-        if (key === 'teamId') {
+        if (key === "teamId") {
           continue;
         }
 
         tempList.push(
           new DailyMetricItem(displayHeaderMap[key], [
             new DailyMetricItem(
-              '🚀 Today: ' + d[key] + ' (Updated: ' + time + ')',
+              "🚀 Today: " + d[key] + " (Updated: " + time + ")",
             ),
           ]),
         );
@@ -202,9 +202,9 @@ class DailyMetricItem extends TreeItem {
 export function constructDailyMetricData(data, ctx) {
   let cloud9DailyMetricDataProvier = new DailyMetricDataProvider(data);
 
-  window.registerTreeDataProvider('DailyMetric', cloud9DailyMetricDataProvier);
+  window.registerTreeDataProvider("DailyMetric", cloud9DailyMetricDataProvier);
 
-  commands.registerCommand('DailyMetric.refreshEntry', () =>
+  commands.registerCommand("DailyMetric.refreshEntry", () =>
     cloud9DailyMetricDataProvier.refresh(),
   );
 }

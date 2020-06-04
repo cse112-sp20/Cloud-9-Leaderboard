@@ -1,4 +1,4 @@
-import {SessionSummary, KeystrokeAggregate} from '../model/models';
+import {SessionSummary, KeystrokeAggregate} from "../model/models";
 import {
   isWindows,
   getSoftwareDir,
@@ -8,15 +8,15 @@ import {
   showStatus,
   getFileDataAsJson,
   humanizeMinutes,
-} from '../Util';
-import {DEFAULT_SESSION_THRESHOLD_SECONDS} from '../Constants';
-import CodeTimeSummary from '../model/CodeTimeSummary';
-import {getCodeTimeSummary} from './TimeSummaryData';
-const fs = require('fs');
+} from "../Util";
+import {DEFAULT_SESSION_THRESHOLD_SECONDS} from "../Constants";
+import CodeTimeSummary from "../model/CodeTimeSummary";
+import {getCodeTimeSummary} from "./TimeSummaryData";
+const fs = require("fs");
 
 export function getSessionThresholdSeconds() {
   const thresholdSeconds =
-    getItem('sessionThresholdInSec') || DEFAULT_SESSION_THRESHOLD_SECONDS;
+    getItem("sessionThresholdInSec") || DEFAULT_SESSION_THRESHOLD_SECONDS;
   return thresholdSeconds;
 }
 
@@ -28,9 +28,9 @@ export function clearSessionSummaryData() {
 export function getSessionSummaryFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += '\\sessionSummary.json';
+    file += "\\sessionSummary.json";
   } else {
-    file += '/sessionSummary.json';
+    file += "/sessionSummary.json";
   }
   return file;
 }
@@ -104,7 +104,7 @@ export function getTimeBetweenLastPayload() {
   let elapsedSeconds = 60;
 
   // will be zero if its a new day
-  const lastPayloadEnd = getItem('latestPayloadTimestampEndUtc');
+  const lastPayloadEnd = getItem("latestPayloadTimestampEndUtc");
 
   // the last payload end time is reset within the new day checker
   if (lastPayloadEnd && lastPayloadEnd > 0) {
@@ -153,8 +153,8 @@ export function updateStatusBarWithSummaryData() {
   // const inFlowIcon = currentDayMinutes > averageDailyMinutes ? "🚀 " : "";
   const inFlowIcon =
     codeTimeSummary.activeCodeTimeMinutes > averageDailyMinutes
-      ? '$(rocket)'
-      : '$(clock)';
+      ? "$(rocket)"
+      : "$(clock)";
   const minutesStr = humanizeMinutes(codeTimeSummary.activeCodeTimeMinutes);
 
   const msg = `${inFlowIcon} ${minutesStr}`;
