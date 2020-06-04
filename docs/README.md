@@ -8,12 +8,16 @@
 
 <h4 align="center">A leaderboard application built on top of <a href="https://www.software.com/code-time">Code Time</a>.</h4>
 
+![Testing workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Testing%20workflow/badge.svg)
+![Eslint Analysis workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Eslint%20Analysis%20workflow/badge.svg)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 <p align="center">
   <a href="#About">About</a> •
   <a href="#Installation">Installation</a> •
   <a href="#Features">Features</a> •
   <a href="#Team">Team</a> •
-  <a href="#Documentation and Structure">Documentation/Structure</a> •
+  <a href="#Documentation/Structure">Documentation/Structure</a> •
   <a href="#Credits">Credits</a>
 </p>
 
@@ -111,8 +115,7 @@ npm run compile
 
 #### Patrick Pajarillaga
 
-<img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/33/Patrick_Star.svg/1200px-Patrick_Star.svg.png" alt="drawing" width="100"/>
-
+<img src="https://imgur.com/JrU9EBF" alt="drawing" width="100"/>
 <p>Patrick is a 3rd year computer sciences with interests in topics of machine learning and augmented reality. His hobbies include gaming on his PC or going to various concerts scattered around the city.</p>
 
 
