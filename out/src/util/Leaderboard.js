@@ -8,7 +8,6 @@
  *
  * @file   This files defines the Leaderboard class.
  * @author AuthorName.
- * @since  0.0.1
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -27,8 +26,16 @@ const Firestore_1 = require("./Firestore");
 const Authentication_1 = require("./Authentication");
 const Constants_1 = require("./Constants");
 const fs = require('fs');
+/**
+ * Leaderboard for storing global leaderboard statistics
+ */
 class Leaderboard {
     constructor() { }
+    /**
+     * Add user to the class for global leaderboard
+     * @param userId user ID of the current user to be added
+     * @param userObj current user's statistics
+     */
     static addUser(userId, userObj) {
         if (!Leaderboard.users) {
             Leaderboard.users = [];
@@ -40,11 +47,17 @@ class Leaderboard {
         }
         Leaderboard.users.push(user);
     }
+    /**
+     * Getting users from the leaderboard class
+     */
     static getUsers() {
         return Leaderboard.users;
     }
 }
 exports.Leaderboard = Leaderboard;
+/**
+ * Getting the filepath of the leaderboard txt file
+ */
 function getLeaderboardFile() {
     let filePath = Util_1.getSoftwareDir();
     if (Util_1.isWindows()) {
@@ -56,6 +69,9 @@ function getLeaderboardFile() {
     return filePath;
 }
 exports.getLeaderboardFile = getLeaderboardFile;
+/**
+ * Getting the filepath of the team leaderboard txt file
+ */
 function getTeamLeaderboardFile() {
     let filePath = Util_1.getSoftwareDir();
     if (Util_1.isWindows()) {
@@ -67,6 +83,9 @@ function getTeamLeaderboardFile() {
     return filePath;
 }
 exports.getTeamLeaderboardFile = getTeamLeaderboardFile;
+/**
+ * Display global leaderboard with everyone's cumulative points
+ */
 function displayLeaderboard() {
     return __awaiter(this, void 0, void 0, function* () {
         //ID check
@@ -109,6 +128,10 @@ function displayLeaderboard() {
     });
 }
 exports.displayLeaderboard = displayLeaderboard;
+/**
+ * Display team leaderboard txt file that consists of statistics
+ * of all users belonging to the same team as the client
+ */
 function displayTeamLeaderboard() {
     return __awaiter(this, void 0, void 0, function* () {
         //ID check
@@ -151,6 +174,11 @@ function displayTeamLeaderboard() {
     });
 }
 exports.displayTeamLeaderboard = displayTeamLeaderboard;
+/**
+ * A callback function that is used to write the content of the txt files
+ * @param users all user statistics object to be written
+ * @param isTeam checking whether the current format is for a team
+ */
 function writeToFile(users, isTeam) {
     return __awaiter(this, void 0, void 0, function* () {
         let leaderboardFile;
@@ -178,6 +206,7 @@ function writeToFile(users, isTeam) {
         let scoreMap = [];
         users.map((user) => {
             let obj = {};
+            console.log(user.id);
             obj['id'] = user.id;
             obj['name'] = user['name'];
             obj['totalKeystrokes'] = user['keystrokes'];
@@ -197,6 +226,7 @@ function writeToFile(users, isTeam) {
         let teamname = '';
         scoreMap.map((user, i) => {
             let rankNumberSection = '';
+            console.log('User id: ' + user.id);
             if (i == 0) {
                 rankNumberSection += '\uD83E\uDD47 ';
             }
@@ -230,8 +260,9 @@ function writeToFile(users, isTeam) {
                     badges += String.fromCodePoint(0x1f388) + ' ';
                 }
             }
-            console.log("cacheduserid: " + cachedUserId);
-            console.log("user id :" + user.name);
+            console.log('cacheduserid: ' + cachedUserId);
+            console.log('user id :' + user.id);
+            console.log(user);
             if (cachedUserId == user.id) {
                 username = user.name;
                 rankNumberSection = i + 1 + ' ' + rankNumberSection;
@@ -262,11 +293,12 @@ function writeToFile(users, isTeam) {
             ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME) !== undefined
                 ? ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME)
                 : '______';
-        console.log("username is :" + username);
+        console.log('username is :' + username);
         leaderBoardContent += 'Username \t : \t ' + username + '\n';
         leaderBoardContent += 'Teamname \t : \t ' + teamname + '\n\n';
         leaderBoardContent += Constants_1.SECTION_BAR;
-        leaderBoardContent += 'LEADERBOARD RANKING \n';
+        leaderBoardContent +=
+            '                                   LEADERBOARD RANKING \n';
         leaderBoardContent += Constants_1.SECTION_BAR + '\n';
         if (isTeam) {
             leaderBoardContent +=
@@ -300,14 +332,15 @@ function writeToFile(users, isTeam) {
         //STATS HERE, TODO
         let BADGE_LENGTH = 6;
         leaderBoardContent += Constants_1.SECTION_BAR;
-        leaderBoardContent += 'Metric \n';
+        leaderBoardContent += '                                          Metric \n';
         leaderBoardContent += Constants_1.SECTION_BAR + '\n';
         console.log(scoreMap);
         leaderBoardContent += 'Each second spent coding        + 0.01 \n';
         leaderBoardContent += 'Each keystroke                  +    1 \n';
         leaderBoardContent += 'Each modified line              +   10 \n';
         leaderBoardContent += '\n' + Constants_1.SECTION_BAR;
-        leaderBoardContent += 'Achievements (How you can earn these badges) \n';
+        leaderBoardContent +=
+            '                      Achievements (How you can earn these badges) \n';
         leaderBoardContent += Constants_1.SECTION_BAR + '\n';
         console.log(scoreMap);
         leaderBoardContent +=

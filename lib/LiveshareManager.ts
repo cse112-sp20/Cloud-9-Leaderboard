@@ -1,11 +1,11 @@
-import {softwarePost, isResponseOk} from './http/HttpClient';
-import {getItem, logIt} from './Util';
+import {softwarePost, isResponseOk} from "./http/HttpClient";
+import {getItem, logIt} from "./Util";
 
 export async function manageLiveshareSession(session) {
-  softwarePost('/data/liveshare', session, getItem('jwt'))
+  softwarePost("/data/liveshare", session, getItem("jwt"))
     .then(async (resp) => {
       if (isResponseOk(resp)) {
-        logIt('completed liveshare sync');
+        logIt("completed liveshare sync");
       } else {
         logIt(`unable to sync liveshare metrics: ${resp.message}`);
       }

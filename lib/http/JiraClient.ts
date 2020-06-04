@@ -1,7 +1,7 @@
-import axios, {AxiosInstance} from 'axios';
-import {logIt, getItem} from '../Util';
+import axios, {AxiosInstance} from "axios";
+import {logIt, getItem} from "../Util";
 
-export const ROOT_API = 'https://sftwco.atlassian.net';
+export const ROOT_API = "https://sftwco.atlassian.net";
 
 const jiraClient: AxiosInstance = axios.create({
   baseURL: ROOT_API,
@@ -23,7 +23,7 @@ export class JiraClient {
 
   async apiGet(api: string, accessToken: string) {
     jiraClient.defaults.headers.common[
-      'Authorization'
+      "Authorization"
     ] = `Bearer ${accessToken}`;
 
     const resp = await jiraClient.get(api).catch((err) => {
@@ -34,7 +34,7 @@ export class JiraClient {
   }
 
   async fetchIssues() {
-    const accessToken = getItem('atlassian_access_token');
-    return this.apiGet('/rest/api/3/issuetype', accessToken);
+    const accessToken = getItem("atlassian_access_token");
+    return this.apiGet("/rest/api/3/issuetype", accessToken);
   }
 }

@@ -1,5 +1,5 @@
-import {window, ExtensionContext} from 'vscode';
-import {getAppJwt, getUser} from '../DataController';
+import {window, ExtensionContext} from "vscode";
+import {getAppJwt, getUser} from "../DataController";
 import {
   showOfflinePrompt,
   getOsUsername,
@@ -7,13 +7,13 @@ import {
   setItem,
   getItem,
   getWorkspaceName,
-} from '../Util';
+} from "../Util";
 import {
   softwarePost,
   isResponseOk,
   serverIsAvailable,
-} from '../http/HttpClient';
-import {EventManager} from '../managers/EventManager';
+} from "../http/HttpClient";
+import {EventManager} from "../managers/EventManager";
 
 let retry_counter = 0;
 // 2 minute
@@ -21,7 +21,7 @@ const one_min_millis = 1000 * 60;
 let atlassianOauthFetchTimeout = null;
 
 export function onboardInit(ctx: ExtensionContext, callback: any) {
-  const jwt = getItem('jwt');
+  const jwt = getItem("jwt");
   if (jwt) {
     // we have the jwt, call the callback that anon was not created
     return callback(ctx, false /*anonCreated*/);
@@ -93,10 +93,10 @@ async function secondaryWindowOnboarding(ctx: ExtensionContext, callback: any) {
 export async function createAnonymousUser(serverIsOnline) {
   let appJwt = await getAppJwt(serverIsOnline);
   if (appJwt && serverIsOnline) {
-    const jwt = getItem('jwt');
+    const jwt = getItem("jwt");
     // check one more time before creating the anon user
     if (!jwt) {
-      const creation_annotation = 'NO_SESSION_FILE';
+      const creation_annotation = "NO_SESSION_FILE";
       const username = await getOsUsername();
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const hostname = await getHostname();
@@ -104,11 +104,11 @@ export async function createAnonymousUser(serverIsOnline) {
       const eventType = `createanon-${workspace_name}`;
       EventManager.getInstance().createCodeTimeEvent(
         eventType,
-        'anon_creation',
-        'anon creation',
+        "anon_creation",
+        "anon creation",
       );
       const resp = await softwarePost(
-        '/data/onboard',
+        "/data/onboard",
         {
           timezone,
           username,
@@ -118,7 +118,7 @@ export async function createAnonymousUser(serverIsOnline) {
         appJwt,
       );
       if (isResponseOk(resp) && resp.data && resp.data.jwt) {
-        setItem('jwt', resp.data.jwt);
+        setItem("jwt", resp.data.jwt);
         return resp.data.jwt;
       }
     }
@@ -146,20 +146,20 @@ async function refetchAtlassianOauthFetchHandler(tryCountUntilFoundUser) {
       refetchAtlassianOauthLazily(tryCountUntilFoundUser);
     }
   } else {
-    const message = 'Successfully connected to Atlassian';
+    const message = "Successfully connected to Atlassian";
     window.showInformationMessage(message);
   }
 }
 
 export async function getAtlassianOauth(serverIsOnline) {
-  let jwt = getItem('jwt');
+  let jwt = getItem("jwt");
   if (serverIsOnline && jwt) {
     let user = await getUser(serverIsOnline, jwt);
     if (user && user.auths) {
       // get the one that is "slack"
       for (let i = 0; i < user.auths.length; i++) {
         const oauthInfo = user.auths[i];
-        if (oauthInfo.type === 'atlassian') {
+        if (oauthInfo.type === "atlassian") {
           updateAtlassianAccessInfo(oauthInfo);
           return oauthInfo;
         }
@@ -174,8 +174,8 @@ export async function updateAtlassianAccessInfo(oauth) {
    * {access_token, refresh_token}
    */
   if (oauth) {
-    setItem('atlassian_access_token', oauth.access_token);
+    setItem("atlassian_access_token", oauth.access_token);
   } else {
-    setItem('atlassian_access_token', null);
+    setItem("atlassian_access_token", null);
   }
 }

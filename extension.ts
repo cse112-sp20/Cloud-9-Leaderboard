@@ -1,29 +1,16 @@
-// Copyright (c) 2018 Software. All Rights Reserved.
+/**
+ * Summary. (use period)
+ *
+ * Description. (use period)
+ *
+ * @link   URL
+ * @file   This files defines the MyClass class.
+ * @author AuthorName.
+ */
+import {window, ExtensionContext} from "vscode";
 
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import {
-  window,
-  ExtensionContext,
-  StatusBarAlignment,
-  commands,
-  Command,
-  TreeDataProvider,
-  TreeItemCollapsibleState,
-  ProviderResult,
-  TreeItem,
-  Event,
-  EventEmitter,
-  TreeView,
-  Disposable,
-} from 'vscode';
-import {retrieveUserDailyMetric} from './src/util/Firestore';
-import {
-  isLoggedIn,
-  sendHeartbeat,
-  initializePreferences,
-} from './lib/DataController';
-import {onboardInit} from './lib/user/OnboardManager';
+import {sendHeartbeat, initializePreferences} from "./lib/DataController";
+import {onboardInit} from "./lib/user/OnboardManager";
 import {
   showStatus,
   nowInSecs,
@@ -35,29 +22,29 @@ import {
   displayReadmeIfNotExists,
   setItem,
   getWorkspaceName,
-} from './lib/Util';
-import {serverIsAvailable} from './lib/http/HttpClient';
-import {getHistoricalCommits} from './lib/repo/KpmRepoManager';
-import {manageLiveshareSession} from './lib/LiveshareManager';
-import * as vsls from 'vsls/vscode';
-import {createCommands} from './lib/command-helper';
-import {KpmManager} from './lib/managers/KpmManager';
-import {SummaryManager} from './lib/managers/SummaryManager';
+} from "./lib/Util";
+import {serverIsAvailable} from "./lib/http/HttpClient";
+import {getHistoricalCommits} from "./lib/repo/KpmRepoManager";
+import {manageLiveshareSession} from "./lib/LiveshareManager";
+import * as vsls from "vsls/vscode";
+import {createCommands} from "./lib/command-helper";
+import {KpmManager} from "./lib/managers/KpmManager";
+import {SummaryManager} from "./lib/managers/SummaryManager";
 import {
   setSessionSummaryLiveshareMinutes,
   updateStatusBarWithSummaryData,
-} from './lib/storage/SessionSummaryData';
-import {WallClockManager} from './lib/managers/WallClockManager';
-import {EventManager} from './lib/managers/EventManager';
+} from "./lib/storage/SessionSummaryData";
+import {WallClockManager} from "./lib/managers/WallClockManager";
+import {EventManager} from "./lib/managers/EventManager";
 import {
   sendOfflineEvents,
   getLastSavedKeystrokesStats,
-} from './lib/managers/FileManager';
+} from "./lib/managers/FileManager";
 
 import {
   storeExtensionContext,
   authenticateUser,
-} from './src/util/Authentication';
+} from "./src/util/Authentication";
 
 let TELEMETRY_ON = true;
 let statusBarItem = null;
@@ -90,9 +77,9 @@ export function getStatusBarItem() {
 export function deactivate(ctx: ExtensionContext) {
   // store the deactivate event
   EventManager.getInstance().createCodeTimeEvent(
-    'resource',
-    'unload',
-    'EditorDeactivate',
+    "resource",
+    "unload",
+    "EditorDeactivate",
   );
 
   if (_ls && _ls.id) {
@@ -101,8 +88,8 @@ export function deactivate(ctx: ExtensionContext) {
     let offsetSec = getOffsetSeconds();
     let localNow = nowSec - offsetSec;
     // close the session on our end
-    _ls['end'] = nowSec;
-    _ls['local_end'] = localNow;
+    _ls["end"] = nowSec;
+    _ls["local_end"] = localNow;
     manageLiveshareSession(_ls);
     _ls = null;
   }
@@ -132,8 +119,8 @@ export function deactivate(ctx: ExtensionContext) {
 //export var extensionContext;
 
 export async function activate(ctx: ExtensionContext) {
-  window.showInformationMessage('Cloud9 Activated!');
-  console.log('Cloud9 activated');
+  window.showInformationMessage("Cloud9 Activated!");
+  console.log("Cloud9 activated");
   //store ref to extension context
   storeExtensionContext(ctx);
 
@@ -147,9 +134,9 @@ export async function activate(ctx: ExtensionContext) {
   // onboard the user as anonymous if it's being installed
   if (window.state.focused) {
     EventManager.getInstance().createCodeTimeEvent(
-      'focused_onboard',
+      "focused_onboard",
       eventName,
-      'onboarding',
+      "onboarding",
     );
     onboardInit(ctx, intializePlugin /*successFunction*/);
   } else {
@@ -161,18 +148,18 @@ export async function activate(ctx: ExtensionContext) {
       EventManager.getInstance().createCodeTimeEvent(
         nonFocusedEventType,
         eventName,
-        'onboarding',
+        "onboarding",
       );
       onboardInit(ctx, intializePlugin /*successFunction*/);
     }, 1000 * secondDelay);
   }
 
-  console.log('BEfore calling authenticateUser');
+  console.log("BEfore calling authenticateUser");
 
   // sign the user in
 
   authenticateUser();
-  //await retrieveUserDailyMetric(testCallback, ctx);
+  //await retrieveUserDailyMetric(constructDailyMetricData, ctx);
 }
 
 function getRandomArbitrary(min, max) {
@@ -188,9 +175,9 @@ export async function intializePlugin(
 
   // store the activate event
   EventManager.getInstance().createCodeTimeEvent(
-    'resource',
-    'load',
-    'EditorActivate',
+    "resource",
+    "load",
+    "EditorActivate",
   );
 
   // initialize the wall clock timer
@@ -208,16 +195,16 @@ export async function intializePlugin(
   // add the interval jobs
   initializeIntervalJobs();
 
-  const initializedVscodePlugin = getItem('vscode_CtInit');
+  const initializedVscodePlugin = getItem("vscode_CtInit");
   if (!initializedVscodePlugin) {
-    setItem('vscode_CtInit', true);
+    setItem("vscode_CtInit", true);
 
     // send a bootstrap kpm payload
     kpmController.buildBootstrapKpmPayload();
 
     // send a heartbeat that the plugin as been installed
     // (or the user has deleted the session.json and restarted the IDE)
-    sendHeartbeat('INSTALLED', serverIsOnline);
+    sendHeartbeat("INSTALLED", serverIsOnline);
   }
 
   // initialize the day check timer
@@ -228,7 +215,7 @@ export async function intializePlugin(
 function initializeIntervalJobs() {
   hourly_interval = setInterval(async () => {
     const isonline = await serverIsAvailable();
-    sendHeartbeat('HOURLY', isonline);
+    sendHeartbeat("HOURLY", isonline);
   }, one_hour_millis);
 
   thirty_minute_interval = setInterval(async () => {

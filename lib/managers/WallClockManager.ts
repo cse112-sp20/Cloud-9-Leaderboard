@@ -1,8 +1,8 @@
-import {getItem, humanizeMinutes, setItem} from '../Util';
-import {commands, window} from 'vscode';
-import {updateStatusBarWithSummaryData} from '../storage/SessionSummaryData';
-import {incrementEditorSeconds} from '../storage/TimeSummaryData';
-import {KpmManager} from './KpmManager';
+import {getItem, humanizeMinutes, setItem} from "../Util";
+import {commands, window} from "vscode";
+import {updateStatusBarWithSummaryData} from "../storage/SessionSummaryData";
+import {incrementEditorSeconds} from "../storage/TimeSummaryData";
+import {KpmManager} from "./KpmManager";
 
 const SECONDS_INTERVAL = 30;
 const CLOCK_INTERVAL = 1000 * SECONDS_INTERVAL;
@@ -27,14 +27,14 @@ export class WallClockManager {
   private initTimer() {
     const kpmMgr: KpmManager = KpmManager.getInstance();
 
-    this._wctime = getItem('wctime') || 0;
+    this._wctime = getItem("wctime") || 0;
     setInterval(() => {
       // If the window is focused
       if (window.state.focused || kpmMgr.hasKeystrokeData()) {
         // set the wctime (deprecated, remove one day when all plugins use time data info)
-        this._wctime = getItem('wctime') || 0;
+        this._wctime = getItem("wctime") || 0;
         this._wctime += SECONDS_INTERVAL;
-        setItem('wctime', this._wctime);
+        setItem("wctime", this._wctime);
 
         // update the file info file
         incrementEditorSeconds(SECONDS_INTERVAL);

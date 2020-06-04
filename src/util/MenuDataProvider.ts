@@ -9,11 +9,7 @@
  */
 
 import {
-  window,
-  ExtensionContext,
-  StatusBarAlignment,
   commands,
-  Command,
   TreeDataProvider,
   TreeItemCollapsibleState,
   ProviderResult,
@@ -22,25 +18,17 @@ import {
   EventEmitter,
   TreeView,
   Disposable,
-  FileType,
-} from 'vscode';
+} from "vscode";
 
-import {GLOBAL_STATE_USER_ID, GLOBAL_STATE_USER_NICKNAME} from './Constants';
+import {GLOBAL_STATE_USER_ID, GLOBAL_STATE_USER_NICKNAME} from "./Constants";
 
-import {signInOrSignUpUserWithUserInput} from './Authentication';
+import {signInOrSignUpUserWithUserInput} from "./Authentication";
 
-import {getExtensionContext} from './Authentication';
+import {getExtensionContext} from "./Authentication";
 
-const path = require('path');
-
-const resourcePath: string = path.join(
-  __filename,
-  '..',
-  '..',
-  '..',
-  'resources',
-);
-
+/**
+ * Menu data provider
+ */
 export class MenuDataProvider implements TreeDataProvider<MenuItem> {
   private _onDidChangeTreeData: EventEmitter<
     MenuItem | undefined
@@ -48,6 +36,9 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
   readonly onDidChangeTreeData: Event<MenuItem | undefined> = this
     ._onDidChangeTreeData.event;
 
+  /**
+   * Refreshs menu data provider
+   */
   refresh(): void {
     const ctx = getExtensionContext();
 
@@ -56,15 +47,15 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
         new MenuItem(
           `Welcome, ${ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME)}!`,
         ),
-        new MenuItem('📊 View personal stats'),
-        new MenuItem('🌐 Leaderboard'),
-        new MenuItem('💻 Log out account'),
+        new MenuItem("📊 View personal stats"),
+        new MenuItem("🌐 Leaderboard"),
+        new MenuItem("💻 Log out account"),
       ];
     } else {
       this.data = [
-        new MenuItem('Sign in / Create Account'),
-        new MenuItem('📊 View personal stats'),
-        new MenuItem('🌐 Leaderboard'),
+        new MenuItem("Sign in / Create Account"),
+        new MenuItem("📊 View personal stats"),
+        new MenuItem("🌐 Leaderboard"),
       ];
     }
 
@@ -74,18 +65,30 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
   private view: TreeView<MenuItem>;
   data: MenuItem[];
 
+  /**
+   * Creates an instance of menu data provider.
+   */
   constructor() {
     this.data = [
-      new MenuItem('Sign in / Create Account'),
-      new MenuItem('📊 View personal stats'),
-      new MenuItem('🌐 Leaderboard'),
+      new MenuItem("Sign in / Create Account"),
+      new MenuItem("📊 View personal stats"),
+      new MenuItem("🌐 Leaderboard"),
     ];
   }
 
+  /**
+   * Binds view
+   * @param menuTreeView
+   */
   bindView(menuTreeView: TreeView<MenuItem>): void {
     this.view = menuTreeView;
   }
 
+  /**
+   * Gets children
+   * @param [task]
+   * @returns children
+   */
   getChildren(task?: MenuItem | undefined): ProviderResult<MenuItem[]> {
     if (task === undefined) {
       return this.data;
@@ -93,14 +96,27 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
     return task.children;
   }
 
+  /**
+   * Gets tree item
+   * @param task
+   * @returns tree item
+   */
   getTreeItem(task: MenuItem): TreeItem | Thenable<TreeItem> {
     return task;
   }
 }
 
+/**
+ * Menu item
+ */
 export class MenuItem extends TreeItem {
   children: MenuItem[] | undefined;
 
+  /**
+   * Creates an instance of menu item.
+   * @param label
+   * @param [children]
+   */
   constructor(label: string, children?: MenuItem[]) {
     super(
       label,
@@ -112,6 +128,10 @@ export class MenuItem extends TreeItem {
   }
 }
 
+/**
+ * Connect menu data provider treeview with change selectioin.
+ * @param view
+ */
 export const connectCloud9MenuTreeView = (view: TreeView<MenuItem>) => {
   return Disposable.from(
     view.onDidChangeSelection(async (e) => {
@@ -126,17 +146,22 @@ export const connectCloud9MenuTreeView = (view: TreeView<MenuItem>) => {
   );
 };
 
+/**
+ * Handles for menu treeview item selections
+ * @param view
+ * @param item
+ */
 export const handleMenuChangeSelection = (
   view: TreeView<MenuItem>,
   item: MenuItem,
 ) => {
-  if (item.label === 'Sign in / Create Account') {
+  if (item.label === "Sign in / Create Account") {
     signInOrSignUpUserWithUserInput();
-  } else if (item.label === '📊 View personal stats') {
-    commands.executeCommand('cloud9.personalStats');
-  } else if (item.label === '🌐 Leaderboard') {
-    commands.executeCommand('cloud9.leaderboard');
-  } else if (item.label === '💻 Log out account') {
-    commands.executeCommand('cloud9.logOut');
+  } else if (item.label === "📊 View personal stats") {
+    commands.executeCommand("cloud9.personalStats");
+  } else if (item.label === "🌐 Leaderboard") {
+    commands.executeCommand("cloud9.leaderboard");
+  } else if (item.label === "💻 Log out account") {
+    commands.executeCommand("cloud9.logOut");
   }
 };
