@@ -45,11 +45,20 @@ import {
 } from './Constants';
 const fs = require('fs');
 
+/**
+ * Personal Stats class for storing all information about
+ * the current user. All daily metric is stored using this class.
+ */
 export class PersonalStats {
   private static dates: Array<Object>;
 
   constructor() {}
 
+  /**
+   * Add statistics of a day to the class of this current user.
+   * @param date date of the statistics
+   * @param statsObj statistics values
+   */
   public static addDayStats(date, statsObj) {
     if (!PersonalStats.dates) {
       PersonalStats.dates = [];
@@ -62,11 +71,17 @@ export class PersonalStats {
     PersonalStats.dates.push(dateObj);
   }
 
+  /**
+   * Getter for user statistics
+   */
   public static getUsers() {
     return PersonalStats.dates;
   }
 }
 
+/**
+ * Finding the file path of the personal stats txt file
+ */
 export function getPersonalStatsFile() {
   let filePath = getSoftwareDir();
   if (isWindows()) {
@@ -77,6 +92,9 @@ export function getPersonalStatsFile() {
   return filePath;
 }
 
+/**
+ * Display personal statistics text file in the vscode window
+ */
 export async function displayPersonalStats() {
   // 1st write the code time metrics dashboard file
   // await writeLeaderboard();
@@ -118,6 +136,10 @@ export async function displayPersonalStats() {
   });
 }
 
+/**
+ * Write to personal statistics text file
+ * @param dates the objects to be parsed and written on to the text file
+ */
 async function writePersonalStatsFile(dates) {
   let personalStatsFile = getPersonalStatsFile();
 

@@ -17,6 +17,9 @@ import {
   animals,
 } from 'unique-names-generator';
 
+/**
+ * Random anonymous name generator
+ */
 export function generateRandomName() {
   const randomName: string = uniqueNamesGenerator({
     dictionaries: [adjectives, colors, animals],
@@ -24,10 +27,17 @@ export function generateRandomName() {
   return randomName;
 }
 
+/**
+ * Random integer generator
+ * @param ceil the max value of the random number
+ */
 export function getRandomInt(ceil) {
   return Math.floor(Math.random() * Math.floor(ceil));
 }
 
+/**
+ * Random email generator
+ */
 export function generateRandomEmail() {
   const EMAIL_LEN = 28;
   const CHAR_SET =

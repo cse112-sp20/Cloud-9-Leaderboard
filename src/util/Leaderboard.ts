@@ -35,13 +35,18 @@ import {
 const fs = require('fs');
 
 /**
- * Leaderboard
+ * Leaderboard for storing global leaderboard statistics
  */
 export class Leaderboard {
   private static users: Array<Object>;
 
   constructor() {}
 
+  /**
+   * Add user to the class for global leaderboard
+   * @param userId user ID of the current user to be added
+   * @param userObj current user's statistics
+   */
   public static addUser(userId, userObj) {
     if (!Leaderboard.users) {
       Leaderboard.users = [];
@@ -54,11 +59,17 @@ export class Leaderboard {
     Leaderboard.users.push(user);
   }
 
+  /**
+   * Getting users from the leaderboard class
+   */
   public static getUsers() {
     return Leaderboard.users;
   }
 }
 
+/**
+ * Getting the filepath of the leaderboard txt file
+ */
 export function getLeaderboardFile() {
   let filePath = getSoftwareDir();
   if (isWindows()) {
@@ -69,6 +80,9 @@ export function getLeaderboardFile() {
   return filePath;
 }
 
+/**
+ * Getting the filepath of the team leaderboard txt file
+ */
 export function getTeamLeaderboardFile() {
   let filePath = getSoftwareDir();
   if (isWindows()) {
@@ -79,6 +93,9 @@ export function getTeamLeaderboardFile() {
   return filePath;
 }
 
+/**
+ * Display global leaderboard with everyone's cumulative points
+ */
 export async function displayLeaderboard() {
   //ID check
   await checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
@@ -120,6 +137,10 @@ export async function displayLeaderboard() {
   });
 }
 
+/**
+ * Display team leaderboard txt file that consists of statistics
+ * of all users belonging to the same team as the client
+ */
 export async function displayTeamLeaderboard() {
   //ID check
   await checkIfCachedUserIdExistsAndPrompt().then((loggedIn) => {
@@ -161,6 +182,11 @@ export async function displayTeamLeaderboard() {
   });
 }
 
+/**
+ * A callback function that is used to write the content of the txt files
+ * @param users all user statistics object to be written
+ * @param isTeam checking whether the current format is for a team
+ */
 async function writeToFile(users, isTeam) {
   let leaderboardFile;
 

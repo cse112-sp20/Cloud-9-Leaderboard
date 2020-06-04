@@ -766,6 +766,10 @@ export async function checkIfInTeam() {
   return inTeam;
 }
 
+/**
+ * Retrieve user statistics globally. All user stats will be returned
+ * @param callback the callback function to call with using all users' stats
+ */
 export async function retrieveUserStats(callback) {
   let db = firebase.firestore();
 
@@ -809,6 +813,11 @@ export async function retrieveUserStats(callback) {
   }
 }
 
+/**
+ * Retrieve user daily metric statistics.
+ * @param callback the callback function to call using userMap
+ * @param c whether the function is called for team leaderboard
+ */
 export function retrieveUserDailyMetric(callback, c) {
   let db = firebase.firestore();
 
@@ -852,6 +861,10 @@ export function retrieveUserDailyMetric(callback, c) {
   }
 }
 
+/**
+ * Retreive user's daily metrics from firebase. Looks at
+ * firebase user collection and retrieve user stats by dates.
+ */
 export async function retrieveUserUpdateDailyMetric() {
   let db = firebase.firestore();
 
