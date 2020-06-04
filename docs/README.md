@@ -8,6 +8,7 @@
 
 <h4 align="center">A leaderboard application built on top of <a href="https://www.software.com/code-time">Code Time</a>.</h4>
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Testing workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Testing%20workflow/badge.svg)
 ![Eslint Analysis workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Eslint%20Analysis%20workflow/badge.svg)
 ![Building workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Building%20workflow/badge.svg)
