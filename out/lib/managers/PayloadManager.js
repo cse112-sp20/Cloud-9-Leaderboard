@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateAggregateInfo = exports.storePayload = exports.processPayload = void 0;
 const Util_1 = require("../Util");
 const TimeSummaryData_1 = require("../storage/TimeSummaryData");
 const FileChangeInfoSummaryData_1 = require("../storage/FileChangeInfoSummaryData");
@@ -18,7 +19,6 @@ const SessionSummaryData_1 = require("../storage/SessionSummaryData");
 const KpmRepoManager_1 = require("../repo/KpmRepoManager");
 const SummaryManager_1 = require("./SummaryManager");
 const FileManager_1 = require("./FileManager");
-const WallClockManager_1 = require("./WallClockManager");
 const Project_1 = require("../model/Project");
 const FireStore_1 = require("../../src/util/FireStore");
 const os = require('os');
@@ -191,7 +191,6 @@ function storePayload(payload, sessionMinutes) {
                 Util_1.logIt(`Error appending to the Software data store file: ${err.message}`);
         });
         // update the status and tree
-        WallClockManager_1.WallClockManager.getInstance().dispatchStatusViewUpdate();
     });
 }
 exports.storePayload = storePayload;

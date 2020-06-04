@@ -9,13 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateStatusBarWithSummaryData = exports.incrementSessionSummaryData = exports.getTimeBetweenLastPayload = exports.setSessionSummaryLiveshareMinutes = exports.saveSessionSummaryToDisk = exports.getSessionSummaryFileAsJson = exports.sessionSummaryExists = exports.getSessionSummaryData = exports.getSessionSummaryFile = exports.clearSessionSummaryData = exports.getSessionThresholdSeconds = void 0;
 const models_1 = require("../model/models");
 const Util_1 = require("../Util");
 const Constants_1 = require("../Constants");
 const TimeSummaryData_1 = require("./TimeSummaryData");
-const fs = require("fs");
+const fs = require('fs');
 function getSessionThresholdSeconds() {
-    const thresholdSeconds = Util_1.getItem("sessionThresholdInSec") || Constants_1.DEFAULT_SESSION_THRESHOLD_SECONDS;
+    const thresholdSeconds = Util_1.getItem('sessionThresholdInSec') || Constants_1.DEFAULT_SESSION_THRESHOLD_SECONDS;
     return thresholdSeconds;
 }
 exports.getSessionThresholdSeconds = getSessionThresholdSeconds;
@@ -27,10 +28,10 @@ exports.clearSessionSummaryData = clearSessionSummaryData;
 function getSessionSummaryFile() {
     let file = Util_1.getSoftwareDir();
     if (Util_1.isWindows()) {
-        file += "\\sessionSummary.json";
+        file += '\\sessionSummary.json';
     }
     else {
-        file += "/sessionSummary.json";
+        file += '/sessionSummary.json';
     }
     return file;
 }
@@ -102,7 +103,7 @@ function getTimeBetweenLastPayload() {
     let sessionMinutes = 1;
     let elapsedSeconds = 60;
     // will be zero if its a new day
-    const lastPayloadEnd = Util_1.getItem("latestPayloadTimestampEndUtc");
+    const lastPayloadEnd = Util_1.getItem('latestPayloadTimestampEndUtc');
     // the last payload end time is reset within the new day checker
     if (lastPayloadEnd && lastPayloadEnd > 0) {
         const nowTimes = Util_1.getNowTimes();
@@ -110,8 +111,7 @@ function getTimeBetweenLastPayload() {
         // diff from the previous end time
         elapsedSeconds = Math.max(60, nowInSec - lastPayloadEnd);
         // if it's less than the threshold then add the minutes to the session time
-        if (elapsedSeconds > 0 &&
-            elapsedSeconds <= getSessionThresholdSeconds()) {
+        if (elapsedSeconds > 0 && elapsedSeconds <= getSessionThresholdSeconds()) {
             // it's still the same session, add the gap time in minutes
             sessionMinutes = elapsedSeconds / 60;
         }
@@ -143,8 +143,8 @@ function updateStatusBarWithSummaryData() {
     const averageDailyMinutes = data.averageDailyMinutes;
     // const inFlowIcon = currentDayMinutes > averageDailyMinutes ? "🚀 " : "";
     const inFlowIcon = codeTimeSummary.activeCodeTimeMinutes > averageDailyMinutes
-        ? "$(rocket)"
-        : "$(clock)";
+        ? '$(rocket)'
+        : '$(clock)';
     const minutesStr = Util_1.humanizeMinutes(codeTimeSummary.activeCodeTimeMinutes);
     const msg = `${inFlowIcon} ${minutesStr}`;
     Util_1.showStatus(msg, null);

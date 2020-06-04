@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.EventManager = void 0;
 const models_1 = require("../model/models");
 const Util_1 = require("../Util");
-const fs = require("fs");
-const os = require("os");
+const fs = require('fs');
+const os = require('os');
 class EventManager {
     constructor() { }
     static getInstance() {

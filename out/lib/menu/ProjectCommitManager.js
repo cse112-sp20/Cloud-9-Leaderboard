@@ -9,48 +9,49 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProjectCommitManager = void 0;
 const vscode_1 = require("vscode");
 const HttpClient_1 = require("../http/HttpClient");
 const Util_1 = require("../Util");
 const checkbox_1 = require("../model/checkbox");
 const ReportManager_1 = require("./ReportManager");
-const moment = require("moment-timezone");
-const dateFormat = "YYYY-MM-DD";
+const moment = require('moment-timezone');
+const dateFormat = 'YYYY-MM-DD';
 let selectedStartTime = 0;
 let selectedEndTime = 0;
-let selectedRangeType = "";
+let selectedRangeType = '';
 let local_start = 0;
 let local_end = 0;
 class ProjectCommitManager {
     constructor() {
         this.items = [
             {
-                label: "Custom",
-                value: "custom",
+                label: 'Custom',
+                value: 'custom',
             },
             {
-                label: "Today",
-                value: "today",
+                label: 'Today',
+                value: 'today',
             },
             {
-                label: "Yesterday",
-                value: "yesterday",
+                label: 'Yesterday',
+                value: 'yesterday',
             },
             {
-                label: "This week",
-                value: "currentWeek",
+                label: 'This week',
+                value: 'currentWeek',
             },
             {
-                label: "Last week",
-                value: "lastWeek",
+                label: 'Last week',
+                value: 'lastWeek',
             },
             {
-                label: "This month",
-                value: "thisMonth",
+                label: 'This month',
+                value: 'thisMonth',
             },
             {
-                label: "Last month",
-                value: "lastMonth",
+                label: 'Last month',
+                value: 'lastMonth',
             },
         ];
         //
@@ -70,10 +71,10 @@ class ProjectCommitManager {
                 };
             });
             const pick = yield vscode_1.window.showQuickPick(pickItems, {
-                placeHolder: "Select a date range",
+                placeHolder: 'Select a date range',
             });
             if (pick && pick.label) {
-                return this.launchProjectSelectionMenu(pick["value"]);
+                return this.launchProjectSelectionMenu(pick['value']);
             }
             return null;
         });
@@ -82,7 +83,7 @@ class ProjectCommitManager {
         return __awaiter(this, void 0, void 0, function* () {
             selectedStartTime = 0;
             selectedEndTime = 0;
-            selectedRangeType = "";
+            selectedRangeType = '';
             const pickItems = this.items.map((item) => {
                 return {
                     label: item.label,
@@ -90,31 +91,31 @@ class ProjectCommitManager {
                 };
             });
             const pick = yield vscode_1.window.showQuickPick(pickItems, {
-                placeHolder: "Select a date range",
+                placeHolder: 'Select a date range',
             });
             if (pick && pick.label) {
-                const val = pick["value"];
-                if (val === "custom") {
+                const val = pick['value'];
+                if (val === 'custom') {
                     // show custom date range input
                     const initialStartVal = moment()
-                        .startOf("day")
-                        .subtract(1, "day")
+                        .startOf('day')
+                        .subtract(1, 'day')
                         .format(dateFormat);
-                    const startDateText = yield this.showDateInputBox(initialStartVal, dateFormat, "starting");
+                    const startDateText = yield this.showDateInputBox(initialStartVal, dateFormat, 'starting');
                     if (startDateText) {
                         // START DATE (begin of day)
                         selectedStartTime = moment(startDateText, dateFormat)
-                            .startOf("day")
+                            .startOf('day')
                             .unix();
                         const endVal = moment
                             .unix(selectedStartTime)
-                            .add(1, "day")
+                            .add(1, 'day')
                             .format(dateFormat);
-                        const endDateText = yield this.showDateInputBox(endVal, dateFormat, "ending");
+                        const endDateText = yield this.showDateInputBox(endVal, dateFormat, 'ending');
                         if (endDateText) {
                             // END DATE (the end of the day)
                             selectedEndTime = moment(endDateText, dateFormat)
-                                .endOf("day")
+                                .endOf('day')
                                 .unix();
                             // create the local start and end
                             const local = moment().local();
@@ -148,7 +149,7 @@ class ProjectCommitManager {
                 };
             });
             const picks = yield vscode_1.window.showQuickPick(pickItems, {
-                placeHolder: "Select one or more projects",
+                placeHolder: 'Select one or more projects',
                 ignoreFocusOut: false,
                 matchOnDescription: true,
                 canPickMany: true,
@@ -159,7 +160,7 @@ class ProjectCommitManager {
                 // go through the array and get the project IDs
                 const projectIds = [];
                 picks.forEach((item) => {
-                    projectIds.push(...item["value"]);
+                    projectIds.push(...item['value']);
                 });
                 if (selectedRangeType) {
                     ReportManager_1.displayProjectCommitsDashboardByRangeType(selectedRangeType, projectIds);
@@ -177,7 +178,7 @@ class ProjectCommitManager {
             return yield this.getProjectCheckboxesByQueryString(qryStr);
         });
     }
-    getProjectCheckboxesByRangeType(type = "lastWeek") {
+    getProjectCheckboxesByRangeType(type = 'lastWeek') {
         return __awaiter(this, void 0, void 0, function* () {
             // fetch the projects from the backend
             const qryStr = `?timeRange=${type}`;
@@ -188,7 +189,7 @@ class ProjectCommitManager {
         return __awaiter(this, void 0, void 0, function* () {
             // fetch the projects from the backend
             const api = `/projects${qryStr}`;
-            const resp = yield HttpClient_1.softwareGet(api, Util_1.getItem("jwt"));
+            const resp = yield HttpClient_1.softwareGet(api, Util_1.getItem('jwt'));
             let checkboxes = [];
             if (HttpClient_1.isResponseOk(resp)) {
                 const projects = resp.data;
@@ -196,23 +197,15 @@ class ProjectCommitManager {
                 if (projects && projects.length) {
                     projects.forEach((p) => {
                         if (!p.coding_records) {
-                            p["coding_records"] = 1;
+                            p['coding_records'] = 1;
                         }
                         total_records += p.coding_records;
                     });
                     let lineNumber = 0;
                     for (let i = 0; i < projects.length; i++) {
                         const p = projects[i];
-                        const name = p.project_name
-                            ? p.project_name
-                            : p.name
-                                ? p.name
-                                : "";
-                        const projectIds = p.projectIds
-                            ? p.projectIds
-                            : p.id
-                                ? [p.id]
-                                : [];
+                        const name = p.project_name ? p.project_name : p.name ? p.name : '';
+                        const projectIds = p.projectIds ? p.projectIds : p.id ? [p.id] : [];
                         if (name && projectIds.length) {
                             const percentage = (p.coding_records / total_records) * 100;
                             // coding_records:419, project_name:"swdc-sublime-music-time", projectId:603593
@@ -245,9 +238,7 @@ class ProjectCommitManager {
                         return `Please enter a valid date to continue (${dateFormat})`;
                     }
                     const endTime = moment(text, dateFormat).unix();
-                    if (selectedStartTime &&
-                        endTime &&
-                        selectedStartTime > endTime) {
+                    if (selectedStartTime && endTime && selectedStartTime > endTime) {
                         return `Please make sure the end date is after the start date`;
                     }
                     return null;

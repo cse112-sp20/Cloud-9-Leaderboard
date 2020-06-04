@@ -21,9 +21,9 @@ class KeystrokeStats {
         this.cumulative_editor_seconds = 0;
         this.cumulative_session_seconds = 0;
         this.elapsed_seconds = 0;
-        this.workspace_name = "";
-        this.hostname = "";
-        this.project_null_error = "";
+        this.workspace_name = '';
+        this.hostname = '';
+        this.project_null_error = '';
         this.source = {};
         this.keystrokes = 0;
         this.project = project;
@@ -36,9 +36,9 @@ class KeystrokeStats {
         this.cumulative_editor_seconds = 0;
         this.cumulative_session_seconds = 0;
         this.elapsed_seconds = 0;
-        this.project_null_error = "";
-        this.hostname = "";
-        this.workspace_name = "";
+        this.project_null_error = '';
+        this.hostname = '';
+        this.workspace_name = '';
     }
     getCurrentStatsData() {
         return JSON.parse(JSON.stringify(this));

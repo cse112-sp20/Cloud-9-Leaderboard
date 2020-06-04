@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.displayWeeklyCommitSummary = exports.displayCodeTimeMetricsDashboard = exports.launchWebDashboardView = exports.showMenuOptions = exports.buildWebDashboardUrl = exports.showQuickPick = void 0;
 const vscode_1 = require("vscode");
 const Util_1 = require("../Util");
 const DataController_1 = require("../DataController");
@@ -20,21 +21,19 @@ const EventManager_1 = require("../managers/EventManager");
  * options: {placeholder, items: [{label, description, url, detail, tooltip},...]}
  */
 function showQuickPick(pickOptions) {
-    if (!pickOptions || !pickOptions["items"]) {
+    if (!pickOptions || !pickOptions['items']) {
         return;
     }
     let options = {
         matchOnDescription: false,
         matchOnDetail: false,
-        placeHolder: pickOptions.placeholder || "",
+        placeHolder: pickOptions.placeholder || '',
     };
-    return vscode_1.window
-        .showQuickPick(pickOptions.items, options)
-        .then((item) => __awaiter(this, void 0, void 0, function* () {
+    return vscode_1.window.showQuickPick(pickOptions.items, options).then((item) => __awaiter(this, void 0, void 0, function* () {
         if (item) {
-            let url = item["url"];
-            let cb = item["cb"];
-            let command = item["command"];
+            let url = item['url'];
+            let cb = item['cb'];
+            let command = item['command'];
             if (url) {
                 Util_1.launchWebUrl(url);
             }
@@ -44,8 +43,8 @@ function showQuickPick(pickOptions) {
             else if (command) {
                 vscode_1.commands.executeCommand(command);
             }
-            if (item["eventDescription"]) {
-                EventManager_1.EventManager.getInstance().createCodeTimeEvent("mouse", "click", item["eventDescription"]);
+            if (item['eventDescription']) {
+                EventManager_1.EventManager.getInstance().createCodeTimeEvent('mouse', 'click', item['eventDescription']);
             }
         }
         return item;
@@ -61,23 +60,23 @@ exports.buildWebDashboardUrl = buildWebDashboardUrl;
 function showMenuOptions() {
     return __awaiter(this, void 0, void 0, function* () {
         const serverIsOnline = yield HttpClient_1.serverIsAvailable();
-        EventManager_1.EventManager.getInstance().createCodeTimeEvent("mouse", "click", "ShowPaletteMenu");
+        EventManager_1.EventManager.getInstance().createCodeTimeEvent('mouse', 'click', 'ShowPaletteMenu');
         const loggedIn = yield DataController_1.isLoggedIn();
         // {placeholder, items: [{label, description, url, details, tooltip},...]}
         let kpmMenuOptions = {
             items: [],
         };
         kpmMenuOptions.items.push({
-            label: "Generate dashboard",
-            detail: "View your latest coding metrics right here in your editor",
+            label: 'Generate dashboard',
+            detail: 'View your latest coding metrics right here in your editor',
             url: null,
             cb: displayCodeTimeMetricsDashboard,
-            eventDescription: "PaletteMenuLaunchDashboard",
+            eventDescription: 'PaletteMenuLaunchDashboard',
         });
-        let loginMsgDetail = "Finish creating your account and see rich data visualizations.";
+        let loginMsgDetail = 'Finish creating your account and see rich data visualizations.';
         if (!serverIsOnline) {
             loginMsgDetail =
-                "Our service is temporarily unavailable. Please try again later.";
+                'Our service is temporarily unavailable. Please try again later.';
         }
         if (!loggedIn) {
             kpmMenuOptions.items.push({
@@ -85,39 +84,39 @@ function showMenuOptions() {
                 detail: loginMsgDetail,
                 url: null,
                 cb: Util_1.launchLogin,
-                eventDescription: "PaletteMenuLogin",
+                eventDescription: 'PaletteMenuLogin',
             });
         }
-        let toggleStatusBarTextLabel = "Hide status bar metrics";
+        let toggleStatusBarTextLabel = 'Hide status bar metrics';
         if (!Util_1.isStatusBarTextVisible()) {
-            toggleStatusBarTextLabel = "Show status bar metrics";
+            toggleStatusBarTextLabel = 'Show status bar metrics';
         }
         kpmMenuOptions.items.push({
             label: toggleStatusBarTextLabel,
-            detail: "Toggle the Code Time status bar metrics text",
+            detail: 'Toggle the Code Time status bar metrics text',
             url: null,
             cb: null,
-            command: "codetime.toggleStatusBar",
+            command: 'codetime.toggleStatusBar',
         });
         kpmMenuOptions.items.push({
-            label: "Submit an issue on GitHub",
-            detail: "Encounter a bug? Submit an issue on our GitHub page",
-            url: "https://github.com/swdotcom/swdc-vscode/issues",
+            label: 'Submit an issue on GitHub',
+            detail: 'Encounter a bug? Submit an issue on our GitHub page',
+            url: 'https://github.com/swdotcom/cloud9/issues',
             cb: null,
         });
         kpmMenuOptions.items.push({
-            label: "Submit feedback",
-            detail: "Send us an email at cody@software.com",
+            label: 'Submit feedback',
+            detail: 'Send us an email at cody@software.com',
             cb: null,
-            command: "codetime.sendFeedback",
+            command: 'codetime.sendFeedback',
         });
         if (loggedIn) {
             kpmMenuOptions.items.push({
-                label: "Web dashboard",
-                detail: "See rich data visualizations in the web app",
+                label: 'Web dashboard',
+                detail: 'See rich data visualizations in the web app',
                 url: null,
                 cb: launchWebDashboardView,
-                eventDescription: "PaletteMenuLaunchWebDashboard",
+                eventDescription: 'PaletteMenuLaunchWebDashboard',
             });
         }
         // kpmMenuOptions.items.push({

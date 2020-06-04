@@ -9,11 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.JiraManager = void 0;
 const vscode_1 = require("vscode");
 const MenuManager_1 = require("./MenuManager");
 class JiraManager {
     constructor() {
-        this._snippet = "";
+        this._snippet = '';
         //
     }
     static getInstance() {
@@ -27,7 +28,7 @@ class JiraManager {
             this._snippet = snippet;
             let menuOptions = {
                 items: [],
-                placeholder: "Select a ticket",
+                placeholder: 'Select a ticket',
             };
             // get the user's tickets
             // const channelNames = await getChannelNames();
@@ -50,9 +51,7 @@ class JiraManager {
                 value,
                 placeHolder,
                 validateInput: (text) => {
-                    return !text
-                        ? "Please enter a valid message to continue."
-                        : null;
+                    return !text ? 'Please enter a valid message to continue.' : null;
                 },
             });
         });

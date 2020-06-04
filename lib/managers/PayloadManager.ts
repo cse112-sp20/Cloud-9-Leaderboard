@@ -243,7 +243,6 @@ export async function storePayload(
   );
 
   // update the status and tree
-  WallClockManager.getInstance().dispatchStatusViewUpdate();
 }
 
 export async function updateAggregateInfo(

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getHistoricalCommits = exports.postRepoContributors = exports.processRepoUsersForWorkspace = exports.getResourceInfo = exports.getRepoContributorInfo = exports.getRepoContributors = exports.getRepoFileCount = exports.getFileContributorCount = exports.getMyRepoInfo = void 0;
 const HttpClient_1 = require("../http/HttpClient");
 const Util_1 = require("../Util");
 const HttpClient_2 = require("../http/HttpClient");
@@ -46,10 +47,10 @@ function getMyRepoInfo() {
             return myRepoInfo;
         }
         const serverAvailable = yield HttpClient_2.serverIsAvailable();
-        const jwt = Util_1.getItem("jwt");
+        const jwt = Util_1.getItem('jwt');
         if (serverAvailable && jwt) {
             // list of [{identifier, tag, branch}]
-            const resp = yield HttpClient_1.softwareGet("/repo/info", jwt);
+            const resp = yield HttpClient_1.softwareGet('/repo/info', jwt);
             if (HttpClient_1.isResponseOk(resp)) {
                 myRepoInfo = resp.data;
             }
@@ -61,7 +62,7 @@ exports.getMyRepoInfo = getMyRepoInfo;
 function getFileContributorCount(fileName) {
     return __awaiter(this, void 0, void 0, function* () {
         let fileType = Util_1.getFileType(fileName);
-        if (fileType === "git") {
+        if (fileType === 'git') {
             return 0;
         }
         const projectDir = getProjectDir(fileName);
@@ -109,12 +110,12 @@ function getRepoFileCount(fileName) {
     });
 }
 exports.getRepoFileCount = getRepoFileCount;
-function getRepoContributors(fileName = "", filterOutNonEmails = true) {
+function getRepoContributors(fileName = '', filterOutNonEmails = true) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!fileName) {
             fileName = Util_1.findFirstActiveDirectoryOrWorkspaceDirectory();
         }
-        const noSpacesFileName = fileName.replace(/^\s+/g, "");
+        const noSpacesFileName = fileName.replace(/^\s+/g, '');
         const cacheId = `file-repo-contributors-info-${noSpacesFileName}`;
         let teamMembers = cacheMgr.get(cacheId);
         // return from cache if we have it
@@ -137,7 +138,7 @@ function getRepoContributorInfo(fileName, filterOutNonEmails = true) {
         if (!projectDir || !Util_1.isGitProject(projectDir)) {
             return null;
         }
-        const noSpacesProjDir = projectDir.replace(/^\s+/g, "");
+        const noSpacesProjDir = projectDir.replace(/^\s+/g, '');
         const cacheId = `project-repo-contributor-info-${noSpacesProjDir}`;
         let repoContributorInfo = cacheMgr.get(cacheId);
         // return from cache if we have it
@@ -163,7 +164,7 @@ function getRepoContributorInfo(fileName, filterOutNonEmails = true) {
             if (resultList && resultList.length > 0) {
                 // count name email
                 resultList.forEach((listInfo) => {
-                    const devInfo = listInfo.split(",");
+                    const devInfo = listInfo.split(',');
                     const name = devInfo[0];
                     const email = Util_1.normalizeGithubEmail(devInfo[1], filterOutNonEmails);
                     if (email && !map[email]) {
@@ -193,7 +194,7 @@ function getResourceInfo(projectDir) {
         if (!projectDir || !Util_1.isGitProject(projectDir)) {
             return {};
         }
-        const noSpacesProjDir = projectDir.replace(/^\s+/g, "");
+        const noSpacesProjDir = projectDir.replace(/^\s+/g, '');
         const cacheId = `resource-info-${noSpacesProjDir}`;
         let resourceInfo = cacheMgr.get(cacheId);
         // return from cache if we have it
@@ -201,10 +202,10 @@ function getResourceInfo(projectDir) {
             return resourceInfo;
         }
         resourceInfo = {};
-        const branch = yield Util_1.wrapExecPromise("git symbolic-ref --short HEAD", projectDir);
-        const identifier = yield Util_1.wrapExecPromise("git config --get remote.origin.url", projectDir);
-        let email = yield Util_1.wrapExecPromise("git config user.email", projectDir);
-        const tag = yield Util_1.wrapExecPromise("git describe --all", projectDir);
+        const branch = yield Util_1.wrapExecPromise('git symbolic-ref --short HEAD', projectDir);
+        const identifier = yield Util_1.wrapExecPromise('git config --get remote.origin.url', projectDir);
+        let email = yield Util_1.wrapExecPromise('git config user.email', projectDir);
+        const tag = yield Util_1.wrapExecPromise('git describe --all', projectDir);
         // both should be valid to return the resource info
         if (branch && identifier) {
             resourceInfo = { branch, identifier, email, tag };
@@ -232,7 +233,7 @@ function postRepoContributors(fileName) {
         const repoContributorInfo = yield getRepoContributorInfo(fileName);
         if (repoContributorInfo) {
             // send this to the backend
-            HttpClient_1.softwarePost("/repo/contributors", repoContributorInfo, Util_1.getItem("jwt"));
+            HttpClient_1.softwarePost('/repo/contributors', repoContributorInfo, Util_1.getItem('jwt'));
         }
     });
 }
@@ -257,7 +258,7 @@ function getLastCommit() {
             const encodedTag = encodeURIComponent(tag);
             const encodedBranch = encodeURIComponent(branch);
             // call the app
-            commit = yield HttpClient_1.softwareGet(`/commits/latest?identifier=${encodedIdentifier}&tag=${encodedTag}&branch=${encodedBranch}`, Util_1.getItem("jwt")).then((resp) => {
+            commit = yield HttpClient_1.softwareGet(`/commits/latest?identifier=${encodedIdentifier}&tag=${encodedTag}&branch=${encodedBranch}`, Util_1.getItem('jwt')).then((resp) => {
                 if (HttpClient_1.isResponseOk(resp)) {
                     // will get a single commit object back with the following attributes
                     // commitId, message, changes, email, timestamp
@@ -288,14 +289,14 @@ function getHistoricalCommits(isonline) {
             const tag = resourceInfo.tag;
             const branch = resourceInfo.branch;
             const latestCommit = yield getLastCommit();
-            let sinceOption = "";
+            let sinceOption = '';
             if (latestCommit) {
                 // add a second
                 const newTimestamp = parseInt(latestCommit.timestamp, 10) + 1;
                 sinceOption = ` --since=${newTimestamp}`;
             }
             else {
-                sinceOption = " --max-count=100";
+                sinceOption = ' --max-count=100';
             }
             const cmd = `git log --stat --pretty="COMMIT:%H,%ct,%cI,%s" --author=${resourceInfo.email}${sinceOption}`;
             // git log --stat --pretty="COMMIT:%H, %ct, %cI, %s, %ae"
@@ -309,18 +310,17 @@ function getHistoricalCommits(isonline) {
             for (let i = 0; i < resultList.length; i++) {
                 let line = resultList[i].trim();
                 if (line && line.length > 0) {
-                    if (line.indexOf("COMMIT:") === 0) {
-                        line = line.substring("COMMIT:".length);
+                    if (line.indexOf('COMMIT:') === 0) {
+                        line = line.substring('COMMIT:'.length);
                         if (commit) {
                             // add it to the commits
                             commits.push(commit);
                         }
                         // split by comma
-                        let commitInfos = line.split(",");
+                        let commitInfos = line.split(',');
                         if (commitInfos && commitInfos.length > 3) {
                             let commitId = commitInfos[0].trim();
-                            if (latestCommit &&
-                                commitId === latestCommit.commitId) {
+                            if (latestCommit && commitId === latestCommit.commitId) {
                                 commit = null;
                                 // go to the next one
                                 continue;
@@ -337,22 +337,22 @@ function getHistoricalCommits(isonline) {
                             };
                         }
                     }
-                    else if (commit && line.indexOf("|") !== -1) {
+                    else if (commit && line.indexOf('|') !== -1) {
                         // get the file and changes
                         // i.e. backend/app.js                | 20 +++++++++-----------
-                        line = line.replace(/ +/g, " ");
+                        line = line.replace(/ +/g, ' ');
                         // split by the pipe
-                        let lineInfos = line.split("|");
+                        let lineInfos = line.split('|');
                         if (lineInfos && lineInfos.length > 1) {
                             let file = lineInfos[0].trim();
                             let metricsLine = lineInfos[1].trim();
-                            let metricsInfos = metricsLine.split(" ");
+                            let metricsInfos = metricsLine.split(' ');
                             if (metricsInfos && metricsInfos.length > 1) {
                                 let addAndDeletes = metricsInfos[1].trim();
                                 // count the number of plus signs and negative signs to find
                                 // out how many additions and deletions per file
                                 let len = addAndDeletes.length;
-                                let lastPlusIdx = addAndDeletes.lastIndexOf("+");
+                                let lastPlusIdx = addAndDeletes.lastIndexOf('+');
                                 let insertions = 0;
                                 let deletions = 0;
                                 if (lastPlusIdx !== -1) {
@@ -408,19 +408,19 @@ function getHistoricalCommits(isonline) {
             myRepoInfo = [];
         }
         /**
-         * We'll get commitId, unixTimestamp, unixDate, commitMessage, authorEmail
-         * then we'll gather the files
-         * COMMIT:52d0ac19236ac69cae951b2a2a0b4700c0c525db, 1545507646, 2018-12-22T11:40:46-08:00, updated wlb to use local_start, xavluiz@gmail.com
-    
-            backend/app.js                  | 20 +++++++++-----------
-            backend/app/lib/audio.js        |  5 -----
-            backend/app/lib/feed_helpers.js | 13 +------------
-            backend/app/lib/sessions.js     | 25 +++++++++++++++----------
-            4 files changed, 25 insertions(+), 38 deletions(-)
-        */
+           * We'll get commitId, unixTimestamp, unixDate, commitMessage, authorEmail
+           * then we'll gather the files
+           * COMMIT:52d0ac19236ac69cae951b2a2a0b4700c0c525db, 1545507646, 2018-12-22T11:40:46-08:00, updated wlb to use local_start, xavluiz@gmail.com
+      
+              backend/app.js                  | 20 +++++++++-----------
+              backend/app/lib/audio.js        |  5 -----
+              backend/app/lib/feed_helpers.js | 13 +------------
+              backend/app/lib/sessions.js     | 25 +++++++++++++++----------
+              4 files changed, 25 insertions(+), 38 deletions(-)
+          */
         function sendCommits(commitData) {
             // send this to the backend
-            HttpClient_1.softwarePost("/commits", commitData, Util_1.getItem("jwt"));
+            HttpClient_1.softwarePost('/commits', commitData, Util_1.getItem('jwt'));
         }
     });
 }

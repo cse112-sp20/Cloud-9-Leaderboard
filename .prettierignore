@@ -3,3 +3,7 @@ node_modules
 coverage
 build
 CHANGELOG.md
+out/*
+.vscode-test/*
+README.md
+.github/workflows*

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.KpmProvider = exports.connectKpmTreeView = void 0;
 const vscode_1 = require("vscode");
 const KpmProviderManager_1 = require("./KpmProviderManager");
 const EventManager_1 = require("../managers/EventManager");
@@ -17,14 +18,12 @@ const kpmCollapsedStateMap = {};
 exports.connectKpmTreeView = (view) => {
     return vscode_1.Disposable.from(view.onDidCollapseElement((e) => __awaiter(void 0, void 0, void 0, function* () {
         const item = e.element;
-        kpmCollapsedStateMap[item.label] =
-            vscode_1.TreeItemCollapsibleState.Collapsed;
+        kpmCollapsedStateMap[item.label] = vscode_1.TreeItemCollapsibleState.Collapsed;
     })), view.onDidExpandElement((e) => __awaiter(void 0, void 0, void 0, function* () {
         const item = e.element;
-        kpmCollapsedStateMap[item.label] =
-            vscode_1.TreeItemCollapsibleState.Expanded;
+        kpmCollapsedStateMap[item.label] = vscode_1.TreeItemCollapsibleState.Expanded;
         if (item.eventDescription) {
-            EventManager_1.EventManager.getInstance().createCodeTimeEvent("mouse", "click", `TreeViewItemExpand_${item.eventDescription}`);
+            EventManager_1.EventManager.getInstance().createCodeTimeEvent('mouse', 'click', `TreeViewItemExpand_${item.eventDescription}`);
         }
     })), view.onDidChangeSelection((e) => __awaiter(void 0, void 0, void 0, function* () {
         if (!e.selection || e.selection.length === 0) {
@@ -32,9 +31,9 @@ exports.connectKpmTreeView = (view) => {
         }
         const item = e.selection[0];
         KpmProviderManager_1.handleKpmChangeSelection(view, item);
-    })), view.onDidChangeVisibility(e => {
+    })), view.onDidChangeVisibility((e) => {
         if (e.visible) {
-            EventManager_1.EventManager.getInstance().createCodeTimeEvent("mouse", "click", "ShowTreeView");
+            EventManager_1.EventManager.getInstance().createCodeTimeEvent('mouse', 'click', 'ShowTreeView');
         }
     }));
 };
@@ -52,7 +51,7 @@ class KpmProvider {
         return void 0; // all playlists are in root
     }
     refresh() {
-        this._onDidChangeTreeData.fire();
+        this._onDidChangeTreeData.fire(null);
     }
     refreshParent(parent) {
         this._onDidChangeTreeData.fire(parent);

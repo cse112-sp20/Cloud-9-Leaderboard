@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const NodeCache = require("node-cache");
+exports.CacheManager = void 0;
+const NodeCache = require('node-cache');
 class CacheManager {
     constructor() {
         // default cache of 2 minutes

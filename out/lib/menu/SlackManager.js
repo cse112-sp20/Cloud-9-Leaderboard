@@ -9,22 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.showSlackChannelMenu = exports.sendSlackMessage = exports.slackContributor = exports.disconnectSlack = exports.connectSlack = exports.sendGeneratedReportReport = exports.generateSlackReport = void 0;
 const Constants_1 = require("../Constants");
 const Util_1 = require("../Util");
 const DataController_1 = require("../DataController");
-const { WebClient } = require("@slack/web-api");
+const { WebClient } = require('@slack/web-api');
 const MenuManager_1 = require("./MenuManager");
 const HttpClient_1 = require("../http/HttpClient");
 const vscode_1 = require("vscode");
 const GitUtil_1 = require("../repo/GitUtil");
-const fs = require("fs");
+const fs = require('fs');
 //// NEW LOGIC /////
 function generateSlackReport() {
     return __awaiter(this, void 0, void 0, function* () {
-        const slackAccessToken = Util_1.getItem("slack_access_token");
+        const slackAccessToken = Util_1.getItem('slack_access_token');
         if (!slackAccessToken) {
-            const connectConfirm = yield vscode_1.window.showInformationMessage("Connect Slack to continue", ...["Yes"]);
-            if (connectConfirm && connectConfirm === "Yes") {
+            const connectConfirm = yield vscode_1.window.showInformationMessage('Connect Slack to continue', ...['Yes']);
+            if (connectConfirm && connectConfirm === 'Yes') {
                 connectSlack(sendGeneratedReportReport);
             }
         }
@@ -39,10 +40,10 @@ exports.generateSlackReport = generateSlackReport;
 //// OLD LOGIC /////
 function sendGeneratedReportReport() {
     return __awaiter(this, void 0, void 0, function* () {
-        const slackAccessToken = Util_1.getItem("slack_access_token");
+        const slackAccessToken = Util_1.getItem('slack_access_token');
         if (!slackAccessToken) {
-            const connectConfirm = yield vscode_1.window.showInformationMessage("Connect Slack to continue", ...["Yes"]);
-            if (connectConfirm && connectConfirm === "Yes") {
+            const connectConfirm = yield vscode_1.window.showInformationMessage('Connect Slack to continue', ...['Yes']);
+            if (connectConfirm && connectConfirm === 'Yes') {
                 connectSlack(sendGeneratedReportReport);
             }
         }
@@ -63,12 +64,12 @@ exports.sendGeneratedReportReport = sendGeneratedReportReport;
  */
 function connectSlack(callback = null) {
     return __awaiter(this, void 0, void 0, function* () {
-        const slackAccessToken = Util_1.getItem("slack_access_token");
+        const slackAccessToken = Util_1.getItem('slack_access_token');
         if (slackAccessToken) {
-            vscode_1.window.showInformationMessage("Slack is already connected");
+            vscode_1.window.showInformationMessage('Slack is already connected');
             return;
         }
-        const jwt = Util_1.getItem("jwt");
+        const jwt = Util_1.getItem('jwt');
         const encodedJwt = encodeURIComponent(jwt);
         const qryStr = `integrate=slack&plugin=musictime&token=${encodedJwt}`;
         // authorize the user for slack
@@ -80,11 +81,11 @@ function connectSlack(callback = null) {
 exports.connectSlack = connectSlack;
 function disconnectSlack() {
     return __awaiter(this, void 0, void 0, function* () {
-        const selection = yield vscode_1.window.showInformationMessage(`Are you sure you would like to disconnect Slack?`, ...["Yes"]);
-        if (selection === "Yes") {
-            let result = yield HttpClient_1.softwarePut(`/auth/slack/disconnect`, {}, Util_1.getItem("jwt"));
+        const selection = yield vscode_1.window.showInformationMessage(`Are you sure you would like to disconnect Slack?`, ...['Yes']);
+        if (selection === 'Yes') {
+            let result = yield HttpClient_1.softwarePut(`/auth/slack/disconnect`, {}, Util_1.getItem('jwt'));
             // oauth is not null, initialize spotify
-            Util_1.setItem("slack_access_token", null);
+            Util_1.setItem('slack_access_token', null);
             vscode_1.window.showInformationMessage(`Successfully disconnected your Slack connection.`);
         }
     });
@@ -93,10 +94,10 @@ exports.disconnectSlack = disconnectSlack;
 function showSlackMessageInputPrompt() {
     return __awaiter(this, void 0, void 0, function* () {
         return yield vscode_1.window.showInputBox({
-            value: "",
-            placeHolder: "Enter a message to appear in the selected channel",
+            value: '',
+            placeHolder: 'Enter a message to appear in the selected channel',
             validateInput: (text) => {
-                return !text ? "Please enter a valid message to continue." : null;
+                return !text ? 'Please enter a valid message to continue.' : null;
             },
         });
     });
@@ -119,7 +120,7 @@ function slackContributor() {
 exports.slackContributor = slackContributor;
 function sendSlackMessage(message, selectedChannel) {
     return __awaiter(this, void 0, void 0, function* () {
-        const slackAccessToken = Util_1.getItem("slack_access_token");
+        const slackAccessToken = Util_1.getItem('slack_access_token');
         const msg = `${message}`;
         const web = new WebClient(slackAccessToken);
         yield web.chat
@@ -137,7 +138,7 @@ function sendSlackMessage(message, selectedChannel) {
             })
                 .catch((err) => {
                 if (err.message) {
-                    console.log("error posting slack message: ", err.message);
+                    console.log('error posting slack message: ', err.message);
                 }
             });
         });
@@ -148,7 +149,7 @@ function showSlackChannelMenu() {
     return __awaiter(this, void 0, void 0, function* () {
         let menuOptions = {
             items: [],
-            placeholder: "Select a channel",
+            placeholder: 'Select a channel',
         };
         // get the available channels
         const channelNames = yield getChannelNames();
@@ -168,12 +169,12 @@ function showSlackChannelMenu() {
 exports.showSlackChannelMenu = showSlackChannelMenu;
 function getChannels() {
     return __awaiter(this, void 0, void 0, function* () {
-        const slackAccessToken = Util_1.getItem("slack_access_token");
+        const slackAccessToken = Util_1.getItem('slack_access_token');
         const web = new WebClient(slackAccessToken);
         const result = yield web.channels
             .list({ exclude_archived: true, exclude_members: false })
             .catch((err) => {
-            console.log("Unable to retrieve slack channels: ", err.message);
+            console.log('Unable to retrieve slack channels: ', err.message);
             return [];
         });
         if (result && result.ok) {

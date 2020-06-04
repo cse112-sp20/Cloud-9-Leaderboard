@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isResponseOk = exports.hasTokenExpired = exports.softwareDelete = exports.softwarePost = exports.softwarePut = exports.softwareGet = exports.spotifyApiPut = exports.serverIsAvailable = void 0;
 const axios_1 = require("axios");
 const Constants_1 = require("../Constants");
 const Util_1 = require("../Util");
@@ -21,16 +22,16 @@ const spotifyApi = axios_1.default.create({});
 const cacheMgr = CacheManager_1.CacheManager.getInstance();
 function serverIsAvailable() {
     return __awaiter(this, void 0, void 0, function* () {
-        let isAvail = cacheMgr.get("serverAvailable");
+        let isAvail = cacheMgr.get('serverAvailable');
         if (isAvail === undefined || isAvail === null) {
-            isAvail = yield softwareGet("/ping", null)
+            isAvail = yield softwareGet('/ping', null)
                 .then((result) => {
                 return isResponseOk(result);
             })
                 .catch((e) => {
                 return false;
             });
-            cacheMgr.set("serverAvailable", isAvail, 60);
+            cacheMgr.set('serverAvailable', isAvail, 60);
         }
         return isAvail;
     });
@@ -38,10 +39,10 @@ function serverIsAvailable() {
 exports.serverIsAvailable = serverIsAvailable;
 function spotifyApiPut(api, payload, accessToken) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (api.indexOf("https://api.spotify.com") === -1) {
-            api = "https://api.spotify.com" + api;
+        if (api.indexOf('https://api.spotify.com') === -1) {
+            api = 'https://api.spotify.com' + api;
         }
-        spotifyApi.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+        spotifyApi.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         return yield spotifyApi.put(api, payload).catch((err) => {
             Util_1.logIt(`error posting data for ${api}, message: ${err.message}`);
             return err;
@@ -58,7 +59,7 @@ exports.spotifyApiPut = spotifyApiPut;
 function softwareGet(api, jwt) {
     return __awaiter(this, void 0, void 0, function* () {
         if (jwt) {
-            beApi.defaults.headers.common["Authorization"] = jwt;
+            beApi.defaults.headers.common['Authorization'] = jwt;
         }
         return yield beApi.get(api).catch((err) => {
             Util_1.logIt(`error fetching data for ${api}, message: ${err.message}`);
@@ -73,7 +74,7 @@ exports.softwareGet = softwareGet;
 function softwarePut(api, payload, jwt) {
     return __awaiter(this, void 0, void 0, function* () {
         // PUT the kpm to the PluginManager
-        beApi.defaults.headers.common["Authorization"] = jwt;
+        beApi.defaults.headers.common['Authorization'] = jwt;
         return yield beApi
             .put(api, payload)
             .then((resp) => {
@@ -92,7 +93,7 @@ exports.softwarePut = softwarePut;
 function softwarePost(api, payload, jwt) {
     return __awaiter(this, void 0, void 0, function* () {
         // POST the kpm to the PluginManager
-        beApi.defaults.headers.common["Authorization"] = jwt;
+        beApi.defaults.headers.common['Authorization'] = jwt;
         return beApi
             .post(api, payload)
             .then((resp) => {
@@ -110,7 +111,7 @@ exports.softwarePost = softwarePost;
  */
 function softwareDelete(api, jwt) {
     return __awaiter(this, void 0, void 0, function* () {
-        beApi.defaults.headers.common["Authorization"] = jwt;
+        beApi.defaults.headers.common['Authorization'] = jwt;
         return beApi
             .delete(api)
             .then((resp) => {

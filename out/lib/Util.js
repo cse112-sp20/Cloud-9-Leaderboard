@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getFileDataPayloadsAsJson = exports.getFileDataArray = exports.getFileDataAsJson = exports.cleanJsonString = exports.getFileType = exports.createSpotifyIdFromUri = exports.buildQueryString = exports.getColumnHeaders = exports.getRowLabels = exports.getRightAlignedTableHeader = exports.getTableHeader = exports.getSectionHeader = exports.getDashboardBottomBorder = exports.getDashboardRow = exports.showWarningMessage = exports.showInformationMessage = exports.connectAtlassian = exports.buildLoginUrl = exports.showLoginPrompt = exports.launchLogin = exports.humanizeMinutes = exports.formatNumber = exports.launchWebUrl = exports.wrapExecPromise = exports.getGitEmail = exports.getSongDisplayName = exports.normalizeGithubEmail = exports.deleteFile = exports.randomCode = exports.getNowTimes = exports.isNewDay = exports.getFormattedDay = exports.getOffsetSeconds = exports.nowInSecs = exports.showOfflinePrompt = exports.getSoftwareSessionAsJson = exports.logIt = exports.logEvent = exports.getExtensionName = exports.getExtensionDisplayName = exports.openFileInEditor = exports.displayReadmeIfNotExists = exports.getImagesDir = exports.getLocalREADMEFile = exports.getPluginEventsFile = exports.getSoftwareDataStoreFile = exports.getSoftwareSessionFile = exports.jwtExists = exports.softwareSessionFileExists = exports.getSoftwareDir = exports.getDailyReportSummaryFile = exports.getProjectContributorCodeSummaryFile = exports.getProjectCodeSummaryFile = exports.getSummaryInfoFile = exports.getCommitSummaryFile = exports.getDashboardFile = exports.getOsUsername = exports.getCommandResultList = exports.getCommandResultLine = exports.getOs = exports.getHostname = exports.isMac = exports.isWindows = exports.isLinux = exports.isEmptyObj = exports.isStatusBarTextVisible = exports.toggleStatusBar = exports.handleCodeTimeStatusToggle = exports.showStatus = exports.showLoading = exports.getItem = exports.setItem = exports.validateEmail = exports.getProjectFolder = exports.getWorkspaceFolderByPath = exports.getRootPathForFile = exports.isFileOpen = exports.getNumberOfTextDocumentsOpen = exports.getFirstWorkspaceFolder = exports.getWorkspaceFolders = exports.findFirstActiveDirectoryOrWorkspaceDirectory = exports.getActiveProjectWorkspace = exports.getFileAgeInDays = exports.isGitProject = exports.getSessionFileCreateTime = exports.codeTimeExtInstalled = exports.isCodeTimeMetricsFile = exports.getVersion = exports.getPluginType = exports.getPluginName = exports.getPluginId = exports.getWorkspaceName = exports.MARKER_WIDTH = exports.TABLE_WIDTH = exports.DASHBOARD_LRG_COL_WIDTH = exports.DASHBOARD_COL_WIDTH = exports.DASHBOARD_VALUE_WIDTH = exports.DASHBOARD_LABEL_WIDTH = exports.alpha = void 0;
 const extension_1 = require("../extension");
 const vscode_1 = require("vscode");
 const Constants_1 = require("./Constants");
@@ -17,23 +18,23 @@ const SessionSummaryData_1 = require("./storage/SessionSummaryData");
 const EventManager_1 = require("./managers/EventManager");
 const HttpClient_1 = require("./http/HttpClient");
 const OnboardManager_1 = require("./user/OnboardManager");
-const moment = require("moment-timezone");
-const open = require("open");
-const { exec } = require("child_process");
-const fs = require("fs");
-const os = require("os");
-const crypto = require("crypto");
-const path = require("path");
-exports.alpha = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const moment = require('moment-timezone');
+const open = require('open');
+const { exec } = require('child_process');
+const fs = require('fs');
+const os = require('os');
+const crypto = require('crypto');
+const path = require('path');
+exports.alpha = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 exports.DASHBOARD_LABEL_WIDTH = 28;
 exports.DASHBOARD_VALUE_WIDTH = 36;
 exports.DASHBOARD_COL_WIDTH = 21;
 exports.DASHBOARD_LRG_COL_WIDTH = 38;
 exports.TABLE_WIDTH = 80;
 exports.MARKER_WIDTH = 4;
-const NUMBER_IN_EMAIL_REGEX = new RegExp("^\\d+\\+");
-const dayFormat = "YYYY-MM-DD";
-const dayTimeFormat = "LLLL";
+const NUMBER_IN_EMAIL_REGEX = new RegExp('^\\d+\\+');
+const dayFormat = 'YYYY-MM-DD';
+const dayTimeFormat = 'LLLL';
 let showStatusBarText = true;
 let extensionName = null;
 let extensionDisplayName = null; // Code Time or Music Time
@@ -63,8 +64,8 @@ function getVersion() {
 }
 exports.getVersion = getVersion;
 function isCodeTimeMetricsFile(fileName) {
-    fileName = fileName || "";
-    if (fileName.includes(".software") && fileName.includes("CodeTime")) {
+    fileName = fileName || '';
+    if (fileName.includes('.software') && fileName.includes('CodeTime')) {
         return true;
     }
     return false;
@@ -88,7 +89,7 @@ function isGitProject(projectDir) {
     if (!projectDir) {
         return false;
     }
-    if (!fs.existsSync(path.join(projectDir, ".git"))) {
+    if (!fs.existsSync(path.join(projectDir, '.git'))) {
         return false;
     }
     return true;
@@ -146,7 +147,7 @@ function findFirstActiveDirectoryOrWorkspaceDirectory() {
     if (folder) {
         return folder.uri.fsPath;
     }
-    return "";
+    return '';
 }
 exports.findFirstActiveDirectoryOrWorkspaceDirectory = findFirstActiveDirectoryOrWorkspaceDirectory;
 /**
@@ -221,7 +222,7 @@ function getProjectFolder(fileName) {
         for (let i = 0; i < vscode_1.workspace.workspaceFolders.length; i++) {
             let workspaceFolder = vscode_1.workspace.workspaceFolders[i];
             if (workspaceFolder.uri) {
-                let isVslsScheme = workspaceFolder.uri.scheme === "vsls" ? true : false;
+                let isVslsScheme = workspaceFolder.uri.scheme === 'vsls' ? true : false;
                 if (isVslsScheme) {
                     liveshareFolder = workspaceFolder;
                 }
@@ -254,8 +255,8 @@ function setItem(key, value) {
     const content = JSON.stringify(jsonObj);
     const sessionFile = getSoftwareSessionFile();
     fs.writeFileSync(sessionFile, content, (err) => {
-        if (err)
-            logIt(`Error writing to the Software session file: ${err.message}`);
+        if (err) {
+        }
     });
 }
 exports.setItem = setItem;
@@ -267,13 +268,13 @@ function getItem(key) {
 }
 exports.getItem = getItem;
 function showLoading() {
-    let loadingMsg = "⏳ code time metrics";
-    updateStatusBar(loadingMsg, "");
+    let loadingMsg = '⏳ code time metrics';
+    updateStatusBar(loadingMsg, '');
 }
 exports.showLoading = showLoading;
 function showStatus(fullMsg, tooltip) {
     if (!tooltip) {
-        tooltip = "Active code time today. Click to see more from Code Time.";
+        tooltip = 'Active code time today. Click to see more from Code Time.';
     }
     updateStatusBar(fullMsg, tooltip);
 }
@@ -283,9 +284,9 @@ function handleCodeTimeStatusToggle() {
 }
 exports.handleCodeTimeStatusToggle = handleCodeTimeStatusToggle;
 function updateStatusBar(msg, tooltip) {
-    let loggedInName = getItem("name");
-    let userInfo = "";
-    if (loggedInName && loggedInName !== "") {
+    let loggedInName = getItem('name');
+    let userInfo = '';
+    if (loggedInName && loggedInName !== '') {
         userInfo = ` Connected as ${loggedInName}`;
     }
     if (!tooltip) {
@@ -293,14 +294,14 @@ function updateStatusBar(msg, tooltip) {
     }
     if (!showStatusBarText) {
         // add the message to the tooltip
-        tooltip = msg + " | " + tooltip;
+        tooltip = msg + ' | ' + tooltip;
     }
     if (!extension_1.getStatusBarItem()) {
         return;
     }
     extension_1.getStatusBarItem().tooltip = `${tooltip}${userInfo}`;
     if (!showStatusBarText) {
-        extension_1.getStatusBarItem().text = "$(clock)";
+        extension_1.getStatusBarItem().text = '$(clock)';
     }
     else {
         extension_1.getStatusBarItem().text = msg;
@@ -326,16 +327,16 @@ exports.isLinux = isLinux;
 // process.platform return the following...
 //   -> 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
 function isWindows() {
-    return process.platform.indexOf("win32") !== -1;
+    return process.platform.indexOf('win32') !== -1;
 }
 exports.isWindows = isWindows;
 function isMac() {
-    return process.platform.indexOf("darwin") !== -1;
+    return process.platform.indexOf('darwin') !== -1;
 }
 exports.isMac = isMac;
 function getHostname() {
     return __awaiter(this, void 0, void 0, function* () {
-        let hostname = yield getCommandResultLine("hostname");
+        let hostname = yield getCommandResultLine('hostname');
         return hostname;
     });
 }
@@ -355,15 +356,15 @@ function getOs() {
         parts.push(platform);
     }
     if (parts.length > 0) {
-        return parts.join("_");
+        return parts.join('_');
     }
-    return "";
+    return '';
 }
 exports.getOs = getOs;
 function getCommandResultLine(cmd, projectDir = null) {
     return __awaiter(this, void 0, void 0, function* () {
         const resultList = yield getCommandResultList(cmd, projectDir);
-        let resultLine = "";
+        let resultLine = '';
         if (resultList && resultList.length) {
             for (let i = 0; i < resultList.length; i++) {
                 let line = resultList[i];
@@ -384,8 +385,8 @@ function getCommandResultList(cmd, projectDir = null) {
             return [];
         }
         const contentList = result
-            .replace(/\r\n/g, "\r")
-            .replace(/\n/g, "\r")
+            .replace(/\r\n/g, '\r')
+            .replace(/\n/g, '\r')
             .split(/\r/);
         return contentList;
     });
@@ -394,8 +395,8 @@ exports.getCommandResultList = getCommandResultList;
 function getOsUsername() {
     return __awaiter(this, void 0, void 0, function* () {
         let username = os.userInfo().username;
-        if (!username || username.trim() === "") {
-            username = yield getCommandResultLine("whoami");
+        if (!username || username.trim() === '') {
+            username = yield getCommandResultLine('whoami');
         }
         return username;
     });
@@ -404,10 +405,10 @@ exports.getOsUsername = getOsUsername;
 function getDashboardFile() {
     let file = getSoftwareDir();
     if (isWindows()) {
-        file += "\\CodeTime.txt";
+        file += '\\CodeTime.txt';
     }
     else {
-        file += "/CodeTime.txt";
+        file += '/CodeTime.txt';
     }
     return file;
 }
@@ -415,10 +416,10 @@ exports.getDashboardFile = getDashboardFile;
 function getCommitSummaryFile() {
     let file = getSoftwareDir();
     if (isWindows()) {
-        file += "\\CommitSummary.txt";
+        file += '\\CommitSummary.txt';
     }
     else {
-        file += "/CommitSummary.txt";
+        file += '/CommitSummary.txt';
     }
     return file;
 }
@@ -426,10 +427,10 @@ exports.getCommitSummaryFile = getCommitSummaryFile;
 function getSummaryInfoFile() {
     let file = getSoftwareDir();
     if (isWindows()) {
-        file += "\\SummaryInfo.txt";
+        file += '\\SummaryInfo.txt';
     }
     else {
-        file += "/SummaryInfo.txt";
+        file += '/SummaryInfo.txt';
     }
     return file;
 }
@@ -437,10 +438,10 @@ exports.getSummaryInfoFile = getSummaryInfoFile;
 function getProjectCodeSummaryFile() {
     let file = getSoftwareDir();
     if (isWindows()) {
-        file += "\\ProjectCodeSummary.txt";
+        file += '\\ProjectCodeSummary.txt';
     }
     else {
-        file += "/ProjectCodeSummary.txt";
+        file += '/ProjectCodeSummary.txt';
     }
     return file;
 }
@@ -448,10 +449,10 @@ exports.getProjectCodeSummaryFile = getProjectCodeSummaryFile;
 function getProjectContributorCodeSummaryFile() {
     let file = getSoftwareDir();
     if (isWindows()) {
-        file += "\\ProjectContributorCodeSummary.txt";
+        file += '\\ProjectContributorCodeSummary.txt';
     }
     else {
-        file += "/ProjectContributorCodeSummary.txt";
+        file += '/ProjectContributorCodeSummary.txt';
     }
     return file;
 }
@@ -459,10 +460,10 @@ exports.getProjectContributorCodeSummaryFile = getProjectContributorCodeSummaryF
 function getDailyReportSummaryFile() {
     let file = getSoftwareDir();
     if (isWindows()) {
-        file += "\\DailyReportSummary.txt";
+        file += '\\DailyReportSummary.txt';
     }
     else {
-        file += "/DailyReportSummary.txt";
+        file += '/DailyReportSummary.txt';
     }
     return file;
 }
@@ -471,10 +472,10 @@ function getSoftwareDir(autoCreate = true) {
     const homedir = os.homedir();
     let softwareDataDir = homedir;
     if (isWindows()) {
-        softwareDataDir += "\\.software";
+        softwareDataDir += '\\.software';
     }
     else {
-        softwareDataDir += "/.software";
+        softwareDataDir += '/.software';
     }
     if (autoCreate && !fs.existsSync(softwareDataDir)) {
         fs.mkdirSync(softwareDataDir);
@@ -491,17 +492,17 @@ function softwareSessionFileExists() {
 }
 exports.softwareSessionFileExists = softwareSessionFileExists;
 function jwtExists() {
-    let jwt = getItem("jwt");
+    let jwt = getItem('jwt');
     return !jwt ? false : true;
 }
 exports.jwtExists = jwtExists;
 function getSoftwareSessionFile() {
     let file = getSoftwareDir();
     if (isWindows()) {
-        file += "\\session.json";
+        file += '\\session.json';
     }
     else {
-        file += "/session.json";
+        file += '/session.json';
     }
     return file;
 }
@@ -509,10 +510,10 @@ exports.getSoftwareSessionFile = getSoftwareSessionFile;
 function getSoftwareDataStoreFile() {
     let file = getSoftwareDir();
     if (isWindows()) {
-        file += "\\data.json";
+        file += '\\data.json';
     }
     else {
-        file += "/data.json";
+        file += '/data.json';
     }
     return file;
 }
@@ -520,10 +521,10 @@ exports.getSoftwareDataStoreFile = getSoftwareDataStoreFile;
 function getPluginEventsFile() {
     let file = getSoftwareDir();
     if (isWindows()) {
-        file += "\\events.json";
+        file += '\\events.json';
     }
     else {
-        file += "/events.json";
+        file += '/events.json';
     }
     return file;
 }
@@ -531,10 +532,10 @@ exports.getPluginEventsFile = getPluginEventsFile;
 function getLocalREADMEFile() {
     let file = __dirname;
     if (isWindows()) {
-        file += "\\README.md";
+        file += '\\README.md';
     }
     else {
-        file += "/README.md";
+        file += '/README.md';
     }
     return file;
 }
@@ -542,20 +543,20 @@ exports.getLocalREADMEFile = getLocalREADMEFile;
 function getImagesDir() {
     let dir = __dirname;
     if (isWindows()) {
-        dir += "\\images";
+        dir += '\\images';
     }
     else {
-        dir += "/images";
+        dir += '/images';
     }
     return dir;
 }
 exports.getImagesDir = getImagesDir;
 function displayReadmeIfNotExists(override = false) {
-    const displayedReadme = getItem("vscode_CtReadme");
+    const displayedReadme = getItem('vscode_CtReadme');
     if (!displayedReadme || override) {
         const readmeUri = vscode_1.Uri.file(getLocalREADMEFile());
-        vscode_1.commands.executeCommand("markdown.showPreview", readmeUri, vscode_1.ViewColumn.One);
-        setItem("vscode_CtReadme", true);
+        vscode_1.commands.executeCommand('markdown.showPreview', readmeUri, vscode_1.ViewColumn.One);
+        setItem('vscode_CtReadme', true);
     }
 }
 exports.displayReadmeIfNotExists = displayReadmeIfNotExists;
@@ -567,16 +568,14 @@ function openFileInEditor(file) {
                 vscode_1.window.showErrorMessage(error.message);
             }
             else {
-                logIt(error);
             }
         });
     }, (error) => {
         if (error.message &&
-            error.message.toLowerCase().includes("file not found")) {
+            error.message.toLowerCase().includes('file not found')) {
             vscode_1.window.showErrorMessage(`Cannot open ${file}.  File not found.`);
         }
         else {
-            logIt(error);
         }
     });
 }
@@ -587,10 +586,10 @@ function getExtensionDisplayName() {
     }
     let extInfoFile = __dirname;
     if (isWindows()) {
-        extInfoFile += "\\extensioninfo.json";
+        extInfoFile += '\\extensioninfo.json';
     }
     else {
-        extInfoFile += "/extensioninfo.json";
+        extInfoFile += '/extensioninfo.json';
     }
     if (fs.existsSync(extInfoFile)) {
         const content = fs.readFileSync(extInfoFile).toString();
@@ -601,13 +600,11 @@ function getExtensionDisplayName() {
                     extensionDisplayName = data.displayName;
                 }
             }
-            catch (e) {
-                logIt(`unable to read ext info name: ${e.message}`);
-            }
+            catch (e) { }
         }
     }
     if (!extensionDisplayName) {
-        extensionDisplayName = "Code Time";
+        extensionDisplayName = 'Code Time';
     }
     return extensionDisplayName;
 }
@@ -618,10 +615,10 @@ function getExtensionName() {
     }
     let extInfoFile = __dirname;
     if (isWindows()) {
-        extInfoFile += "\\extensioninfo.json";
+        extInfoFile += '\\extensioninfo.json';
     }
     else {
-        extInfoFile += "/extensioninfo.json";
+        extInfoFile += '/extensioninfo.json';
     }
     if (fs.existsSync(extInfoFile)) {
         const content = fs.readFileSync(extInfoFile).toString();
@@ -632,13 +629,11 @@ function getExtensionName() {
                     extensionName = data.name;
                 }
             }
-            catch (e) {
-                logIt(`unable to read ext info name: ${e.message}`);
-            }
+            catch (e) { }
         }
     }
     if (!extensionName) {
-        extensionName = "swdc-vscode";
+        extensionName = 'cloud9';
     }
     return extensionName;
 }
@@ -650,9 +645,7 @@ function logEvent(message) {
     }
 }
 exports.logEvent = logEvent;
-function logIt(message) {
-    console.log(`${getExtensionName()}: ${message}`);
-}
+function logIt(message) { }
 exports.logIt = logIt;
 function getSoftwareSessionAsJson() {
     let data = null;
@@ -664,7 +657,6 @@ function getSoftwareSessionAsJson() {
                 data = JSON.parse(cleanJsonString(content));
             }
             catch (e) {
-                logIt(`unable to read session info: ${e.message}`);
                 // error trying to read the session file, delete it
                 deleteFile(sessionFile);
                 data = {};
@@ -677,16 +669,16 @@ exports.getSoftwareSessionAsJson = getSoftwareSessionAsJson;
 function showOfflinePrompt(addReconnectMsg = false) {
     return __awaiter(this, void 0, void 0, function* () {
         // shows a prompt that we're not able to communicate with the app server
-        let infoMsg = "Our service is temporarily unavailable. ";
+        let infoMsg = 'Our service is temporarily unavailable. ';
         if (addReconnectMsg) {
             infoMsg +=
-                "We will try to reconnect again in 10 minutes. Your status bar will not update at this time.";
+                'We will try to reconnect again in 10 minutes. Your status bar will not update at this time.';
         }
         else {
-            infoMsg += "Please try again later.";
+            infoMsg += 'Please try again later.';
         }
         // set the last update time so we don't try to ask too frequently
-        vscode_1.window.showInformationMessage(infoMsg, ...["OK"]);
+        vscode_1.window.showInformationMessage(infoMsg, ...['OK']);
     });
 }
 exports.showOfflinePrompt = showOfflinePrompt;
@@ -705,7 +697,7 @@ function getFormattedDay(unixSeconds) {
 exports.getFormattedDay = getFormattedDay;
 function isNewDay() {
     const { day } = getNowTimes();
-    const currentDay = getItem("currentDay");
+    const currentDay = getItem('currentDay');
     return currentDay !== day ? true : false;
 }
 exports.isNewDay = isNewDay;
@@ -770,12 +762,12 @@ function execPromise(command, opts) {
 function normalizeGithubEmail(email, filterOutNonEmails = true) {
     if (email) {
         if (filterOutNonEmails &&
-            (email.endsWith("github.com") || email.includes("users.noreply"))) {
+            (email.endsWith('github.com') || email.includes('users.noreply'))) {
             return null;
         }
         else {
             const found = email.match(NUMBER_IN_EMAIL_REGEX);
-            if (found && email.includes("users.noreply")) {
+            if (found && email.includes('users.noreply')) {
                 // filter out the ones that look like
                 // 2342353345+username@users.noreply.github.com"
                 return null;
@@ -787,7 +779,7 @@ function normalizeGithubEmail(email, filterOutNonEmails = true) {
 exports.normalizeGithubEmail = normalizeGithubEmail;
 function getSongDisplayName(name) {
     if (!name) {
-        return "";
+        return '';
     }
     name = name.trim();
     if (name.length > 11) {
@@ -804,7 +796,7 @@ function getGitEmail() {
         }
         for (let i = 0; i < workspaceFolders.length; i++) {
             let projectDir = workspaceFolders[i].uri.fsPath;
-            let email = yield wrapExecPromise("git config user.email", projectDir);
+            let email = yield wrapExecPromise('git config user.email', projectDir);
             if (email) {
                 return email;
             }
@@ -817,9 +809,7 @@ function wrapExecPromise(cmd, projectDir) {
     return __awaiter(this, void 0, void 0, function* () {
         let result = null;
         try {
-            let opts = projectDir !== undefined && projectDir !== null
-                ? { cwd: projectDir }
-                : {};
+            let opts = projectDir !== undefined && projectDir !== null ? { cwd: projectDir } : {};
             result = yield execPromise(cmd, opts).catch((e) => {
                 if (e.message) {
                     console.log(e.message);
@@ -850,7 +840,7 @@ function roundUp(num, precision) {
     return Math.ceil(num * precision) / precision;
 }
 function formatNumber(num) {
-    let str = "";
+    let str = '';
     num = num ? parseFloat(num) : 0;
     if (num >= 1000) {
         str = num.toLocaleString();
@@ -869,26 +859,26 @@ exports.formatNumber = formatNumber;
  */
 function humanizeMinutes(min) {
     min = parseInt(min, 0) || 0;
-    let str = "";
+    let str = '';
     if (min === 60) {
-        str = "1 hr";
+        str = '1 hr';
     }
     else if (min > 60) {
         let hrs = parseFloat(min) / 60;
         const roundedTime = roundUp(hrs, 1);
-        str = roundedTime.toFixed(1) + " hrs";
+        str = roundedTime.toFixed(1) + ' hrs';
     }
     else if (min === 1) {
-        str = "1 min";
+        str = '1 min';
     }
     else {
         // less than 60 seconds
-        str = min.toFixed(0) + " min";
+        str = min.toFixed(0) + ' min';
     }
     return str;
 }
 exports.humanizeMinutes = humanizeMinutes;
-function launchLogin(loginType = "software") {
+function launchLogin(loginType = 'software') {
     return __awaiter(this, void 0, void 0, function* () {
         const serverOnline = yield HttpClient_1.serverIsAvailable();
         if (!serverOnline) {
@@ -896,7 +886,7 @@ function launchLogin(loginType = "software") {
             return;
         }
         let loginUrl = yield buildLoginUrl(serverOnline, loginType);
-        setItem("authType", loginType);
+        setItem('authType', loginType);
         launchWebUrl(loginUrl);
         // use the defaults
         DataController_1.refetchUserStatusLazily();
@@ -911,43 +901,43 @@ function showLoginPrompt(serverIsOnline) {
         const infoMsg = `Finish creating your account and see rich data visualizations.`;
         // set the last update time so we don't try to ask too frequently
         const selection = yield vscode_1.window.showInformationMessage(infoMsg, { modal: true }, ...[Constants_1.LOGIN_LABEL]);
-        let eventName = "";
-        let eventType = "";
+        let eventName = '';
+        let eventType = '';
         if (selection === Constants_1.LOGIN_LABEL) {
             let loginUrl = yield buildLoginUrl(serverIsOnline);
             launchWebUrl(loginUrl);
             DataController_1.refetchUserStatusLazily();
-            eventName = "click";
-            eventType = "mouse";
+            eventName = 'click';
+            eventType = 'mouse';
         }
         else {
             // create an event showing login was not selected
-            eventName = "close";
-            eventType = "window";
+            eventName = 'close';
+            eventType = 'window';
         }
-        EventManager_1.EventManager.getInstance().createCodeTimeEvent(eventType, eventName, "OnboardPrompt");
+        EventManager_1.EventManager.getInstance().createCodeTimeEvent(eventType, eventName, 'OnboardPrompt');
     });
 }
 exports.showLoginPrompt = showLoginPrompt;
-function buildLoginUrl(serverOnline, loginType = "software") {
+function buildLoginUrl(serverOnline, loginType = 'software') {
     return __awaiter(this, void 0, void 0, function* () {
-        let jwt = getItem("jwt");
+        let jwt = getItem('jwt');
         if (!jwt) {
             // we should always have a jwt, but if  not create one
             // this will serve as a temp token until they've onboarded
             jwt = yield DataController_1.getAppJwt(serverOnline);
-            setItem("jwt", jwt);
+            setItem('jwt', jwt);
         }
         if (jwt) {
             const encodedJwt = encodeURIComponent(jwt);
-            let loginUrl = "";
-            if (loginType === "software") {
+            let loginUrl = '';
+            if (loginType === 'software') {
                 loginUrl = `${Constants_1.launch_url}/email-signup?token=${encodedJwt}&plugin=${getPluginType()}&auth=software`;
             }
-            else if (loginType === "github") {
+            else if (loginType === 'github') {
                 loginUrl = `${Constants_1.api_endpoint}/auth/github?token=${encodedJwt}&plugin=${getPluginType()}&redirect=${Constants_1.launch_url}`;
             }
-            else if (loginType === "google") {
+            else if (loginType === 'google') {
                 loginUrl = `${Constants_1.api_endpoint}/auth/google?token=${encodedJwt}&plugin=${getPluginType()}&redirect=${Constants_1.launch_url}`;
             }
             return loginUrl;
@@ -966,12 +956,12 @@ function connectAtlassian() {
             showOfflinePrompt();
             return;
         }
-        let jwt = getItem("jwt");
+        let jwt = getItem('jwt');
         if (!jwt) {
             // we should always have a jwt, but if  not create one
             // this will serve as a temp token until they've onboarded
             jwt = yield DataController_1.getAppJwt(serverOnline);
-            setItem("jwt", jwt);
+            setItem('jwt', jwt);
         }
         const encodedJwt = encodeURIComponent(jwt);
         const connectAtlassianAuth = `${Constants_1.api_endpoint}/auth/atlassian?token=${jwt}&plugin=${getPluginType()}`;
@@ -997,20 +987,20 @@ function getDashboardRow(label, value, isSectionHeader = false) {
         // add 3 to account for the " : " between the columns
         const dashLen = content.length;
         for (let i = 0; i < dashLen; i++) {
-            content += "-";
+            content += '-';
         }
-        content += "\n";
+        content += '\n';
     }
     return content;
 }
 exports.getDashboardRow = getDashboardRow;
 function getDashboardBottomBorder() {
-    let content = "";
+    let content = '';
     const len = exports.DASHBOARD_LABEL_WIDTH + exports.DASHBOARD_VALUE_WIDTH;
     for (let i = 0; i < len; i++) {
-        content += "-";
+        content += '-';
     }
-    content += "\n\n";
+    content += '\n\n';
     return content;
 }
 exports.getDashboardBottomBorder = getDashboardBottomBorder;
@@ -1019,18 +1009,18 @@ function getSectionHeader(label) {
     // add 3 to account for the " : " between the columns
     let dashLen = exports.DASHBOARD_LABEL_WIDTH + exports.DASHBOARD_VALUE_WIDTH;
     for (let i = 0; i < dashLen; i++) {
-        content += "-";
+        content += '-';
     }
-    content += "\n";
+    content += '\n';
     return content;
 }
 exports.getSectionHeader = getSectionHeader;
 function formatRightAlignedTableLabel(label, col_width) {
     const spacesRequired = col_width - label.length;
-    let spaces = "";
+    let spaces = '';
     if (spacesRequired > 0) {
         for (let i = 0; i < spacesRequired; i++) {
-            spaces += " ";
+            spaces += ' ';
         }
     }
     return `${spaces}${label}`;
@@ -1041,11 +1031,11 @@ function getTableHeader(leftLabel, rightLabel, isFullTable = true) {
         ? exports.TABLE_WIDTH - exports.DASHBOARD_COL_WIDTH
         : exports.TABLE_WIDTH;
     const spacesRequired = fullLen - leftLabel.length - rightLabel.length;
-    let spaces = "";
+    let spaces = '';
     if (spacesRequired > 0) {
-        let str = "";
+        let str = '';
         for (let i = 0; i < spacesRequired; i++) {
-            spaces += " ";
+            spaces += ' ';
         }
     }
     return `${leftLabel}${spaces}${rightLabel}`;
@@ -1054,25 +1044,25 @@ exports.getTableHeader = getTableHeader;
 function getRightAlignedTableHeader(label) {
     let content = `${formatRightAlignedTableLabel(label, exports.TABLE_WIDTH)}\n`;
     for (let i = 0; i < exports.TABLE_WIDTH; i++) {
-        content += "-";
+        content += '-';
     }
-    content += "\n";
+    content += '\n';
     return content;
 }
 exports.getRightAlignedTableHeader = getRightAlignedTableHeader;
 function getSpaces(spacesRequired) {
-    let spaces = "";
+    let spaces = '';
     if (spacesRequired > 0) {
-        let str = "";
+        let str = '';
         for (let i = 0; i < spacesRequired; i++) {
-            spaces += " ";
+            spaces += ' ';
         }
     }
     return spaces;
 }
 function getRowLabels(labels) {
     // for now 3 columns
-    let content = "";
+    let content = '';
     let spacesRequired = 0;
     for (let i = 0; i < labels.length; i++) {
         const label = labels[i];
@@ -1081,7 +1071,7 @@ function getRowLabels(labels) {
             // show a colon at the end of this column
             spacesRequired = exports.DASHBOARD_COL_WIDTH - content.length - 1;
             content += getSpaces(spacesRequired);
-            content += ":";
+            content += ':';
         }
         else if (i === 1) {
             // middle column
@@ -1102,13 +1092,13 @@ function getRowLabels(labels) {
             content += label;
         }
     }
-    content += "\n";
+    content += '\n';
     return content;
 }
 exports.getRowLabels = getRowLabels;
 function getColumnHeaders(labels) {
     // for now 3 columns
-    let content = "";
+    let content = '';
     let spacesRequired = 0;
     for (let i = 0; i < labels.length; i++) {
         const label = labels[i];
@@ -1134,11 +1124,11 @@ function getColumnHeaders(labels) {
             content += label;
         }
     }
-    content += "\n";
+    content += '\n';
     for (let i = 0; i < exports.TABLE_WIDTH; i++) {
-        content += "-";
+        content += '-';
     }
-    content += "\n";
+    content += '\n';
     return content;
 }
 exports.getColumnHeaders = getColumnHeaders;
@@ -1158,10 +1148,10 @@ function buildQueryString(obj) {
         }
     }
     if (params.length > 0) {
-        return "?" + params.join("&");
+        return '?' + params.join('&');
     }
     else {
-        return "";
+        return '';
     }
 }
 exports.buildQueryString = buildQueryString;
@@ -1180,22 +1170,22 @@ function getDashboardValue(value, isSectionHeader = false) {
     }
 }
 function getDashboardDataDisplay(widthLen, data) {
-    let content = "";
+    let content = '';
     for (let i = 0; i < widthLen; i++) {
-        content += " ";
+        content += ' ';
     }
     return `${content}${data}`;
 }
 function createSpotifyIdFromUri(id) {
-    if (id.indexOf("spotify:") === 0) {
-        return id.substring(id.lastIndexOf(":") + 1);
+    if (id.indexOf('spotify:') === 0) {
+        return id.substring(id.lastIndexOf(':') + 1);
     }
     return id;
 }
 exports.createSpotifyIdFromUri = createSpotifyIdFromUri;
 function getFileType(fileName) {
-    let fileType = "";
-    const lastDotIdx = fileName.lastIndexOf(".");
+    let fileType = '';
+    const lastDotIdx = fileName.lastIndexOf('.');
     const len = fileName.length;
     if (lastDotIdx !== -1 && lastDotIdx < len - 1) {
         fileType = fileName.substring(lastDotIdx + 1);
@@ -1204,7 +1194,7 @@ function getFileType(fileName) {
 }
 exports.getFileType = getFileType;
 function cleanJsonString(content) {
-    content = content.replace(/\r\n/g, "").replace(/\n/g, "").trim();
+    content = content.replace(/\r\n/g, '').replace(/\n/g, '').trim();
     return content;
 }
 exports.cleanJsonString = cleanJsonString;
@@ -1217,7 +1207,6 @@ function getFileDataAsJson(file) {
                 data = JSON.parse(cleanJsonString(content));
             }
             catch (e) {
-                logIt(`unable to read session info: ${e.message}`);
                 // error trying to read the session file, delete it
                 deleteFile(file);
             }
@@ -1239,9 +1228,7 @@ function getFileDataArray(file) {
                 payloads = jsonData;
             }
         }
-        catch (e) {
-            logIt(`Error reading file array data: ${e.message}`);
-        }
+        catch (e) { }
     }
     return payloads;
 }

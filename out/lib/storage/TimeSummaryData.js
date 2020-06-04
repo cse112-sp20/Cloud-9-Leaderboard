@@ -9,21 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getTodayTimeDataSummary = exports.getCodeTimeSummary = exports.incrementSessionAndFileSecondsAndFetch = exports.updateSessionFromSummaryApi = exports.incrementEditorSeconds = exports.getCurrentTimeSummaryProject = exports.clearTimeDataSummary = exports.getTimeDataSummaryFile = void 0;
 const Util_1 = require("../Util");
 const KpmRepoManager_1 = require("../repo/KpmRepoManager");
 const Constants_1 = require("../Constants");
 const CodeTimeSummary_1 = require("../model/CodeTimeSummary");
 const Project_1 = require("../model/Project");
 const TimeData_1 = require("../model/TimeData");
-const fs = require("fs");
-const moment = require("moment-timezone");
+const fs = require('fs');
+const moment = require('moment-timezone');
 function getTimeDataSummaryFile() {
     let file = Util_1.getSoftwareDir();
     if (Util_1.isWindows()) {
-        file += "\\projectTimeData.json";
+        file += '\\projectTimeData.json';
     }
     else {
-        file += "/projectTimeData.json";
+        file += '/projectTimeData.json';
     }
     return file;
 }
@@ -231,8 +232,7 @@ function saveTimeDataSummaryToDisk(data) {
     let payloads = Util_1.getFileDataArray(file);
     if (payloads && payloads.length) {
         // find the one for this day
-        const idx = payloads.findIndex((n) => n.day === data.day &&
-            n.project.directory === data.project.directory);
+        const idx = payloads.findIndex((n) => n.day === data.day && n.project.directory === data.project.directory);
         if (idx !== -1) {
             payloads[idx] = data;
         }

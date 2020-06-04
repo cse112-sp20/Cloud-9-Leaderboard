@@ -1,4 +1,4 @@
-import { getStatusBarItem } from "../extension";
+import {getStatusBarItem} from '../extension';
 import {
   workspace,
   extensions,
@@ -7,7 +7,7 @@ import {
   commands,
   ViewColumn,
   WorkspaceFolder,
-} from "vscode";
+} from 'vscode';
 import {
   CODE_TIME_EXT_ID,
   launch_url,
@@ -15,26 +15,26 @@ import {
   CODE_TIME_PLUGIN_ID,
   CODE_TIME_TYPE,
   api_endpoint,
-} from "./Constants";
+} from './Constants';
 import {
   refetchUserStatusLazily,
   getToggleFileEventLoggingState,
   getAppJwt,
-} from "./DataController";
-import { updateStatusBarWithSummaryData } from "./storage/SessionSummaryData";
-import { EventManager } from "./managers/EventManager";
-import { serverIsAvailable } from "./http/HttpClient";
-import { refetchAtlassianOauthLazily } from "./user/OnboardManager";
+} from './DataController';
+import {updateStatusBarWithSummaryData} from './storage/SessionSummaryData';
+import {EventManager} from './managers/EventManager';
+import {serverIsAvailable} from './http/HttpClient';
+import {refetchAtlassianOauthLazily} from './user/OnboardManager';
 
-const moment = require("moment-timezone");
-const open = require("open");
-const { exec } = require("child_process");
-const fs = require("fs");
-const os = require("os");
-const crypto = require("crypto");
-const path = require("path");
+const moment = require('moment-timezone');
+const open = require('open');
+const {exec} = require('child_process');
+const fs = require('fs');
+const os = require('os');
+const crypto = require('crypto');
+const path = require('path');
 
-export const alpha = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+export const alpha = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 export const DASHBOARD_LABEL_WIDTH = 28;
 export const DASHBOARD_VALUE_WIDTH = 36;
 export const DASHBOARD_COL_WIDTH = 21;
@@ -42,9 +42,9 @@ export const DASHBOARD_LRG_COL_WIDTH = 38;
 export const TABLE_WIDTH = 80;
 export const MARKER_WIDTH = 4;
 
-const NUMBER_IN_EMAIL_REGEX = new RegExp("^\\d+\\+");
-const dayFormat = "YYYY-MM-DD";
-const dayTimeFormat = "LLLL";
+const NUMBER_IN_EMAIL_REGEX = new RegExp('^\\d+\\+');
+const dayFormat = 'YYYY-MM-DD';
+const dayTimeFormat = 'LLLL';
 
 let showStatusBarText = true;
 let extensionName = null;
@@ -76,8 +76,8 @@ export function getVersion() {
 }
 
 export function isCodeTimeMetricsFile(fileName) {
-  fileName = fileName || "";
-  if (fileName.includes(".software") && fileName.includes("CodeTime")) {
+  fileName = fileName || '';
+  if (fileName.includes('.software') && fileName.includes('CodeTime')) {
     return true;
   }
   return false;
@@ -102,7 +102,7 @@ export function isGitProject(projectDir) {
     return false;
   }
 
-  if (!fs.existsSync(path.join(projectDir, ".git"))) {
+  if (!fs.existsSync(path.join(projectDir, '.git'))) {
     return false;
   }
   return true;
@@ -162,7 +162,7 @@ export function findFirstActiveDirectoryOrWorkspaceDirectory(): string {
   if (folder) {
     return folder.uri.fsPath;
   }
-  return "";
+  return '';
 }
 
 /**
@@ -237,7 +237,7 @@ export function getProjectFolder(fileName): WorkspaceFolder {
     for (let i = 0; i < workspace.workspaceFolders.length; i++) {
       let workspaceFolder = workspace.workspaceFolders[i];
       if (workspaceFolder.uri) {
-        let isVslsScheme = workspaceFolder.uri.scheme === "vsls" ? true : false;
+        let isVslsScheme = workspaceFolder.uri.scheme === 'vsls' ? true : false;
         if (isVslsScheme) {
           liveshareFolder = workspaceFolder;
         }
@@ -274,8 +274,8 @@ export function setItem(key, value) {
 
   const sessionFile = getSoftwareSessionFile();
   fs.writeFileSync(sessionFile, content, (err) => {
-    if (err)
-      logIt(`Error writing to the Software session file: ${err.message}`);
+    if (err) {
+    }
   });
 }
 
@@ -287,13 +287,13 @@ export function getItem(key) {
 }
 
 export function showLoading() {
-  let loadingMsg = "⏳ code time metrics";
-  updateStatusBar(loadingMsg, "");
+  let loadingMsg = '⏳ code time metrics';
+  updateStatusBar(loadingMsg, '');
 }
 
 export function showStatus(fullMsg, tooltip) {
   if (!tooltip) {
-    tooltip = "Active code time today. Click to see more from Code Time.";
+    tooltip = 'Active code time today. Click to see more from Code Time.';
   }
   updateStatusBar(fullMsg, tooltip);
 }
@@ -303,9 +303,9 @@ export function handleCodeTimeStatusToggle() {
 }
 
 function updateStatusBar(msg, tooltip) {
-  let loggedInName = getItem("name");
-  let userInfo = "";
-  if (loggedInName && loggedInName !== "") {
+  let loggedInName = getItem('name');
+  let userInfo = '';
+  if (loggedInName && loggedInName !== '') {
     userInfo = ` Connected as ${loggedInName}`;
   }
   if (!tooltip) {
@@ -314,14 +314,14 @@ function updateStatusBar(msg, tooltip) {
 
   if (!showStatusBarText) {
     // add the message to the tooltip
-    tooltip = msg + " | " + tooltip;
+    tooltip = msg + ' | ' + tooltip;
   }
   if (!getStatusBarItem()) {
     return;
   }
   getStatusBarItem().tooltip = `${tooltip}${userInfo}`;
   if (!showStatusBarText) {
-    getStatusBarItem().text = "$(clock)";
+    getStatusBarItem().text = '$(clock)';
   } else {
     getStatusBarItem().text = msg;
   }
@@ -347,15 +347,15 @@ export function isLinux() {
 // process.platform return the following...
 //   -> 'darwin', 'freebsd', 'linux', 'sunos' or 'win32'
 export function isWindows() {
-  return process.platform.indexOf("win32") !== -1;
+  return process.platform.indexOf('win32') !== -1;
 }
 
 export function isMac() {
-  return process.platform.indexOf("darwin") !== -1;
+  return process.platform.indexOf('darwin') !== -1;
 }
 
 export async function getHostname() {
-  let hostname = await getCommandResultLine("hostname");
+  let hostname = await getCommandResultLine('hostname');
   return hostname;
 }
 
@@ -374,15 +374,15 @@ export function getOs() {
     parts.push(platform);
   }
   if (parts.length > 0) {
-    return parts.join("_");
+    return parts.join('_');
   }
-  return "";
+  return '';
 }
 
 export async function getCommandResultLine(cmd, projectDir = null) {
   const resultList = await getCommandResultList(cmd, projectDir);
 
-  let resultLine = "";
+  let resultLine = '';
   if (resultList && resultList.length) {
     for (let i = 0; i < resultList.length; i++) {
       let line = resultList[i];
@@ -401,16 +401,16 @@ export async function getCommandResultList(cmd, projectDir = null) {
     return [];
   }
   const contentList = result
-    .replace(/\r\n/g, "\r")
-    .replace(/\n/g, "\r")
+    .replace(/\r\n/g, '\r')
+    .replace(/\n/g, '\r')
     .split(/\r/);
   return contentList;
 }
 
 export async function getOsUsername() {
   let username = os.userInfo().username;
-  if (!username || username.trim() === "") {
-    username = await getCommandResultLine("whoami");
+  if (!username || username.trim() === '') {
+    username = await getCommandResultLine('whoami');
   }
   return username;
 }
@@ -418,9 +418,9 @@ export async function getOsUsername() {
 export function getDashboardFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += "\\CodeTime.txt";
+    file += '\\CodeTime.txt';
   } else {
-    file += "/CodeTime.txt";
+    file += '/CodeTime.txt';
   }
   return file;
 }
@@ -428,9 +428,9 @@ export function getDashboardFile() {
 export function getCommitSummaryFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += "\\CommitSummary.txt";
+    file += '\\CommitSummary.txt';
   } else {
-    file += "/CommitSummary.txt";
+    file += '/CommitSummary.txt';
   }
   return file;
 }
@@ -438,9 +438,9 @@ export function getCommitSummaryFile() {
 export function getSummaryInfoFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += "\\SummaryInfo.txt";
+    file += '\\SummaryInfo.txt';
   } else {
-    file += "/SummaryInfo.txt";
+    file += '/SummaryInfo.txt';
   }
   return file;
 }
@@ -448,9 +448,9 @@ export function getSummaryInfoFile() {
 export function getProjectCodeSummaryFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += "\\ProjectCodeSummary.txt";
+    file += '\\ProjectCodeSummary.txt';
   } else {
-    file += "/ProjectCodeSummary.txt";
+    file += '/ProjectCodeSummary.txt';
   }
   return file;
 }
@@ -458,9 +458,9 @@ export function getProjectCodeSummaryFile() {
 export function getProjectContributorCodeSummaryFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += "\\ProjectContributorCodeSummary.txt";
+    file += '\\ProjectContributorCodeSummary.txt';
   } else {
-    file += "/ProjectContributorCodeSummary.txt";
+    file += '/ProjectContributorCodeSummary.txt';
   }
   return file;
 }
@@ -468,9 +468,9 @@ export function getProjectContributorCodeSummaryFile() {
 export function getDailyReportSummaryFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += "\\DailyReportSummary.txt";
+    file += '\\DailyReportSummary.txt';
   } else {
-    file += "/DailyReportSummary.txt";
+    file += '/DailyReportSummary.txt';
   }
   return file;
 }
@@ -479,9 +479,9 @@ export function getSoftwareDir(autoCreate = true) {
   const homedir = os.homedir();
   let softwareDataDir = homedir;
   if (isWindows()) {
-    softwareDataDir += "\\.software";
+    softwareDataDir += '\\.software';
   } else {
-    softwareDataDir += "/.software";
+    softwareDataDir += '/.software';
   }
 
   if (autoCreate && !fs.existsSync(softwareDataDir)) {
@@ -500,16 +500,16 @@ export function softwareSessionFileExists() {
 }
 
 export function jwtExists() {
-  let jwt = getItem("jwt");
+  let jwt = getItem('jwt');
   return !jwt ? false : true;
 }
 
 export function getSoftwareSessionFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += "\\session.json";
+    file += '\\session.json';
   } else {
-    file += "/session.json";
+    file += '/session.json';
   }
   return file;
 }
@@ -517,9 +517,9 @@ export function getSoftwareSessionFile() {
 export function getSoftwareDataStoreFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += "\\data.json";
+    file += '\\data.json';
   } else {
-    file += "/data.json";
+    file += '/data.json';
   }
   return file;
 }
@@ -527,9 +527,9 @@ export function getSoftwareDataStoreFile() {
 export function getPluginEventsFile() {
   let file = getSoftwareDir();
   if (isWindows()) {
-    file += "\\events.json";
+    file += '\\events.json';
   } else {
-    file += "/events.json";
+    file += '/events.json';
   }
   return file;
 }
@@ -537,9 +537,9 @@ export function getPluginEventsFile() {
 export function getLocalREADMEFile() {
   let file = __dirname;
   if (isWindows()) {
-    file += "\\README.md";
+    file += '\\README.md';
   } else {
-    file += "/README.md";
+    file += '/README.md';
   }
   return file;
 }
@@ -547,20 +547,20 @@ export function getLocalREADMEFile() {
 export function getImagesDir() {
   let dir = __dirname;
   if (isWindows()) {
-    dir += "\\images";
+    dir += '\\images';
   } else {
-    dir += "/images";
+    dir += '/images';
   }
   return dir;
 }
 
 export function displayReadmeIfNotExists(override = false) {
-  const displayedReadme = getItem("vscode_CtReadme");
+  const displayedReadme = getItem('vscode_CtReadme');
   if (!displayedReadme || override) {
     const readmeUri = Uri.file(getLocalREADMEFile());
 
-    commands.executeCommand("markdown.showPreview", readmeUri, ViewColumn.One);
-    setItem("vscode_CtReadme", true);
+    commands.executeCommand('markdown.showPreview', readmeUri, ViewColumn.One);
+    setItem('vscode_CtReadme', true);
   }
 }
 
@@ -572,20 +572,18 @@ export function openFileInEditor(file) {
         if (error.message) {
           window.showErrorMessage(error.message);
         } else {
-          logIt(error);
         }
       });
     },
     (error: any) => {
       if (
         error.message &&
-        error.message.toLowerCase().includes("file not found")
+        error.message.toLowerCase().includes('file not found')
       ) {
         window.showErrorMessage(`Cannot open ${file}.  File not found.`);
       } else {
-        logIt(error);
       }
-    }
+    },
   );
 }
 
@@ -595,9 +593,9 @@ export function getExtensionDisplayName() {
   }
   let extInfoFile = __dirname;
   if (isWindows()) {
-    extInfoFile += "\\extensioninfo.json";
+    extInfoFile += '\\extensioninfo.json';
   } else {
-    extInfoFile += "/extensioninfo.json";
+    extInfoFile += '/extensioninfo.json';
   }
   if (fs.existsSync(extInfoFile)) {
     const content = fs.readFileSync(extInfoFile).toString();
@@ -607,13 +605,11 @@ export function getExtensionDisplayName() {
         if (data) {
           extensionDisplayName = data.displayName;
         }
-      } catch (e) {
-        logIt(`unable to read ext info name: ${e.message}`);
-      }
+      } catch (e) {}
     }
   }
   if (!extensionDisplayName) {
-    extensionDisplayName = "Code Time";
+    extensionDisplayName = 'Code Time';
   }
   return extensionDisplayName;
 }
@@ -624,9 +620,9 @@ export function getExtensionName() {
   }
   let extInfoFile = __dirname;
   if (isWindows()) {
-    extInfoFile += "\\extensioninfo.json";
+    extInfoFile += '\\extensioninfo.json';
   } else {
-    extInfoFile += "/extensioninfo.json";
+    extInfoFile += '/extensioninfo.json';
   }
   if (fs.existsSync(extInfoFile)) {
     const content = fs.readFileSync(extInfoFile).toString();
@@ -636,13 +632,11 @@ export function getExtensionName() {
         if (data) {
           extensionName = data.name;
         }
-      } catch (e) {
-        logIt(`unable to read ext info name: ${e.message}`);
-      }
+      } catch (e) {}
     }
   }
   if (!extensionName) {
-    extensionName = "swdc-vscode";
+    extensionName = 'cloud9';
   }
   return extensionName;
 }
@@ -654,9 +648,7 @@ export function logEvent(message) {
   }
 }
 
-export function logIt(message) {
-  console.log(`${getExtensionName()}: ${message}`);
-}
+export function logIt(message) {}
 
 export function getSoftwareSessionAsJson() {
   let data = null;
@@ -668,7 +660,6 @@ export function getSoftwareSessionAsJson() {
       try {
         data = JSON.parse(cleanJsonString(content));
       } catch (e) {
-        logIt(`unable to read session info: ${e.message}`);
         // error trying to read the session file, delete it
         deleteFile(sessionFile);
         data = {};
@@ -680,15 +671,15 @@ export function getSoftwareSessionAsJson() {
 
 export async function showOfflinePrompt(addReconnectMsg = false) {
   // shows a prompt that we're not able to communicate with the app server
-  let infoMsg = "Our service is temporarily unavailable. ";
+  let infoMsg = 'Our service is temporarily unavailable. ';
   if (addReconnectMsg) {
     infoMsg +=
-      "We will try to reconnect again in 10 minutes. Your status bar will not update at this time.";
+      'We will try to reconnect again in 10 minutes. Your status bar will not update at this time.';
   } else {
-    infoMsg += "Please try again later.";
+    infoMsg += 'Please try again later.';
   }
   // set the last update time so we don't try to ask too frequently
-  window.showInformationMessage(infoMsg, ...["OK"]);
+  window.showInformationMessage(infoMsg, ...['OK']);
 }
 
 export function nowInSecs() {
@@ -705,8 +696,8 @@ export function getFormattedDay(unixSeconds) {
 }
 
 export function isNewDay() {
-  const { day } = getNowTimes();
-  const currentDay = getItem("currentDay");
+  const {day} = getNowTimes();
+  const currentDay = getItem('currentDay');
   return currentDay !== day ? true : false;
 }
 
@@ -775,12 +766,12 @@ export function normalizeGithubEmail(email: string, filterOutNonEmails = true) {
   if (email) {
     if (
       filterOutNonEmails &&
-      (email.endsWith("github.com") || email.includes("users.noreply"))
+      (email.endsWith('github.com') || email.includes('users.noreply'))
     ) {
       return null;
     } else {
       const found = email.match(NUMBER_IN_EMAIL_REGEX);
-      if (found && email.includes("users.noreply")) {
+      if (found && email.includes('users.noreply')) {
         // filter out the ones that look like
         // 2342353345+username@users.noreply.github.com"
         return null;
@@ -793,7 +784,7 @@ export function normalizeGithubEmail(email: string, filterOutNonEmails = true) {
 
 export function getSongDisplayName(name) {
   if (!name) {
-    return "";
+    return '';
   }
   name = name.trim();
   if (name.length > 11) {
@@ -812,7 +803,7 @@ export async function getGitEmail() {
   for (let i = 0; i < workspaceFolders.length; i++) {
     let projectDir = workspaceFolders[i].uri.fsPath;
 
-    let email = await wrapExecPromise("git config user.email", projectDir);
+    let email = await wrapExecPromise('git config user.email', projectDir);
     if (email) {
       return email;
     }
@@ -824,9 +815,7 @@ export async function wrapExecPromise(cmd, projectDir) {
   let result = null;
   try {
     let opts =
-      projectDir !== undefined && projectDir !== null
-        ? { cwd: projectDir }
-        : {};
+      projectDir !== undefined && projectDir !== null ? {cwd: projectDir} : {};
     result = await execPromise(cmd, opts).catch((e) => {
       if (e.message) {
         console.log(e.message);
@@ -856,7 +845,7 @@ function roundUp(num, precision) {
 }
 
 export function formatNumber(num) {
-  let str = "";
+  let str = '';
   num = num ? parseFloat(num) : 0;
   if (num >= 1000) {
     str = num.toLocaleString();
@@ -873,30 +862,30 @@ export function formatNumber(num) {
  */
 export function humanizeMinutes(min) {
   min = parseInt(min, 0) || 0;
-  let str = "";
+  let str = '';
   if (min === 60) {
-    str = "1 hr";
+    str = '1 hr';
   } else if (min > 60) {
     let hrs = parseFloat(min) / 60;
     const roundedTime = roundUp(hrs, 1);
-    str = roundedTime.toFixed(1) + " hrs";
+    str = roundedTime.toFixed(1) + ' hrs';
   } else if (min === 1) {
-    str = "1 min";
+    str = '1 min';
   } else {
     // less than 60 seconds
-    str = min.toFixed(0) + " min";
+    str = min.toFixed(0) + ' min';
   }
   return str;
 }
 
-export async function launchLogin(loginType = "software") {
+export async function launchLogin(loginType = 'software') {
   const serverOnline = await serverIsAvailable();
   if (!serverOnline) {
     showOfflinePrompt();
     return;
   }
   let loginUrl = await buildLoginUrl(serverOnline, loginType);
-  setItem("authType", loginType);
+  setItem('authType', loginType);
   launchWebUrl(loginUrl);
   // use the defaults
   refetchUserStatusLazily();
@@ -910,48 +899,48 @@ export async function showLoginPrompt(serverIsOnline) {
   // set the last update time so we don't try to ask too frequently
   const selection = await window.showInformationMessage(
     infoMsg,
-    { modal: true },
-    ...[LOGIN_LABEL]
+    {modal: true},
+    ...[LOGIN_LABEL],
   );
 
-  let eventName = "";
-  let eventType = "";
+  let eventName = '';
+  let eventType = '';
 
   if (selection === LOGIN_LABEL) {
     let loginUrl = await buildLoginUrl(serverIsOnline);
     launchWebUrl(loginUrl);
     refetchUserStatusLazily();
-    eventName = "click";
-    eventType = "mouse";
+    eventName = 'click';
+    eventType = 'mouse';
   } else {
     // create an event showing login was not selected
-    eventName = "close";
-    eventType = "window";
+    eventName = 'close';
+    eventType = 'window';
   }
 
   EventManager.getInstance().createCodeTimeEvent(
     eventType,
     eventName,
-    "OnboardPrompt"
+    'OnboardPrompt',
   );
 }
 
-export async function buildLoginUrl(serverOnline, loginType = "software") {
-  let jwt = getItem("jwt");
+export async function buildLoginUrl(serverOnline, loginType = 'software') {
+  let jwt = getItem('jwt');
   if (!jwt) {
     // we should always have a jwt, but if  not create one
     // this will serve as a temp token until they've onboarded
     jwt = await getAppJwt(serverOnline);
-    setItem("jwt", jwt);
+    setItem('jwt', jwt);
   }
   if (jwt) {
     const encodedJwt = encodeURIComponent(jwt);
-    let loginUrl = "";
-    if (loginType === "software") {
+    let loginUrl = '';
+    if (loginType === 'software') {
       loginUrl = `${launch_url}/email-signup?token=${encodedJwt}&plugin=${getPluginType()}&auth=software`;
-    } else if (loginType === "github") {
+    } else if (loginType === 'github') {
       loginUrl = `${api_endpoint}/auth/github?token=${encodedJwt}&plugin=${getPluginType()}&redirect=${launch_url}`;
-    } else if (loginType === "google") {
+    } else if (loginType === 'google') {
       loginUrl = `${api_endpoint}/auth/google?token=${encodedJwt}&plugin=${getPluginType()}&redirect=${launch_url}`;
     }
     return loginUrl;
@@ -967,12 +956,12 @@ export async function connectAtlassian() {
     showOfflinePrompt();
     return;
   }
-  let jwt = getItem("jwt");
+  let jwt = getItem('jwt');
   if (!jwt) {
     // we should always have a jwt, but if  not create one
     // this will serve as a temp token until they've onboarded
     jwt = await getAppJwt(serverOnline);
-    setItem("jwt", jwt);
+    setItem('jwt', jwt);
   }
 
   const encodedJwt = encodeURIComponent(jwt);
@@ -998,20 +987,20 @@ export function getDashboardRow(label, value, isSectionHeader = false) {
     // add 3 to account for the " : " between the columns
     const dashLen = content.length;
     for (let i = 0; i < dashLen; i++) {
-      content += "-";
+      content += '-';
     }
-    content += "\n";
+    content += '\n';
   }
   return content;
 }
 
 export function getDashboardBottomBorder() {
-  let content = "";
+  let content = '';
   const len = DASHBOARD_LABEL_WIDTH + DASHBOARD_VALUE_WIDTH;
   for (let i = 0; i < len; i++) {
-    content += "-";
+    content += '-';
   }
-  content += "\n\n";
+  content += '\n\n';
   return content;
 }
 
@@ -1020,18 +1009,18 @@ export function getSectionHeader(label) {
   // add 3 to account for the " : " between the columns
   let dashLen = DASHBOARD_LABEL_WIDTH + DASHBOARD_VALUE_WIDTH;
   for (let i = 0; i < dashLen; i++) {
-    content += "-";
+    content += '-';
   }
-  content += "\n";
+  content += '\n';
   return content;
 }
 
 function formatRightAlignedTableLabel(label, col_width) {
   const spacesRequired = col_width - label.length;
-  let spaces = "";
+  let spaces = '';
   if (spacesRequired > 0) {
     for (let i = 0; i < spacesRequired; i++) {
-      spaces += " ";
+      spaces += ' ';
     }
   }
   return `${spaces}${label}`;
@@ -1043,11 +1032,11 @@ export function getTableHeader(leftLabel, rightLabel, isFullTable = true) {
     ? TABLE_WIDTH - DASHBOARD_COL_WIDTH
     : TABLE_WIDTH;
   const spacesRequired = fullLen - leftLabel.length - rightLabel.length;
-  let spaces = "";
+  let spaces = '';
   if (spacesRequired > 0) {
-    let str = "";
+    let str = '';
     for (let i = 0; i < spacesRequired; i++) {
-      spaces += " ";
+      spaces += ' ';
     }
   }
   return `${leftLabel}${spaces}${rightLabel}`;
@@ -1056,18 +1045,18 @@ export function getTableHeader(leftLabel, rightLabel, isFullTable = true) {
 export function getRightAlignedTableHeader(label) {
   let content = `${formatRightAlignedTableLabel(label, TABLE_WIDTH)}\n`;
   for (let i = 0; i < TABLE_WIDTH; i++) {
-    content += "-";
+    content += '-';
   }
-  content += "\n";
+  content += '\n';
   return content;
 }
 
 function getSpaces(spacesRequired) {
-  let spaces = "";
+  let spaces = '';
   if (spacesRequired > 0) {
-    let str = "";
+    let str = '';
     for (let i = 0; i < spacesRequired; i++) {
-      spaces += " ";
+      spaces += ' ';
     }
   }
   return spaces;
@@ -1075,7 +1064,7 @@ function getSpaces(spacesRequired) {
 
 export function getRowLabels(labels) {
   // for now 3 columns
-  let content = "";
+  let content = '';
   let spacesRequired = 0;
   for (let i = 0; i < labels.length; i++) {
     const label = labels[i];
@@ -1084,7 +1073,7 @@ export function getRowLabels(labels) {
       // show a colon at the end of this column
       spacesRequired = DASHBOARD_COL_WIDTH - content.length - 1;
       content += getSpaces(spacesRequired);
-      content += ":";
+      content += ':';
     } else if (i === 1) {
       // middle column
       spacesRequired =
@@ -1103,13 +1092,13 @@ export function getRowLabels(labels) {
       content += label;
     }
   }
-  content += "\n";
+  content += '\n';
   return content;
 }
 
 export function getColumnHeaders(labels) {
   // for now 3 columns
-  let content = "";
+  let content = '';
   let spacesRequired = 0;
   for (let i = 0; i < labels.length; i++) {
     const label = labels[i];
@@ -1133,11 +1122,11 @@ export function getColumnHeaders(labels) {
       content += label;
     }
   }
-  content += "\n";
+  content += '\n';
   for (let i = 0; i < TABLE_WIDTH; i++) {
-    content += "-";
+    content += '-';
   }
-  content += "\n";
+  content += '\n';
   return content;
 }
 
@@ -1157,9 +1146,9 @@ export function buildQueryString(obj) {
     }
   }
   if (params.length > 0) {
-    return "?" + params.join("&");
+    return '?' + params.join('&');
   } else {
-    return "";
+    return '';
   }
 }
 
@@ -1179,23 +1168,23 @@ function getDashboardValue(value, isSectionHeader = false) {
 }
 
 function getDashboardDataDisplay(widthLen, data) {
-  let content = "";
+  let content = '';
   for (let i = 0; i < widthLen; i++) {
-    content += " ";
+    content += ' ';
   }
   return `${content}${data}`;
 }
 
 export function createSpotifyIdFromUri(id: string) {
-  if (id.indexOf("spotify:") === 0) {
-    return id.substring(id.lastIndexOf(":") + 1);
+  if (id.indexOf('spotify:') === 0) {
+    return id.substring(id.lastIndexOf(':') + 1);
   }
   return id;
 }
 
 export function getFileType(fileName: string) {
-  let fileType = "";
-  const lastDotIdx = fileName.lastIndexOf(".");
+  let fileType = '';
+  const lastDotIdx = fileName.lastIndexOf('.');
   const len = fileName.length;
   if (lastDotIdx !== -1 && lastDotIdx < len - 1) {
     fileType = fileName.substring(lastDotIdx + 1);
@@ -1204,7 +1193,7 @@ export function getFileType(fileName: string) {
 }
 
 export function cleanJsonString(content) {
-  content = content.replace(/\r\n/g, "").replace(/\n/g, "").trim();
+  content = content.replace(/\r\n/g, '').replace(/\n/g, '').trim();
   return content;
 }
 
@@ -1216,7 +1205,6 @@ export function getFileDataAsJson(file) {
       try {
         data = JSON.parse(cleanJsonString(content));
       } catch (e) {
-        logIt(`unable to read session info: ${e.message}`);
         // error trying to read the session file, delete it
         deleteFile(file);
       }
@@ -1236,9 +1224,7 @@ export function getFileDataArray(file) {
       } else {
         payloads = jsonData;
       }
-    } catch (e) {
-      logIt(`Error reading file array data: ${e.message}`);
-    }
+    } catch (e) {}
   }
   return payloads;
 }
