@@ -192,6 +192,7 @@ async function writeToFile(users, isTeam) {
 
   users.map((user) => {
     let obj = {};
+    console.log(user.id);
     obj['id'] = user.id;
     obj['name'] = user['name'];
     obj['totalKeystrokes'] = user['keystrokes'];
@@ -214,6 +215,8 @@ async function writeToFile(users, isTeam) {
 
   scoreMap.map((user, i) => {
     let rankNumberSection = '';
+
+    console.log('User id: ' + user.id);
 
     if (i == 0) {
       rankNumberSection += '\uD83E\uDD47 ';
@@ -254,7 +257,7 @@ async function writeToFile(users, isTeam) {
     }
 
     console.log('cacheduserid: ' + cachedUserId);
-    console.log('user id :' + user.name);
+    console.log('user id :' + user.id);
 
     if (cachedUserId == user.id) {
       username = user.name;

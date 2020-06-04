@@ -56,7 +56,14 @@ export async function loginUserWithEmailAndPassword(email, password) {
     .signInWithEmailAndPassword(email, password)
     .then(async (userCred) => {
       console.log('logging user in: ' + userCred.user.uid);
-      await updatePersistentStorageWithUserDocData(userCred.user.uid);
+      await updatePersistentStorageWithUserDocData(userCred.user.uid).then(
+        () => {
+          const ctx = getExtensionContext();
+
+          console.log(ctx.globalState);
+          console.log('64');
+        },
+      );
 
       loggedIn = true;
       errorCode = 'no error';
@@ -92,6 +99,8 @@ export async function updatePersistentStorageWithUserDocData(userId) {
         ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, userData.teamName);
         ctx.globalState.update(GLOBAL_STATE_USER_EMAIL, userData.email);
 
+        ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
+
         const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
         console.log('teamId: ' + teamId);
         if (teamId != undefined && teamId != '') {
@@ -113,6 +122,9 @@ export async function updatePersistentStorageWithUserDocData(userId) {
                     GLOBAL_STATE_USER_IS_TEAM_LEADER,
                     true,
                   );
+
+                  console.log(ctx.globalState);
+                  console.log('124');
 
                   //store team member data in persistent storage
                   let members = await fetchTeamMembersList(teamId);
@@ -371,6 +383,9 @@ export async function retrieveTeamMemberStats(callback) {
                 for (let key in doc.data()) {
                   currUser[key] = doc.data()[key];
                 }
+
+                currUser['id'] = doc.id;
+
                 userMap.push(currUser);
                 return userMap;
               })

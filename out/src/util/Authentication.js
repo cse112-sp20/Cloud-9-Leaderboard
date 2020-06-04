@@ -48,7 +48,7 @@ function logOut() {
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_ID, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, undefined);
-    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, undefined);
+    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_NICKNAME, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, undefined);
     console.log('Logging out: ' + extensionContext.globalState);

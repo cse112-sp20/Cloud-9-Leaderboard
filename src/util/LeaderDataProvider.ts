@@ -46,7 +46,7 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
     const ctx = getExtensionContext();
 
     const isTeamLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
-    console.log('is lear: ' + isTeamLeader);
+    console.log('is team leader: ' + isTeamLeader);
 
     if (!isTeamLeader) {
       const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);

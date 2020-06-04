@@ -48,7 +48,11 @@ function loginUserWithEmailAndPassword(email, password) {
             .signInWithEmailAndPassword(email, password)
             .then((userCred) => __awaiter(this, void 0, void 0, function* () {
             console.log('logging user in: ' + userCred.user.uid);
-            yield updatePersistentStorageWithUserDocData(userCred.user.uid);
+            yield updatePersistentStorageWithUserDocData(userCred.user.uid).then(() => {
+                const ctx = Authentication_1.getExtensionContext();
+                console.log(ctx.globalState);
+                console.log("64");
+            });
             loggedIn = true;
             errorCode = 'no error';
         }))
@@ -83,6 +87,7 @@ function updatePersistentStorageWithUserDocData(userId) {
                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, userData.teamCode);
                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, userData.teamName);
                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_EMAIL, userData.email);
+                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
                 const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
                 console.log('teamId: ' + teamId);
                 if (teamId != undefined && teamId != '') {
@@ -98,6 +103,8 @@ function updatePersistentStorageWithUserDocData(userId) {
                             if (teamDocData.teamLeadUserId == userId) {
                                 console.log('Is team leader');
                                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, true);
+                                console.log(ctx.globalState);
+                                console.log("124");
                                 //store team member data in persistent storage
                                 let members = yield fetchTeamMembersList(teamId);
                                 console.log(members);
@@ -311,6 +318,7 @@ function retrieveTeamMemberStats(callback) {
                             for (let key in doc.data()) {
                                 currUser[key] = doc.data()[key];
                             }
+                            currUser['id'] = doc.id;
                             userMap.push(currUser);
                             return userMap;
                         })
