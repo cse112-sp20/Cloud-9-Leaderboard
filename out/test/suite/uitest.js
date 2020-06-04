@@ -17,6 +17,7 @@ describe('Hello World Example UI Tests', () => {
         driver = vscode_extension_tester_1.VSBrowser.instance.driver;
     });
     it('Create a Team', () => __awaiter(void 0, void 0, void 0, function* () {
+        this.timeout(10000);
         const activityBar = new vscode_extension_tester_1.ActivityBar();
         const control = yield activityBar.getViewControl('Cloud9');
         const view = yield control.openView();
@@ -32,11 +33,11 @@ describe('Hello World Example UI Tests', () => {
         yield signInNotif[0].takeAction('Create a new account');
         const input = yield vscode_extension_tester_1.InputBox.create();
         yield input.setText('test@test.com');
-        //await input.confirm(); // press enter
-        //await input.setText('password');
-        const teamInfo = yield new vscode_extension_tester_1.SideBarView().getContent().getSection('Team Info');
+        yield input.confirm(); // press enter
+        yield input.setText('password');
+        //const teamInfo = await new SideBarView().getContent().getSection('Team Info') as CustomTreeSection;
         //Clicking an item in a
-        yield (yield teamInfo.findItem('🛡 Create your Team')).click();
+        //await (await teamInfo.findItem('🛡 Create your Team')).click();
         // /await section.findItem('🛡 Create your Team')
     }));
 });

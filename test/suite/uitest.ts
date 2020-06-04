@@ -29,14 +29,14 @@ describe('Hello World Example UI Tests', () => {
         //Click sign in and set email to be test@test.com
         await signInNotif[0].takeAction('Create a new account');
         const input = await InputBox.create();
-        //await input.setText('test@test.com');
-        //await input.confirm(); // press enter
-        //await input.setText('password');
+        await input.setText('test@test.com');
+        await input.confirm(); // press enter
+        await input.setText('password');
 
 
-        const teamInfo = await new SideBarView().getContent().getSection('Team Info') as CustomTreeSection;
+        //const teamInfo = await new SideBarView().getContent().getSection('Team Info') as CustomTreeSection;
         //Clicking an item in a
-        await (await teamInfo.findItem('🛡 Create your Team')).click();
+        //await (await teamInfo.findItem('🛡 Create your Team')).click();
         // /await section.findItem('🛡 Create your Team')
     });
 });
