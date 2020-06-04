@@ -7,38 +7,38 @@ import {
   getProjectFolder,
   getWorkspaceName,
   getHostname,
-} from '../Util';
-import {incrementSessionAndFileSecondsAndFetch} from '../storage/TimeSummaryData';
+} from "../Util";
+import {incrementSessionAndFileSecondsAndFetch} from "../storage/TimeSummaryData";
 import {
   getFileChangeSummaryAsJson,
   saveFileChangeInfoToDisk,
-} from '../storage/FileChangeInfoSummaryData';
-import {KeystrokeAggregate, FileChangeInfo} from '../model/models';
-import {NO_PROJ_NAME, UNTITLED} from '../Constants';
+} from "../storage/FileChangeInfoSummaryData";
+import {KeystrokeAggregate, FileChangeInfo} from "../model/models";
+import {NO_PROJ_NAME, UNTITLED} from "../Constants";
 import {
   incrementSessionSummaryData,
   getTimeBetweenLastPayload,
-} from '../storage/SessionSummaryData';
-import TimeData from '../model/TimeData';
-import RepoContributorInfo from '../model/RepoContributorInfo';
+} from "../storage/SessionSummaryData";
+import TimeData from "../model/TimeData";
+import RepoContributorInfo from "../model/RepoContributorInfo";
 import {
   getRepoContributorInfo,
   getRepoFileCount,
   getFileContributorCount,
   getResourceInfo,
-} from '../repo/KpmRepoManager';
-import KeystrokeStats from '../model/KeystrokeStats';
-import {SummaryManager} from './SummaryManager';
-import {sendBatchPayload, getLastSavedKeystrokesStats} from './FileManager';
-import {WallClockManager} from './WallClockManager';
-import {WorkspaceFolder} from 'vscode';
-import Project from '../model/Project';
-import {updateStats} from '../../src/util/FireStore';
-import {processMetric} from '../../src/util/Metric';
+} from "../repo/KpmRepoManager";
+import KeystrokeStats from "../model/KeystrokeStats";
+import {SummaryManager} from "./SummaryManager";
+import {sendBatchPayload, getLastSavedKeystrokesStats} from "./FileManager";
+import {WallClockManager} from "./WallClockManager";
+import {WorkspaceFolder} from "vscode";
+import Project from "../model/Project";
+import {updateStats} from "../../src/util/FireStore";
+import {processMetric} from "../../src/util/Metric";
 
-const os = require('os');
-const fs = require('fs');
-const path = require('path');
+const os = require("os");
+const fs = require("fs");
+const path = require("path");
 
 /**
  * This will update the cumulative editor and session seconds.
@@ -58,7 +58,7 @@ async function validateAndUpdateCumulativeData(
   );
 
   // default error to empty
-  payload.project_null_error = '';
+  payload.project_null_error = "";
 
   // get the latest payload (in-memory or on file)
   let lastPayload: KeystrokeStats = await getLastSavedKeystrokesStats();
@@ -143,7 +143,7 @@ export async function processPayload(payload: KeystrokeStats, sendNow = false) {
   p.name = projName;
   p.resource = resourceInfo;
   p.identifier =
-    resourceInfo && resourceInfo.identifier ? resourceInfo.identifier : '';
+    resourceInfo && resourceInfo.identifier ? resourceInfo.identifier : "";
   payload.project = p;
 
   // validate the cumulative data
@@ -197,13 +197,13 @@ export async function processPayload(payload: KeystrokeStats, sendNow = false) {
   // set the timezone
   payload.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  console.log('From PayloadManager.ts');
+  console.log("From PayloadManager.ts");
   updateStats(payload);
 
   // async for either
   if (sendNow) {
     // send the payload now (only called when getting installed)
-    sendBatchPayload('/data/batch', [payload]);
+    sendBatchPayload("/data/batch", [payload]);
     logIt(`sending kpm metrics`);
   } else {
     // store to send the batch later
@@ -212,7 +212,7 @@ export async function processPayload(payload: KeystrokeStats, sendNow = false) {
   }
 
   // Update the latestPayloadTimestampEndUtc. It's used to determine session time and elapsed_seconds
-  setItem('latestPayloadTimestampEndUtc', nowTimes.now_in_sec);
+  setItem("latestPayloadTimestampEndUtc", nowTimes.now_in_sec);
 }
 
 /**

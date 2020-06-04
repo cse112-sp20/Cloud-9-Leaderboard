@@ -8,3 +8,4 @@ out/*
 README.md
 .github/workflows*
 docs/assets/*
+*.js

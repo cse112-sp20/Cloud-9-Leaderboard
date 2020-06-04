@@ -1,19 +1,19 @@
-import {getItem, setItem, getNowTimes, isNewDay} from '../Util';
-import {clearFileChangeInfoSummaryData} from '../storage/FileChangeInfoSummaryData';
+import {getItem, setItem, getNowTimes, isNewDay} from "../Util";
+import {clearFileChangeInfoSummaryData} from "../storage/FileChangeInfoSummaryData";
 import {
   clearSessionSummaryData,
   getSessionSummaryData,
   saveSessionSummaryToDisk,
   updateStatusBarWithSummaryData,
-} from '../storage/SessionSummaryData';
-import {updateSessionFromSummaryApi} from '../storage/TimeSummaryData';
-import {softwareGet, isResponseOk} from '../http/HttpClient';
-import {SessionSummary} from '../model/models';
+} from "../storage/SessionSummaryData";
+import {updateSessionFromSummaryApi} from "../storage/TimeSummaryData";
+import {softwareGet, isResponseOk} from "../http/HttpClient";
+import {SessionSummary} from "../model/models";
 import {
   sendOfflineData,
   sendOfflineTimeData,
   clearLastSavedKeystrokeStats,
-} from './FileManager';
+} from "./FileManager";
 
 // every 1 min
 const DAY_CHECK_TIMER_INTERVAL = 1000 * 60;
@@ -38,7 +38,7 @@ export class SummaryManager {
 
   init() {
     // fetch the current day from the sessions.json
-    this._currentDay = getItem('currentDay');
+    this._currentDay = getItem("currentDay");
 
     // start timer to check if it's a new day or not
     this._dayCheckTimer = setInterval(async () => {
@@ -74,7 +74,7 @@ export class SummaryManager {
       await sendOfflineTimeData();
 
       // clear the wctime for other plugins that still rely on it
-      setItem('wctime', 0);
+      setItem("wctime", 0);
 
       clearFileChangeInfoSummaryData();
 
@@ -83,10 +83,10 @@ export class SummaryManager {
       this._currentDay = nowTime.day;
 
       // update the current day
-      setItem('currentDay', this._currentDay);
+      setItem("currentDay", this._currentDay);
 
       // update the last payload timestamp
-      setItem('latestPayloadTimestampEndUtc', 0);
+      setItem("latestPayloadTimestampEndUtc", 0);
 
       setTimeout(() => {
         this.updateSessionSummaryFromServer();
@@ -98,7 +98,7 @@ export class SummaryManager {
    * This is only called from the new day checker
    */
   async updateSessionSummaryFromServer() {
-    const jwt = getItem('jwt');
+    const jwt = getItem("jwt");
     const result = await softwareGet(`/sessions/summary?refresh=true`, jwt);
     if (isResponseOk(result) && result.data) {
       const data = result.data;

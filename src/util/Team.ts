@@ -1,34 +1,30 @@
 /**
- * Summary. (use period)
+ * This file contains functions for team management.
+ * Functions from Firestore.ts are called to update/retrieve data on firebase.
  *
- * Description. (use period)
- *
- * @link   URL
- * @file   This files defines the MyClass class.
- * @author AuthorName.
- * @since  x.x.x
+ * @file   Team.ts
  */
 
-import {window} from 'vscode';
+import {window} from "vscode";
 import {
   addNewTeamToDbAndJoin,
   joinTeamWithTeamId,
   checkIfInTeam,
-} from './Firestore';
+} from "./Firestore";
 import {
   getExtensionContext,
   checkIfCachedUserIdExistsAndPrompt,
-} from './Authentication';
+} from "./Authentication";
 import {
   GLOBAL_STATE_USER_ID,
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_TEAM_ID,
   AUTH_NOT_LOGGED_IN,
-} from './Constants';
+} from "./Constants";
 
 /**
- * prompts the user to enter a team name and updates the firebase 2
- * @pre-condition: userid exists
+ * prompts the user to enter a team name and updates the firebase
+ * @return nothing
  */
 export async function createAndJoinTeam() {
   //ID check
@@ -38,26 +34,29 @@ export async function createAndJoinTeam() {
 
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
-  if (cachedUserId === undefined || cachedUserId === '') {
+  if (cachedUserId === undefined || cachedUserId === "") {
     window.showErrorMessage(AUTH_NOT_LOGGED_IN);
+    return;
   } else {
-    //first check if already in team
+    // First check if already in team
     const inTeam = await checkIfInTeam();
 
+    // If the user is already in a team, they cannot create a new team
     if (inTeam) {
-      window.showInformationMessage('You have already joined a team!');
+      window.showInformationMessage("You have already joined a team!");
       return;
     }
 
-    window.showInformationMessage('Enter a name for your new team!');
-
+    window.showInformationMessage("Enter a name for your new team!");
+    //prompt the user to enter a name for their team and create a new doc for the team
     await window
-      .showInputBox({placeHolder: 'Enter a new team name'})
+      .showInputBox({placeHolder: "Enter a new team name"})
       .then(async (teamName) => {
-        if (teamName == undefined || teamName == '') {
-          window.showInformationMessage('Please enter a valid team name!');
+        if (teamName == undefined || teamName == "") {
+          window.showInformationMessage("Please enter a valid team name!");
           return;
         }
+        //function call to add a firebase document for this new team
         addNewTeamToDbAndJoin(teamName);
       });
   }
@@ -75,19 +74,19 @@ export async function getTeamInfo() {
   const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
-  if (cachedUserId == undefined || cachedUserId == '') {
+  if (cachedUserId == undefined || cachedUserId == "") {
     window.showErrorMessage(AUTH_NOT_LOGGED_IN);
     return;
   }
 
-  if (teamId == undefined || teamId == '') {
-    window.showInformationMessage('No team info found.');
+  if (teamId == undefined || teamId == "") {
+    window.showInformationMessage("No team info found.");
     return;
   }
 
-  let messageStr = 'Your team name: ' + teamName + '\n';
+  let messageStr = "Your team name: " + teamName + "\n";
 
-  messageStr += 'Your team ID: ' + teamId;
+  messageStr += "Your team ID: " + teamId;
 
   console.log(messageStr);
   window.showInformationMessage(messageStr, {modal: true});
@@ -103,7 +102,7 @@ export async function joinTeam() {
   //first check if user is already in a team
   const inTeam = await checkIfInTeam();
   if (inTeam) {
-    window.showInformationMessage('You have already joined a team!');
+    window.showInformationMessage("You have already joined a team!");
     return;
   }
 
@@ -111,14 +110,14 @@ export async function joinTeam() {
 
   const cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
 
-  if (cachedUserId === undefined || cachedUserId === '') {
+  if (cachedUserId === undefined || cachedUserId === "") {
     window.showErrorMessage(AUTH_NOT_LOGGED_IN);
   } else {
     await window
-      .showInputBox({placeHolder: 'Enter a team code'})
+      .showInputBox({placeHolder: "Enter a team code"})
       .then(async (teamCode) => {
         if (teamCode == undefined) {
-          window.showInformationMessage('Please enter a valid team name!');
+          window.showInformationMessage("Please enter a valid team name!");
           return;
         }
         joinTeamWithTeamId(teamCode, false);

@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
-import {api_endpoint} from '../Constants';
+import {api_endpoint} from "../Constants";
 
-import {logIt} from '../Util';
-import {CacheManager} from '../cache/CacheManager';
+import {logIt} from "../Util";
+import {CacheManager} from "../cache/CacheManager";
 
 // build the axios api base url
 const beApi = axios.create({
@@ -15,26 +15,26 @@ const spotifyApi = axios.create({});
 const cacheMgr: CacheManager = CacheManager.getInstance();
 
 export async function serverIsAvailable() {
-  let isAvail = cacheMgr.get('serverAvailable');
+  let isAvail = cacheMgr.get("serverAvailable");
 
   if (isAvail === undefined || isAvail === null) {
-    isAvail = await softwareGet('/ping', null)
+    isAvail = await softwareGet("/ping", null)
       .then((result) => {
         return isResponseOk(result);
       })
       .catch((e) => {
         return false;
       });
-    cacheMgr.set('serverAvailable', isAvail, 60);
+    cacheMgr.set("serverAvailable", isAvail, 60);
   }
   return isAvail;
 }
 
 export async function spotifyApiPut(api, payload, accessToken) {
-  if (api.indexOf('https://api.spotify.com') === -1) {
-    api = 'https://api.spotify.com' + api;
+  if (api.indexOf("https://api.spotify.com") === -1) {
+    api = "https://api.spotify.com" + api;
   }
-  spotifyApi.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  spotifyApi.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
   return await spotifyApi.put(api, payload).catch((err) => {
     logIt(`error posting data for ${api}, message: ${err.message}`);
     return err;
@@ -49,7 +49,7 @@ export async function spotifyApiPut(api, payload, accessToken) {
  */
 export async function softwareGet(api, jwt) {
   if (jwt) {
-    beApi.defaults.headers.common['Authorization'] = jwt;
+    beApi.defaults.headers.common["Authorization"] = jwt;
   }
 
   return await beApi.get(api).catch((err) => {
@@ -63,7 +63,7 @@ export async function softwareGet(api, jwt) {
  */
 export async function softwarePut(api, payload, jwt) {
   // PUT the kpm to the PluginManager
-  beApi.defaults.headers.common['Authorization'] = jwt;
+  beApi.defaults.headers.common["Authorization"] = jwt;
 
   return await beApi
     .put(api, payload)
@@ -81,7 +81,7 @@ export async function softwarePut(api, payload, jwt) {
  */
 export async function softwarePost(api, payload, jwt) {
   // POST the kpm to the PluginManager
-  beApi.defaults.headers.common['Authorization'] = jwt;
+  beApi.defaults.headers.common["Authorization"] = jwt;
   return beApi
     .post(api, payload)
     .then((resp) => {
@@ -97,7 +97,7 @@ export async function softwarePost(api, payload, jwt) {
  * perform a delete request
  */
 export async function softwareDelete(api, jwt) {
-  beApi.defaults.headers.common['Authorization'] = jwt;
+  beApi.defaults.headers.common["Authorization"] = jwt;
   return beApi
     .delete(api)
     .then((resp) => {

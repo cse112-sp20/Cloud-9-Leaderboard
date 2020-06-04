@@ -1,4 +1,4 @@
-import {Position} from 'vscode';
+import {Position} from "vscode";
 
 export default class Checkbox {
   checked: boolean;

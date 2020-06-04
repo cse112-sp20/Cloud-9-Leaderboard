@@ -28,8 +28,17 @@ const Metric_1 = require("./Metric");
 const Authentication_1 = require("./Authentication");
 const Constants_1 = require("./Constants");
 const fs = require('fs');
+/**
+ * Personal Stats class for storing all information about
+ * the current user. All daily metric is stored using this class.
+ */
 class PersonalStats {
     constructor() { }
+    /**
+     * Add statistics of a day to the class of this current user.
+     * @param date date of the statistics
+     * @param statsObj statistics values
+     */
     static addDayStats(date, statsObj) {
         if (!PersonalStats.dates) {
             PersonalStats.dates = [];
@@ -41,11 +50,17 @@ class PersonalStats {
         }
         PersonalStats.dates.push(dateObj);
     }
+    /**
+     * Getter for user statistics
+     */
     static getUsers() {
         return PersonalStats.dates;
     }
 }
 exports.PersonalStats = PersonalStats;
+/**
+ * Finding the file path of the personal stats txt file
+ */
 function getPersonalStatsFile() {
     let filePath = Util_1.getSoftwareDir();
     if (Util_1.isWindows()) {
@@ -57,6 +72,9 @@ function getPersonalStatsFile() {
     return filePath;
 }
 exports.getPersonalStatsFile = getPersonalStatsFile;
+/**
+ * Display personal statistics text file in the vscode window
+ */
 function displayPersonalStats() {
     return __awaiter(this, void 0, void 0, function* () {
         // 1st write the code time metrics dashboard file
@@ -99,6 +117,10 @@ function displayPersonalStats() {
     });
 }
 exports.displayPersonalStats = displayPersonalStats;
+/**
+ * Write to personal statistics text file
+ * @param dates the objects to be parsed and written on to the text file
+ */
 function writePersonalStatsFile(dates) {
     return __awaiter(this, void 0, void 0, function* () {
         let personalStatsFile = getPersonalStatsFile();
@@ -124,8 +146,9 @@ function writePersonalStatsFile(dates) {
         content += Constants_1.WECOME_TO_CLOUD9_ROW_3;
         content += Constants_1.WECOME_TO_CLOUD9_ROW_4;
         content += Constants_1.WECOME_TO_CLOUD9_ROW_5;
+        content += '\n';
         content += Constants_1.SECTION_BAR;
-        content += 'How to gain points \n';
+        content += '                                     How to gain points \n';
         content += Constants_1.SECTION_BAR + '\n';
         content +=
             'Each second spent coding:                            + 0.01 points per second \n';
@@ -139,7 +162,7 @@ function writePersonalStatsFile(dates) {
         // content += PERSONAL_STATISTIC_ROW_4;
         // content += PERSONAL_STATISTIC_ROW_5;
         content += Constants_1.SECTION_BAR;
-        content += 'Record\n';
+        content += '                                           Record\n';
         content += Constants_1.SECTION_BAR + '\n';
         // content +=
         //   'Dates'.padEnd(FIELD_LENGTH, ' ') +
@@ -216,7 +239,7 @@ function writePersonalStatsFile(dates) {
             content += '\n';
         });
         content += '\n' + Constants_1.SECTION_BAR;
-        content += 'Statistics\n';
+        content += '                                         Statistics\n';
         content += Constants_1.SECTION_BAR + '\n';
         let statsObj = Metric_1.calculateStats(scoreMap);
         content +=
@@ -243,13 +266,54 @@ function writePersonalStatsFile(dates) {
             'Lines per minute:'.padEnd(Constants_1.STAT_LENGTH, ' ') +
                 statsObj['lpm'].toFixed(3) +
                 '\n';
-        content += Constants_1.ACHIEVEMENT_ROW_1;
-        content += Constants_1.ACHIEVEMENT_ROW_2;
-        content += Constants_1.ACHIEVEMENT_ROW_3;
-        content += Constants_1.ACHIEVEMENT_ROW_4;
-        content += Constants_1.ACHIEVEMENT_ROW_5;
+        content += '\n' + Constants_1.SECTION_BAR;
+        content += '                                        Achievemnts\n';
+        content += Constants_1.SECTION_BAR + '\n';
+        content += 'These are personal achievements/milestones that you can earn\n\n';
         content +=
-            'These are personal achievements/milestones that you have accumulated\n\n';
+            '__________________________________________________________________________________________\n';
+        content +=
+            '|                                                              |                          |\n';
+        content +=
+            '|                           ACHIEVEMENTS                       |           BADGE          |\n';
+        content +=
+            '|______________________________________________________________|__________________________|\n';
+        content +=
+            '|                                                              |                          |\n';
+        content +=
+            '|                   Reach 5000 total keystrokes                |             💎           |\n';
+        content +=
+            '|______________________________________________________________|__________________________|\n';
+        content +=
+            '|                                                              |                          |\n';
+        content +=
+            '|                  Reach 2000 total lines changed              |             🔎           |\n';
+        content +=
+            '|______________________________________________________________|__________________________|\n';
+        content +=
+            '|                                                              |                          |\n';
+        content +=
+            '|                  Spend total of 200 hours coding             |             🔥           |\n';
+        content +=
+            '|______________________________________________________________|__________________________|\n';
+        content +=
+            '|                                                              |                          |\n';
+        content +=
+            '|                   Reach 500 total keystrokes daily           |             💪           |\n';
+        content +=
+            '|______________________________________________________________|__________________________|\n';
+        content +=
+            '|                                                              |                          |\n';
+        content +=
+            '|                 Reach 200 total lines changed daily          |             🥊           |\n';
+        content +=
+            '|______________________________________________________________|__________________________|\n';
+        content +=
+            '|                                                              |                          |\n';
+        content +=
+            '|                 Spend total of 6 hours coding daily          |             🎈           |\n';
+        content +=
+            '|______________________________________________________________|__________________________|\n';
         fs.writeFileSync(personalStatsFile, content, (err) => {
             if (err) {
                 console.error('Error writing leaderboard');

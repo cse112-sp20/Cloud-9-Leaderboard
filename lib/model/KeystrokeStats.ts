@@ -1,7 +1,7 @@
-import {getOs, getVersion, getPluginId} from '../Util';
-import {FileChangeInfo} from './models';
-import {processPayload} from '../managers/PayloadManager';
-import Project from './Project';
+import {getOs, getVersion, getPluginId} from "../Util";
+import {FileChangeInfo} from "./models";
+import {processPayload} from "../managers/PayloadManager";
+import Project from "./Project";
 
 export default class KeystrokeStats {
   public source: {};
@@ -20,9 +20,9 @@ export default class KeystrokeStats {
   public cumulative_editor_seconds: number = 0;
   public cumulative_session_seconds: number = 0;
   public elapsed_seconds: number = 0;
-  public workspace_name: string = '';
-  public hostname: string = '';
-  public project_null_error: string = '';
+  public workspace_name: string = "";
+  public hostname: string = "";
+  public project_null_error: string = "";
 
   constructor(project: Project) {
     this.source = {};
@@ -37,9 +37,9 @@ export default class KeystrokeStats {
     this.cumulative_editor_seconds = 0;
     this.cumulative_session_seconds = 0;
     this.elapsed_seconds = 0;
-    this.project_null_error = '';
-    this.hostname = '';
-    this.workspace_name = '';
+    this.project_null_error = "";
+    this.hostname = "";
+    this.workspace_name = "";
   }
 
   getCurrentStatsData() {
