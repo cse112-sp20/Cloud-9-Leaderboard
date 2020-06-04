@@ -48,7 +48,7 @@ OR
 
 2. Download from the VSCode Marketplace:<br>
 ```
- https://marketplace.visualstudio.com/items?itemName=CSE112.cloud9
+ [https://marketplace.visualstudio.com/items?itemName=CSE112.cloud9](https://marketplace.visualstudio.com/items?itemName=CSE112.cloud9)
 ```
 ## Getting Started
 
