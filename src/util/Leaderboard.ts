@@ -325,7 +325,7 @@ async function writeToFile(users, isTeam) {
   leaderBoardContent += 'Teamname \t : \t ' + teamname + '\n\n';
 
   leaderBoardContent += SECTION_BAR;
-  leaderBoardContent += 'LEADERBOARD RANKING \n';
+  leaderBoardContent += '                                   LEADERBOARD RANKING \n';
   leaderBoardContent += SECTION_BAR + '\n';
 
   if (isTeam) {
@@ -362,7 +362,7 @@ async function writeToFile(users, isTeam) {
   let BADGE_LENGTH = 6;
 
   leaderBoardContent += SECTION_BAR;
-  leaderBoardContent += 'Metric \n';
+  leaderBoardContent += '                                          Metric \n';
   leaderBoardContent += SECTION_BAR + '\n';
   console.log(scoreMap);
   leaderBoardContent += 'Each second spent coding        + 0.01 \n';
@@ -370,7 +370,7 @@ async function writeToFile(users, isTeam) {
   leaderBoardContent += 'Each modified line              +   10 \n';
 
   leaderBoardContent += '\n' + SECTION_BAR;
-  leaderBoardContent += 'Achievements (How you can earn these badges) \n';
+  leaderBoardContent += '                      Achievements (How you can earn these badges) \n';
   leaderBoardContent += SECTION_BAR + '\n';
   console.log(scoreMap);
   leaderBoardContent +=

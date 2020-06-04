@@ -35,7 +35,7 @@ exports.DEFAULT_USER_DOC_TOP = {
     teamCode: '',
     cumulativePoints: 0,
     teamName: '',
-    isTeamLeader: false
+    isTeamLeader: false,
 };
 exports.DEFAULT_TEAM_DOC = {
 // teamName: '',
@@ -66,9 +66,9 @@ exports.AUTH_ERR_CODE_WRONG_PASSWORD = 'auth/wrong-password';
 exports.AUTH_ERR_CODE_WEAK_PASSWORD = 'auth/weak-password';
 exports.AUTH_ERR_CODE_USER_NOT_FOUND = 'auth/user-not-found';
 exports.AUTH_ERR_CODE_INVALID_EMAIL = 'auth/invalid-email';
-exports.MAX_USERNAME_LENGTH = 50;
+exports.MAX_USERNAME_LENGTH = 46;
 exports.MAX_RANK_LENGTH = 6;
-exports.SECTION_BAR = '\n'.padStart(80, '=');
+exports.SECTION_BAR = '\n'.padStart(92, '=');
 exports.STAT_LENGTH = 30;
 exports.FIELD_LENGTH = 12;
 exports.PERSONAL_STATISTIC_ROW_1 = '     ____                                 _   ____  _        _   _     _   _          \n';
@@ -76,22 +76,22 @@ exports.PERSONAL_STATISTIC_ROW_2 = '    |  _ \\ ___ _ __ ___  ___  _ __   __ _| 
 exports.PERSONAL_STATISTIC_ROW_3 = "    | |_) / _ \\ '__/ __|/ _ \\| '_ \\ / _` | | \\___ \\| __/ _` | __| / __| __| |/ __/ __|\n";
 exports.PERSONAL_STATISTIC_ROW_4 = '    |  __/  __/ |  \\__ \\ (_) | | | | (_| | |  ___) | || (_| | |_| \\__ \\ |_| | (__\\__ \\\n';
 exports.PERSONAL_STATISTIC_ROW_5 = '    |_|   \\___|_|  |___/\\___/|_| |_|\\__,_|_| |____/ \\__\\__,_|\\__|_|___/\\__|_|\\___|___/\n';
-exports.WECOME_TO_CLOUD9_ROW_1 = '  __        __   _                            _____        ____ _                 _    ___\n';
-exports.WECOME_TO_CLOUD9_ROW_2 = '  \\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__    / ___| | ___  _   _  __| |  / _ \\ \n';
-exports.WECOME_TO_CLOUD9_ROW_3 = "   \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\  | |   | |/ _ \\| | | |/ _` | | (_) |\n";
-exports.WECOME_TO_CLOUD9_ROW_4 = '    \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) | | |___| | (_) | |_| | (_| |  \\__, |\n';
-exports.WECOME_TO_CLOUD9_ROW_5 = '     \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/   \\____|_|\\___/ \\__,_|\\__,_|    /_/ \n';
-exports.LEADERBOARD_ROW_1 = ' _                   _           _                         _\n';
-exports.LEADERBOARD_ROW_2 = '| |    ___  __ _  __| | ___ _ __| |__   ___   __ _ _ __ __| |\n';
-exports.LEADERBOARD_ROW_3 = "| |   / _ \\/ _` |/ _` |/ _ \\ '__| '_ \\ / _ \\ / _` | '__/ _` |\n";
-exports.LEADERBOARD_ROW_4 = '| |__|  __/ (_| | (_| |  __/ |  | |_) | (_) | (_| | | | (_| |\n';
-exports.LEADERBOARD_ROW_5 = '|_____\\___|\\__,_|\\__,_|\\___|_|  |_.__/ \\___/ \\__,_|_|  \\__,_|\n';
+exports.WECOME_TO_CLOUD9_ROW_1 = '__        __   _                            _____        ____ _                 _    ___\n';
+exports.WECOME_TO_CLOUD9_ROW_2 = '\\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__    / ___| | ___  _   _  __| |  / _ \\ \n';
+exports.WECOME_TO_CLOUD9_ROW_3 = " \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\  | |   | |/ _ \\| | | |/ _` | | (_) |\n";
+exports.WECOME_TO_CLOUD9_ROW_4 = '  \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) | | |___| | (_) | |_| | (_| |  \\__, |\n';
+exports.WECOME_TO_CLOUD9_ROW_5 = '   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/   \\____|_|\\___/ \\__,_|\\__,_|    /_/ \n';
+exports.LEADERBOARD_ROW_1 = '                _                   _           _                         _\n';
+exports.LEADERBOARD_ROW_2 = '               | |    ___  __ _  __| | ___ _ __| |__   ___   __ _ _ __ __| |\n';
+exports.LEADERBOARD_ROW_3 = "               | |   / _ \\/ _` |/ _` |/ _ \\ '__| '_ \\ / _ \\ / _` | '__/ _` |\n";
+exports.LEADERBOARD_ROW_4 = '               | |__|  __/ (_| | (_| |  __/ |  | |_) | (_) | (_| | | | (_| |\n';
+exports.LEADERBOARD_ROW_5 = '               |_____\\___|\\__,_|\\__,_|\\___|_|  |_.__/ \\___/ \\__,_|_|  \\__,_|\n';
 exports.ACHIEVEMENT_ROW_1 = '    _        _     _                                     _  \n';
 exports.ACHIEVEMENT_ROW_2 = '   / \\   ___| |__ (_) _____   _____ _ __ ___   ___ _ __ | |_ ___ \n';
 exports.ACHIEVEMENT_ROW_3 = "  / _ \\ / __| '_ \\| |/ _ \\ \\ / / _ \\ '_ ` _ \\ / _ \\ '_ \\| __/ __|\n";
 exports.ACHIEVEMENT_ROW_4 = ' / ___ \\ (__| | | | |  __/\\ V /  __/ | | | | |  __/ | | | |_\\__ \\\n';
 exports.ACHIEVEMENT_ROW_5 = '/_/   \\_\\___|_| |_|_|\\___| \\_/ \\___|_| |_| |_|\\___|_| |_|\\__|___/\n';
-exports.CLOUD9_LEADERBOARD_ROW_1 = '   ____ _                 _    ___    _                   _           _                         _\n';
+exports.CLOUD9_LEADERBOARD_ROW_1 = '            ____ _                 _    ___    _                   _           _                         _\n';
 exports.CLOUD9_LEADERBOARD_ROW_2 = '  / ___| | ___  _   _  __| |  / _ \\  | |    ___  __ _  __| | ___ _ __| |__   ___   __ _ _ __ __| |\n';
 exports.CLOUD9_LEADERBOARD_ROW_3 = " | |   | |/ _ \\| | | |/ _` | | (_) | | |   / _ \\/ _` |/ _` |/ _ \\ '__| '_ \\ / _ \\ / _` | '__/ _` |\n";
 exports.CLOUD9_LEADERBOARD_ROW_4 = ' | |___| | (_) | |_| | (_| |  \\__, | | |__|  __/ (_| | (_| |  __/ |  | |_) | (_) | (_| | | | (_| |\n';

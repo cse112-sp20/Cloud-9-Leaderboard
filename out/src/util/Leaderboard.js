@@ -8,7 +8,6 @@
  *
  * @file   This files defines the Leaderboard class.
  * @author AuthorName.
- * @since  0.0.1
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -298,7 +297,7 @@ function writeToFile(users, isTeam) {
         leaderBoardContent += 'Username \t : \t ' + username + '\n';
         leaderBoardContent += 'Teamname \t : \t ' + teamname + '\n\n';
         leaderBoardContent += Constants_1.SECTION_BAR;
-        leaderBoardContent += 'LEADERBOARD RANKING \n';
+        leaderBoardContent += '                                   LEADERBOARD RANKING \n';
         leaderBoardContent += Constants_1.SECTION_BAR + '\n';
         if (isTeam) {
             leaderBoardContent +=
@@ -332,14 +331,14 @@ function writeToFile(users, isTeam) {
         //STATS HERE, TODO
         let BADGE_LENGTH = 6;
         leaderBoardContent += Constants_1.SECTION_BAR;
-        leaderBoardContent += 'Metric \n';
+        leaderBoardContent += '                                        Metric \n';
         leaderBoardContent += Constants_1.SECTION_BAR + '\n';
         console.log(scoreMap);
         leaderBoardContent += 'Each second spent coding        + 0.01 \n';
         leaderBoardContent += 'Each keystroke                  +    1 \n';
         leaderBoardContent += 'Each modified line              +   10 \n';
         leaderBoardContent += '\n' + Constants_1.SECTION_BAR;
-        leaderBoardContent += 'Achievements (How you can earn these badges) \n';
+        leaderBoardContent += '                      Achievements (How you can earn these badges) \n';
         leaderBoardContent += Constants_1.SECTION_BAR + '\n';
         console.log(scoreMap);
         leaderBoardContent +=

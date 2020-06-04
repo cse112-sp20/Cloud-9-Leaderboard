@@ -72,9 +72,9 @@ export const AUTH_ERR_CODE_WEAK_PASSWORD = 'auth/weak-password';
 export const AUTH_ERR_CODE_USER_NOT_FOUND = 'auth/user-not-found';
 export const AUTH_ERR_CODE_INVALID_EMAIL = 'auth/invalid-email';
 
-export const MAX_USERNAME_LENGTH = 50;
+export const MAX_USERNAME_LENGTH = 46;
 export const MAX_RANK_LENGTH = 6;
-export const SECTION_BAR = '\n'.padStart(80, '=');
+export const SECTION_BAR = '\n'.padStart(92, '=');
 
 export const STAT_LENGTH = 30;
 export const FIELD_LENGTH = 12;
@@ -91,26 +91,26 @@ export const PERSONAL_STATISTIC_ROW_5 =
   '    |_|   \\___|_|  |___/\\___/|_| |_|\\__,_|_| |____/ \\__\\__,_|\\__|_|___/\\__|_|\\___|___/\n';
 
 export const WECOME_TO_CLOUD9_ROW_1 =
-  '  __        __   _                            _____        ____ _                 _    ___\n';
+  '__        __   _                            _____        ____ _                 _    ___\n';
 export const WECOME_TO_CLOUD9_ROW_2 =
-  '  \\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__    / ___| | ___  _   _  __| |  / _ \\ \n';
+  '\\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__    / ___| | ___  _   _  __| |  / _ \\ \n';
 export const WECOME_TO_CLOUD9_ROW_3 =
-  "   \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\  | |   | |/ _ \\| | | |/ _` | | (_) |\n";
+  " \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\  | |   | |/ _ \\| | | |/ _` | | (_) |\n";
 export const WECOME_TO_CLOUD9_ROW_4 =
-  '    \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) | | |___| | (_) | |_| | (_| |  \\__, |\n';
+  '  \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) | | |___| | (_) | |_| | (_| |  \\__, |\n';
 export const WECOME_TO_CLOUD9_ROW_5 =
-  '     \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/   \\____|_|\\___/ \\__,_|\\__,_|    /_/ \n';
+  '   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/   \\____|_|\\___/ \\__,_|\\__,_|    /_/ \n';
 
 export const LEADERBOARD_ROW_1 =
-  ' _                   _           _                         _\n';
+  '                _                   _           _                         _\n';
 export const LEADERBOARD_ROW_2 =
-  '| |    ___  __ _  __| | ___ _ __| |__   ___   __ _ _ __ __| |\n';
+  '               | |    ___  __ _  __| | ___ _ __| |__   ___   __ _ _ __ __| |\n';
 export const LEADERBOARD_ROW_3 =
-  "| |   / _ \\/ _` |/ _` |/ _ \\ '__| '_ \\ / _ \\ / _` | '__/ _` |\n";
+  "               | |   / _ \\/ _` |/ _` |/ _ \\ '__| '_ \\ / _ \\ / _` | '__/ _` |\n";
 export const LEADERBOARD_ROW_4 =
-  '| |__|  __/ (_| | (_| |  __/ |  | |_) | (_) | (_| | | | (_| |\n';
+  '               | |__|  __/ (_| | (_| |  __/ |  | |_) | (_) | (_| | | | (_| |\n';
 export const LEADERBOARD_ROW_5 =
-  '|_____\\___|\\__,_|\\__,_|\\___|_|  |_.__/ \\___/ \\__,_|_|  \\__,_|\n';
+  '               |_____\\___|\\__,_|\\__,_|\\___|_|  |_.__/ \\___/ \\__,_|_|  \\__,_|\n';
 
 export const ACHIEVEMENT_ROW_1 =
   '    _        _     _                                     _  \n';
@@ -124,7 +124,7 @@ export const ACHIEVEMENT_ROW_5 =
   '/_/   \\_\\___|_| |_|_|\\___| \\_/ \\___|_| |_| |_|\\___|_| |_|\\__|___/\n';
 
 export const CLOUD9_LEADERBOARD_ROW_1 =
-  '   ____ _                 _    ___    _                   _           _                         _\n';
+  '            ____ _                 _    ___    _                   _           _                         _\n';
 export const CLOUD9_LEADERBOARD_ROW_2 =
   '  / ___| | ___  _   _  __| |  / _ \\  | |    ___  __ _  __| | ___ _ __| |__   ___   __ _ _ __ __| |\n';
 export const CLOUD9_LEADERBOARD_ROW_3 =

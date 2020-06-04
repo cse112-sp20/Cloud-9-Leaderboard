@@ -71,8 +71,14 @@ function calculateStats(scoreMap) {
     statsObj['lcpd'] = totalValues['linesChanged'] / days;
     statsObj['tspd'] = totalValues['timeInterval'] / days;
     statsObj['ppd'] = totalValues['points'] / days;
-    statsObj['kpm'] = totalValues['timeInterval'] === 0 ? 0 : totalValues['keystrokes'] / (totalValues['timeInterval'] / 60);
-    statsObj['lpm'] = totalValues['timeInterval'] === 0 ? 0 : totalValues['linesChanged'] / (totalValues['timeInterval'] / 60);
+    statsObj['kpm'] =
+        totalValues['timeInterval'] === 0
+            ? 0
+            : totalValues['keystrokes'] / (totalValues['timeInterval'] / 60);
+    statsObj['lpm'] =
+        totalValues['timeInterval'] === 0
+            ? 0
+            : totalValues['linesChanged'] / (totalValues['timeInterval'] / 60);
     return statsObj;
 }
 exports.calculateStats = calculateStats;

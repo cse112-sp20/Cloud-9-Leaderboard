@@ -234,6 +234,10 @@ function updateStats(payload) {
     });
 }
 exports.updateStats = updateStats;
+/**
+ * Retrieves team member stats
+ * @param callback
+ */
 function retrieveTeamMemberStats(callback) {
     return __awaiter(this, void 0, void 0, function* () {
         let db = firebase.firestore();
@@ -300,6 +304,10 @@ function retrieveTeamMemberStats(callback) {
     });
 }
 exports.retrieveTeamMemberStats = retrieveTeamMemberStats;
+/**
+ * Retrieves all user stats
+ * @param callback
+ */
 function retrieveAllUserStats(callback) {
     return __awaiter(this, void 0, void 0, function* () {
         let db = firebase.firestore();
@@ -331,6 +339,9 @@ function retrieveAllUserStats(callback) {
 exports.retrieveAllUserStats = retrieveAllUserStats;
 /**
  * Create new user credential and add new doc to db
+ * @param email
+ * @param password
+ * @returns
  */
 function createNewUserInFirebase(email, password) {
     return __awaiter(this, void 0, void 0, function* () {

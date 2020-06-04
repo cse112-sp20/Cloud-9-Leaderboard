@@ -80,9 +80,12 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
       let memberFetchLists = [];
 
-      for (let [key, value] of Object.entries(memberMaps)) {
-        memberFetchLists.push(new LeaderItem('Email: ' + key));
+      if(memberMaps !== undefined){
+        for (let [key, value] of Object.entries(memberMaps)) {
+          memberFetchLists.push(new LeaderItem('Email: ' + key));
+        }
       }
+
 
       if (memberFetchLists.length === 0) {
         console.log('empty');
@@ -96,11 +99,13 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
       console.log('line 100');
 
+      if(memberMaps !== undefined){
       for (let [key, value] of Object.entries(memberMaps)) {
         childLeaderItem = new LeaderItem('Remove member: ' + key);
 
         removeMemberFetchLists.push(childLeaderItem);
       }
+    }
 
       console.log('powell');
 
@@ -260,6 +265,10 @@ export const handleLeaderInfoChangeSelection = (
     GLOBAL_STATE_USER_TEAM_MEMBERS,
   );
   if (item.label.startsWith('No permission:')) {
+    
+    
+
+
     if (ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
       let childItem = new LeaderItem('');
 
@@ -276,73 +285,93 @@ export const handleLeaderInfoChangeSelection = (
       console.log('Is not a leader');
     }
   } else if (item.label === 'Team members') {
-    item.children = [];
 
-    for (let [key, value] of Object.entries(memberMaps)) {
-      item.children.push(
-        new LeaderItem('User: ' + memberMaps[key]['name'], item, [
-          new LeaderItem(''),
-        ]),
-      );
+
+    if (memberMaps !== undefined){
+      item.children = [];
+
+      for (let [key, value] of Object.entries(memberMaps)) {
+        item.children.push(
+          new LeaderItem('User: ' + memberMaps[key]['name'], item, [
+            new LeaderItem(''),
+          ]),
+        );
+      }
+  
+      if (item.children.length === 0) {
+        item.children.push(new LeaderItem('Empty: No team member yet', item));
+      }
+  
+      commands.executeCommand('LeaderView.refreshEntry');
     }
 
-    if (item.children.length === 0) {
-      item.children.push(new LeaderItem('Empty: No team member yet', item));
-    }
-
-    commands.executeCommand('LeaderView.refreshEntry');
   } else if (item.label.startsWith('User: ')) {
-    item.children = [];
 
-    for (let [key, value] of Object.entries(memberMaps)) {
-      item.children.push(new LeaderItem('Email: ' + key));
+    if (memberMaps !== undefined){
+      item.children = [];
+
+      for (let [key, value] of Object.entries(memberMaps)) {
+        item.children.push(new LeaderItem('Email: ' + key));
+      }
+      commands.executeCommand('LeaderView.refreshEntry');
     }
-    commands.executeCommand('LeaderView.refreshEntry');
+
+    
   } else if (item.label === 'Remove Team members') {
-    item.children = [];
-    for (let [key, value] of Object.entries(memberMaps)) {
-      item.children.push(new LeaderItem('Remove member: ' + key, item));
+
+    if (memberMaps !== undefined){
+
+      item.children = [];
+      for (let [key, value] of Object.entries(memberMaps)) {
+        item.children.push(new LeaderItem('Remove member: ' + key, item));
+      }
+  
+      if (item.children.length === 0) {
+        item.children.push(new LeaderItem('Empty: No team member yet', item));
+      }
+      // item.children = [
+      //   new LeaderItem('etyuan@ucsd.edu', item),
+      //   new LeaderItem('Member: aihsieh@ucsd.edu', item),
+      // ];
+      commands.executeCommand('LeaderView.refreshEntry');
     }
 
-    if (item.children.length === 0) {
-      item.children.push(new LeaderItem('Empty: No team member yet', item));
-    }
-    // item.children = [
-    //   new LeaderItem('etyuan@ucsd.edu', item),
-    //   new LeaderItem('Member: aihsieh@ucsd.edu', item),
-    // ];
-    commands.executeCommand('LeaderView.refreshEntry');
   } else if (item.label.startsWith('Remove member: ')) {
-    let selectedMemberEmail = item.label.substring(15);
 
-    window
-      .showInformationMessage(
-        `Are you sure you want to remove ${selectedMemberEmail}?`,
-        'yes',
-        'no',
-      )
-      .then((input) => {
-        if (input === 'yes') {
-          const member = memberMaps[selectedMemberEmail];
+    if (memberMaps !== undefined){
+      let selectedMemberEmail = item.label.substring(15);
 
-          const memberId = member['id'];
-          const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+      window
+        .showInformationMessage(
+          `Are you sure you want to remove ${selectedMemberEmail}?`,
+          'yes',
+          'no',
+        )
+        .then((input) => {
+          if (input === 'yes') {
+            const member = memberMaps[selectedMemberEmail];
+  
+            const memberId = member['id'];
+            const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+  
+            leaveTeam(memberId, teamId).then(() => {
+              const newMemberMaps = ctx.globalState.get(
+                GLOBAL_STATE_USER_TEAM_MEMBERS,
+              );
+              item.parent.children = [];
+              for (let [key, value] of Object.entries(newMemberMaps)) {
+                item.parent.children.push(new LeaderItem('Member: ' + key, item));
+              }
+  
+              commands.executeCommand('LeaderView.refreshEntry');
+              window.showInformationMessage('Successfully remove');
+            });
+          } else {
+            window.showInformationMessage('Removal canceled');
+          }
+        });
+    }
 
-          leaveTeam(memberId, teamId).then(() => {
-            const newMemberMaps = ctx.globalState.get(
-              GLOBAL_STATE_USER_TEAM_MEMBERS,
-            );
-            item.parent.children = [];
-            for (let [key, value] of Object.entries(newMemberMaps)) {
-              item.parent.children.push(new LeaderItem('Member: ' + key, item));
-            }
 
-            commands.executeCommand('LeaderView.refreshEntry');
-            window.showInformationMessage('Successfully remove');
-          });
-        } else {
-          window.showInformationMessage('Removal canceled');
-        }
-      });
   }
 };
