@@ -14,13 +14,12 @@ const assert = require('chai').assert;
 describe('Hello World Example UI Tests', () => {
     let driver;
     before(() => {
-        driver = vscode_extension_tester_1.VSBrowser.instance.driver;
+        //driver = VSBrowser.instance.driver;
     });
     it('Create a Team', () => __awaiter(void 0, void 0, void 0, function* () {
-        this.timeout(10000);
         const activityBar = new vscode_extension_tester_1.ActivityBar();
         const control = yield activityBar.getViewControl('Cloud9');
-        const view = yield control.openView();
+        yield control.openView();
         //Click sign in on tree view
         const menuInfo = yield new vscode_extension_tester_1.SideBarView().getContent().getSection('Menu');
         yield (yield menuInfo.findItem('Sign in / Create Account')).click();
@@ -30,11 +29,20 @@ describe('Hello World Example UI Tests', () => {
         const message = yield signInNotif[0].getMessage();
         assert.equal(message, 'Please sign in or create a new account!');
         //Click sign in and set email to be test@test.com
-        yield signInNotif[0].takeAction('Create a new account');
+        yield signInNotif[0].takeAction((yield signInNotif[0].getActions())[0].getTitle());
         const input = yield vscode_extension_tester_1.InputBox.create();
-        yield input.setText('test@test.com');
+        yield input.setText('tester@test.com');
         yield input.confirm(); // press enter
         yield input.setText('password');
+        yield input.confirm(); // press enter
+        assert.equal((yield (yield new vscode_extension_tester_1.Workbench().getNotifications())[0].getMessage()) == '', false);
+        //View personal stats
+        yield (yield menuInfo.findItem('📊 View personal stats')).click();
+        const editorView = new vscode_extension_tester_1.EditorView();
+        const editor = yield editorView.openEditor('personal_statistics.txt');
+        console.log((yield editor.getTitle()) + "; " + (yield editor.getText()));
+        //assert(await editor.isDisplayed(), true);
+        //assert(await editor.getTitle(), "personal_statistics.txt");
         //const teamInfo = await new SideBarView().getContent().getSection('Team Info') as CustomTreeSection;
         //Clicking an item in a
         //await (await teamInfo.findItem('🛡 Create your Team')).click();
