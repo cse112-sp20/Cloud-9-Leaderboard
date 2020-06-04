@@ -171,6 +171,7 @@ async function writePersonalStatsFile(dates) {
   content += WECOME_TO_CLOUD9_ROW_3;
   content += WECOME_TO_CLOUD9_ROW_4;
   content += WECOME_TO_CLOUD9_ROW_5;
+  content += '\n';
 
   content += SECTION_BAR;
   content += '                                     How to gain points \n';
@@ -316,7 +317,7 @@ async function writePersonalStatsFile(dates) {
   content +=
     '|                                                              |                          |\n';
   content +=
-    '|                   ACHIEVEMENTS                               |          REWARD          |\n';
+    '|                           ACHIEVEMENTS                       |           BADGE          |\n';
   content +=
     '|______________________________________________________________|__________________________|\n';
 
