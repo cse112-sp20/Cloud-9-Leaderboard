@@ -85,20 +85,26 @@ class LeaderDataProvider {
             console.log("Is team leader 73");
             const ctx = Authentication_1.getExtensionContext();
             const memberMaps = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS);
+            console.log("line 81");
             let memberFetchLists = [];
             for (let [key, value] of Object.entries(memberMaps)) {
                 memberFetchLists.push(new LeaderItem('Email: ' + key));
             }
             if (memberFetchLists.length === 0) {
+                console.log("empty");
                 memberFetchLists.push(new LeaderItem('Empty: No team member yet'));
             }
+            console.log("line 94");
             let removeMemberFetchLists = [];
             let childLeaderItem = new LeaderItem('');
+            console.log("line 100");
             for (let [key, value] of Object.entries(memberMaps)) {
                 childLeaderItem = new LeaderItem('Remove member: ' + key);
                 removeMemberFetchLists.push(childLeaderItem);
             }
+            console.log("powell");
             if (removeMemberFetchLists.length === 0) {
+                console.log("remove empty");
                 removeMemberFetchLists.push(new LeaderItem('Empty: No team member yet'));
             }
             let topLeaderItem = new LeaderItem('Remove Team members', undefined, removeMemberFetchLists);
@@ -109,6 +115,7 @@ class LeaderDataProvider {
                 new LeaderItem('Team members', undefined, memberFetchLists),
                 topLeaderItem,
             ];
+            console.log(this.data);
         }
         this._onDidChangeTreeData.fire(null);
     }

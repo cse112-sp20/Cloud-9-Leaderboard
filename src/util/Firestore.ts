@@ -286,6 +286,10 @@ export function updateStats(payload) {
     });
 }
 
+/**
+ * Retrieves team member stats
+ * @param callback 
+ */
 export async function retrieveTeamMemberStats(callback) {
   let db = firebase.firestore();
 
@@ -356,6 +360,10 @@ export async function retrieveTeamMemberStats(callback) {
   }
 }
 
+/**
+ * Retrieves all user stats
+ * @param callback 
+ */
 export async function retrieveAllUserStats(callback) {
   let db = firebase.firestore();
 
@@ -387,10 +395,14 @@ export async function retrieveAllUserStats(callback) {
     });
 }
 
+
+
 /**
  * Create new user credential and add new doc to db
+ * @param email 
+ * @param password 
+ * @returns  
  */
-
 export async function createNewUserInFirebase(email, password) {
   if (email == null) {
     console.log('email is null');
@@ -431,7 +443,6 @@ export async function createNewUserInFirebase(email, password) {
  * Add a new user doc to database
  * @param userId
  */
-
 async function addNewUserDocToDb(userId, email) {
   console.log('Adding doc to db for new user...');
 

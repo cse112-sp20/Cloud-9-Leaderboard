@@ -95,7 +95,7 @@ function authenticateUser() {
                 vscode_1.window.showInformationMessage('Welcome back, ' + cachedUserNickName + '!!');
                 console.log('is team leade ' + isTeamLeadr);
                 vscode_1.commands.executeCommand('MenuView.refreshEntry');
-                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                // commands.executeCommand('LeaderView.refreshEntry');
                 vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
             }
             else {
@@ -156,7 +156,7 @@ function signInOrSignUpUserWithUserInput() {
                                     ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
                                     '!!');
                                 vscode_1.commands.executeCommand('MenuView.refreshEntry');
-                                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                                //    commands.executeCommand('LeaderView.refreshEntry');
                                 vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
                                 vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
                                 return;
@@ -173,7 +173,7 @@ function signInOrSignUpUserWithUserInput() {
                             }
                         }));
                         vscode_1.commands.executeCommand('MenuView.refreshEntry');
-                        vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                        //     commands.executeCommand('LeaderView.refreshEntry');
                         vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
                         vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
                     }
@@ -186,7 +186,7 @@ function signInOrSignUpUserWithUserInput() {
                                     ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
                                     '!!');
                                 vscode_1.commands.executeCommand('MenuView.refreshEntry');
-                                vscode_1.commands.executeCommand('LeaderView.refreshEntry');
+                                //     commands.executeCommand('LeaderView.refreshEntry');
                                 vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
                                 return;
                             }

@@ -28,8 +28,17 @@ const Metric_1 = require("./Metric");
 const Authentication_1 = require("./Authentication");
 const Constants_1 = require("./Constants");
 const fs = require('fs');
+/**
+ * Personal Stats class for storing all information about
+ * the current user. All daily metric is stored using this class.
+ */
 class PersonalStats {
     constructor() { }
+    /**
+     * Add statistics of a day to the class of this current user.
+     * @param date date of the statistics
+     * @param statsObj statistics values
+     */
     static addDayStats(date, statsObj) {
         if (!PersonalStats.dates) {
             PersonalStats.dates = [];
@@ -41,11 +50,17 @@ class PersonalStats {
         }
         PersonalStats.dates.push(dateObj);
     }
+    /**
+     * Getter for user statistics
+     */
     static getUsers() {
         return PersonalStats.dates;
     }
 }
 exports.PersonalStats = PersonalStats;
+/**
+ * Finding the file path of the personal stats txt file
+ */
 function getPersonalStatsFile() {
     let filePath = Util_1.getSoftwareDir();
     if (Util_1.isWindows()) {
@@ -57,6 +72,9 @@ function getPersonalStatsFile() {
     return filePath;
 }
 exports.getPersonalStatsFile = getPersonalStatsFile;
+/**
+ * Display personal statistics text file in the vscode window
+ */
 function displayPersonalStats() {
     return __awaiter(this, void 0, void 0, function* () {
         // 1st write the code time metrics dashboard file
@@ -99,6 +117,10 @@ function displayPersonalStats() {
     });
 }
 exports.displayPersonalStats = displayPersonalStats;
+/**
+ * Write to personal statistics text file
+ * @param dates the objects to be parsed and written on to the text file
+ */
 function writePersonalStatsFile(dates) {
     return __awaiter(this, void 0, void 0, function* () {
         let personalStatsFile = getPersonalStatsFile();

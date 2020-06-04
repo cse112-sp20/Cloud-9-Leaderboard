@@ -7,7 +7,6 @@
  *
  * @file   This files defines the Leaderboard class.
  * @author AuthorName.
- * @since  0.0.1
  */
 
 import {workspace, window, ViewColumn} from 'vscode';

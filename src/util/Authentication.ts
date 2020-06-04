@@ -117,7 +117,7 @@ export async function authenticateUser() {
       );
       console.log('is team leade ' + isTeamLeadr);
       commands.executeCommand('MenuView.refreshEntry');
-      commands.executeCommand('LeaderView.refreshEntry');
+     // commands.executeCommand('LeaderView.refreshEntry');
       commands.executeCommand('TeamMenuView.refreshEntry');
     } else {
       // user doc does not exist, prompt user to sign in or sign up
@@ -185,7 +185,7 @@ export async function signInOrSignUpUserWithUserInput() {
                         '!!',
                     );
                     commands.executeCommand('MenuView.refreshEntry');
-                    commands.executeCommand('LeaderView.refreshEntry');
+                //    commands.executeCommand('LeaderView.refreshEntry');
                     commands.executeCommand('TeamMenuView.refreshEntry');
                     commands.executeCommand('DailyMetric.refreshEntry');
                     return;
@@ -201,7 +201,7 @@ export async function signInOrSignUpUserWithUserInput() {
                 },
               );
               commands.executeCommand('MenuView.refreshEntry');
-              commands.executeCommand('LeaderView.refreshEntry');
+         //     commands.executeCommand('LeaderView.refreshEntry');
               commands.executeCommand('TeamMenuView.refreshEntry');
               commands.executeCommand('DailyMetric.refreshEntry');
             } else if (selection == AUTH_CREATE_ACCOUNT) {
@@ -216,7 +216,7 @@ export async function signInOrSignUpUserWithUserInput() {
                         '!!',
                     );
                     commands.executeCommand('MenuView.refreshEntry');
-                    commands.executeCommand('LeaderView.refreshEntry');
+               //     commands.executeCommand('LeaderView.refreshEntry');
                     commands.executeCommand('TeamMenuView.refreshEntry');
                     return;
                   }
