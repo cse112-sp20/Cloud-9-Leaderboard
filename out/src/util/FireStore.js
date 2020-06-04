@@ -51,7 +51,7 @@ function loginUserWithEmailAndPassword(email, password) {
             yield updatePersistentStorageWithUserDocData(userCred.user.uid).then(() => {
                 const ctx = Authentication_1.getExtensionContext();
                 console.log(ctx.globalState);
-                console.log("64");
+                console.log('64');
             });
             loggedIn = true;
             errorCode = 'no error';
@@ -87,53 +87,74 @@ function updatePersistentStorageWithUserDocData(userId) {
                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, userData.teamCode);
                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_NAME, userData.teamName);
                 ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_EMAIL, userData.email);
-                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
+                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, userData.isTeamLeader);
                 const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
+                const isTeamLeader = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER);
                 console.log('teamId: ' + teamId);
-                if (teamId != undefined && teamId != '') {
-                    yield db
-                        .collection(Constants_1.COLLECTION_ID_TEAMS)
-                        .doc(teamId)
-                        .get()
-                        .then((teamDoc) => __awaiter(this, void 0, void 0, function* () {
-                        if (teamDoc.exists) {
-                            const teamDocData = teamDoc.data();
-                            console.log('teamDc data user id: ' + teamDocData.teamLeadUserId);
-                            console.log('user id :' + userId);
-                            if (teamDocData.teamLeadUserId == userId) {
-                                console.log('Is team leader');
-                                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, true);
-                                console.log(ctx.globalState);
-                                console.log("124");
-                                //store team member data in persistent storage
-                                let members = yield fetchTeamMembersList(teamId);
-                                console.log(members);
-                                console.log('updating team member list to persistent storage.');
-                                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, members);
-                                console.log(ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS));
-                                //     commands.executeCommand('LeaderView.refreshEntry');
-                            }
-                            else {
-                                console.log('Is not team leader');
-                                ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
-                                //       commands.executeCommand('LeaderView.refreshEntry');
-                            }
-                        }
-                    }))
-                        .then(() => {
-                        vscode_1.commands.executeCommand('LeaderView.refreshEntry');
-                    })
-                        .catch((e) => {
-                        console.log(e.message);
-                    });
-                    //  commands.executeCommand('LeaderView.refreshEntry');
+                console.log('team leader???', isTeamLeader);
+                if (isTeamLeader && teamId !== undefined && teamId !== '') {
+                    let members = yield fetchTeamMembersList(teamId);
+                    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, members);
+                    console.log(ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS));
+                    vscode_1.commands.executeCommand('LeaderView.refreshEntry');
                 }
-                else {
-                    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
-                    ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_ID, undefined);
-                    //  commands.executeCommand('LeaderView.refreshEntry');
-                }
-                console.log(ctx.globalState);
+                // if (teamId != undefined && teamId != '') {
+                //   await db
+                //     .collection(COLLECTION_ID_TEAMS)
+                //     .doc(teamId)
+                //     .get()
+                //     .then(async (teamDoc) => {
+                //       if (teamDoc.exists) {
+                //         const teamDocData = teamDoc.data();
+                //         console.log(
+                //           'teamDc data user id: ' + teamDocData.teamLeadUserId,
+                //         );
+                //         console.log('user id :' + userId);
+                //         if (teamDocData.teamLeadUserId == userId) {
+                //           console.log('Is team leader');
+                //           ctx.globalState.update(
+                //             GLOBAL_STATE_USER_IS_TEAM_LEADER,
+                //             true,
+                //           );
+                //           console.log(ctx.globalState);
+                //           console.log('124');
+                //           //store team member data in persistent storage
+                //           let members = await fetchTeamMembersList(teamId);
+                //           console.log(members);
+                //           console.log(
+                //             'updating team member list to persistent storage.',
+                //           );
+                //           ctx.globalState.update(
+                //             GLOBAL_STATE_USER_TEAM_MEMBERS,
+                //             members,
+                //           );
+                //           console.log(
+                //             ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS),
+                //           );
+                //           //     commands.executeCommand('LeaderView.refreshEntry');
+                //         } else {
+                //           console.log('Is not team leader');
+                //           ctx.globalState.update(
+                //             GLOBAL_STATE_USER_IS_TEAM_LEADER,
+                //             false,
+                //           );
+                //           //       commands.executeCommand('LeaderView.refreshEntry');
+                //         }
+                //       }
+                //     })
+                //     .then(() => {
+                //       commands.executeCommand('LeaderView.refreshEntry');
+                //     })
+                //     .catch((e) => {
+                //       console.log(e.message);
+                //     });
+                //   //  commands.executeCommand('LeaderView.refreshEntry');
+                // } else {
+                //   ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
+                //   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
+                //   //  commands.executeCommand('LeaderView.refreshEntry');
+                // }
+                //console.log(ctx.globalState);
                 //    commands.executeCommand('LeaderView.refreshEntry');
             }
         }))
@@ -450,7 +471,7 @@ function addNewTeamToDbAndJoin(teamName) {
         const cachedUserId = Authentication_1.getExtensionContext().globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
         var teamId = undefined;
         // team doc fields
-        var newTeamDoc = Constants_1.DEFAULT_TEAM_DOC;
+        var newTeamDoc = {};
         newTeamDoc['teamName'] = teamName;
         newTeamDoc['teamLeadUserId'] = cachedUserId;
         yield db
@@ -535,7 +556,7 @@ function joinTeamWithTeamId(teamId, isLeader) {
             let updateUser = yield userDoc
                 .update({
                 teamCode: teamId,
-                isLeader: isLeader,
+                isTeamLeader: isLeader,
                 teamName: teamName,
             })
                 .then(() => {

@@ -98,74 +98,91 @@ export async function updatePersistentStorageWithUserDocData(userId) {
         ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, userData.teamCode);
         ctx.globalState.update(GLOBAL_STATE_USER_TEAM_NAME, userData.teamName);
         ctx.globalState.update(GLOBAL_STATE_USER_EMAIL, userData.email);
-
-        ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
+        ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, userData.isTeamLeader);
 
         const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
+        const isTeamLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
+
         console.log('teamId: ' + teamId);
-        if (teamId != undefined && teamId != '') {
-          await db
-            .collection(COLLECTION_ID_TEAMS)
-            .doc(teamId)
-            .get()
-            .then(async (teamDoc) => {
-              if (teamDoc.exists) {
-                const teamDocData = teamDoc.data();
 
-                console.log(
-                  'teamDc data user id: ' + teamDocData.teamLeadUserId,
-                );
-                console.log('user id :' + userId);
-                if (teamDocData.teamLeadUserId == userId) {
-                  console.log('Is team leader');
-                  ctx.globalState.update(
-                    GLOBAL_STATE_USER_IS_TEAM_LEADER,
-                    true,
-                  );
+        console.log('team leader???', isTeamLeader);
 
-                  console.log(ctx.globalState);
-                  console.log('124');
 
-                  //store team member data in persistent storage
-                  let members = await fetchTeamMembersList(teamId);
-
-                  console.log(members);
-                  console.log(
-                    'updating team member list to persistent storage.',
-                  );
-                  ctx.globalState.update(
-                    GLOBAL_STATE_USER_TEAM_MEMBERS,
-                    members,
-                  );
-                  console.log(
-                    ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS),
-                  );
-
-                  //     commands.executeCommand('LeaderView.refreshEntry');
-                } else {
-                  console.log('Is not team leader');
-                  ctx.globalState.update(
-                    GLOBAL_STATE_USER_IS_TEAM_LEADER,
-                    false,
-                  );
-                  //       commands.executeCommand('LeaderView.refreshEntry');
-                }
-              }
-            })
-            .then(() => {
-              commands.executeCommand('LeaderView.refreshEntry');
-            })
-            .catch((e) => {
-              console.log(e.message);
-            });
-          //  commands.executeCommand('LeaderView.refreshEntry');
-        } else {
-          ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
-          ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
-          //  commands.executeCommand('LeaderView.refreshEntry');
+        if(isTeamLeader && teamId !== undefined && teamId !== ''){
+          let members = await fetchTeamMembersList(teamId);
+          ctx.globalState.update(
+            GLOBAL_STATE_USER_TEAM_MEMBERS,
+            members,
+          );
+          console.log(
+            ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS),
+          );
+          commands.executeCommand('LeaderView.refreshEntry');
         }
 
-        console.log(ctx.globalState);
+        // if (teamId != undefined && teamId != '') {
+        //   await db
+        //     .collection(COLLECTION_ID_TEAMS)
+        //     .doc(teamId)
+        //     .get()
+        //     .then(async (teamDoc) => {
+        //       if (teamDoc.exists) {
+        //         const teamDocData = teamDoc.data();
+
+        //         console.log(
+        //           'teamDc data user id: ' + teamDocData.teamLeadUserId,
+        //         );
+        //         console.log('user id :' + userId);
+        //         if (teamDocData.teamLeadUserId == userId) {
+        //           console.log('Is team leader');
+        //           ctx.globalState.update(
+        //             GLOBAL_STATE_USER_IS_TEAM_LEADER,
+        //             true,
+        //           );
+
+        //           console.log(ctx.globalState);
+        //           console.log('124');
+
+        //           //store team member data in persistent storage
+        //           let members = await fetchTeamMembersList(teamId);
+
+        //           console.log(members);
+        //           console.log(
+        //             'updating team member list to persistent storage.',
+        //           );
+        //           ctx.globalState.update(
+        //             GLOBAL_STATE_USER_TEAM_MEMBERS,
+        //             members,
+        //           );
+        //           console.log(
+        //             ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS),
+        //           );
+
+        //           //     commands.executeCommand('LeaderView.refreshEntry');
+        //         } else {
+        //           console.log('Is not team leader');
+        //           ctx.globalState.update(
+        //             GLOBAL_STATE_USER_IS_TEAM_LEADER,
+        //             false,
+        //           );
+        //           //       commands.executeCommand('LeaderView.refreshEntry');
+        //         }
+        //       }
+        //     })
+        //     .then(() => {
+        //       commands.executeCommand('LeaderView.refreshEntry');
+        //     })
+        //     .catch((e) => {
+        //       console.log(e.message);
+        //     });
+        //   //  commands.executeCommand('LeaderView.refreshEntry');
+        // } else {
+        //   ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
+        //   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
+        //   //  commands.executeCommand('LeaderView.refreshEntry');
+        // }
+
+        //console.log(ctx.globalState);
         //    commands.executeCommand('LeaderView.refreshEntry');
       }
     })
@@ -536,7 +553,7 @@ export async function addNewTeamToDbAndJoin(teamName) {
   var teamId = undefined;
 
   // team doc fields
-  var newTeamDoc = DEFAULT_TEAM_DOC;
+  var newTeamDoc = {};
   newTeamDoc['teamName'] = teamName;
   newTeamDoc['teamLeadUserId'] = cachedUserId;
 
@@ -628,7 +645,7 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
     let updateUser = await userDoc
       .update({
         teamCode: teamId,
-        isLeader: isLeader,
+        isTeamLeader: isLeader,
         teamName: teamName,
       })
       .then(() => {
