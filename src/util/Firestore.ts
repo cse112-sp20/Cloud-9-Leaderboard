@@ -1,7 +1,7 @@
 /**
  * This file contains functions that interact with firebase collections and documents.
  *
- * 
+ *
  *
  * @file   Firestore.ts
  * @author Howard Lin, Ethan Yuan, Tina Hsieh
@@ -45,11 +45,11 @@ const db = firebase.firestore();
 
 /**
  * login user with email and password to an existing account
- * @param email the user's input email 
+ * @param email the user's input email
  * @param password the user's input password
- * @returns 
- *  loggedIn - whether the user is successfully logged in 
- *  errorCode - the error message/code when the user is is not successfully logged in 
+ * @returns
+ *  loggedIn - whether the user is successfully logged in
+ *  errorCode - the error message/code when the user is is not successfully logged in
  */
 export async function loginUserWithEmailAndPassword(email, password) {
   let loggedIn = false;
@@ -107,8 +107,8 @@ export async function updatePersistentStorageWithUserDocData(userId) {
 
         console.log('team leader???', isTeamLeader);
 
-        // if the user is the in a team and also the leader, 
-        // retrieve a list of team members and store in persistent storage 
+        // if the user is the in a team and also the leader,
+        // retrieve a list of team members and store in persistent storage
         if (isTeamLeader && teamId !== undefined && teamId !== '') {
           let members = await fetchTeamMembersList(teamId);
           ctx.globalState.update(GLOBAL_STATE_USER_TEAM_MEMBERS, members);
@@ -381,14 +381,14 @@ export async function retrieveAllUserStats(callback) {
 
 /**
  * Create new user credential with email and pasword and add new doc to db
- * @param email the user's input email 
- * @param password the user's input password 
+ * @param email the user's input email
+ * @param password the user's input password
  * @returns
- *  created - whether the new account is successfully created 
- *  errorCode - the error message when the account is not created 
+ *  created - whether the new account is successfully created
+ *  errorCode - the error message when the account is not created
  */
 export async function createNewUserInFirebase(email, password) {
-  //null inputs check 
+  //null inputs check
   if (email == null) {
     console.log('email is null');
     return {created: false, errorCode: 'Email is invalid!'};
@@ -407,7 +407,7 @@ export async function createNewUserInFirebase(email, password) {
       const currentUserId = auth.currentUser.uid;
       console.log('Adding new user with ID: ' + currentUserId);
 
-      //function call to add a new user document to firebase 
+      //function call to add a new user document to firebase
       await addNewUserDocToDb(currentUserId, email);
 
       created = true;
@@ -426,9 +426,9 @@ export async function createNewUserInFirebase(email, password) {
 }
 
 /**
- * Add a new user doc to database with user ID and email 
+ * Add a new user doc to database with user ID and email
  * @param userId
- * @returns nothing 
+ * @returns nothing
  */
 async function addNewUserDocToDb(userId, email) {
   console.log('Adding doc to db for new user...');
@@ -438,9 +438,9 @@ async function addNewUserDocToDb(userId, email) {
     return;
   }
 
-  let today = new Date().toISOString().split('T')[0]; // for daily stats 
-  const generatedName = generateRandomName(); // a randomly generated nick name for this user 
-  //add a new user doc to the Users collection in firebase 
+  let today = new Date().toISOString().split('T')[0]; // for daily stats
+  const generatedName = generateRandomName(); // a randomly generated nick name for this user
+  //add a new user doc to the Users collection in firebase
   db.collection(COLLECTION_ID_USERS)
     .doc(userId)
     .set({
@@ -456,7 +456,7 @@ async function addNewUserDocToDb(userId, email) {
       console.log('Error creating new entry');
     });
 
-  // add a new daily (today) stats doc for this user 
+  // add a new daily (today) stats doc for this user
   db.collection(COLLECTION_ID_USERS)
     .doc(userId)
     .collection('dates')
@@ -473,9 +473,9 @@ async function addNewUserDocToDb(userId, email) {
 }
 
 /**
- * Adds new team to db and let the user join the team as the leader 
- * @param teamName name of team 
- * @returns  nothing 
+ * Adds new team to db and let the user join the team as the leader
+ * @param teamName name of team
+ * @returns  nothing
  */
 export async function addNewTeamToDbAndJoin(teamName) {
   if (teamName == '' || teamName == undefined) {
@@ -610,8 +610,8 @@ export async function joinTeamWithTeamId(teamId, isLeader) {
 
 /**
  * remove member from team in db, only leader is allowed to call this function
- * @param userId the user's document id 
- * @param teamId the team's document id 
+ * @param userId the user's document id
+ * @param teamId the team's document id
  */
 export async function leaveTeam(userId, teamId) {
   //get reference to extension context
@@ -851,7 +851,7 @@ export async function retrieveUserUpdateDailyMetric() {
 
 /**
  * returns true if a document associated with the passed in ID exists in firebase
- * @param userId the uid to check 
+ * @param userId the uid to check
  */
 export async function userDocExists(userId) {
   if (userId == undefined || userId == '') return false;
@@ -888,7 +888,7 @@ export async function fetchTeamMembersList(teamId) {
   const leaderId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
   if (leaderId == undefined) return;
 
-  //map of members in the team 
+  //map of members in the team
   let members = new Map<string, Map<string, string>>();
   await db
     .collection(COLLECTION_ID_USERS)
@@ -899,7 +899,7 @@ export async function fetchTeamMembersList(teamId) {
         console.log('Empty team.');
         return members;
       }
-      //for each member, keep a map fro them 
+      //for each member, keep a map fro them
       snapshot.forEach((memberDoc) => {
         const memberId = memberDoc.id;
         if (memberId != leaderId) {

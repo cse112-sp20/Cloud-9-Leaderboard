@@ -305,42 +305,57 @@ async function writePersonalStatsFile(dates) {
     statsObj['lpm'].toFixed(3) +
     '\n';
 
-
   content += '\n' + SECTION_BAR;
   content += '                                        Achievemnts\n';
   content += SECTION_BAR + '\n';
 
+  content += 'These are personal achievements/milestones that you can earn\n\n';
 
   content +=
-    'These are personal achievements/milestones that you can earn\n\n';
+    '__________________________________________________________________________________________\n';
+  content +=
+    '|                                                              |                          |\n';
+  content +=
+    '|                   ACHIEVEMENTS                               |          REWARD          |\n';
+  content +=
+    '|______________________________________________________________|__________________________|\n';
 
-
-
-    content += '__________________________________________________________________________________________\n';
-    content += '|                                                              |                          |\n';
-    content += '|                   ACHIEVEMENTS                               |          REWARD          |\n';
-    content += '|______________________________________________________________|__________________________|\n';
-
-    content += '|                                                              |                          |\n';
-    content += '|                   Reach 5000 total keystrokes                |             💎           |\n';
-    content += '|______________________________________________________________|__________________________|\n';
-    content += '|                                                              |                          |\n';
-    content += '|                  Reach 2000 total lines changed              |             🔎           |\n';
-    content += '|______________________________________________________________|__________________________|\n';
-    content += '|                                                              |                          |\n';
-    content += '|                  Spend total of 200 hours coding             |             🔥           |\n';
-    content += '|______________________________________________________________|__________________________|\n';
-    content += '|                                                              |                          |\n';
-    content += '|                   Reach 500 total keystrokes daily           |             💪           |\n';
-    content += '|______________________________________________________________|__________________________|\n';
-    content += '|                                                              |                          |\n';
-    content += '|                 Reach 200 total lines changed daily          |             🥊           |\n';
-    content += '|______________________________________________________________|__________________________|\n';
-    content += '|                                                              |                          |\n';
-    content += '|                 Spend total of 6 hours coding daily          |             🎈           |\n';
-    content += '|______________________________________________________________|__________________________|\n';
-
-
+  content +=
+    '|                                                              |                          |\n';
+  content +=
+    '|                   Reach 5000 total keystrokes                |             💎           |\n';
+  content +=
+    '|______________________________________________________________|__________________________|\n';
+  content +=
+    '|                                                              |                          |\n';
+  content +=
+    '|                  Reach 2000 total lines changed              |             🔎           |\n';
+  content +=
+    '|______________________________________________________________|__________________________|\n';
+  content +=
+    '|                                                              |                          |\n';
+  content +=
+    '|                  Spend total of 200 hours coding             |             🔥           |\n';
+  content +=
+    '|______________________________________________________________|__________________________|\n';
+  content +=
+    '|                                                              |                          |\n';
+  content +=
+    '|                   Reach 500 total keystrokes daily           |             💪           |\n';
+  content +=
+    '|______________________________________________________________|__________________________|\n';
+  content +=
+    '|                                                              |                          |\n';
+  content +=
+    '|                 Reach 200 total lines changed daily          |             🥊           |\n';
+  content +=
+    '|______________________________________________________________|__________________________|\n';
+  content +=
+    '|                                                              |                          |\n';
+  content +=
+    '|                 Spend total of 6 hours coding daily          |             🎈           |\n';
+  content +=
+    '|______________________________________________________________|__________________________|\n';
 
   fs.writeFileSync(personalStatsFile, content, (err) => {
     if (err) {

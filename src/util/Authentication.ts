@@ -1,5 +1,5 @@
 /**
- * This file contains functions for authenticating users: 
+ * This file contains functions for authenticating users:
  * log in, sign up, and log out.
  *
  * @file   Authentication.ts
@@ -54,7 +54,7 @@ export function getExtensionContext() {
  * Log the user out
  */
 export function logOut() {
-  //reset all fields in extension context's global state 
+  //reset all fields in extension context's global state
   let ctx = getExtensionContext();
   ctx.globalState.update(GLOBAL_STATE_USER_ID, undefined);
   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
@@ -66,7 +66,7 @@ export function logOut() {
   console.log('Logging out: ' + extensionContext.globalState);
   window.showInformationMessage('Goodbye!');
 
-  //reload treeview content to reflect the logout event 
+  //reload treeview content to reflect the logout event
   commands.executeCommand('MenuView.refreshEntry');
   commands.executeCommand('LeaderView.refreshEntry');
 
@@ -145,7 +145,7 @@ export async function signInOrSignUpUserWithUserInput() {
       if (selection == undefined) {
         return;
       }
-      // prompt for user input 
+      // prompt for user input
       await window
         .showInputBox({placeHolder: 'Enter your email: example@gmail.com'})
         .then((inputEmail) => {
@@ -156,7 +156,7 @@ export async function signInOrSignUpUserWithUserInput() {
             .showInputBox({
               placeHolder:
                 'Enter your password (must be 6 characters long or more)',
-              password: true, //hiding user's input password 
+              password: true, //hiding user's input password
             })
             .then((inputPassword) => {
               password = inputPassword;
@@ -171,24 +171,26 @@ export async function signInOrSignUpUserWithUserInput() {
           ) {
             window.showErrorMessage('Invalid email or password!');
           } else {
-            if (selection == AUTH_SIGN_IN) { //user chose to sign in to an existing account
+            if (selection == AUTH_SIGN_IN) {
+              //user chose to sign in to an existing account
               await loginUserWithEmailAndPassword(email, password).then(
                 async (result) => {
                   console.log(result.loggedIn);
                   console.log(result.errorCode);
-                  if (result.loggedIn) { // successfully logged the user in
+                  if (result.loggedIn) {
+                    // successfully logged the user in
                     window.showInformationMessage(
                       'Welcome back, ' +
                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
                         '!!',
                     );
-                    // reload the treeview content 
+                    // reload the treeview content
                     commands.executeCommand('MenuView.refreshEntry');
                     commands.executeCommand('TeamMenuView.refreshEntry');
                     commands.executeCommand('DailyMetric.refreshEntry');
                     return;
                   }
-                  // failed to log the user in, print out error message 
+                  // failed to log the user in, print out error message
                   if (result.errorCode == AUTH_ERR_CODE_WRONG_PASSWORD) {
                     window.showErrorMessage('Wrong password!');
                   } else if (result.errorCode == AUTH_ERR_CODE_USER_NOT_FOUND) {
@@ -198,28 +200,30 @@ export async function signInOrSignUpUserWithUserInput() {
                   }
                 },
               );
-              //reload treeview content 
+              //reload treeview content
               commands.executeCommand('MenuView.refreshEntry');
               commands.executeCommand('TeamMenuView.refreshEntry');
               commands.executeCommand('DailyMetric.refreshEntry');
-            } else if (selection == AUTH_CREATE_ACCOUNT) { //user chose to create a new account 
+            } else if (selection == AUTH_CREATE_ACCOUNT) {
+              //user chose to create a new account
               await createNewUserInFirebase(email, password).then(
                 async (result) => {
                   console.log(result.created);
                   console.log(result.errorCode);
-                  if (result.created) { // successfully created a new account for user
+                  if (result.created) {
+                    // successfully created a new account for user
                     // welcome them with generated name
                     window.showInformationMessage(
                       'Welcome! Your nickname is: ' +
                         ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME) +
                         '!!',
                     );
-                    //reload treeview content 
+                    //reload treeview content
                     commands.executeCommand('MenuView.refreshEntry');
                     commands.executeCommand('TeamMenuView.refreshEntry');
                     return;
                   }
-                  // failed to create a new account for user, print the error message 
+                  // failed to create a new account for user, print the error message
                   if (result.errorCode == AUTH_ERR_CODE_EMAIL_USED) {
                     window.showErrorMessage('Email already in use!');
                   } else if (result.errorCode == AUTH_ERR_CODE_WEAK_PASSWORD) {
@@ -249,7 +253,8 @@ export async function checkIfCachedUserIdExistsAndPrompt() {
   let loggedIn = false;
   if (cachedUserId != undefined) {
     loggedIn = true;
-  } else {// no cached user ID in persistent storage, prompt the user to sign in or sign up 
+  } else {
+    // no cached user ID in persistent storage, prompt the user to sign in or sign up
     await signInOrSignUpUserWithUserInput().then(async () => {
       cachedUserId = ctx.globalState.get(GLOBAL_STATE_USER_ID);
       if (cachedUserId != undefined) {

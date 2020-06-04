@@ -80,12 +80,11 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
       let memberFetchLists = [];
 
-      if(memberMaps !== undefined){
+      if (memberMaps !== undefined) {
         for (let [key, value] of Object.entries(memberMaps)) {
           memberFetchLists.push(new LeaderItem('Email: ' + key));
         }
       }
-
 
       if (memberFetchLists.length === 0) {
         console.log('empty');
@@ -99,13 +98,13 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 
       console.log('line 100');
 
-      if(memberMaps !== undefined){
-      for (let [key, value] of Object.entries(memberMaps)) {
-        childLeaderItem = new LeaderItem('Remove member: ' + key);
+      if (memberMaps !== undefined) {
+        for (let [key, value] of Object.entries(memberMaps)) {
+          childLeaderItem = new LeaderItem('Remove member: ' + key);
 
-        removeMemberFetchLists.push(childLeaderItem);
+          removeMemberFetchLists.push(childLeaderItem);
+        }
       }
-    }
 
       console.log('powell');
 
@@ -265,10 +264,6 @@ export const handleLeaderInfoChangeSelection = (
     GLOBAL_STATE_USER_TEAM_MEMBERS,
   );
   if (item.label.startsWith('No permission:')) {
-    
-    
-
-
     if (ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
       let childItem = new LeaderItem('');
 
@@ -285,9 +280,7 @@ export const handleLeaderInfoChangeSelection = (
       console.log('Is not a leader');
     }
   } else if (item.label === 'Team members') {
-
-
-    if (memberMaps !== undefined){
+    if (memberMaps !== undefined) {
       item.children = [];
 
       for (let [key, value] of Object.entries(memberMaps)) {
@@ -297,17 +290,15 @@ export const handleLeaderInfoChangeSelection = (
           ]),
         );
       }
-  
+
       if (item.children.length === 0) {
         item.children.push(new LeaderItem('Empty: No team member yet', item));
       }
-  
+
       commands.executeCommand('LeaderView.refreshEntry');
     }
-
   } else if (item.label.startsWith('User: ')) {
-
-    if (memberMaps !== undefined){
+    if (memberMaps !== undefined) {
       item.children = [];
 
       for (let [key, value] of Object.entries(memberMaps)) {
@@ -315,17 +306,13 @@ export const handleLeaderInfoChangeSelection = (
       }
       commands.executeCommand('LeaderView.refreshEntry');
     }
-
-    
   } else if (item.label === 'Remove Team members') {
-
-    if (memberMaps !== undefined){
-
+    if (memberMaps !== undefined) {
       item.children = [];
       for (let [key, value] of Object.entries(memberMaps)) {
         item.children.push(new LeaderItem('Remove member: ' + key, item));
       }
-  
+
       if (item.children.length === 0) {
         item.children.push(new LeaderItem('Empty: No team member yet', item));
       }
@@ -335,10 +322,8 @@ export const handleLeaderInfoChangeSelection = (
       // ];
       commands.executeCommand('LeaderView.refreshEntry');
     }
-
   } else if (item.label.startsWith('Remove member: ')) {
-
-    if (memberMaps !== undefined){
+    if (memberMaps !== undefined) {
       let selectedMemberEmail = item.label.substring(15);
 
       window
@@ -350,19 +335,21 @@ export const handleLeaderInfoChangeSelection = (
         .then((input) => {
           if (input === 'yes') {
             const member = memberMaps[selectedMemberEmail];
-  
+
             const memberId = member['id'];
             const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
-  
+
             leaveTeam(memberId, teamId).then(() => {
               const newMemberMaps = ctx.globalState.get(
                 GLOBAL_STATE_USER_TEAM_MEMBERS,
               );
               item.parent.children = [];
               for (let [key, value] of Object.entries(newMemberMaps)) {
-                item.parent.children.push(new LeaderItem('Member: ' + key, item));
+                item.parent.children.push(
+                  new LeaderItem('Member: ' + key, item),
+                );
               }
-  
+
               commands.executeCommand('LeaderView.refreshEntry');
               window.showInformationMessage('Successfully remove');
             });
@@ -371,7 +358,5 @@ export const handleLeaderInfoChangeSelection = (
           }
         });
     }
-
-
   }
 };

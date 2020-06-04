@@ -1,5 +1,5 @@
 /**
- * This file contains functions for team management. 
+ * This file contains functions for team management.
  * Functions from Firestore.ts are called to update/retrieve data on firebase.
  *
  * @file   Team.ts
@@ -41,14 +41,14 @@ export async function createAndJoinTeam() {
     // First check if already in team
     const inTeam = await checkIfInTeam();
 
-    // If the user is already in a team, they cannot create a new team 
+    // If the user is already in a team, they cannot create a new team
     if (inTeam) {
       window.showInformationMessage('You have already joined a team!');
       return;
     }
 
     window.showInformationMessage('Enter a name for your new team!');
-    //prompt the user to enter a name for their team and create a new doc for the team 
+    //prompt the user to enter a name for their team and create a new doc for the team
     await window
       .showInputBox({placeHolder: 'Enter a new team name'})
       .then(async (teamName) => {
@@ -56,7 +56,7 @@ export async function createAndJoinTeam() {
           window.showInformationMessage('Please enter a valid team name!');
           return;
         }
-        //function call to add a firebase document for this new team 
+        //function call to add a firebase document for this new team
         addNewTeamToDbAndJoin(teamName);
       });
   }
