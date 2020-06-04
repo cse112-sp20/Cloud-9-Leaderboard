@@ -82,6 +82,7 @@ class LeaderDataProvider {
             }
         }
         else {
+            console.log("Is team leader 73");
             const ctx = Authentication_1.getExtensionContext();
             const memberMaps = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS);
             let memberFetchLists = [];

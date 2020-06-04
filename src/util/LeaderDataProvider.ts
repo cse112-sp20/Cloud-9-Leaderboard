@@ -70,6 +70,7 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
         ];
       }
     } else {
+      console.log("Is team leader 73");
       const ctx = getExtensionContext();
       const memberMaps: Map<string, Map<string, string>> = ctx.globalState.get(
         GLOBAL_STATE_USER_TEAM_MEMBERS,

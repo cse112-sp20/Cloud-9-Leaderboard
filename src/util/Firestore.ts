@@ -117,73 +117,8 @@ export async function updatePersistentStorageWithUserDocData(userId) {
           console.log(
             ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS),
           );
-          commands.executeCommand('LeaderView.refreshEntry');
+          //commands.executeCommand('LeaderView.refreshEntry');
         }
-
-        // if (teamId != undefined && teamId != '') {
-        //   await db
-        //     .collection(COLLECTION_ID_TEAMS)
-        //     .doc(teamId)
-        //     .get()
-        //     .then(async (teamDoc) => {
-        //       if (teamDoc.exists) {
-        //         const teamDocData = teamDoc.data();
-
-        //         console.log(
-        //           'teamDc data user id: ' + teamDocData.teamLeadUserId,
-        //         );
-        //         console.log('user id :' + userId);
-        //         if (teamDocData.teamLeadUserId == userId) {
-        //           console.log('Is team leader');
-        //           ctx.globalState.update(
-        //             GLOBAL_STATE_USER_IS_TEAM_LEADER,
-        //             true,
-        //           );
-
-        //           console.log(ctx.globalState);
-        //           console.log('124');
-
-        //           //store team member data in persistent storage
-        //           let members = await fetchTeamMembersList(teamId);
-
-        //           console.log(members);
-        //           console.log(
-        //             'updating team member list to persistent storage.',
-        //           );
-        //           ctx.globalState.update(
-        //             GLOBAL_STATE_USER_TEAM_MEMBERS,
-        //             members,
-        //           );
-        //           console.log(
-        //             ctx.globalState.get(GLOBAL_STATE_USER_TEAM_MEMBERS),
-        //           );
-
-        //           //     commands.executeCommand('LeaderView.refreshEntry');
-        //         } else {
-        //           console.log('Is not team leader');
-        //           ctx.globalState.update(
-        //             GLOBAL_STATE_USER_IS_TEAM_LEADER,
-        //             false,
-        //           );
-        //           //       commands.executeCommand('LeaderView.refreshEntry');
-        //         }
-        //       }
-        //     })
-        //     .then(() => {
-        //       commands.executeCommand('LeaderView.refreshEntry');
-        //     })
-        //     .catch((e) => {
-        //       console.log(e.message);
-        //     });
-        //   //  commands.executeCommand('LeaderView.refreshEntry');
-        // } else {
-        //   ctx.globalState.update(GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
-        //   ctx.globalState.update(GLOBAL_STATE_USER_TEAM_ID, undefined);
-        //   //  commands.executeCommand('LeaderView.refreshEntry');
-        // }
-
-        //console.log(ctx.globalState);
-        //    commands.executeCommand('LeaderView.refreshEntry');
       }
     })
     .catch((e) => {

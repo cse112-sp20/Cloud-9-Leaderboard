@@ -258,6 +258,7 @@ async function writeToFile(users, isTeam) {
 
     console.log('cacheduserid: ' + cachedUserId);
     console.log('user id :' + user.id);
+    console.log(user);
 
     if (cachedUserId == user.id) {
       username = user.name;
