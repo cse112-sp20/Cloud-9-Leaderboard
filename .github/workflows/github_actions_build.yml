@@ -5,12 +5,10 @@ on:
   pull_request:
     branches:
       - master
-      - dev
 
   push:
-    branches-ignore:
-      # Ignore any documentation pushes
-      - 'document-*'
+    branches:
+      - 'master'
 
 jobs:
   deploy:
