@@ -76,7 +76,7 @@ export function logOut() {
 }
 
 /**
- * authentication entry point
+ * Authentication entry point
  * @param ctx
  */
 export async function authenticateUser() {
@@ -127,7 +127,7 @@ export async function authenticateUser() {
 }
 
 /**
- * prompts the user to sign in or sign up with input email and password
+ * Prompts the user to sign in or sign up with input email and password
  */
 export async function signInOrSignUpUserWithUserInput() {
   const ctx = getExtensionContext();

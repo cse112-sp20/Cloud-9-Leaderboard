@@ -1,12 +1,10 @@
 /**
- * Summary. (use period)
+ * File that contains method to handle metrics
  *
  * Description. (use period)
  *
- * @link   URL
- * @file   This files defines the MyClass class.
+ * @file   This files defines handle metric method.
  * @author AuthorName.
- * @since  x.x.x
  */
 
 import {window} from 'vscode';
