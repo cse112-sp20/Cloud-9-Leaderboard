@@ -42,11 +42,9 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
    * Refreshs leader data provider
    */
   refresh(): void {
-    console.log('Leader refresh called');
     const ctx = getExtensionContext();
 
     const isTeamLeader = ctx.globalState.get(GLOBAL_STATE_USER_IS_TEAM_LEADER);
-    console.log('is team leader: ' + isTeamLeader);
 
     if (!isTeamLeader) {
       const teamId = ctx.globalState.get(GLOBAL_STATE_USER_TEAM_ID);
@@ -70,13 +68,10 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
         ];
       }
     } else {
-      console.log('Is team leader 73');
       const ctx = getExtensionContext();
       const memberMaps: Map<string, Map<string, string>> = ctx.globalState.get(
         GLOBAL_STATE_USER_TEAM_MEMBERS,
       );
-
-      console.log('line 81');
 
       let memberFetchLists = [];
 
@@ -87,16 +82,11 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
       }
 
       if (memberFetchLists.length === 0) {
-        console.log('empty');
         memberFetchLists.push(new LeaderItem('Empty: No team member yet'));
       }
 
-      console.log('line 94');
-
       let removeMemberFetchLists: LeaderItem[] = [];
       let childLeaderItem = new LeaderItem('');
-
-      console.log('line 100');
 
       if (memberMaps !== undefined) {
         for (let [key, value] of Object.entries(memberMaps)) {
@@ -106,10 +96,7 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
         }
       }
 
-      console.log('powell');
-
       if (removeMemberFetchLists.length === 0) {
-        console.log('remove empty');
         removeMemberFetchLists.push(
           new LeaderItem('Empty: No team member yet'),
         );
@@ -129,8 +116,6 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
         new LeaderItem('Team members', undefined, memberFetchLists),
         topLeaderItem,
       ];
-
-      console.log(this.data);
     }
     this._onDidChangeTreeData.fire(null);
   }
@@ -209,7 +194,7 @@ export class LeaderDataProvider implements TreeDataProvider<LeaderItem> {
 }
 
 /**
- * Leader item
+ * Leader item Class that extends TreeItem
  */
 export class LeaderItem extends TreeItem {
   children: LeaderItem[] | undefined;
@@ -241,6 +226,11 @@ export class LeaderItem extends TreeItem {
   }
 }
 
+/**
+ * Connector for leader tree view to extension.
+ * Include handler for leader info selector
+ * @param view
+ */
 export const connectCloud9LeaderTreeView = (view: TreeView<LeaderItem>) => {
   return Disposable.from(
     view.onDidChangeSelection(async (e) => {
@@ -255,6 +245,11 @@ export const connectCloud9LeaderTreeView = (view: TreeView<LeaderItem>) => {
   );
 };
 
+/**
+ * Handler for leader info change selection
+ * @param view
+ * @param item
+ */
 export const handleLeaderInfoChangeSelection = (
   view: TreeView<LeaderItem>,
   item: LeaderItem,
@@ -276,8 +271,6 @@ export const handleLeaderInfoChangeSelection = (
         topItem,
       ];
       commands.executeCommand('LeaderView.refreshEntry');
-    } else {
-      console.log('Is not a leader');
     }
   } else if (item.label === 'Team members') {
     if (memberMaps !== undefined) {
@@ -316,10 +309,7 @@ export const handleLeaderInfoChangeSelection = (
       if (item.children.length === 0) {
         item.children.push(new LeaderItem('Empty: No team member yet', item));
       }
-      // item.children = [
-      //   new LeaderItem('etyuan@ucsd.edu', item),
-      //   new LeaderItem('Member: aihsieh@ucsd.edu', item),
-      // ];
+
       commands.executeCommand('LeaderView.refreshEntry');
     }
   } else if (item.label.startsWith('Remove member: ')) {
