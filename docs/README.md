@@ -49,6 +49,15 @@ OR
 ```
  https://marketplace.visualstudio.com/items?itemName=CSE112.cloud9
 ```
+## Getting Started
+
+### How to Create An Account
+1. Navigate to the Cloud 9 in VSCode
+2. Click on the Sign In/Create Account
+3. Input your preferred email and password
+<br>
+
+:tada: Congrats you are now logged into Cloud 9 Leaderboard! :tada:
 
 ## Features
 
