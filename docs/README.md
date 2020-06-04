@@ -15,10 +15,10 @@
 <p align="center">
   <a href="#About">About</a> •
   <a href="#Installation">Installation</a> •
-  <a href="#Getting Started">Getting Started</a> •
+  <a href="#getting-started">Getting Started</a> •
   <a href="#Features">Features</a> •
   <a href="#Team">Team</a> •
-  <a href="#Documentation/Structure">Documentation/Structure</a> •
+  <a href="#documentationstructure">Documentation/Structure</a> •
   <a href="#Credits">Credits</a>
 </p>
 
@@ -36,7 +36,7 @@ team on a group leaderboard.
 
 ## Installation
 
-<a href="https://imgur.com/pgemzR9"><img src="https://i.imgur.com/pgemzR9l.gif" title="source: imgur.com" /></a>
+<a href="https://imgur.com/pgemzR9"><img src="https://i.imgur.com/pgemzR9.gif" title="source: imgur.com" /></a>
 
 ### Installation Options
 1. Navigate to the Extention Tab of VSCode and type in 
@@ -48,7 +48,7 @@ OR
 
 2. Download from the VSCode Marketplace:<br>
 ```
- [https://marketplace.visualstudio.com/items?itemName=CSE112.cloud9](https://marketplace.visualstudio.com/items?itemName=CSE112.cloud9)
+ https://marketplace.visualstudio.com/items?itemName=CSE112.cloud9
 ```
 ## Getting Started
 
