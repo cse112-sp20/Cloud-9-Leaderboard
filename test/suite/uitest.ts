@@ -2,7 +2,7 @@ import { SideBarView, EditorView, InputBox, CustomTreeSection, ActivityBar, Work
 const assert = require('chai').assert;
 
 describe('Cloud 9 UI Tests', () => {
-    it('End to End Test', async function() {
+    it('End to End Test', async function () {
         this.timeout(10000);
         this.retries();
         const activityBar = new ActivityBar();
@@ -40,12 +40,12 @@ describe('Cloud 9 UI Tests', () => {
         const personalStatsTitle = await personalStats.getTitle();
         console.log('4');
         assert(personalStatsTitle, "personal_statistics.txt");
-    
+
         //View global leaderboard
         console.log('5');
         await (await menuInfo.findItem('🌐 Leaderboard')).click();
         console.log('6');
-        const globalStats = await new EditorView().openEditor('leaderboard.txt');        
+        const globalStats = await new EditorView().openEditor('leaderboard.txt');
         console.log('7');
         assert.equal(await globalStats.getTitle() == "", false); // check actual text
         console.log('8');
@@ -55,17 +55,39 @@ describe('Cloud 9 UI Tests', () => {
         console.log('9');
         const teamInfo = await sidebar.getContent().getSection('Team Info') as CustomTreeSection;
         console.log('10');
-        await (await teamInfo.findItem('🛡 Create your Team')).click();
-        console.log('11');
+
+    });
+
+    it('End to End Test 2', async function () {
+        this.timeout(10000);
+        this.retries();
+        const activityBar = new ActivityBar();
+        const control = await activityBar.getViewControl('Cloud9');
+
+        await control.openView();
+
+        //Click sign in on tree view
+        const sidebar = new SideBarView();
+        const teamInfo = await sidebar.getContent().getSection('Team Info') as CustomTreeSection;
 
         //Check that testTeam is the team name
         await (await teamInfo.findItem('Get Team Info')).click();
-        console.log('12');
+        console.log('11');
         await (await (await teamInfo.findItem('Get Team Info')).findChildItem("TeamName")).click();
         assert.equal(await (await (await teamInfo.findItem('Get Team Info')).findChildItem("TeamName")) == undefined, false);
 
-        console.log('13');
-
+        // const teamInfo = await new SideBarView().getContent().getSection('Team Info') as CustomTreeSection;
+        // const getTeamInfo = await teamInfo.findItem('Get Team Info');
+        // assert.equal(getTeamInfo.getLabel(), 'Get Team Info');
+        // await getTeamInfo.click();
+        // const teamName = await getTeamInfo.select()[0];
+        // const teamId = await getTeamInfo.select()[1];
+        // assert.equal(teamName.getLabel(), 'TeamName');
+        // assert.equal(teamId.getLabel(), 'teamId');
+        // await teamName.click();
+        // await teamId.click();
+        // assert.equal(teamName.select()[0].getLabel(), 'testTeam');
+        // assert.equal(teamId.select()[0].getLabel(), '5wlt5EI8qxP6q5VpV0v2');
     });
 });
 
