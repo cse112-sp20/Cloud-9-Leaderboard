@@ -12,6 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const vscode_extension_tester_1 = require("vscode-extension-tester");
 const assert = require('chai').assert;
 describe('Cloud 9 UI Tests', () => {
+    let driver;
+    before(() => {
+        driver = vscode_extension_tester_1.VSBrowser.instance.driver;
+    });
     it('End to End Test', function () {
         return __awaiter(this, void 0, void 0, function* () {
             this.timeout(10000);
@@ -54,19 +58,24 @@ describe('Cloud 9 UI Tests', () => {
             assert.equal((yield globalStats.getTitle()) == "", false); // check actual text
             console.log('8');
             //console.log(await globalStats.getText()); */
+            pauseForSeconds(2);
             //Load up team
             console.log('9');
             const teamInfo = yield sidebar.getContent().getSection('Team Info');
             console.log('10');
-            yield (yield teamInfo.findItem('🛡 Create your Team')).click();
-            console.log('11');
             //Check that testTeam is the team name
-            yield (yield teamInfo.findItem('Get Team Info')).click();
-            console.log('12');
-            yield (yield (yield teamInfo.findItem('Get Team Info')).findChildItem("TeamName")).click();
+            const getTeamInfo = yield (yield teamInfo.findItem('Get Team Info'));
+            yield getTeamInfo.click();
+            console.log('11');
+            const childItem = yield getTeamInfo.findChildItem("TeamName");
             assert.equal((yield (yield (yield teamInfo.findItem('Get Team Info')).findChildItem("TeamName"))) == undefined, false);
-            console.log('13');
         });
     });
 });
+//Pause the program to wait for loading
+function pauseForSeconds(seconds) {
+    //Wait before clicking team
+    var currentTime = new Date().getTime();
+    while (currentTime + (seconds * 1000) >= new Date().getTime()) { }
+}
 //# sourceMappingURL=uitest.js.map
