@@ -1,16 +1,18 @@
 import { SideBarView, EditorView, InputBox, CustomTreeSection, ActivityBar, Workbench, Notification, WebDriver, VSBrowser, ViewControl, TextEditor } from 'vscode-extension-tester';
 const assert = require('chai').assert;
 
-describe('Hello World Example UI Tests', () => {
-
-    it('Create a Team', async () => {
+describe('Cloud 9 UI Tests', () => {
+    it('End to End Test', async function() {
+        this.timeout(10000);
+        this.retries();
         const activityBar = new ActivityBar();
         const control = await activityBar.getViewControl('Cloud9');
 
         await control.openView();
 
         //Click sign in on tree view
-        const menuInfo =  await new SideBarView().getContent().getSection('Menu') as CustomTreeSection;
+        const sidebar = new SideBarView();
+        const menuInfo = await sidebar.getContent().getSection('Menu') as CustomTreeSection;
         await (await menuInfo.findItem('Sign in / Create Account')).click();
 
         //Click sign in on notfication
@@ -39,20 +41,31 @@ describe('Hello World Example UI Tests', () => {
         console.log('4');
         assert(personalStatsTitle, "personal_statistics.txt");
     
-
+        //View global leaderboard
         console.log('5');
         await (await menuInfo.findItem('🌐 Leaderboard')).click();
         console.log('6');
         const globalStats = await new EditorView().openEditor('leaderboard.txt');        
         console.log('7');
-        assert(await globalStats.getTitle() == "", false);
+        assert.equal(await globalStats.getTitle() == "", false); // check actual text
         console.log('8');
-        //console.log(await globalStats.getText()); 
+        //console.log(await globalStats.getText()); */
 
-        //const teamInfo = await new SideBarView().getContent().getSection('Team Info') as CustomTreeSection;
-        //Clicking an item in a
-        //await (await teamInfo.findItem('🛡 Create your Team')).click();
-        // /await section.findItem('🛡 Create your Team')
+        //Load up team
+        console.log('9');
+        const teamInfo = await sidebar.getContent().getSection('Team Info') as CustomTreeSection;
+        console.log('10');
+        await (await teamInfo.findItem('🛡 Create your Team')).click();
+        console.log('11');
+
+        //Check that testTeam is the team name
+        await (await teamInfo.findItem('Get Team Info')).click();
+        console.log('12');
+        await (await (await teamInfo.findItem('Get Team Info')).findChildItem("TeamName")).click();
+        assert.equal(await (await (await teamInfo.findItem('Get Team Info')).findChildItem("TeamName")) == undefined, false);
+
+        console.log('13');
+
     });
 });
 
