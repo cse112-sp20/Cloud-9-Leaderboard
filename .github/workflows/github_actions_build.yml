@@ -3,7 +3,7 @@ name: Deploying workflow
 
 on:
   push:
-      branches: workflow-edit-build-process
+      branches: master
 jobs:
   check_tag:
       name: Check tag 
