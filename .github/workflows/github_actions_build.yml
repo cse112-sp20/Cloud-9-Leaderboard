@@ -1,25 +1,58 @@
-  
-name: Building workflow
+
+name: Deploying workflow
 
 on:
   push:
-    branches:
-      - 'master'
-
+      branches: workflow-edit-build-process
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm install
-        run: npm ci
-        env:
-          CI: 'true'
-      - run: sudo apt-get install xvfb
-      - run: npm run deploy
-        env:
-          vscode_token: ${{ secrets.VSCE_TOKEN }}
+  check_tag:
+      name: Check tag 
+      runs-on: ubuntu-18.04
+      steps:
+      -   uses: actions/checkout@v1
+      -   name: Get previous tag
+          id: prev_tag
+          uses: WyriHaximus/github-action-get-previous-tag@master
+          env:
+              GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+      outputs:
+          tag: ${{ steps.prev_tag.outputs.tag }}
+  release:
+      name: Release
+      runs-on: ubuntu-18.04
+      needs: check_tag
+      steps:
+      -   name: Checkout
+          uses: actions/checkout@v2
+      -   name: Setup Node.js
+          uses: actions/setup-node@v1
+          with:
+              node-version: 12
+      -   name: Install dependencies
+          run: npm install
+      -   name: Release
+          env:
+              GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+              NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          run: npx semantic-release@latest
+
+  publish:
+      name: Publish
+      runs-on: ubuntu-18.04
+      needs: [release, check_tag]
+      steps:
+      -   name: Checkout
+          uses: actions/checkout@v1
+      -   name: Setup Node.js
+          uses: actions/setup-node@v1
+          with:
+              node-version: 12
+      -   name: Install dependencies
+          run: npm install
+
+      -   name: Vscode Publish Extension
+          uses: JCofman/vscodeaction@master
+          env:
+              VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+          with:
+              args: publish minor -p $VSCE_TOKEN
