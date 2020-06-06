@@ -9,11 +9,7 @@
  */
 
 import {
-  window,
-  ExtensionContext,
-  StatusBarAlignment,
   commands,
-  Command,
   TreeDataProvider,
   TreeItemCollapsibleState,
   ProviderResult,

@@ -13,8 +13,8 @@
 import {workspace, window, ViewColumn} from "vscode";
 import {getSoftwareDir, isWindows} from "../../lib/Util";
 import {retrieveUserStats} from "./Firestore";
-import {scoreCalculation, calculateStats} from "./Metric";
-import {stat} from "fs";
+import {calculateStats} from "./Metric";
+
 import {
   getExtensionContext,
   checkIfCachedUserIdExistsAndPrompt,
@@ -226,9 +226,9 @@ async function writePersonalStatsFile(dates) {
 
     let scoreDifference = currentScore - previousScore;
     if (scoreDifference >= 0) {
-      content += obj["dateStr"] + " 🟢🟢🟢🟢🟢" + "\n";
+      content += obj["dateStr"] + " 🟩🟩🟩🟩🟩🟩" + "\n";
     } else {
-      content += obj["dateStr"] + " 🔴🔴🔴🔴🔴" + "\n";
+      content += obj["dateStr"] + " 🟥🟥🟥🟥🟥🟥" + "\n";
       counter = 1;
     }
 
