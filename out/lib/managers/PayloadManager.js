@@ -21,9 +21,9 @@ const SummaryManager_1 = require("./SummaryManager");
 const FileManager_1 = require("./FileManager");
 const Project_1 = require("../model/Project");
 const FireStore_1 = require("../../src/util/FireStore");
-const os = require('os');
-const fs = require('fs');
-const path = require('path');
+const os = require("os");
+const fs = require("fs");
+const path = require("path");
 /**
  * This will update the cumulative editor and session seconds.
  * It will also provide any error details if any are encountered.
@@ -36,7 +36,7 @@ function validateAndUpdateCumulativeData(payload, sessionMinutes) {
         // This will find a time data object based on the current day
         let td = yield TimeSummaryData_1.incrementSessionAndFileSecondsAndFetch(payload.project, sessionMinutes);
         // default error to empty
-        payload.project_null_error = '';
+        payload.project_null_error = "";
         // get the latest payload (in-memory or on file)
         let lastPayload = yield FileManager_1.getLastSavedKeystrokesStats();
         // check to see if we're in a new day
@@ -113,7 +113,7 @@ function processPayload(payload, sendNow = false) {
         p.name = projName;
         p.resource = resourceInfo;
         p.identifier =
-            resourceInfo && resourceInfo.identifier ? resourceInfo.identifier : '';
+            resourceInfo && resourceInfo.identifier ? resourceInfo.identifier : "";
         payload.project = p;
         // validate the cumulative data
         yield validateAndUpdateCumulativeData(payload, sessionMinutes);
@@ -156,12 +156,12 @@ function processPayload(payload, sendNow = false) {
         }
         // set the timezone
         payload.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        console.log('From PayloadManager.ts');
+        console.log("From PayloadManager.ts");
         FireStore_1.updateStats(payload);
         // async for either
         if (sendNow) {
             // send the payload now (only called when getting installed)
-            FileManager_1.sendBatchPayload('/data/batch', [payload]);
+            FileManager_1.sendBatchPayload("/data/batch", [payload]);
             Util_1.logIt(`sending kpm metrics`);
         }
         else {
@@ -170,7 +170,7 @@ function processPayload(payload, sendNow = false) {
             Util_1.logIt(`storing kpm metrics`);
         }
         // Update the latestPayloadTimestampEndUtc. It's used to determine session time and elapsed_seconds
-        Util_1.setItem('latestPayloadTimestampEndUtc', nowTimes.now_in_sec);
+        Util_1.setItem("latestPayloadTimestampEndUtc", nowTimes.now_in_sec);
     });
 }
 exports.processPayload = processPayload;

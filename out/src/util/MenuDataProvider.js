@@ -23,8 +23,6 @@ const vscode_1 = require("vscode");
 const Constants_1 = require("./Constants");
 const Authentication_1 = require("./Authentication");
 const Authentication_2 = require("./Authentication");
-const path = require('path');
-const resourcePath = path.join(__filename, '..', '..', '..', 'resources');
 /**
  * Menu data provider
  */
@@ -37,9 +35,9 @@ class MenuDataProvider {
         this.onDidChangeTreeData = this
             ._onDidChangeTreeData.event;
         this.data = [
-            new MenuItem('Sign in / Create Account'),
-            new MenuItem('📊 View personal stats'),
-            new MenuItem('🌐 Leaderboard'),
+            new MenuItem("Sign in / Create Account"),
+            new MenuItem("📊 View personal stats"),
+            new MenuItem("🌐 Leaderboard"),
         ];
     }
     /**
@@ -50,16 +48,16 @@ class MenuDataProvider {
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID) !== undefined) {
             this.data = [
                 new MenuItem(`Welcome, ${ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME)}!`),
-                new MenuItem('📊 View personal stats'),
-                new MenuItem('🌐 Leaderboard'),
-                new MenuItem('💻 Log out account'),
+                new MenuItem("📊 View personal stats"),
+                new MenuItem("🌐 Leaderboard"),
+                new MenuItem("💻 Log out account"),
             ];
         }
         else {
             this.data = [
-                new MenuItem('Sign in / Create Account'),
-                new MenuItem('📊 View personal stats'),
-                new MenuItem('🌐 Leaderboard'),
+                new MenuItem("Sign in / Create Account"),
+                new MenuItem("📊 View personal stats"),
+                new MenuItem("🌐 Leaderboard"),
             ];
         }
         this._onDidChangeTreeData.fire(null);
@@ -128,17 +126,17 @@ exports.connectCloud9MenuTreeView = (view) => {
  * @param item
  */
 exports.handleMenuChangeSelection = (view, item) => {
-    if (item.label === 'Sign in / Create Account') {
+    if (item.label === "Sign in / Create Account") {
         Authentication_1.signInOrSignUpUserWithUserInput();
     }
-    else if (item.label === '📊 View personal stats') {
-        vscode_1.commands.executeCommand('cloud9.personalStats');
+    else if (item.label === "📊 View personal stats") {
+        vscode_1.commands.executeCommand("cloud9.personalStats");
     }
-    else if (item.label === '🌐 Leaderboard') {
-        vscode_1.commands.executeCommand('cloud9.leaderboard');
+    else if (item.label === "🌐 Leaderboard") {
+        vscode_1.commands.executeCommand("cloud9.leaderboard");
     }
-    else if (item.label === '💻 Log out account') {
-        vscode_1.commands.executeCommand('cloud9.logOut');
+    else if (item.label === "💻 Log out account") {
+        vscode_1.commands.executeCommand("cloud9.logOut");
     }
 };
 //# sourceMappingURL=MenuDataProvider.js.map

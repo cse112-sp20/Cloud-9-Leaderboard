@@ -30,7 +30,7 @@ function createAndJoinTeam() {
         yield Authentication_1.checkIfCachedUserIdExistsAndPrompt();
         const ctx = Authentication_1.getExtensionContext();
         const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-        if (cachedUserId === undefined || cachedUserId === '') {
+        if (cachedUserId === undefined || cachedUserId === "") {
             vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
             return;
         }
@@ -39,16 +39,16 @@ function createAndJoinTeam() {
             const inTeam = yield Firestore_1.checkIfInTeam();
             // If the user is already in a team, they cannot create a new team
             if (inTeam) {
-                vscode_1.window.showInformationMessage('You have already joined a team!');
+                vscode_1.window.showInformationMessage("You have already joined a team!");
                 return;
             }
-            vscode_1.window.showInformationMessage('Enter a name for your new team!');
+            vscode_1.window.showInformationMessage("Enter a name for your new team!");
             //prompt the user to enter a name for their team and create a new doc for the team
             yield vscode_1.window
-                .showInputBox({ placeHolder: 'Enter a new team name' })
+                .showInputBox({ placeHolder: "Enter a new team name" })
                 .then((teamName) => __awaiter(this, void 0, void 0, function* () {
-                if (teamName == undefined || teamName == '') {
-                    vscode_1.window.showInformationMessage('Please enter a valid team name!');
+                if (teamName == undefined || teamName == "") {
+                    vscode_1.window.showInformationMessage("Please enter a valid team name!");
                     return;
                 }
                 //function call to add a firebase document for this new team
@@ -69,16 +69,16 @@ function getTeamInfo() {
         const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
         const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-        if (cachedUserId == undefined || cachedUserId == '') {
+        if (cachedUserId == undefined || cachedUserId == "") {
             vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
             return;
         }
-        if (teamId == undefined || teamId == '') {
-            vscode_1.window.showInformationMessage('No team info found.');
+        if (teamId == undefined || teamId == "") {
+            vscode_1.window.showInformationMessage("No team info found.");
             return;
         }
-        let messageStr = 'Your team name: ' + teamName + '\n';
-        messageStr += 'Your team ID: ' + teamId;
+        let messageStr = "Your team name: " + teamName + "\n";
+        messageStr += "Your team ID: " + teamId;
         console.log(messageStr);
         vscode_1.window.showInformationMessage(messageStr, { modal: true });
         return messageStr;
@@ -95,20 +95,20 @@ function joinTeam() {
         //first check if user is already in a team
         const inTeam = yield Firestore_1.checkIfInTeam();
         if (inTeam) {
-            vscode_1.window.showInformationMessage('You have already joined a team!');
+            vscode_1.window.showInformationMessage("You have already joined a team!");
             return;
         }
         const ctx = Authentication_1.getExtensionContext();
         const cachedUserId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID);
-        if (cachedUserId === undefined || cachedUserId === '') {
+        if (cachedUserId === undefined || cachedUserId === "") {
             vscode_1.window.showErrorMessage(Constants_1.AUTH_NOT_LOGGED_IN);
         }
         else {
             yield vscode_1.window
-                .showInputBox({ placeHolder: 'Enter a team code' })
+                .showInputBox({ placeHolder: "Enter a team code" })
                 .then((teamCode) => __awaiter(this, void 0, void 0, function* () {
                 if (teamCode == undefined) {
-                    vscode_1.window.showInformationMessage('Please enter a valid team name!');
+                    vscode_1.window.showInformationMessage("Please enter a valid team name!");
                     return;
                 }
                 Firestore_1.joinTeamWithTeamId(teamCode, false);

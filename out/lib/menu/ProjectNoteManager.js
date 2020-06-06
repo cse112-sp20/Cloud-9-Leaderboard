@@ -14,10 +14,10 @@ class ProjectNoteManager {
     }
     addNote() {
         vscode_1.window.showInputBox({
-            value: '',
-            placeHolder: 'Enter a note',
+            value: "",
+            placeHolder: "Enter a note",
             validateInput: (text) => {
-                return !text ? 'Please enter a non-empty note to continue.' : null;
+                return !text ? "Please enter a non-empty note to continue." : null;
             },
         });
     }

@@ -1,13 +1,11 @@
 "use strict";
 /**
- * Summary. (use period)
+ * File that contains method to handle metrics
  *
  * Description. (use period)
  *
- * @link   URL
- * @file   This files defines the MyClass class.
+ * @file   This files defines handle metric method.
  * @author AuthorName.
- * @since  x.x.x
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateStats = exports.scoreCalculation = exports.processMetric = void 0;
@@ -20,17 +18,17 @@ function processMetric(obj) {
     console.log(obj);
     // aggregator from codeTime Payload
     const metric = {};
-    metric['keystrokes'] = obj.keystrokes;
-    metric['linesChanged'] = 0;
-    metric['timeInterval'] = obj.elapsed_seconds;
+    metric["keystrokes"] = obj.keystrokes;
+    metric["linesChanged"] = 0;
+    metric["timeInterval"] = obj.elapsed_seconds;
     for (let filename in obj.source) {
         let file = obj.source[filename];
         if (file) {
-            if ('linesAdded' in file) {
-                metric['linesChanged'] += file['linesAdded'];
+            if ("linesAdded" in file) {
+                metric["linesChanged"] += file["linesAdded"];
             }
-            if ('linesRemoved' in file) {
-                metric['linesChanged'] += file['linesRemoved'];
+            if ("linesRemoved" in file) {
+                metric["linesChanged"] += file["linesRemoved"];
             }
         }
     }
@@ -43,9 +41,9 @@ exports.processMetric = processMetric;
 function scoreCalculation(userStats) {
     // TODO : user stats to score
     let score = 0;
-    score += userStats['timeInterval'] * 0.01;
-    score += userStats['keystrokes'] * 1;
-    score += userStats['linesChanged'] + 10;
+    score += userStats["timeInterval"] * 0.01;
+    score += userStats["keystrokes"] * 1;
+    score += userStats["linesChanged"] + 10;
     return score;
 }
 exports.scoreCalculation = scoreCalculation;
@@ -60,25 +58,25 @@ function calculateStats(scoreMap) {
         timeInterval: 0,
     };
     scoreMap.map((item) => {
-        totalValues['keystrokes'] += item['keystrokes'];
-        totalValues['points'] += parseFloat(item['points']);
-        totalValues['linesChanged'] += item['linesChanged'];
-        totalValues['timeInterval'] += item['timeInterval'];
+        totalValues["keystrokes"] += item["keystrokes"];
+        totalValues["points"] += parseFloat(item["points"]);
+        totalValues["linesChanged"] += item["linesChanged"];
+        totalValues["timeInterval"] += item["timeInterval"];
     });
     let statsObj = {};
     let days = scoreMap.length;
-    statsObj['kpd'] = totalValues['keystrokes'] / days;
-    statsObj['lcpd'] = totalValues['linesChanged'] / days;
-    statsObj['tspd'] = totalValues['timeInterval'] / days;
-    statsObj['ppd'] = totalValues['points'] / days;
-    statsObj['kpm'] =
-        totalValues['timeInterval'] === 0
+    statsObj["kpd"] = totalValues["keystrokes"] / days;
+    statsObj["lcpd"] = totalValues["linesChanged"] / days;
+    statsObj["tspd"] = totalValues["timeInterval"] / days;
+    statsObj["ppd"] = totalValues["points"] / days;
+    statsObj["kpm"] =
+        totalValues["timeInterval"] === 0
             ? 0
-            : totalValues['keystrokes'] / (totalValues['timeInterval'] / 60);
-    statsObj['lpm'] =
-        totalValues['timeInterval'] === 0
+            : totalValues["keystrokes"] / (totalValues["timeInterval"] / 60);
+    statsObj["lpm"] =
+        totalValues["timeInterval"] === 0
             ? 0
-            : totalValues['linesChanged'] / (totalValues['timeInterval'] / 60);
+            : totalValues["linesChanged"] / (totalValues["timeInterval"] / 60);
     return statsObj;
 }
 exports.calculateStats = calculateStats;

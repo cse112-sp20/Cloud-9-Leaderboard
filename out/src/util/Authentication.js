@@ -27,7 +27,7 @@ let extensionContext = undefined;
  * @param ctx vscode extension context
  */
 function storeExtensionContext(ctx) {
-    console.log('storing extension context');
+    console.log("storing extension context");
     extensionContext = ctx;
 }
 exports.storeExtensionContext = storeExtensionContext;
@@ -50,17 +50,17 @@ function logOut() {
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER, false);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_NICKNAME, undefined);
     ctx.globalState.update(Constants_1.GLOBAL_STATE_USER_TEAM_MEMBERS, undefined);
-    console.log('Logging out: ' + extensionContext.globalState);
-    vscode_1.window.showInformationMessage('Goodbye!');
+    console.log("Logging out: " + extensionContext.globalState);
+    vscode_1.window.showInformationMessage("Goodbye!");
     //reload treeview content to reflect the logout event
-    vscode_1.commands.executeCommand('MenuView.refreshEntry');
-    vscode_1.commands.executeCommand('LeaderView.refreshEntry');
-    vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
-    vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
+    vscode_1.commands.executeCommand("MenuView.refreshEntry");
+    vscode_1.commands.executeCommand("LeaderView.refreshEntry");
+    vscode_1.commands.executeCommand("DailyMetric.refreshEntry");
+    vscode_1.commands.executeCommand("TeamMenuView.refreshEntry");
 }
 exports.logOut = logOut;
 /**
- * authentication entry point
+ * Authentication entry point
  * @param ctx
  */
 function authenticateUser() {
@@ -73,29 +73,29 @@ function authenticateUser() {
         const isTeamLeader = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER);
         if (cachedUserId === undefined) {
             // case1: sign in or create new account
-            vscode_1.window.showInformationMessage('Cloud9: Welcome to Cloud 9!');
+            vscode_1.window.showInformationMessage("Cloud9: Welcome to Cloud 9!");
             signInOrSignUpUserWithUserInput().then(() => {
                 Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.constructDailyMetricData, ctx);
             });
         }
         else {
             // case2: existing user's id found
-            console.log('Found cachedUserId: ' + cachedUserId);
-            console.log('Found cachedTeamName: ' + cachedTeamName);
-            console.log('Found cachedTeamId: ' + cachedTeamId);
-            console.log('Found cachedUserNickname: ' + cachedUserNickName);
+            console.log("Found cachedUserId: " + cachedUserId);
+            console.log("Found cachedTeamName: " + cachedTeamName);
+            console.log("Found cachedTeamId: " + cachedTeamId);
+            console.log("Found cachedUserNickname: " + cachedUserNickName);
             //check if user doc exists in firebase
             let exists = yield Firestore_1.userDocExists(cachedUserId);
             if (exists) {
-                console.log('user doc exists');
+                console.log("user doc exists");
                 Firestore_1.updatePersistentStorageWithUserDocData(cachedUserId).then(() => {
                     Firestore_1.retrieveUserDailyMetric(DailyMetricDataProvider_1.constructDailyMetricData, ctx);
                 });
-                vscode_1.window.showInformationMessage('Welcome back, ' + cachedUserNickName + '!!');
-                console.log('is team leader ' + isTeamLeader);
-                vscode_1.commands.executeCommand('MenuView.refreshEntry');
+                vscode_1.window.showInformationMessage("Welcome back, " + cachedUserNickName + "!!");
+                console.log("is team leader " + isTeamLeader);
+                vscode_1.commands.executeCommand("MenuView.refreshEntry");
                 // commands.executeCommand('LeaderView.refreshEntry');
-                vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
+                vscode_1.commands.executeCommand("TeamMenuView.refreshEntry");
             }
             else {
                 // user doc does not exist, prompt user to sign in or sign up
@@ -108,7 +108,7 @@ function authenticateUser() {
 }
 exports.authenticateUser = authenticateUser;
 /**
- * prompts the user to sign in or sign up with input email and password
+ * Prompts the user to sign in or sign up with input email and password
  */
 function signInOrSignUpUserWithUserInput() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -117,21 +117,21 @@ function signInOrSignUpUserWithUserInput() {
         let password = undefined;
         //prompt the user to sign in or create an account
         vscode_1.window
-            .showInformationMessage('Please sign in or create a new account!', Constants_1.AUTH_SIGN_IN, Constants_1.AUTH_CREATE_ACCOUNT)
+            .showInformationMessage("Please sign in or create a new account!", Constants_1.AUTH_SIGN_IN, Constants_1.AUTH_CREATE_ACCOUNT)
             .then((selection) => __awaiter(this, void 0, void 0, function* () {
             if (selection == undefined) {
                 return;
             }
             // prompt for user input
             yield vscode_1.window
-                .showInputBox({ placeHolder: 'Enter your email: example@gmail.com' })
+                .showInputBox({ placeHolder: "Enter your email: example@gmail.com" })
                 .then((inputEmail) => {
                 email = inputEmail;
             })
                 .then(() => __awaiter(this, void 0, void 0, function* () {
                 yield vscode_1.window
                     .showInputBox({
-                    placeHolder: 'Enter your password (must be 6 characters long or more)',
+                    placeHolder: "Enter your password (must be 6 characters long or more)",
                     password: true,
                 })
                     .then((inputPassword) => {
@@ -141,9 +141,9 @@ function signInOrSignUpUserWithUserInput() {
                 .then(() => __awaiter(this, void 0, void 0, function* () {
                 if (email == undefined ||
                     password == undefined ||
-                    email == '' ||
-                    password == '') {
-                    vscode_1.window.showErrorMessage('Invalid email or password!');
+                    email == "" ||
+                    password == "") {
+                    vscode_1.window.showErrorMessage("Invalid email or password!");
                 }
                 else {
                     if (selection == Constants_1.AUTH_SIGN_IN) {
@@ -153,30 +153,30 @@ function signInOrSignUpUserWithUserInput() {
                             console.log(result.errorCode);
                             if (result.loggedIn) {
                                 // successfully logged the user in
-                                vscode_1.window.showInformationMessage('Welcome back, ' +
+                                vscode_1.window.showInformationMessage("Welcome back, " +
                                     ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
-                                    '!!');
+                                    "!!");
                                 // reload the treeview content
-                                vscode_1.commands.executeCommand('MenuView.refreshEntry');
-                                vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
-                                vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
+                                vscode_1.commands.executeCommand("MenuView.refreshEntry");
+                                vscode_1.commands.executeCommand("TeamMenuView.refreshEntry");
+                                vscode_1.commands.executeCommand("DailyMetric.refreshEntry");
                                 return;
                             }
                             // failed to log the user in, print out error message
                             if (result.errorCode == Constants_1.AUTH_ERR_CODE_WRONG_PASSWORD) {
-                                vscode_1.window.showErrorMessage('Wrong password!');
+                                vscode_1.window.showErrorMessage("Wrong password!");
                             }
                             else if (result.errorCode == Constants_1.AUTH_ERR_CODE_USER_NOT_FOUND) {
-                                vscode_1.window.showErrorMessage('User not found!');
+                                vscode_1.window.showErrorMessage("User not found!");
                             }
                             else if (result.errorCode == Constants_1.AUTH_ERR_CODE_INVALID_EMAIL) {
-                                vscode_1.window.showErrorMessage('Invalid email!');
+                                vscode_1.window.showErrorMessage("Invalid email!");
                             }
                         }));
                         //reload treeview content
-                        vscode_1.commands.executeCommand('MenuView.refreshEntry');
-                        vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
-                        vscode_1.commands.executeCommand('DailyMetric.refreshEntry');
+                        vscode_1.commands.executeCommand("MenuView.refreshEntry");
+                        vscode_1.commands.executeCommand("TeamMenuView.refreshEntry");
+                        vscode_1.commands.executeCommand("DailyMetric.refreshEntry");
                     }
                     else if (selection == Constants_1.AUTH_CREATE_ACCOUNT) {
                         //user chose to create a new account
@@ -186,23 +186,23 @@ function signInOrSignUpUserWithUserInput() {
                             if (result.created) {
                                 // successfully created a new account for user
                                 // welcome them with generated name
-                                vscode_1.window.showInformationMessage('Welcome! Your nickname is: ' +
+                                vscode_1.window.showInformationMessage("Welcome! Your nickname is: " +
                                     ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME) +
-                                    '!!');
+                                    "!!");
                                 //reload treeview content
-                                vscode_1.commands.executeCommand('MenuView.refreshEntry');
-                                vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
+                                vscode_1.commands.executeCommand("MenuView.refreshEntry");
+                                vscode_1.commands.executeCommand("TeamMenuView.refreshEntry");
                                 return;
                             }
                             // failed to create a new account for user, print the error message
                             if (result.errorCode == Constants_1.AUTH_ERR_CODE_EMAIL_USED) {
-                                vscode_1.window.showErrorMessage('Email already in use!');
+                                vscode_1.window.showErrorMessage("Email already in use!");
                             }
                             else if (result.errorCode == Constants_1.AUTH_ERR_CODE_WEAK_PASSWORD) {
-                                vscode_1.window.showErrorMessage('Password is too weak! Needs to be 6 characters long or more!');
+                                vscode_1.window.showErrorMessage("Password is too weak! Needs to be 6 characters long or more!");
                             }
                             else if (result.errorCode == Constants_1.AUTH_ERR_CODE_INVALID_EMAIL) {
-                                vscode_1.window.showErrorMessage('Invalid email!');
+                                vscode_1.window.showErrorMessage("Invalid email!");
                             }
                             else {
                                 vscode_1.window.showErrorMessage(result.errorCode);

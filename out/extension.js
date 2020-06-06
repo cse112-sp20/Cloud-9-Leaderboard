@@ -59,15 +59,15 @@ function getStatusBarItem() {
 exports.getStatusBarItem = getStatusBarItem;
 function deactivate(ctx) {
     // store the deactivate event
-    EventManager_1.EventManager.getInstance().createCodeTimeEvent('resource', 'unload', 'EditorDeactivate');
+    EventManager_1.EventManager.getInstance().createCodeTimeEvent("resource", "unload", "EditorDeactivate");
     if (_ls && _ls.id) {
         // the IDE is closing, send this off
         let nowSec = Util_1.nowInSecs();
         let offsetSec = Util_1.getOffsetSeconds();
         let localNow = nowSec - offsetSec;
         // close the session on our end
-        _ls['end'] = nowSec;
-        _ls['local_end'] = localNow;
+        _ls["end"] = nowSec;
+        _ls["local_end"] = localNow;
         LiveshareManager_1.manageLiveshareSession(_ls);
         _ls = null;
     }
@@ -94,8 +94,8 @@ exports.deactivate = deactivate;
 //export var extensionContext;
 function activate(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
-        vscode_1.window.showInformationMessage('Cloud9 Activated!');
-        console.log('Cloud9 activated');
+        vscode_1.window.showInformationMessage("Cloud9 Activated!");
+        console.log("Cloud9 activated");
         //store ref to extension context
         Authentication_1.storeExtensionContext(ctx);
         // add the code time commands
@@ -104,7 +104,7 @@ function activate(ctx) {
         const eventName = `onboard-${workspace_name}`;
         // onboard the user as anonymous if it's being installed
         if (vscode_1.window.state.focused) {
-            EventManager_1.EventManager.getInstance().createCodeTimeEvent('focused_onboard', eventName, 'onboarding');
+            EventManager_1.EventManager.getInstance().createCodeTimeEvent("focused_onboard", eventName, "onboarding");
             OnboardManager_1.onboardInit(ctx, intializePlugin /*successFunction*/);
         }
         else {
@@ -113,11 +113,11 @@ function activate(ctx) {
             const nonFocusedEventType = `nonfocused_onboard-${secondDelay}`;
             // initialize in 5 seconds if this is the secondary window
             setTimeout(() => {
-                EventManager_1.EventManager.getInstance().createCodeTimeEvent(nonFocusedEventType, eventName, 'onboarding');
+                EventManager_1.EventManager.getInstance().createCodeTimeEvent(nonFocusedEventType, eventName, "onboarding");
                 OnboardManager_1.onboardInit(ctx, intializePlugin /*successFunction*/);
             }, 1000 * secondDelay);
         }
-        console.log('BEfore calling authenticateUser');
+        console.log("BEfore calling authenticateUser");
         // sign the user in
         Authentication_1.authenticateUser();
         //await retrieveUserDailyMetric(constructDailyMetricData, ctx);
@@ -132,7 +132,7 @@ function intializePlugin(ctx, createdAnonUser) {
     return __awaiter(this, void 0, void 0, function* () {
         Util_1.logIt(`Loaded ${Util_1.getPluginName()} v${Util_1.getVersion()}`);
         // store the activate event
-        EventManager_1.EventManager.getInstance().createCodeTimeEvent('resource', 'load', 'EditorActivate');
+        EventManager_1.EventManager.getInstance().createCodeTimeEvent("resource", "load", "EditorActivate");
         // initialize the wall clock timer
         WallClockManager_1.WallClockManager.getInstance();
         // load the last payload into memory
@@ -143,14 +143,14 @@ function intializePlugin(ctx, createdAnonUser) {
         yield DataController_1.initializePreferences(serverIsOnline);
         // add the interval jobs
         initializeIntervalJobs();
-        const initializedVscodePlugin = Util_1.getItem('vscode_CtInit');
+        const initializedVscodePlugin = Util_1.getItem("vscode_CtInit");
         if (!initializedVscodePlugin) {
-            Util_1.setItem('vscode_CtInit', true);
+            Util_1.setItem("vscode_CtInit", true);
             // send a bootstrap kpm payload
             kpmController.buildBootstrapKpmPayload();
             // send a heartbeat that the plugin as been installed
             // (or the user has deleted the session.json and restarted the IDE)
-            DataController_1.sendHeartbeat('INSTALLED', serverIsOnline);
+            DataController_1.sendHeartbeat("INSTALLED", serverIsOnline);
         }
         // initialize the day check timer
         SummaryManager_1.SummaryManager.getInstance().updateSessionSummaryFromServer();
@@ -161,7 +161,7 @@ exports.intializePlugin = intializePlugin;
 function initializeIntervalJobs() {
     hourly_interval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
         const isonline = yield HttpClient_1.serverIsAvailable();
-        DataController_1.sendHeartbeat('HOURLY', isonline);
+        DataController_1.sendHeartbeat("HOURLY", isonline);
     }), one_hour_millis);
     thirty_minute_interval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
         const isonline = yield HttpClient_1.serverIsAvailable();

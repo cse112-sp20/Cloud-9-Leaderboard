@@ -3,15 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.saveFileChangeInfoToDisk = exports.getFileChangeSummaryAsJson = exports.clearFileChangeInfoSummaryData = exports.getFileChangeSummaryFile = void 0;
 const Util_1 = require("../Util");
 const CacheManager_1 = require("../cache/CacheManager");
-const fs = require('fs');
+const fs = require("fs");
 const cacheMgr = CacheManager_1.CacheManager.getInstance();
 function getFileChangeSummaryFile() {
     let file = Util_1.getSoftwareDir();
     if (Util_1.isWindows()) {
-        file += '\\fileChangeSummary.json';
+        file += "\\fileChangeSummary.json";
     }
     else {
-        file += '/fileChangeSummary.json';
+        file += "/fileChangeSummary.json";
     }
     return file;
 }
@@ -23,7 +23,7 @@ exports.clearFileChangeInfoSummaryData = clearFileChangeInfoSummaryData;
 // returns a map of file change info
 // {fileName => FileChangeInfo, fileName => FileChangeInfo}
 function getFileChangeSummaryAsJson() {
-    let fileChangeInfoMap = cacheMgr.get('fileChangeSummary');
+    let fileChangeInfoMap = cacheMgr.get("fileChangeSummary");
     if (!fileChangeInfoMap) {
         const file = getFileChangeSummaryFile();
         fileChangeInfoMap = Util_1.getFileDataAsJson(file);
@@ -31,7 +31,7 @@ function getFileChangeSummaryAsJson() {
             fileChangeInfoMap = {};
         }
         else {
-            cacheMgr.set('fileChangeSummary', fileChangeInfoMap);
+            cacheMgr.set("fileChangeSummary", fileChangeInfoMap);
         }
     }
     return fileChangeInfoMap;
@@ -48,7 +48,7 @@ function saveFileChangeInfoToDisk(fileChangeInfoData) {
             });
             // update the cache
             if (fileChangeInfoData) {
-                cacheMgr.set('fileChangeSummary', fileChangeInfoData);
+                cacheMgr.set("fileChangeSummary", fileChangeInfoData);
             }
         }
         catch (e) {
