@@ -58,7 +58,7 @@ class TeamDataProvider {
                 new TeamItem("📋 View team leaderboard"),
                 new TeamItem("Get Team Info", [
                     new TeamItem("TeamName", [new TeamItem(teamName + "")]),
-                    new TeamItem("teamId", [new TeamItem(teamId + "")]),
+                    new TeamItem("TeamID", [new TeamItem(teamId + "")]),
                 ]),
             ];
         }
@@ -141,7 +141,7 @@ exports.handleTeamInfoChangeSelection = (view, item) => {
                 new TeamItem("TeamName", [
                     new TeamItem("Empty (Please join a team first)"),
                 ]),
-                new TeamItem("teamId", [
+                new TeamItem("TeamID", [
                     new TeamItem("Empty (Please join a team first)"),
                 ]),
             ];
@@ -149,7 +149,7 @@ exports.handleTeamInfoChangeSelection = (view, item) => {
         else {
             item.children = [
                 new TeamItem("TeamName", [new TeamItem(teamName + "")]),
-                new TeamItem("teamId", [new TeamItem(teamId + "")]),
+                new TeamItem("TeamID", [new TeamItem(teamId + "")]),
             ];
         }
         vscode_1.commands.executeCommand("TeamMenuView.refreshEntry");

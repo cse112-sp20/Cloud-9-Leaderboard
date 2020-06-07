@@ -65,7 +65,7 @@ export class TeamDataProvider implements TreeDataProvider<TeamItem> {
         new TeamItem("📋 View team leaderboard"),
         new TeamItem("Get Team Info", [
           new TeamItem("TeamName", [new TeamItem(teamName + "")]),
-          new TeamItem("teamId", [new TeamItem(teamId + "")]),
+          new TeamItem("TeamID", [new TeamItem(teamId + "")]),
         ]),
       ];
     }
@@ -176,14 +176,14 @@ export const handleTeamInfoChangeSelection = (
         new TeamItem("TeamName", [
           new TeamItem("Empty (Please join a team first)"),
         ]),
-        new TeamItem("teamId", [
+        new TeamItem("TeamID", [
           new TeamItem("Empty (Please join a team first)"),
         ]),
       ];
     } else {
       item.children = [
         new TeamItem("TeamName", [new TeamItem(teamName + "")]),
-        new TeamItem("teamId", [new TeamItem(teamId + "")]),
+        new TeamItem("TeamID", [new TeamItem(teamId + "")]),
       ];
     }
 
