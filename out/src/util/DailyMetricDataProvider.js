@@ -102,7 +102,11 @@ class DailyMetricDataProvider {
                         continue;
                     }
                     tempList.push(new DailyMetricItem(displayHeaderMap[key], [
-                        new DailyMetricItem("🚀 Today: " + +userDocument[key].toFixed(3) + " (Updated: " + time + ")"),
+                        new DailyMetricItem("🚀 Today: " +
+                            +userDocument[key].toFixed(3) +
+                            " (Updated: " +
+                            time +
+                            ")"),
                     ]));
                 }
                 this.data = tempList;

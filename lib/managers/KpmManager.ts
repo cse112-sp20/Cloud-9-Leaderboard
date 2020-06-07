@@ -369,7 +369,6 @@ export class KpmManager {
     return staticInfo;
   }
 
-
   /**
    * This will return true if it's a true file. we don't
    * want to send events for .git or other event triggers

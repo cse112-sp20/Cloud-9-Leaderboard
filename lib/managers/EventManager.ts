@@ -1,5 +1,5 @@
 import {CodeTimeEvent} from "../model/models";
-import { getPluginEventsFile, getNowTimes, getHostname} from "../Util";
+import {getPluginEventsFile, getNowTimes, getHostname} from "../Util";
 
 const fs = require("fs");
 const os = require("os");

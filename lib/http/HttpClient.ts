@@ -9,7 +9,6 @@ const beApi = axios.create({
   baseURL: `${api_endpoint}`,
 });
 
-
 const cacheMgr: CacheManager = CacheManager.getInstance();
 
 export async function serverIsAvailable() {

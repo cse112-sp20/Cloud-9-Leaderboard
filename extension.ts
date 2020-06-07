@@ -24,9 +24,7 @@ import {createCommands} from "./lib/command-helper";
 import {KpmManager} from "./lib/managers/KpmManager";
 import {SummaryManager} from "./lib/managers/SummaryManager";
 import {EventManager} from "./lib/managers/EventManager";
-import {
-  getLastSavedKeystrokesStats,
-} from "./lib/managers/FileManager";
+import {getLastSavedKeystrokesStats} from "./lib/managers/FileManager";
 
 import {
   storeExtensionContext,
@@ -50,7 +48,6 @@ const one_hour_millis = one_min_millis * 60;
 // will then listen for text document changes.
 //
 const kpmController: KpmManager = KpmManager.getInstance();
-
 
 export function deactivate(ctx: ExtensionContext) {
   // store the deactivate event
@@ -136,14 +133,12 @@ export async function intializePlugin(
   ctx: ExtensionContext,
   createdAnonUser: boolean,
 ) {
-
   // store the activate event
   EventManager.getInstance().createCodeTimeEvent(
     "resource",
     "load",
     "EditorActivate",
   );
-
 
   // load the last payload into memory
   getLastSavedKeystrokesStats();

@@ -20,9 +20,7 @@ import {
 } from "./Util";
 import {DEFAULT_SESSION_THRESHOLD_SECONDS} from "./Constants";
 
-
 let toggleFileEventLogging = null;
-
 
 export function getToggleFileEventLoggingState() {
   if (toggleFileEventLogging === null) {
@@ -32,7 +30,6 @@ export function getToggleFileEventLoggingState() {
   }
   return toggleFileEventLogging;
 }
-
 
 /**
  * get the app jwt
@@ -47,7 +44,6 @@ export async function getAppJwt(serverIsOnline) {
   }
   return null;
 }
-
 
 export async function getUser(serverIsOnline, jwt) {
   if (jwt && serverIsOnline) {
@@ -174,9 +170,6 @@ export async function updatePreferences() {
   }
 }
 
-
-
-
 export async function sendHeartbeat(reason, serverIsOnline) {
   let jwt = getItem("jwt");
   if (serverIsOnline && jwt) {
@@ -198,5 +191,3 @@ export async function sendHeartbeat(reason, serverIsOnline) {
     });
   }
 }
-
-

@@ -1,7 +1,5 @@
 import {commands, Disposable, workspace, window, TreeView} from "vscode";
-import {
-  updatePreferences,
-} from "./DataController";
+import {updatePreferences} from "./DataController";
 import {
   TeamDataProvider,
   TeamItem,

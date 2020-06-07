@@ -1,6 +1,6 @@
 /**
- * This file contains functions that interact with firebase collections and documents.
- *
+ * This file contains functions that interact with firebase
+ * collections and documents.
  *
  *
  * @file   Firestore.ts
@@ -22,7 +22,6 @@ import {
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_IS_TEAM_LEADER,
   GLOBAL_STATE_USER_NICKNAME,
-  FIELD_ID_TEAM_LEAD_USER_ID,
   GLOBAL_STATE_USER_EMAIL,
   GLOBAL_STATE_USER_TEAM_MEMBERS,
 } from "./Constants";
@@ -849,7 +848,8 @@ export async function retrieveUserUpdateDailyMetric() {
 }
 
 /**
- * returns true if a document associated with the passed in ID exists in firebase
+ * returns true if a document associated with the passed in ID exists in
+ * firebase
  * @param userId the uid to check
  */
 export async function userDocExists(userId) {

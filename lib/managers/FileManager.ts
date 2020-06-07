@@ -38,7 +38,6 @@ export async function sendOfflineTimeData() {
   clearTimeDataSummary();
 }
 
-
 /**
  * send the offline data.
  */
@@ -61,8 +60,7 @@ export async function batchSendArrayData(api, file) {
       const payloads = getFileDataArray(file);
       batchSendPayloadData(api, file, payloads);
     }
-  } catch (e) {
-  }
+  } catch (e) {}
 }
 
 export async function batchSendData(api, file) {
@@ -75,8 +73,7 @@ export async function batchSendData(api, file) {
       const payloads = getFileDataPayloadsAsJson(file);
       batchSendPayloadData(api, file, payloads);
     }
-  } catch (e) {
-  }
+  } catch (e) {}
 }
 
 export async function getLastSavedKeystrokesStats() {
@@ -94,8 +91,7 @@ export async function getLastSavedKeystrokesStats() {
         latestPayload = currentPayloads[0];
       }
     }
-  } catch (e) {
-  }
+  } catch (e) {}
   // returns one in memory if not found in file
   return latestPayload;
 }
@@ -103,8 +99,6 @@ export async function getLastSavedKeystrokesStats() {
 export async function batchSendPayloadData(api, file, payloads) {
   // send the batch
   if (payloads && payloads.length > 0) {
-
-
     // send batch_limit at a time
     let batch = [];
     for (let i = 0; i < payloads.length; i++) {
@@ -137,16 +131,13 @@ export async function batchSendPayloadData(api, file, payloads) {
 export function sendBatchPayload(api, batch) {
   // console.log("SEND BATCH LOOK HERE");
   // console.log(batch);
-  return softwarePost(api, batch, getItem("jwt")).catch((e) => {
-  });
+  return softwarePost(api, batch, getItem("jwt")).catch((e) => {});
 }
-
 
 export async function storeCurrentPayload(payload) {
   try {
     const content = JSON.stringify(payload, null, 4);
-    fs.writeFileSync(this.getCurrentPayloadFile(), content, (err) => {
-    });
+    fs.writeFileSync(this.getCurrentPayloadFile(), content, (err) => {});
   } catch (e) {
     //
   }

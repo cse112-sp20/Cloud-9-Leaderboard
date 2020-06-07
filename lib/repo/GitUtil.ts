@@ -6,7 +6,6 @@ const ONE_HOUR_IN_SEC = 60 * 60;
 const ONE_DAY_SEC = ONE_HOUR_IN_SEC * 24;
 const ONE_WEEK_SEC = ONE_DAY_SEC * 7;
 
-
 export async function getCommandResult(cmd, projectDir) {
   let result = await wrapExecPromise(cmd, projectDir);
   if (!result) {
@@ -23,8 +22,6 @@ export async function getCommandResult(cmd, projectDir) {
     .split(/\r/);
   return resultList;
 }
-
-
 
 /**
  * Returns the user's today's start and end in UTC time

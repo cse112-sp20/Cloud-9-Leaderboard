@@ -42,7 +42,6 @@ function getProjectDir(fileName = null) {
   return null;
 }
 
-
 export async function getFileContributorCount(fileName) {
   let fileType = getFileType(fileName);
 
@@ -97,7 +96,6 @@ export async function getRepoFileCount(fileName) {
 
   return resultList.length;
 }
-
 
 export async function getRepoContributorInfo(
   fileName: string,
@@ -200,7 +198,6 @@ export async function getResourceInfo(projectDir) {
   // we don't have git info, return an empty object
   return resourceInfo;
 }
-
 
 /**
  * get the last git commit from the app server

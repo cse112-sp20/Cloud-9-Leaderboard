@@ -55,8 +55,7 @@ export async function clearTimeDataSummary() {
   let payloads: TimeData[] = [];
   try {
     const content = JSON.stringify(payloads, null, 4);
-    fs.writeFileSync(file, content, (err) => {
-    });
+    fs.writeFileSync(file, content, (err) => {});
   } catch (e) {
     //
   }
@@ -279,8 +278,7 @@ function saveTimeDataSummaryToDisk(data: TimeData) {
 
   try {
     const content = JSON.stringify(payloads, null, 4);
-    fs.writeFileSync(file, content, (err) => {
-    });
+    fs.writeFileSync(file, content, (err) => {});
   } catch (e) {
     //
   }

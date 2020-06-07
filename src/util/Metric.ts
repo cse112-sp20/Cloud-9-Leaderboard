@@ -44,7 +44,7 @@ export function scoreCalculation(userStats) {
   let score = 0;
   score += userStats["timeInterval"] * 0.01;
   score += userStats["keystrokes"] * 1;
-  score += userStats["linesChanged"] + 10;
+  score += userStats["linesChanged"] * 10;
   return score;
 }
 

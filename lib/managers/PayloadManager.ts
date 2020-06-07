@@ -229,9 +229,7 @@ export async function storePayload(
   fs.appendFileSync(
     getSoftwareDataStoreFile(),
     JSON.stringify(payload) + os.EOL,
-    (err) => {
-        
-    },
+    (err) => {},
   );
 
   // update the status and tree

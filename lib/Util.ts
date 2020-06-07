@@ -1,9 +1,4 @@
-import {
-  workspace,
-  extensions,
-  window,
-  WorkspaceFolder,
-} from "vscode";
+import {workspace, extensions, window, WorkspaceFolder} from "vscode";
 import {
   CODE_TIME_EXT_ID,
   launch_url,
@@ -12,9 +7,7 @@ import {
   CODE_TIME_TYPE,
   api_endpoint,
 } from "./Constants";
-import {
-  getAppJwt,
-} from "./DataController";
+import {getAppJwt} from "./DataController";
 import {EventManager} from "./managers/EventManager";
 import {serverIsAvailable} from "./http/HttpClient";
 import {refetchAtlassianOauthLazily} from "./user/OnboardManager";
@@ -54,7 +47,6 @@ export function getPluginId() {
   return CODE_TIME_PLUGIN_ID;
 }
 
-
 export function getPluginType() {
   return CODE_TIME_TYPE;
 }
@@ -63,7 +55,6 @@ export function getVersion() {
   const extension = extensions.getExtension(CODE_TIME_EXT_ID);
   return extension.packageJSON.version;
 }
-
 
 export function getSessionFileCreateTime() {
   let sessionFile = getSoftwareSessionFile();
@@ -174,8 +165,6 @@ export function getNumberOfTextDocumentsOpen() {
   return workspace.textDocuments ? workspace.textDocuments.length : 0;
 }
 
-
-
 export function getRootPathForFile(fileName) {
   let folder = getProjectFolder(fileName);
   if (folder) {
@@ -183,7 +172,6 @@ export function getRootPathForFile(fileName) {
   }
   return null;
 }
-
 
 export function getProjectFolder(fileName): WorkspaceFolder {
   let liveshareFolder = null;
@@ -214,7 +202,6 @@ export function getProjectFolder(fileName): WorkspaceFolder {
   return null;
 }
 
-
 export function setItem(key, value) {
   // now save it on file
   const jsonObj = getSoftwareSessionAsJson();
@@ -235,8 +222,6 @@ export function getItem(key) {
   const val = jsonObj[key] || null;
   return val;
 }
-
-
 
 export function isEmptyObj(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
@@ -317,7 +302,6 @@ export async function getOsUsername() {
   return username;
 }
 
-
 export function getSoftwareDir(autoCreate = true) {
   const homedir = os.homedir();
   let softwareDataDir = homedir;
@@ -333,8 +317,6 @@ export function getSoftwareDir(autoCreate = true) {
 
   return softwareDataDir;
 }
-
-
 
 export function getSoftwareSessionFile() {
   let file = getSoftwareDir();
@@ -365,8 +347,6 @@ export function getPluginEventsFile() {
   }
   return file;
 }
-
-
 
 export function openFileInEditor(file) {
   workspace.openTextDocument(file).then(
@@ -444,7 +424,6 @@ export function getExtensionName() {
   }
   return extensionName;
 }
-
 
 //export function logIt(message) {}
 
