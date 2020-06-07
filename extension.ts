@@ -25,7 +25,6 @@ import {getHistoricalCommits} from "./lib/repo/KpmRepoManager";
 import {createCommands} from "./lib/command-helper";
 import {KpmManager} from "./lib/managers/KpmManager";
 import {SummaryManager} from "./lib/managers/SummaryManager";
-import {WallClockManager} from "./lib/managers/WallClockManager";
 import {EventManager} from "./lib/managers/EventManager";
 import {
   getLastSavedKeystrokesStats,
@@ -147,8 +146,6 @@ export async function intializePlugin(
     "EditorActivate",
   );
 
-  // initialize the wall clock timer
-  WallClockManager.getInstance();
 
   // load the last payload into memory
   getLastSavedKeystrokesStats();

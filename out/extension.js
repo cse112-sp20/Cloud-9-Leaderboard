@@ -28,7 +28,6 @@ const KpmRepoManager_1 = require("./lib/repo/KpmRepoManager");
 const command_helper_1 = require("./lib/command-helper");
 const KpmManager_1 = require("./lib/managers/KpmManager");
 const SummaryManager_1 = require("./lib/managers/SummaryManager");
-const WallClockManager_1 = require("./lib/managers/WallClockManager");
 const EventManager_1 = require("./lib/managers/EventManager");
 const FileManager_1 = require("./lib/managers/FileManager");
 const Authentication_1 = require("./src/util/Authentication");
@@ -109,8 +108,6 @@ function intializePlugin(ctx, createdAnonUser) {
     return __awaiter(this, void 0, void 0, function* () {
         // store the activate event
         EventManager_1.EventManager.getInstance().createCodeTimeEvent("resource", "load", "EditorActivate");
-        // initialize the wall clock timer
-        WallClockManager_1.WallClockManager.getInstance();
         // load the last payload into memory
         FileManager_1.getLastSavedKeystrokesStats();
         const serverIsOnline = yield HttpClient_1.serverIsAvailable();

@@ -29,11 +29,9 @@ import {
 import KeystrokeStats from "../model/KeystrokeStats";
 import {SummaryManager} from "./SummaryManager";
 import {sendBatchPayload, getLastSavedKeystrokesStats} from "./FileManager";
-import {WallClockManager} from "./WallClockManager";
 import {WorkspaceFolder} from "vscode";
 import Project from "../model/Project";
 import {updateStats} from "../../src/util/FireStore";
-import {processMetric} from "../../src/util/Metric";
 
 const os = require("os");
 const fs = require("fs");
