@@ -15,7 +15,8 @@ describe('Cloud 9 UI Tests', () => {
         const control = await activityBar.getViewControl('Cloud9');
 
         await control.openView();
-
+        pauseForSeconds(1);
+        
         //Click sign in on tree view
         const sidebar = new SideBarView();
         const menuInfo = await sidebar.getContent().getSection('Menu') as CustomTreeSection;
@@ -49,6 +50,7 @@ describe('Cloud 9 UI Tests', () => {
 
         //View global leaderboard
         console.log('5');
+        pauseForSeconds(1);
         await (await menuInfo.findItem('🌐 Leaderboard')).click();
         console.log('6');
         const globalStats = await new EditorView().openEditor('leaderboard.txt');

@@ -23,6 +23,7 @@ describe('Cloud 9 UI Tests', () => {
             const activityBar = new vscode_extension_tester_1.ActivityBar();
             const control = yield activityBar.getViewControl('Cloud9');
             yield control.openView();
+            pauseForSeconds(1);
             //Click sign in on tree view
             const sidebar = new vscode_extension_tester_1.SideBarView();
             const menuInfo = yield sidebar.getContent().getSection('Menu');
@@ -51,6 +52,7 @@ describe('Cloud 9 UI Tests', () => {
             assert(personalStatsTitle, "personal_statistics.txt");
             //View global leaderboard
             console.log('5');
+            pauseForSeconds(1);
             yield (yield menuInfo.findItem('🌐 Leaderboard')).click();
             console.log('6');
             const globalStats = yield new vscode_extension_tester_1.EditorView().openEditor('leaderboard.txt');
@@ -69,6 +71,14 @@ describe('Cloud 9 UI Tests', () => {
             console.log('11');
             const childItem = yield getTeamInfo.findChildItem("TeamName");
             assert.equal((yield (yield (yield teamInfo.findItem('Get Team Info')).findChildItem("TeamName"))) == undefined, false);
+            console.log(12);
+            const dailyMetric = yield sidebar.getContent().getSection('Daily Metric');
+            console.log(13);
+            // Check that daily metric
+            assert.equal((yield (yield (yield dailyMetric.findItem('Keystrokes')).findChildItem("🚀 Today: 0 (No data yet)"))) == undefined, true);
+            assert.equal((yield (yield (yield dailyMetric.findItem('Lines Changed')).findChildItem("🚀 Today: 0 (No data yet)"))) == undefined, true);
+            assert.equal((yield (yield (yield dailyMetric.findItem('Time Interval')).findChildItem("🚀 Today: 0 (No data yet)"))) == undefined, true);
+            assert.equal((yield (yield (yield dailyMetric.findItem('Total Points')).findChildItem("🚀 Today: 0 (No data yet)"))) == undefined, true);
         });
     });
 });
