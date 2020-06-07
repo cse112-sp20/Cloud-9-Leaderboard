@@ -37,7 +37,6 @@ import {
   authenticateUser,
 } from "./src/util/Authentication";
 
-let statusBarItem = null;
 let _ls = null;
 
 let fifteen_minute_interval = null;

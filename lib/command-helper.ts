@@ -1,7 +1,6 @@
 import {commands, Disposable, workspace, window, TreeView} from "vscode";
 import {
   updatePreferences,
-  sendTeamInvite,
 } from "./DataController";
 import {
   TeamDataProvider,

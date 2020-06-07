@@ -16,8 +16,6 @@ import {
   getVersion,
   getHostname,
   getWorkspaceName,
-  buildLoginUrl,
-  launchWebUrl,
   logIt,
   getPluginId,
   getCommitSummaryFile,
@@ -66,34 +64,6 @@ export function getToggleFileEventLoggingState() {
   return toggleFileEventLogging;
 }
 
-export async function getRegisteredTeamMembers(
-  identifier,
-): Promise<TeamMember[]> {
-  const encodedIdentifier = encodeURIComponent(identifier);
-  const api = `/repo/contributors?identifier=${encodedIdentifier}`;
-
-  let teamMembers: TeamMember[] = [];
-  // returns: [{email, name, identifier},..]
-  const resp = await softwareGet(api, getItem("jwt"));
-  if (isResponseOk(resp)) {
-    teamMembers = resp.data;
-  }
-  return teamMembers;
-}
-
-export async function sendTeamInvite(identifier, emails) {
-  const payload = {
-    identifier,
-    emails,
-  };
-  const api = `/users/invite`;
-  const resp = await softwarePost(api, payload, getItem("jwt"));
-  if (isResponseOk(resp)) {
-    window.showInformationMessage("Sent team invitation");
-  } else {
-    window.showErrorMessage(resp.data.message);
-  }
-}
 
 /**
  * get the app jwt
@@ -304,65 +274,8 @@ export async function updatePreferences() {
   }
 }
 
-export function refetchUserStatusLazily(
-  tryCountUntilFoundUser = 50,
-  interval = 10000,
-) {
-  if (userFetchTimeout) {
-    return;
-  }
-  userFetchTimeout = setTimeout(() => {
-    userFetchTimeout = null;
-    userStatusFetchHandler(tryCountUntilFoundUser, interval);
-  }, interval);
-}
 
-async function userStatusFetchHandler(tryCountUntilFoundUser, interval) {
-  let serverIsOnline = await serverIsAvailable();
-  let loggedIn: boolean = await isLoggedIn();
-  if (!loggedIn) {
-    // try again if the count is not zero
-    if (tryCountUntilFoundUser > 0) {
-      tryCountUntilFoundUser -= 1;
-      refetchUserStatusLazily(tryCountUntilFoundUser, interval);
-    }
-  } else {
-    sendHeartbeat(`STATE_CHANGE:LOGGED_IN:true`, serverIsOnline);
 
-    const message = "Successfully logged on to Code Time";
-    window.showInformationMessage(message);
-  }
-}
-
-export function refetchSlackConnectStatusLazily(
-  callback,
-  tryCountUntilFound = 40,
-) {
-  if (slackFetchTimeout) {
-    return;
-  }
-  slackFetchTimeout = setTimeout(() => {
-    slackFetchTimeout = null;
-    slackConnectStatusHandler(callback, tryCountUntilFound);
-  }, 10000);
-}
-
-async function slackConnectStatusHandler(callback, tryCountUntilFound) {
-  let serverIsOnline = await serverIsAvailable();
-  let oauth = await getSlackOauth(serverIsOnline);
-  if (!oauth) {
-    // try again if the count is not zero
-    if (tryCountUntilFound > 0) {
-      tryCountUntilFound -= 1;
-      refetchSlackConnectStatusLazily(callback, tryCountUntilFound);
-    }
-  } else {
-    window.showInformationMessage(`Successfully connected to Slack`);
-    if (callback) {
-      callback();
-    }
-  }
-}
 
 export async function sendHeartbeat(reason, serverIsOnline) {
   let jwt = getItem("jwt");
@@ -386,6 +299,7 @@ export async function sendHeartbeat(reason, serverIsOnline) {
     });
   }
 }
+
 
 
 export async function writeCommitSummaryData() {

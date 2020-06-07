@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.writeCodeTimeMetricsDashboard = exports.writeProjectContributorCommitDashboard = exports.writeProjectContributorCommitDashboardFromGitLogs = exports.writeProjectCommitDashboard = exports.writeProjectCommitDashboardByRangeType = exports.writeProjectCommitDashboardByStartEnd = exports.writeDailyReportDashboard = exports.writeCommitSummaryData = exports.sendHeartbeat = exports.refetchSlackConnectStatusLazily = exports.refetchUserStatusLazily = exports.updatePreferences = exports.initializePreferences = exports.getUser = exports.getSlackOauth = exports.isLoggedIn = exports.getUserRegistrationState = exports.getAppJwt = exports.sendTeamInvite = exports.getRegisteredTeamMembers = exports.getToggleFileEventLoggingState = void 0;
+exports.writeCodeTimeMetricsDashboard = exports.writeProjectContributorCommitDashboard = exports.writeProjectContributorCommitDashboardFromGitLogs = exports.writeProjectCommitDashboard = exports.writeProjectCommitDashboardByRangeType = exports.writeProjectCommitDashboardByStartEnd = exports.writeDailyReportDashboard = exports.writeCommitSummaryData = exports.sendHeartbeat = exports.updatePreferences = exports.initializePreferences = exports.getUser = exports.getSlackOauth = exports.isLoggedIn = exports.getUserRegistrationState = exports.getAppJwt = exports.getToggleFileEventLoggingState = void 0;
 const vscode_1 = require("vscode");
 const HttpClient_1 = require("./http/HttpClient");
 const Util_1 = require("./Util");
@@ -31,37 +31,6 @@ function getToggleFileEventLoggingState() {
     return toggleFileEventLogging;
 }
 exports.getToggleFileEventLoggingState = getToggleFileEventLoggingState;
-function getRegisteredTeamMembers(identifier) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const encodedIdentifier = encodeURIComponent(identifier);
-        const api = `/repo/contributors?identifier=${encodedIdentifier}`;
-        let teamMembers = [];
-        // returns: [{email, name, identifier},..]
-        const resp = yield HttpClient_1.softwareGet(api, Util_1.getItem("jwt"));
-        if (HttpClient_1.isResponseOk(resp)) {
-            teamMembers = resp.data;
-        }
-        return teamMembers;
-    });
-}
-exports.getRegisteredTeamMembers = getRegisteredTeamMembers;
-function sendTeamInvite(identifier, emails) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const payload = {
-            identifier,
-            emails,
-        };
-        const api = `/users/invite`;
-        const resp = yield HttpClient_1.softwarePost(api, payload, Util_1.getItem("jwt"));
-        if (HttpClient_1.isResponseOk(resp)) {
-            vscode_1.window.showInformationMessage("Sent team invitation");
-        }
-        else {
-            vscode_1.window.showErrorMessage(resp.data.message);
-        }
-    });
-}
-exports.sendTeamInvite = sendTeamInvite;
 /**
  * get the app jwt
  */
@@ -270,16 +239,6 @@ function updatePreferences() {
     });
 }
 exports.updatePreferences = updatePreferences;
-function refetchUserStatusLazily(tryCountUntilFoundUser = 50, interval = 10000) {
-    if (userFetchTimeout) {
-        return;
-    }
-    userFetchTimeout = setTimeout(() => {
-        userFetchTimeout = null;
-        userStatusFetchHandler(tryCountUntilFoundUser, interval);
-    }, interval);
-}
-exports.refetchUserStatusLazily = refetchUserStatusLazily;
 function userStatusFetchHandler(tryCountUntilFoundUser, interval) {
     return __awaiter(this, void 0, void 0, function* () {
         let serverIsOnline = yield HttpClient_1.serverIsAvailable();
@@ -288,42 +247,13 @@ function userStatusFetchHandler(tryCountUntilFoundUser, interval) {
             // try again if the count is not zero
             if (tryCountUntilFoundUser > 0) {
                 tryCountUntilFoundUser -= 1;
-                refetchUserStatusLazily(tryCountUntilFoundUser, interval);
+                //refetchUserStatusLazily(tryCountUntilFoundUser, interval);
             }
         }
         else {
             sendHeartbeat(`STATE_CHANGE:LOGGED_IN:true`, serverIsOnline);
             const message = "Successfully logged on to Code Time";
             vscode_1.window.showInformationMessage(message);
-        }
-    });
-}
-function refetchSlackConnectStatusLazily(callback, tryCountUntilFound = 40) {
-    if (slackFetchTimeout) {
-        return;
-    }
-    slackFetchTimeout = setTimeout(() => {
-        slackFetchTimeout = null;
-        slackConnectStatusHandler(callback, tryCountUntilFound);
-    }, 10000);
-}
-exports.refetchSlackConnectStatusLazily = refetchSlackConnectStatusLazily;
-function slackConnectStatusHandler(callback, tryCountUntilFound) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let serverIsOnline = yield HttpClient_1.serverIsAvailable();
-        let oauth = yield getSlackOauth(serverIsOnline);
-        if (!oauth) {
-            // try again if the count is not zero
-            if (tryCountUntilFound > 0) {
-                tryCountUntilFound -= 1;
-                refetchSlackConnectStatusLazily(callback, tryCountUntilFound);
-            }
-        }
-        else {
-            vscode_1.window.showInformationMessage(`Successfully connected to Slack`);
-            if (callback) {
-                callback();
-            }
         }
     });
 }

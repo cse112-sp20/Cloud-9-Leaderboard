@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFileDataPayloadsAsJson = exports.getFileDataArray = exports.getFileDataAsJson = exports.cleanJsonString = exports.getFileType = exports.createSpotifyIdFromUri = exports.buildQueryString = exports.getColumnHeaders = exports.getRowLabels = exports.getRightAlignedTableHeader = exports.getTableHeader = exports.getSectionHeader = exports.getDashboardBottomBorder = exports.getDashboardRow = exports.showWarningMessage = exports.showInformationMessage = exports.connectAtlassian = exports.buildLoginUrl = exports.showLoginPrompt = exports.launchLogin = exports.humanizeMinutes = exports.formatNumber = exports.launchWebUrl = exports.wrapExecPromise = exports.getGitEmail = exports.getSongDisplayName = exports.normalizeGithubEmail = exports.deleteFile = exports.randomCode = exports.getNowTimes = exports.isNewDay = exports.getFormattedDay = exports.getOffsetSeconds = exports.nowInSecs = exports.showOfflinePrompt = exports.getSoftwareSessionAsJson = exports.logIt = exports.logEvent = exports.getExtensionName = exports.getExtensionDisplayName = exports.openFileInEditor = exports.displayReadmeIfNotExists = exports.getImagesDir = exports.getLocalREADMEFile = exports.getPluginEventsFile = exports.getSoftwareDataStoreFile = exports.getSoftwareSessionFile = exports.jwtExists = exports.softwareSessionFileExists = exports.getSoftwareDir = exports.getDailyReportSummaryFile = exports.getProjectContributorCodeSummaryFile = exports.getProjectCodeSummaryFile = exports.getSummaryInfoFile = exports.getCommitSummaryFile = exports.getDashboardFile = exports.getOsUsername = exports.getCommandResultList = exports.getCommandResultLine = exports.getOs = exports.getHostname = exports.isMac = exports.isWindows = exports.isLinux = exports.isEmptyObj = exports.isStatusBarTextVisible = exports.toggleStatusBar = exports.handleCodeTimeStatusToggle = exports.showStatus = exports.showLoading = exports.getItem = exports.setItem = exports.validateEmail = exports.getProjectFolder = exports.getWorkspaceFolderByPath = exports.getRootPathForFile = exports.isFileOpen = exports.getNumberOfTextDocumentsOpen = exports.getFirstWorkspaceFolder = exports.getWorkspaceFolders = exports.findFirstActiveDirectoryOrWorkspaceDirectory = exports.getActiveProjectWorkspace = exports.getFileAgeInDays = exports.isGitProject = exports.getSessionFileCreateTime = exports.codeTimeExtInstalled = exports.isCodeTimeMetricsFile = exports.getVersion = exports.getPluginType = exports.getPluginName = exports.getPluginId = exports.getWorkspaceName = exports.MARKER_WIDTH = exports.TABLE_WIDTH = exports.DASHBOARD_LRG_COL_WIDTH = exports.DASHBOARD_COL_WIDTH = exports.DASHBOARD_VALUE_WIDTH = exports.DASHBOARD_LABEL_WIDTH = exports.alpha = void 0;
+exports.getFileDataPayloadsAsJson = exports.getFileDataArray = exports.getFileDataAsJson = exports.cleanJsonString = exports.getFileType = exports.createSpotifyIdFromUri = exports.buildQueryString = exports.getColumnHeaders = exports.getRowLabels = exports.getRightAlignedTableHeader = exports.getTableHeader = exports.getSectionHeader = exports.getDashboardBottomBorder = exports.getDashboardRow = exports.showWarningMessage = exports.showInformationMessage = exports.connectAtlassian = exports.buildLoginUrl = exports.showLoginPrompt = exports.launchLogin = exports.humanizeMinutes = exports.formatNumber = exports.launchWebUrl = exports.wrapExecPromise = exports.getGitEmail = exports.getSongDisplayName = exports.normalizeGithubEmail = exports.deleteFile = exports.randomCode = exports.getNowTimes = exports.isNewDay = exports.getFormattedDay = exports.getOffsetSeconds = exports.nowInSecs = exports.showOfflinePrompt = exports.getSoftwareSessionAsJson = exports.logIt = exports.logEvent = exports.getExtensionName = exports.getExtensionDisplayName = exports.openFileInEditor = exports.displayReadmeIfNotExists = exports.getImagesDir = exports.getLocalREADMEFile = exports.getPluginEventsFile = exports.getSoftwareDataStoreFile = exports.getSoftwareSessionFile = exports.jwtExists = exports.softwareSessionFileExists = exports.getSoftwareDir = exports.getDailyReportSummaryFile = exports.getProjectContributorCodeSummaryFile = exports.getProjectCodeSummaryFile = exports.getSummaryInfoFile = exports.getCommitSummaryFile = exports.getDashboardFile = exports.getOsUsername = exports.getCommandResultList = exports.getCommandResultLine = exports.getOs = exports.getHostname = exports.isMac = exports.isWindows = exports.isLinux = exports.isEmptyObj = exports.isStatusBarTextVisible = exports.toggleStatusBar = exports.getItem = exports.setItem = exports.validateEmail = exports.getProjectFolder = exports.getWorkspaceFolderByPath = exports.getRootPathForFile = exports.isFileOpen = exports.getNumberOfTextDocumentsOpen = exports.getFirstWorkspaceFolder = exports.getWorkspaceFolders = exports.findFirstActiveDirectoryOrWorkspaceDirectory = exports.getActiveProjectWorkspace = exports.getFileAgeInDays = exports.isGitProject = exports.getSessionFileCreateTime = exports.codeTimeExtInstalled = exports.isCodeTimeMetricsFile = exports.getVersion = exports.getPluginType = exports.getPluginName = exports.getPluginId = exports.getWorkspaceName = exports.MARKER_WIDTH = exports.TABLE_WIDTH = exports.DASHBOARD_LRG_COL_WIDTH = exports.DASHBOARD_COL_WIDTH = exports.DASHBOARD_VALUE_WIDTH = exports.DASHBOARD_LABEL_WIDTH = exports.alpha = void 0;
 const vscode_1 = require("vscode");
 const Constants_1 = require("./Constants");
 const DataController_1 = require("./DataController");
@@ -266,22 +266,6 @@ function getItem(key) {
     return val;
 }
 exports.getItem = getItem;
-function showLoading() {
-    let loadingMsg = "⏳ code time metrics";
-    updateStatusBar(loadingMsg, "");
-}
-exports.showLoading = showLoading;
-function showStatus(fullMsg, tooltip) {
-    if (!tooltip) {
-        tooltip = "Active code time today. Click to see more from Code Time.";
-    }
-    updateStatusBar(fullMsg, tooltip);
-}
-exports.showStatus = showStatus;
-function handleCodeTimeStatusToggle() {
-    //toggleStatusBar();
-}
-exports.handleCodeTimeStatusToggle = handleCodeTimeStatusToggle;
 function updateStatusBar(msg, tooltip) {
     let loggedInName = getItem("name");
     let userInfo = "";
@@ -878,7 +862,7 @@ function launchLogin(loginType = "software") {
         setItem("authType", loginType);
         launchWebUrl(loginUrl);
         // use the defaults
-        DataController_1.refetchUserStatusLazily();
+        //refetchUserStatusLazily();
     });
 }
 exports.launchLogin = launchLogin;
@@ -895,7 +879,7 @@ function showLoginPrompt(serverIsOnline) {
         if (selection === Constants_1.LOGIN_LABEL) {
             let loginUrl = yield buildLoginUrl(serverIsOnline);
             launchWebUrl(loginUrl);
-            DataController_1.refetchUserStatusLazily();
+            //refetchUserStatusLazily();
             eventName = "click";
             eventType = "mouse";
         }

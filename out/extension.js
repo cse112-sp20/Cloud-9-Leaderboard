@@ -32,7 +32,6 @@ const WallClockManager_1 = require("./lib/managers/WallClockManager");
 const EventManager_1 = require("./lib/managers/EventManager");
 const FileManager_1 = require("./lib/managers/FileManager");
 const Authentication_1 = require("./src/util/Authentication");
-let statusBarItem = null;
 let _ls = null;
 let fifteen_minute_interval = null;
 let twenty_minute_interval = null;

@@ -16,7 +16,6 @@ import {
   api_endpoint,
 } from "./Constants";
 import {
-  refetchUserStatusLazily,
   getToggleFileEventLoggingState,
   getAppJwt,
 } from "./DataController";
@@ -285,21 +284,6 @@ export function getItem(key) {
   return val;
 }
 
-export function showLoading() {
-  let loadingMsg = "⏳ code time metrics";
-  updateStatusBar(loadingMsg, "");
-}
-
-export function showStatus(fullMsg, tooltip) {
-  if (!tooltip) {
-    tooltip = "Active code time today. Click to see more from Code Time.";
-  }
-  updateStatusBar(fullMsg, tooltip);
-}
-
-export function handleCodeTimeStatusToggle() {
-  //toggleStatusBar();
-}
 
 function updateStatusBar(msg, tooltip) {
   let loggedInName = getItem("name");
@@ -879,7 +863,7 @@ export async function launchLogin(loginType = "software") {
   setItem("authType", loginType);
   launchWebUrl(loginUrl);
   // use the defaults
-  refetchUserStatusLazily();
+  //refetchUserStatusLazily();
 }
 
 /**
@@ -900,7 +884,7 @@ export async function showLoginPrompt(serverIsOnline) {
   if (selection === LOGIN_LABEL) {
     let loginUrl = await buildLoginUrl(serverIsOnline);
     launchWebUrl(loginUrl);
-    refetchUserStatusLazily();
+    //refetchUserStatusLazily();
     eventName = "click";
     eventType = "mouse";
   } else {

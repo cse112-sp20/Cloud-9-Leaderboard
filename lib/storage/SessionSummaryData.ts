@@ -5,7 +5,6 @@ import {
   logIt,
   getNowTimes,
   getItem,
-  showStatus,
   getFileDataAsJson,
   humanizeMinutes,
 } from "../Util";
@@ -158,5 +157,4 @@ export function updateStatusBarWithSummaryData() {
   const minutesStr = humanizeMinutes(codeTimeSummary.activeCodeTimeMinutes);
 
   const msg = `${inFlowIcon} ${minutesStr}`;
-  showStatus(msg, null);
 }

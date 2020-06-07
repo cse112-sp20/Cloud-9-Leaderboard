@@ -147,7 +147,6 @@ function updateStatusBarWithSummaryData() {
         : "$(clock)";
     const minutesStr = Util_1.humanizeMinutes(codeTimeSummary.activeCodeTimeMinutes);
     const msg = `${inFlowIcon} ${minutesStr}`;
-    Util_1.showStatus(msg, null);
 }
 exports.updateStatusBarWithSummaryData = updateStatusBarWithSummaryData;
 //# sourceMappingURL=SessionSummaryData.js.map
