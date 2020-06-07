@@ -38,7 +38,6 @@ import {
   findFirstActiveDirectoryOrWorkspaceDirectory,
   getDailyReportSummaryFile,
 } from "./Util";
-import {buildWebDashboardUrl} from "./menu/MenuManager";
 import {DEFAULT_SESSION_THRESHOLD_SECONDS} from "./Constants";
 import {SessionSummary, CommitChangeStats} from "./model/models";
 import {getSessionSummaryData} from "./storage/SessionSummaryData";
@@ -388,23 +387,6 @@ export async function sendHeartbeat(reason, serverIsOnline) {
   }
 }
 
-export async function handleKpmClickedEvent() {
-  let serverIsOnline = await serverIsAvailable();
-  // {loggedIn: true|false}
-  let loggedIn: boolean = await isLoggedIn();
-  let webUrl = await buildWebDashboardUrl();
-
-  if (!loggedIn) {
-    webUrl = await buildLoginUrl(serverIsOnline);
-    refetchUserStatusLazily();
-  } else {
-    // add the token=jwt
-    const jwt = getItem("jwt");
-    const encodedJwt = encodeURIComponent(jwt);
-    webUrl = `${webUrl}?token=${encodedJwt}`;
-  }
-  launchWebUrl(webUrl);
-}
 
 export async function writeCommitSummaryData() {
   const filePath = getCommitSummaryFile();

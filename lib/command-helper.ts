@@ -1,6 +1,5 @@
 import {commands, Disposable, workspace, window, TreeView} from "vscode";
 import {
-  handleKpmClickedEvent,
   updatePreferences,
   sendTeamInvite,
 } from "./DataController";
