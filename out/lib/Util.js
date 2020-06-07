@@ -9,11 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFileDataPayloadsAsJson = exports.getFileDataArray = exports.getFileDataAsJson = exports.cleanJsonString = exports.getFileType = exports.createSpotifyIdFromUri = exports.buildQueryString = exports.getColumnHeaders = exports.getRowLabels = exports.getRightAlignedTableHeader = exports.getTableHeader = exports.getSectionHeader = exports.getDashboardBottomBorder = exports.getDashboardRow = exports.showWarningMessage = exports.showInformationMessage = exports.connectAtlassian = exports.buildLoginUrl = exports.showLoginPrompt = exports.launchLogin = exports.humanizeMinutes = exports.formatNumber = exports.launchWebUrl = exports.wrapExecPromise = exports.getGitEmail = exports.getSongDisplayName = exports.normalizeGithubEmail = exports.deleteFile = exports.randomCode = exports.getNowTimes = exports.isNewDay = exports.getFormattedDay = exports.getOffsetSeconds = exports.nowInSecs = exports.showOfflinePrompt = exports.getSoftwareSessionAsJson = exports.getExtensionName = exports.getExtensionDisplayName = exports.openFileInEditor = exports.displayReadmeIfNotExists = exports.getImagesDir = exports.getLocalREADMEFile = exports.getPluginEventsFile = exports.getSoftwareDataStoreFile = exports.getSoftwareSessionFile = exports.jwtExists = exports.softwareSessionFileExists = exports.getSoftwareDir = exports.getDailyReportSummaryFile = exports.getProjectContributorCodeSummaryFile = exports.getProjectCodeSummaryFile = exports.getSummaryInfoFile = exports.getCommitSummaryFile = exports.getDashboardFile = exports.getOsUsername = exports.getCommandResultList = exports.getCommandResultLine = exports.getOs = exports.getHostname = exports.isMac = exports.isWindows = exports.isLinux = exports.isEmptyObj = exports.isStatusBarTextVisible = exports.toggleStatusBar = exports.getItem = exports.setItem = exports.validateEmail = exports.getProjectFolder = exports.getWorkspaceFolderByPath = exports.getRootPathForFile = exports.isFileOpen = exports.getNumberOfTextDocumentsOpen = exports.getFirstWorkspaceFolder = exports.getWorkspaceFolders = exports.findFirstActiveDirectoryOrWorkspaceDirectory = exports.getActiveProjectWorkspace = exports.getFileAgeInDays = exports.isGitProject = exports.getSessionFileCreateTime = exports.codeTimeExtInstalled = exports.isCodeTimeMetricsFile = exports.getVersion = exports.getPluginType = exports.getPluginName = exports.getPluginId = exports.getWorkspaceName = exports.MARKER_WIDTH = exports.TABLE_WIDTH = exports.DASHBOARD_LRG_COL_WIDTH = exports.DASHBOARD_COL_WIDTH = exports.DASHBOARD_VALUE_WIDTH = exports.DASHBOARD_LABEL_WIDTH = exports.alpha = void 0;
+exports.getFileDataPayloadsAsJson = exports.getFileDataArray = exports.getFileDataAsJson = exports.cleanJsonString = exports.getFileType = exports.createSpotifyIdFromUri = exports.buildQueryString = exports.getColumnHeaders = exports.getRowLabels = exports.getRightAlignedTableHeader = exports.getTableHeader = exports.getSectionHeader = exports.getDashboardBottomBorder = exports.getDashboardRow = exports.showWarningMessage = exports.showInformationMessage = exports.connectAtlassian = exports.buildLoginUrl = exports.showLoginPrompt = exports.launchLogin = exports.humanizeMinutes = exports.formatNumber = exports.launchWebUrl = exports.wrapExecPromise = exports.getGitEmail = exports.getSongDisplayName = exports.normalizeGithubEmail = exports.deleteFile = exports.randomCode = exports.getNowTimes = exports.isNewDay = exports.getFormattedDay = exports.getOffsetSeconds = exports.nowInSecs = exports.showOfflinePrompt = exports.getSoftwareSessionAsJson = exports.getExtensionName = exports.getExtensionDisplayName = exports.openFileInEditor = exports.getPluginEventsFile = exports.getSoftwareDataStoreFile = exports.getSoftwareSessionFile = exports.getSoftwareDir = exports.getOsUsername = exports.getCommandResultList = exports.getCommandResultLine = exports.getOs = exports.getHostname = exports.isMac = exports.isWindows = exports.isLinux = exports.isEmptyObj = exports.getItem = exports.setItem = exports.getProjectFolder = exports.getRootPathForFile = exports.getNumberOfTextDocumentsOpen = exports.getFirstWorkspaceFolder = exports.getWorkspaceFolders = exports.findFirstActiveDirectoryOrWorkspaceDirectory = exports.getActiveProjectWorkspace = exports.getFileAgeInDays = exports.isGitProject = exports.getSessionFileCreateTime = exports.getVersion = exports.getPluginType = exports.getPluginId = exports.getWorkspaceName = exports.MARKER_WIDTH = exports.TABLE_WIDTH = exports.DASHBOARD_LRG_COL_WIDTH = exports.DASHBOARD_COL_WIDTH = exports.DASHBOARD_VALUE_WIDTH = exports.DASHBOARD_LABEL_WIDTH = exports.alpha = void 0;
 const vscode_1 = require("vscode");
 const Constants_1 = require("./Constants");
 const DataController_1 = require("./DataController");
-const SessionSummaryData_1 = require("./storage/SessionSummaryData");
 const EventManager_1 = require("./managers/EventManager");
 const HttpClient_1 = require("./http/HttpClient");
 const OnboardManager_1 = require("./user/OnboardManager");
@@ -34,7 +33,6 @@ exports.MARKER_WIDTH = 4;
 const NUMBER_IN_EMAIL_REGEX = new RegExp("^\\d+\\+");
 const dayFormat = "YYYY-MM-DD";
 const dayTimeFormat = "LLLL";
-let showStatusBarText = true;
 let extensionName = null;
 let extensionDisplayName = null; // Code Time or Music Time
 let workspace_name = null;
@@ -49,10 +47,6 @@ function getPluginId() {
     return Constants_1.CODE_TIME_PLUGIN_ID;
 }
 exports.getPluginId = getPluginId;
-function getPluginName() {
-    return Constants_1.CODE_TIME_EXT_ID;
-}
-exports.getPluginName = getPluginName;
 function getPluginType() {
     return Constants_1.CODE_TIME_TYPE;
 }
@@ -62,19 +56,6 @@ function getVersion() {
     return extension.packageJSON.version;
 }
 exports.getVersion = getVersion;
-function isCodeTimeMetricsFile(fileName) {
-    fileName = fileName || "";
-    if (fileName.includes(".software") && fileName.includes("CodeTime")) {
-        return true;
-    }
-    return false;
-}
-exports.isCodeTimeMetricsFile = isCodeTimeMetricsFile;
-function codeTimeExtInstalled() {
-    const codeTimeExt = vscode_1.extensions.getExtension(Constants_1.CODE_TIME_EXT_ID);
-    return codeTimeExt ? true : false;
-}
-exports.codeTimeExtInstalled = codeTimeExtInstalled;
 function getSessionFileCreateTime() {
     let sessionFile = getSoftwareSessionFile();
     const stat = fs.statSync(sessionFile);
@@ -181,19 +162,6 @@ function getNumberOfTextDocumentsOpen() {
     return vscode_1.workspace.textDocuments ? vscode_1.workspace.textDocuments.length : 0;
 }
 exports.getNumberOfTextDocumentsOpen = getNumberOfTextDocumentsOpen;
-function isFileOpen(fileName) {
-    if (getNumberOfTextDocumentsOpen() > 0) {
-        // check if the .software/CodeTime has already been opened
-        for (let i = 0; i < vscode_1.workspace.textDocuments.length; i++) {
-            let docObj = vscode_1.workspace.textDocuments[i];
-            if (docObj.fileName && docObj.fileName === fileName) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-exports.isFileOpen = isFileOpen;
 function getRootPathForFile(fileName) {
     let folder = getProjectFolder(fileName);
     if (folder) {
@@ -202,19 +170,6 @@ function getRootPathForFile(fileName) {
     return null;
 }
 exports.getRootPathForFile = getRootPathForFile;
-function getWorkspaceFolderByPath(path) {
-    let liveshareFolder = null;
-    if (vscode_1.workspace.workspaceFolders && vscode_1.workspace.workspaceFolders.length > 0) {
-        for (let i = 0; i < vscode_1.workspace.workspaceFolders.length; i++) {
-            let workspaceFolder = vscode_1.workspace.workspaceFolders[i];
-            if (path.includes(workspaceFolder.uri.fsPath)) {
-                return workspaceFolder;
-            }
-        }
-    }
-    return null;
-}
-exports.getWorkspaceFolderByPath = getWorkspaceFolderByPath;
 function getProjectFolder(fileName) {
     let liveshareFolder = null;
     if (vscode_1.workspace.workspaceFolders && vscode_1.workspace.workspaceFolders.length > 0) {
@@ -242,11 +197,6 @@ function getProjectFolder(fileName) {
     return null;
 }
 exports.getProjectFolder = getProjectFolder;
-function validateEmail(email) {
-    let re = /\S+@\S+\.\S+/;
-    return re.test(email);
-}
-exports.validateEmail = validateEmail;
 function setItem(key, value) {
     // now save it on file
     const jsonObj = getSoftwareSessionAsJson();
@@ -266,29 +216,6 @@ function getItem(key) {
     return val;
 }
 exports.getItem = getItem;
-function updateStatusBar(msg, tooltip) {
-    let loggedInName = getItem("name");
-    let userInfo = "";
-    if (loggedInName && loggedInName !== "") {
-        userInfo = ` Connected as ${loggedInName}`;
-    }
-    if (!tooltip) {
-        tooltip = `Click to see more from Code Time`;
-    }
-    if (!showStatusBarText) {
-        // add the message to the tooltip
-        tooltip = msg + " | " + tooltip;
-    }
-}
-function toggleStatusBar() {
-    showStatusBarText = !showStatusBarText;
-    SessionSummaryData_1.updateStatusBarWithSummaryData();
-}
-exports.toggleStatusBar = toggleStatusBar;
-function isStatusBarTextVisible() {
-    return showStatusBarText;
-}
-exports.isStatusBarTextVisible = isStatusBarTextVisible;
 function isEmptyObj(obj) {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
@@ -375,72 +302,6 @@ function getOsUsername() {
     });
 }
 exports.getOsUsername = getOsUsername;
-function getDashboardFile() {
-    let file = getSoftwareDir();
-    if (isWindows()) {
-        file += "\\CodeTime.txt";
-    }
-    else {
-        file += "/CodeTime.txt";
-    }
-    return file;
-}
-exports.getDashboardFile = getDashboardFile;
-function getCommitSummaryFile() {
-    let file = getSoftwareDir();
-    if (isWindows()) {
-        file += "\\CommitSummary.txt";
-    }
-    else {
-        file += "/CommitSummary.txt";
-    }
-    return file;
-}
-exports.getCommitSummaryFile = getCommitSummaryFile;
-function getSummaryInfoFile() {
-    let file = getSoftwareDir();
-    if (isWindows()) {
-        file += "\\SummaryInfo.txt";
-    }
-    else {
-        file += "/SummaryInfo.txt";
-    }
-    return file;
-}
-exports.getSummaryInfoFile = getSummaryInfoFile;
-function getProjectCodeSummaryFile() {
-    let file = getSoftwareDir();
-    if (isWindows()) {
-        file += "\\ProjectCodeSummary.txt";
-    }
-    else {
-        file += "/ProjectCodeSummary.txt";
-    }
-    return file;
-}
-exports.getProjectCodeSummaryFile = getProjectCodeSummaryFile;
-function getProjectContributorCodeSummaryFile() {
-    let file = getSoftwareDir();
-    if (isWindows()) {
-        file += "\\ProjectContributorCodeSummary.txt";
-    }
-    else {
-        file += "/ProjectContributorCodeSummary.txt";
-    }
-    return file;
-}
-exports.getProjectContributorCodeSummaryFile = getProjectContributorCodeSummaryFile;
-function getDailyReportSummaryFile() {
-    let file = getSoftwareDir();
-    if (isWindows()) {
-        file += "\\DailyReportSummary.txt";
-    }
-    else {
-        file += "/DailyReportSummary.txt";
-    }
-    return file;
-}
-exports.getDailyReportSummaryFile = getDailyReportSummaryFile;
 function getSoftwareDir(autoCreate = true) {
     const homedir = os.homedir();
     let softwareDataDir = homedir;
@@ -456,19 +317,6 @@ function getSoftwareDir(autoCreate = true) {
     return softwareDataDir;
 }
 exports.getSoftwareDir = getSoftwareDir;
-function softwareSessionFileExists() {
-    // don't auto create the file
-    const file = getSoftwareSessionFile();
-    // check if it exists
-    const sessionFileExists = fs.existsSync(file);
-    return sessionFileExists;
-}
-exports.softwareSessionFileExists = softwareSessionFileExists;
-function jwtExists() {
-    let jwt = getItem("jwt");
-    return !jwt ? false : true;
-}
-exports.jwtExists = jwtExists;
 function getSoftwareSessionFile() {
     let file = getSoftwareDir();
     if (isWindows()) {
@@ -502,37 +350,6 @@ function getPluginEventsFile() {
     return file;
 }
 exports.getPluginEventsFile = getPluginEventsFile;
-function getLocalREADMEFile() {
-    let file = __dirname;
-    if (isWindows()) {
-        file += "\\README.md";
-    }
-    else {
-        file += "/README.md";
-    }
-    return file;
-}
-exports.getLocalREADMEFile = getLocalREADMEFile;
-function getImagesDir() {
-    let dir = __dirname;
-    if (isWindows()) {
-        dir += "\\images";
-    }
-    else {
-        dir += "/images";
-    }
-    return dir;
-}
-exports.getImagesDir = getImagesDir;
-function displayReadmeIfNotExists(override = false) {
-    const displayedReadme = getItem("vscode_CtReadme");
-    if (!displayedReadme || override) {
-        const readmeUri = vscode_1.Uri.file(getLocalREADMEFile());
-        vscode_1.commands.executeCommand("markdown.showPreview", readmeUri, vscode_1.ViewColumn.One);
-        setItem("vscode_CtReadme", true);
-    }
-}
-exports.displayReadmeIfNotExists = displayReadmeIfNotExists;
 function openFileInEditor(file) {
     vscode_1.workspace.openTextDocument(file).then((doc) => {
         // Show open document and set focus

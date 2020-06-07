@@ -14,8 +14,6 @@ import {onboardInit} from "./lib/user/OnboardManager";
 import {
   nowInSecs,
   getOffsetSeconds,
-  getVersion,
-  getPluginName,
   getItem,
   setItem,
   getWorkspaceName,
