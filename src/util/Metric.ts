@@ -7,9 +7,6 @@
  * @author AuthorName.
  */
 
-import {window} from "vscode";
-import {stat} from "fs";
-
 /*
  * Function for extract codetime payload for leaderboard metric
  */

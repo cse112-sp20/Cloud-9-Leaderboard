@@ -28,7 +28,6 @@ import {
   AUTH_ERR_CODE_USER_NOT_FOUND,
   AUTH_ERR_CODE_INVALID_EMAIL,
   GLOBAL_STATE_USER_TEAM_MEMBERS,
-  FIELD_ID_TEAM_LEAD_USER_ID,
 } from "./Constants";
 import {constructDailyMetricData} from "./DailyMetricDataProvider";
 

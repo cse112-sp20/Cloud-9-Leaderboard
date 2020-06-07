@@ -1,0 +1,3 @@
+[2020-06-06 21:22:18.948] [sharedprocess] [info] main {"machineId":"2085179db7695421fbe71d1bdc0e39ac8dd8e41db57509c9fb68fcb7798d24e2","windowId":2}
+[2020-06-06 21:22:19.047] [sharedprocess] [error] [File Watcher (node.js)] Error: ENOENT: no such file or directory, stat 'c:\Users\garza\Cloud-9-Leaderboard\test-resources\settings\User\snippets'
+[2020-06-06 21:22:21.165] [sharedprocess] [info] Installing extension: cse112.cloud9

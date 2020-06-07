@@ -114,10 +114,6 @@ suite('firestore.ts', () => {
         var spy = sinon.spy(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc('test'), 'set');
         yield FireStore_1.addNewUserDocToDb('testEmail', 'testPassword').then(() => {
             chai_1.expect(spy.calledOnce);
-            /*expect(spy.args[0]).to.equal({
-              name: generateRandomName(),
-              ...DEFAULT_USER_DOC_TOP,
-            })*/
         });
     }));
     test('create new user', () => __awaiter(void 0, void 0, void 0, function* () {

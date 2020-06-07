@@ -5,5 +5,18 @@
         "files2": []
     },
     "theme": "vs-dark",
-    "themeBackground": "#1e1e1e"
+    "themeBackground": "#1e1e1e",
+    "windowsState": {
+        "lastActiveWindow": {
+            "backupPath": "c:\\Users\\garza\\Cloud-9-Leaderboard\\test-resources\\settings\\Backups\\1591503735767",
+            "uiState": {
+                "mode": 1,
+                "x": 3228,
+                "y": 456,
+                "width": 1024,
+                "height": 768
+            }
+        },
+        "openedWindows": []
+    }
 }
