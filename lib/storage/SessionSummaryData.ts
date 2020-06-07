@@ -2,7 +2,6 @@ import {SessionSummary, KeystrokeAggregate} from "../model/models";
 import {
   isWindows,
   getSoftwareDir,
-  logIt,
   getNowTimes,
   getItem,
   getFileDataAsJson,
@@ -78,8 +77,6 @@ export function saveSessionSummaryToDisk(sessionSummaryData) {
     // JSON.stringify(data, replacer, number of spaces)
     const content = JSON.stringify(sessionSummaryData, null, 4);
     fs.writeFileSync(file, content, (err) => {
-      if (err)
-        logIt(`Deployer: Error writing session summary data: ${err.message}`);
     });
   } catch (e) {
     //

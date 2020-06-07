@@ -1,6 +1,5 @@
 import {
   getSoftwareDataStoreFile,
-  logIt,
   getNowTimes,
   setItem,
   isNewDay,
@@ -204,11 +203,9 @@ export async function processPayload(payload: KeystrokeStats, sendNow = false) {
   if (sendNow) {
     // send the payload now (only called when getting installed)
     sendBatchPayload("/data/batch", [payload]);
-    logIt(`sending kpm metrics`);
   } else {
     // store to send the batch later
     storePayload(payload, sessionMinutes);
-    logIt(`storing kpm metrics`);
   }
 
   // Update the latestPayloadTimestampEndUtc. It's used to determine session time and elapsed_seconds
@@ -235,10 +232,7 @@ export async function storePayload(
     getSoftwareDataStoreFile(),
     JSON.stringify(payload) + os.EOL,
     (err) => {
-      if (err)
-        logIt(
-          `Error appending to the Software data store file: ${err.message}`,
-        );
+        
     },
   );
 

@@ -25,7 +25,6 @@ class EventManager {
     storeEvent(event) {
         fs.appendFile(Util_1.getPluginEventsFile(), JSON.stringify(event) + os.EOL, (err) => {
             if (err) {
-                Util_1.logIt(`Error appending to the events data file: ${err.message}`);
             }
         });
     }

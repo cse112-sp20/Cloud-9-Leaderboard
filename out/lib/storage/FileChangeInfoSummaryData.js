@@ -43,8 +43,6 @@ function saveFileChangeInfoToDisk(fileChangeInfoData) {
         try {
             const content = JSON.stringify(fileChangeInfoData, null, 4);
             fs.writeFileSync(file, content, (err) => {
-                if (err)
-                    Util_1.logIt(`Deployer: Error writing session summary data: ${err.message}`);
             });
             // update the cache
             if (fileChangeInfoData) {

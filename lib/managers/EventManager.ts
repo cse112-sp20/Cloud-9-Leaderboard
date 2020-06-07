@@ -1,5 +1,5 @@
 import {CodeTimeEvent} from "../model/models";
-import {logIt, getPluginEventsFile, getNowTimes, getHostname} from "../Util";
+import { getPluginEventsFile, getNowTimes, getHostname} from "../Util";
 
 const fs = require("fs");
 const os = require("os");
@@ -23,7 +23,6 @@ export class EventManager {
       JSON.stringify(event) + os.EOL,
       (err) => {
         if (err) {
-          logIt(`Error appending to the events data file: ${err.message}`);
         }
       },
     );

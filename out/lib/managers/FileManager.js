@@ -69,7 +69,6 @@ function batchSendArrayData(api, file) {
             }
         }
         catch (e) {
-            Util_1.logIt(`Error batch sending payloads: ${e.message}`);
         }
     });
 }
@@ -87,7 +86,6 @@ function batchSendData(api, file) {
             }
         }
         catch (e) {
-            Util_1.logIt(`Error batch sending payloads: ${e.message}`);
         }
     });
 }
@@ -108,7 +106,6 @@ function getLastSavedKeystrokesStats() {
             }
         }
         catch (e) {
-            Util_1.logIt(`Error fetching last payload: ${e.message}`);
         }
         // returns one in memory if not found in file
         return latestPayload;
@@ -153,7 +150,6 @@ function sendBatchPayload(api, batch) {
     // console.log("SEND BATCH LOOK HERE");
     // console.log(batch);
     return HttpClient_1.softwarePost(api, batch, Util_1.getItem("jwt")).catch((e) => {
-        Util_1.logIt(`Unable to send plugin data batch, error: ${e.message}`);
     });
 }
 exports.sendBatchPayload = sendBatchPayload;
@@ -173,8 +169,6 @@ function storeCurrentPayload(payload) {
         try {
             const content = JSON.stringify(payload, null, 4);
             fs.writeFileSync(this.getCurrentPayloadFile(), content, (err) => {
-                if (err)
-                    Util_1.logIt(`Deployer: Error writing time data: ${err.message}`);
             });
         }
         catch (e) {

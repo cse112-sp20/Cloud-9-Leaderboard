@@ -1,7 +1,6 @@
 import {
   getSoftwareDir,
   isWindows,
-  logIt,
   getFileDataArray,
   getNowTimes,
   getActiveProjectWorkspace,
@@ -57,7 +56,6 @@ export async function clearTimeDataSummary() {
   try {
     const content = JSON.stringify(payloads, null, 4);
     fs.writeFileSync(file, content, (err) => {
-      if (err) logIt(`Deployer: Error writing time data: ${err.message}`);
     });
   } catch (e) {
     //
@@ -282,7 +280,6 @@ function saveTimeDataSummaryToDisk(data: TimeData) {
   try {
     const content = JSON.stringify(payloads, null, 4);
     fs.writeFileSync(file, content, (err) => {
-      if (err) logIt(`Deployer: Error writing time data: ${err.message}`);
     });
   } catch (e) {
     //

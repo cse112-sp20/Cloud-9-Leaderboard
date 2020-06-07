@@ -107,7 +107,6 @@ function getRandomArbitrary(min, max) {
 }
 function intializePlugin(ctx, createdAnonUser) {
     return __awaiter(this, void 0, void 0, function* () {
-        Util_1.logIt(`Loaded ${Util_1.getPluginName()} v${Util_1.getVersion()}`);
         // store the activate event
         EventManager_1.EventManager.getInstance().createCodeTimeEvent("resource", "load", "EditorActivate");
         // initialize the wall clock timer

@@ -623,7 +623,7 @@ export function logEvent(message) {
   }
 }
 
-export function logIt(message) {}
+//export function logIt(message) {}
 
 export function getSoftwareSessionAsJson() {
   let data = null;

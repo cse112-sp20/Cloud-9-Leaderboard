@@ -1,4 +1,4 @@
-import {getSoftwareDir, isWindows, logIt, getFileDataAsJson} from "../Util";
+import {getSoftwareDir, isWindows, getFileDataAsJson} from "../Util";
 import {CacheManager} from "../cache/CacheManager";
 const fs = require("fs");
 
@@ -40,8 +40,7 @@ export function saveFileChangeInfoToDisk(fileChangeInfoData) {
     try {
       const content = JSON.stringify(fileChangeInfoData, null, 4);
       fs.writeFileSync(file, content, (err) => {
-        if (err)
-          logIt(`Deployer: Error writing session summary data: ${err.message}`);
+        
       });
       // update the cache
       if (fileChangeInfoData) {

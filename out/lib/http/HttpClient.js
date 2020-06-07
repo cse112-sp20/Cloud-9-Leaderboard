@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.isResponseOk = exports.hasTokenExpired = exports.softwarePost = exports.softwarePut = exports.softwareGet = exports.serverIsAvailable = void 0;
 const axios_1 = require("axios");
 const Constants_1 = require("../Constants");
-const Util_1 = require("../Util");
 const CacheManager_1 = require("../cache/CacheManager");
 // build the axios api base url
 const beApi = axios_1.default.create({
@@ -48,7 +47,6 @@ function softwareGet(api, jwt) {
             beApi.defaults.headers.common["Authorization"] = jwt;
         }
         return yield beApi.get(api).catch((err) => {
-            Util_1.logIt(`error fetching data for ${api}, message: ${err.message}`);
             return err;
         });
     });
@@ -67,7 +65,6 @@ function softwarePut(api, payload, jwt) {
             return resp;
         })
             .catch((err) => {
-            Util_1.logIt(`error posting data for ${api}, message: ${err.message}`);
             return err;
         });
     });
@@ -86,7 +83,6 @@ function softwarePost(api, payload, jwt) {
             return resp;
         })
             .catch((err) => {
-            Util_1.logIt(`error posting data for ${api}, message: ${err.message}`);
             return err;
         });
     });

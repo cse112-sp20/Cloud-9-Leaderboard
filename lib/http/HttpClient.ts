@@ -2,7 +2,6 @@ import axios from "axios";
 
 import {api_endpoint} from "../Constants";
 
-import {logIt} from "../Util";
 import {CacheManager} from "../cache/CacheManager";
 
 // build the axios api base url
@@ -41,7 +40,6 @@ export async function softwareGet(api, jwt) {
   }
 
   return await beApi.get(api).catch((err) => {
-    logIt(`error fetching data for ${api}, message: ${err.message}`);
     return err;
   });
 }
@@ -59,7 +57,6 @@ export async function softwarePut(api, payload, jwt) {
       return resp;
     })
     .catch((err) => {
-      logIt(`error posting data for ${api}, message: ${err.message}`);
       return err;
     });
 }
@@ -76,7 +73,6 @@ export async function softwarePost(api, payload, jwt) {
       return resp;
     })
     .catch((err) => {
-      logIt(`error posting data for ${api}, message: ${err.message}`);
       return err;
     });
 }

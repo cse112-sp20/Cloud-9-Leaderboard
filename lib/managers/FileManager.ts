@@ -8,7 +8,6 @@ import {
   deleteFile,
   logEvent,
   getPluginEventsFile,
-  logIt,
   getFileDataPayloadsAsJson,
   getFileDataArray,
   getItem,
@@ -73,7 +72,6 @@ export async function batchSendArrayData(api, file) {
       batchSendPayloadData(api, file, payloads);
     }
   } catch (e) {
-    logIt(`Error batch sending payloads: ${e.message}`);
   }
 }
 
@@ -88,7 +86,6 @@ export async function batchSendData(api, file) {
       batchSendPayloadData(api, file, payloads);
     }
   } catch (e) {
-    logIt(`Error batch sending payloads: ${e.message}`);
   }
 }
 
@@ -108,7 +105,6 @@ export async function getLastSavedKeystrokesStats() {
       }
     }
   } catch (e) {
-    logIt(`Error fetching last payload: ${e.message}`);
   }
   // returns one in memory if not found in file
   return latestPayload;
@@ -152,7 +148,6 @@ export function sendBatchPayload(api, batch) {
   // console.log("SEND BATCH LOOK HERE");
   // console.log(batch);
   return softwarePost(api, batch, getItem("jwt")).catch((e) => {
-    logIt(`Unable to send plugin data batch, error: ${e.message}`);
   });
 }
 
@@ -170,7 +165,6 @@ export async function storeCurrentPayload(payload) {
   try {
     const content = JSON.stringify(payload, null, 4);
     fs.writeFileSync(this.getCurrentPayloadFile(), content, (err) => {
-      if (err) logIt(`Deployer: Error writing time data: ${err.message}`);
     });
   } catch (e) {
     //

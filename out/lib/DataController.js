@@ -120,7 +120,6 @@ function sendPreferencesUpdate(userId, userPrefs) {
         api = `/users/${userId}/preferences`;
         let resp = yield HttpClient_1.softwarePut(api, userPrefs, Util_1.getItem("jwt"));
         if (HttpClient_1.isResponseOk(resp)) {
-            Util_1.logIt("update user code time preferences");
         }
     });
 }
@@ -179,7 +178,6 @@ function sendHeartbeat(reason, serverIsOnline) {
             let api = `/data/heartbeat`;
             HttpClient_1.softwarePost(api, heartbeat, jwt).then((resp) => __awaiter(this, void 0, void 0, function* () {
                 if (!HttpClient_1.isResponseOk(resp)) {
-                    Util_1.logIt("unable to send heartbeat ping");
                 }
             }));
         }

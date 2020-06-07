@@ -15,7 +15,6 @@ import {
   nowInSecs,
   getOffsetSeconds,
   getVersion,
-  logIt,
   getPluginName,
   getItem,
   setItem,
@@ -140,7 +139,6 @@ export async function intializePlugin(
   ctx: ExtensionContext,
   createdAnonUser: boolean,
 ) {
-  logIt(`Loaded ${getPluginName()} v${getVersion()}`);
 
   // store the activate event
   EventManager.getInstance().createCodeTimeEvent(

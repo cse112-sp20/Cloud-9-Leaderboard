@@ -16,7 +16,6 @@ import {
   getVersion,
   getHostname,
   getWorkspaceName,
-  logIt,
   getPluginId,
 } from "./Util";
 import {DEFAULT_SESSION_THRESHOLD_SECONDS} from "./Constants";
@@ -132,7 +131,6 @@ async function sendPreferencesUpdate(userId, userPrefs) {
   api = `/users/${userId}/preferences`;
   let resp = await softwarePut(api, userPrefs, getItem("jwt"));
   if (isResponseOk(resp)) {
-    logIt("update user code time preferences");
   }
 }
 
@@ -196,7 +194,6 @@ export async function sendHeartbeat(reason, serverIsOnline) {
     let api = `/data/heartbeat`;
     softwarePost(api, heartbeat, jwt).then(async (resp) => {
       if (!isResponseOk(resp)) {
-        logIt("unable to send heartbeat ping");
       }
     });
   }
