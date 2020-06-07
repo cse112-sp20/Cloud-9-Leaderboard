@@ -1,17 +1,15 @@
 /**
- * Summary. (use period)
+ * Filename: Utility.ts
  *
- * Description. (use period)
+ * Contain cloud9 extenion utility function
  *
  * @link   URL
- * @file   This files defines the MyClass class.
+ * @file   This files contains utility function.
  * @author AuthorName.
- * @since  x.x.x
  */
 
 import {
   uniqueNamesGenerator,
-  Config,
   adjectives,
   colors,
   animals,

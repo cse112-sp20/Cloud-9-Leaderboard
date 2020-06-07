@@ -18,8 +18,8 @@ const Constants_1 = require("./Constants");
 const SessionSummaryData_1 = require("./storage/SessionSummaryData");
 const GitUtil_1 = require("./repo/GitUtil");
 const TimeSummaryData_1 = require("./storage/TimeSummaryData");
-const fs = require('fs');
-const moment = require('moment-timezone');
+const fs = require("fs");
+const moment = require("moment-timezone");
 let toggleFileEventLogging = null;
 let slackFetchTimeout = null;
 let userFetchTimeout = null;
@@ -27,7 +27,7 @@ function getToggleFileEventLoggingState() {
     if (toggleFileEventLogging === null) {
         toggleFileEventLogging = vscode_1.workspace
             .getConfiguration()
-            .get('toggleFileEventLogging');
+            .get("toggleFileEventLogging");
     }
     return toggleFileEventLogging;
 }
@@ -38,7 +38,7 @@ function getRegisteredTeamMembers(identifier) {
         const api = `/repo/contributors?identifier=${encodedIdentifier}`;
         let teamMembers = [];
         // returns: [{email, name, identifier},..]
-        const resp = yield HttpClient_1.softwareGet(api, Util_1.getItem('jwt'));
+        const resp = yield HttpClient_1.softwareGet(api, Util_1.getItem("jwt"));
         if (HttpClient_1.isResponseOk(resp)) {
             teamMembers = resp.data;
         }
@@ -53,9 +53,9 @@ function sendTeamInvite(identifier, emails) {
             emails,
         };
         const api = `/users/invite`;
-        const resp = yield HttpClient_1.softwarePost(api, payload, Util_1.getItem('jwt'));
+        const resp = yield HttpClient_1.softwarePost(api, payload, Util_1.getItem("jwt"));
         if (HttpClient_1.isResponseOk(resp)) {
-            vscode_1.window.showInformationMessage('Sent team invitation');
+            vscode_1.window.showInformationMessage("Sent team invitation");
         }
         else {
             vscode_1.window.showErrorMessage(resp.data.message);
@@ -81,25 +81,25 @@ function getAppJwt(serverIsOnline) {
 exports.getAppJwt = getAppJwt;
 function getUserRegistrationState(serverIsOnline) {
     return __awaiter(this, void 0, void 0, function* () {
-        let jwt = Util_1.getItem('jwt');
+        let jwt = Util_1.getItem("jwt");
         if (serverIsOnline && jwt) {
-            let api = '/users/plugin/state';
+            let api = "/users/plugin/state";
             let resp = yield HttpClient_1.softwareGet(api, jwt);
             if (HttpClient_1.isResponseOk(resp) && resp.data) {
                 // NOT_FOUND, ANONYMOUS, OK, UNKNOWN
-                let state = resp.data.state ? resp.data.state : 'UNKNOWN';
-                if (state === 'OK') {
-                    let sessionEmail = Util_1.getItem('name');
+                let state = resp.data.state ? resp.data.state : "UNKNOWN";
+                if (state === "OK") {
+                    let sessionEmail = Util_1.getItem("name");
                     let email = resp.data.email;
                     // set the name using the email
                     if (email && sessionEmail !== email) {
-                        Util_1.setItem('name', email);
+                        Util_1.setItem("name", email);
                     }
                     // check the jwt
                     let pluginJwt = resp.data.jwt;
                     if (pluginJwt && pluginJwt !== jwt) {
                         // update it
-                        Util_1.setItem('jwt', pluginJwt);
+                        Util_1.setItem("jwt", pluginJwt);
                     }
                     // if we need the user it's "resp.data.user"
                     return { loggedOn: true, state };
@@ -109,7 +109,7 @@ function getUserRegistrationState(serverIsOnline) {
             }
         }
         // all else fails, set false and UNKNOWN
-        return { loggedOn: false, state: 'UNKNOWN' };
+        return { loggedOn: false, state: "UNKNOWN" };
     });
 }
 exports.getUserRegistrationState = getUserRegistrationState;
@@ -119,7 +119,7 @@ exports.getUserRegistrationState = getUserRegistrationState;
  */
 function isLoggedIn() {
     return __awaiter(this, void 0, void 0, function* () {
-        const name = Util_1.getItem('name');
+        const name = Util_1.getItem("name");
         if (name) {
             return true;
         }
@@ -134,14 +134,14 @@ function isLoggedIn() {
 exports.isLoggedIn = isLoggedIn;
 function getSlackOauth(serverIsOnline) {
     return __awaiter(this, void 0, void 0, function* () {
-        let jwt = Util_1.getItem('jwt');
+        let jwt = Util_1.getItem("jwt");
         if (serverIsOnline && jwt) {
             let user = yield getUser(serverIsOnline, jwt);
             if (user && user.auths) {
                 // get the one that is "slack"
                 for (let i = 0; i < user.auths.length; i++) {
-                    if (user.auths[i].type === 'slack') {
-                        Util_1.setItem('slack_access_token', user.auths[i].access_token);
+                    if (user.auths[i].type === "slack") {
+                        Util_1.setItem("slack_access_token", user.auths[i].access_token);
                         return user.auths[i];
                     }
                 }
@@ -160,7 +160,7 @@ function getUser(serverIsOnline, jwt) {
                     const user = resp.data.data;
                     if (user.registered === 1) {
                         // update jwt to what the jwt is for this spotify user
-                        Util_1.setItem('name', user.email);
+                        Util_1.setItem("name", user.email);
                     }
                     return user;
                 }
@@ -172,7 +172,7 @@ function getUser(serverIsOnline, jwt) {
 exports.getUser = getUser;
 function initializePreferences(serverIsOnline) {
     return __awaiter(this, void 0, void 0, function* () {
-        let jwt = Util_1.getItem('jwt');
+        let jwt = Util_1.getItem("jwt");
         // use a default if we're unable to get the user or preferences
         let sessionThresholdInSec = Constants_1.DEFAULT_SESSION_THRESHOLD_SECONDS;
         if (jwt && serverIsOnline) {
@@ -197,7 +197,7 @@ function initializePreferences(serverIsOnline) {
                     if (prefsShowGit !== null) {
                         yield vscode_1.workspace
                             .getConfiguration()
-                            .update('showGitMetrics', prefsShowGit, vscode_1.ConfigurationTarget.Global);
+                            .update("showGitMetrics", prefsShowGit, vscode_1.ConfigurationTarget.Global);
                     }
                     if (prefsShowRank !== null) {
                         // await workspace
@@ -212,25 +212,25 @@ function initializePreferences(serverIsOnline) {
             }
         }
         // update the session threshold in seconds config
-        Util_1.setItem('sessionThresholdInSec', sessionThresholdInSec);
+        Util_1.setItem("sessionThresholdInSec", sessionThresholdInSec);
     });
 }
 exports.initializePreferences = initializePreferences;
 function sendPreferencesUpdate(userId, userPrefs) {
     return __awaiter(this, void 0, void 0, function* () {
         let api = `/users/${userId}`;
-        let showGitMetrics = vscode_1.workspace.getConfiguration().get('showGitMetrics');
+        let showGitMetrics = vscode_1.workspace.getConfiguration().get("showGitMetrics");
         // let showWeeklyRanking = workspace
         //     .getConfiguration()
         //     .get("showWeeklyRanking");
-        userPrefs['showGit'] = showGitMetrics;
+        userPrefs["showGit"] = showGitMetrics;
         // userPrefs["showRank"] = showWeeklyRanking;
         // update the preferences
         // /:id/preferences
         api = `/users/${userId}/preferences`;
-        let resp = yield HttpClient_1.softwarePut(api, userPrefs, Util_1.getItem('jwt'));
+        let resp = yield HttpClient_1.softwarePut(api, userPrefs, Util_1.getItem("jwt"));
         if (HttpClient_1.isResponseOk(resp)) {
-            Util_1.logIt('update user code time preferences');
+            Util_1.logIt("update user code time preferences");
         }
     });
 }
@@ -238,13 +238,13 @@ function updatePreferences() {
     return __awaiter(this, void 0, void 0, function* () {
         toggleFileEventLogging = vscode_1.workspace
             .getConfiguration()
-            .get('toggleFileEventLogging');
-        let showGitMetrics = vscode_1.workspace.getConfiguration().get('showGitMetrics');
+            .get("toggleFileEventLogging");
+        let showGitMetrics = vscode_1.workspace.getConfiguration().get("showGitMetrics");
         // let showWeeklyRanking = workspace
         //     .getConfiguration()
         //     .get("showWeeklyRanking");
         // get the user's preferences and update them if they don't match what we have
-        let jwt = Util_1.getItem('jwt');
+        let jwt = Util_1.getItem("jwt");
         let serverIsOnline = yield HttpClient_1.serverIsAvailable();
         if (jwt && serverIsOnline) {
             let user = yield getUser(serverIsOnline, jwt);
@@ -294,7 +294,7 @@ function userStatusFetchHandler(tryCountUntilFoundUser, interval) {
         }
         else {
             sendHeartbeat(`STATE_CHANGE:LOGGED_IN:true`, serverIsOnline);
-            const message = 'Successfully logged on to Code Time';
+            const message = "Successfully logged on to Code Time";
             vscode_1.window.showInformationMessage(message);
         }
     });
@@ -330,7 +330,7 @@ function slackConnectStatusHandler(callback, tryCountUntilFound) {
 }
 function sendHeartbeat(reason, serverIsOnline) {
     return __awaiter(this, void 0, void 0, function* () {
-        let jwt = Util_1.getItem('jwt');
+        let jwt = Util_1.getItem("jwt");
         if (serverIsOnline && jwt) {
             let heartbeat = {
                 pluginId: Util_1.getPluginId(),
@@ -346,7 +346,7 @@ function sendHeartbeat(reason, serverIsOnline) {
             let api = `/data/heartbeat`;
             HttpClient_1.softwarePost(api, heartbeat, jwt).then((resp) => __awaiter(this, void 0, void 0, function* () {
                 if (!HttpClient_1.isResponseOk(resp)) {
-                    Util_1.logIt('unable to send heartbeat ping');
+                    Util_1.logIt("unable to send heartbeat ping");
                 }
             }));
         }
@@ -365,7 +365,7 @@ function handleKpmClickedEvent() {
         }
         else {
             // add the token=jwt
-            const jwt = Util_1.getItem('jwt');
+            const jwt = Util_1.getItem("jwt");
             const encodedJwt = encodeURIComponent(jwt);
             webUrl = `${webUrl}?token=${encodedJwt}`;
         }
@@ -378,13 +378,13 @@ function writeCommitSummaryData() {
         const filePath = Util_1.getCommitSummaryFile();
         const serverIsOnline = yield HttpClient_1.serverIsAvailable();
         if (serverIsOnline) {
-            const result = yield HttpClient_1.softwareGet(`/dashboard/commits`, Util_1.getItem('jwt')).catch((err) => {
+            const result = yield HttpClient_1.softwareGet(`/dashboard/commits`, Util_1.getItem("jwt")).catch((err) => {
                 return null;
             });
             if (HttpClient_1.isResponseOk(result) && result.data) {
                 // get the string content out
                 const content = result.data;
-                console.log('COMMITS');
+                console.log("COMMITS");
                 console.log(content);
                 fs.writeFileSync(filePath, content, (err) => {
                     if (err) {
@@ -395,7 +395,7 @@ function writeCommitSummaryData() {
         }
         if (!fs.existsSync(filePath)) {
             // just create an empty file
-            fs.writeFileSync(filePath, 'WEEKLY COMMIT SUMMARY', (err) => {
+            fs.writeFileSync(filePath, "WEEKLY COMMIT SUMMARY", (err) => {
                 if (err) {
                     Util_1.logIt(`Error writing to the weekly commit summary content file: ${err.message}`);
                 }
@@ -404,9 +404,9 @@ function writeCommitSummaryData() {
     });
 }
 exports.writeCommitSummaryData = writeCommitSummaryData;
-function writeDailyReportDashboard(type = 'yesterday', projectIds = []) {
+function writeDailyReportDashboard(type = "yesterday", projectIds = []) {
     return __awaiter(this, void 0, void 0, function* () {
-        let dashboardContent = '';
+        let dashboardContent = "";
         const file = Util_1.getDailyReportSummaryFile();
         fs.writeFileSync(file, dashboardContent, (err) => {
             if (err) {
@@ -418,19 +418,19 @@ function writeDailyReportDashboard(type = 'yesterday', projectIds = []) {
 exports.writeDailyReportDashboard = writeDailyReportDashboard;
 function writeProjectCommitDashboardByStartEnd(start, end, projectIds) {
     return __awaiter(this, void 0, void 0, function* () {
-        const qryStr = `?start=${start}&end=${end}&projectIds=${projectIds.join(',')}`;
+        const qryStr = `?start=${start}&end=${end}&projectIds=${projectIds.join(",")}`;
         const api = `/projects/codeSummary${qryStr}`;
-        const result = yield HttpClient_1.softwareGet(api, Util_1.getItem('jwt'));
+        const result = yield HttpClient_1.softwareGet(api, Util_1.getItem("jwt"));
         const { rangeStart, rangeEnd } = createStartEndRangeByTimestamps(start, end);
         yield writeProjectCommitDashboard(result, rangeStart, rangeEnd);
     });
 }
 exports.writeProjectCommitDashboardByStartEnd = writeProjectCommitDashboardByStartEnd;
-function writeProjectCommitDashboardByRangeType(type = 'lastWeek', projectIds) {
+function writeProjectCommitDashboardByRangeType(type = "lastWeek", projectIds) {
     return __awaiter(this, void 0, void 0, function* () {
-        const qryStr = `?timeRange=${type}&projectIds=${projectIds.join(',')}`;
+        const qryStr = `?timeRange=${type}&projectIds=${projectIds.join(",")}`;
         const api = `/projects/codeSummary${qryStr}`;
-        const result = yield HttpClient_1.softwareGet(api, Util_1.getItem('jwt'));
+        const result = yield HttpClient_1.softwareGet(api, Util_1.getItem("jwt"));
         // create the header
         const { rangeStart, rangeEnd } = createStartEndRangeByType(type);
         yield writeProjectCommitDashboard(result, rangeStart, rangeEnd);
@@ -439,15 +439,15 @@ function writeProjectCommitDashboardByRangeType(type = 'lastWeek', projectIds) {
 exports.writeProjectCommitDashboardByRangeType = writeProjectCommitDashboardByRangeType;
 function writeProjectCommitDashboard(apiResult, rangeStart, rangeEnd) {
     return __awaiter(this, void 0, void 0, function* () {
-        let dashboardContent = '';
+        let dashboardContent = "";
         // [{projectId, name, identifier, commits, files_changed, insertions, deletions, hours,
         //   keystrokes, characters_added, characters_deleted, lines_added, lines_removed},...]
         if (HttpClient_1.isResponseOk(apiResult)) {
             let codeCommitData = apiResult.data;
             // create the title
-            const formattedDate = moment().format('ddd, MMM Do h:mma');
+            const formattedDate = moment().format("ddd, MMM Do h:mma");
             dashboardContent = `CODE TIME PROJECT SUMMARY     (Last updated on ${formattedDate})`;
-            dashboardContent += '\n\n';
+            dashboardContent += "\n\n";
             if (codeCommitData && codeCommitData.length) {
                 // filter out null project names
                 codeCommitData = codeCommitData.filter((n) => n.name);
@@ -455,37 +455,37 @@ function writeProjectCommitDashboard(apiResult, rangeStart, rangeEnd) {
                     dashboardContent += Util_1.getDashboardRow(el.name, `${rangeStart} to ${rangeEnd}`, true);
                     // hours
                     const hours = Util_1.humanizeMinutes(el.session_seconds / 60);
-                    dashboardContent += Util_1.getDashboardRow('Code time', hours);
+                    dashboardContent += Util_1.getDashboardRow("Code time", hours);
                     // keystrokes
                     const keystrokes = el.keystrokes
                         ? Util_1.formatNumber(el.keystrokes)
                         : Util_1.formatNumber(0);
-                    dashboardContent += Util_1.getDashboardRow('Keystrokes', keystrokes);
+                    dashboardContent += Util_1.getDashboardRow("Keystrokes", keystrokes);
                     // commits
                     const commits = el.commits ? Util_1.formatNumber(el.commits) : Util_1.formatNumber(0);
-                    dashboardContent += Util_1.getDashboardRow('Commits', commits);
+                    dashboardContent += Util_1.getDashboardRow("Commits", commits);
                     // files_changed
                     const files_changed = el.files_changed
                         ? Util_1.formatNumber(el.files_changed)
                         : Util_1.formatNumber(0);
-                    dashboardContent += Util_1.getDashboardRow('Files changed', files_changed);
+                    dashboardContent += Util_1.getDashboardRow("Files changed", files_changed);
                     // insertions
                     const insertions = el.insertions
                         ? Util_1.formatNumber(el.insertions)
                         : Util_1.formatNumber(0);
-                    dashboardContent += Util_1.getDashboardRow('Insertions', insertions);
+                    dashboardContent += Util_1.getDashboardRow("Insertions", insertions);
                     // deletions
                     const deletions = el.deletions
                         ? Util_1.formatNumber(el.deletions)
                         : Util_1.formatNumber(0);
-                    dashboardContent += Util_1.getDashboardRow('Deletions', deletions);
+                    dashboardContent += Util_1.getDashboardRow("Deletions", deletions);
                     dashboardContent += Util_1.getDashboardBottomBorder();
                 });
             }
             else {
-                dashboardContent += 'No data available';
+                dashboardContent += "No data available";
             }
-            dashboardContent += '\n';
+            dashboardContent += "\n";
         }
         const file = Util_1.getProjectCodeSummaryFile();
         fs.writeFileSync(file, dashboardContent, (err) => {
@@ -505,67 +505,67 @@ function writeProjectContributorCommitDashboardFromGitLogs(identifier) {
         const contributorsTodaysChangeStatsP = GitUtil_1.getTodaysCommits(activeRootPath, false);
         const contributorsYesterdaysChangeStatsP = GitUtil_1.getYesterdaysCommits(activeRootPath, false);
         const contributorsWeeksChangeStatsP = GitUtil_1.getThisWeeksCommits(activeRootPath, false);
-        let dashboardContent = '';
+        let dashboardContent = "";
         const now = moment().unix();
-        const formattedDate = moment.unix(now).format('ddd, MMM Do h:mma');
-        dashboardContent = Util_1.getTableHeader('PROJECT SUMMARY', ` (Last updated on ${formattedDate})`);
-        dashboardContent += '\n\n';
+        const formattedDate = moment.unix(now).format("ddd, MMM Do h:mma");
+        dashboardContent = Util_1.getTableHeader("PROJECT SUMMARY", ` (Last updated on ${formattedDate})`);
+        dashboardContent += "\n\n";
         dashboardContent += `Project: ${identifier}`;
-        dashboardContent += '\n\n';
+        dashboardContent += "\n\n";
         // TODAY
-        let projectDate = moment.unix(now).format('MMM Do, YYYY');
+        let projectDate = moment.unix(now).format("MMM Do, YYYY");
         dashboardContent += Util_1.getRightAlignedTableHeader(`Today (${projectDate})`);
-        dashboardContent += Util_1.getColumnHeaders(['Metric', 'You', 'All Contributors']);
+        dashboardContent += Util_1.getColumnHeaders(["Metric", "You", "All Contributors"]);
         let summary = {
             activity: yield userTodaysChangeStatsP,
             contributorActivity: yield contributorsTodaysChangeStatsP,
         };
-        dashboardContent += getRowNumberData(summary, 'Commits', 'commitCount');
+        dashboardContent += getRowNumberData(summary, "Commits", "commitCount");
         // files changed
-        dashboardContent += getRowNumberData(summary, 'Files changed', 'fileCount');
+        dashboardContent += getRowNumberData(summary, "Files changed", "fileCount");
         // insertions
-        dashboardContent += getRowNumberData(summary, 'Insertions', 'insertions');
+        dashboardContent += getRowNumberData(summary, "Insertions", "insertions");
         // deletions
-        dashboardContent += getRowNumberData(summary, 'Deletions', 'deletions');
-        dashboardContent += '\n';
+        dashboardContent += getRowNumberData(summary, "Deletions", "deletions");
+        dashboardContent += "\n";
         // YESTERDAY
-        projectDate = moment.unix(now).format('MMM Do, YYYY');
+        projectDate = moment.unix(now).format("MMM Do, YYYY");
         let startDate = moment
             .unix(now)
-            .subtract(1, 'day')
-            .startOf('day')
-            .format('MMM Do, YYYY');
+            .subtract(1, "day")
+            .startOf("day")
+            .format("MMM Do, YYYY");
         dashboardContent += Util_1.getRightAlignedTableHeader(`Yesterday (${startDate})`);
-        dashboardContent += Util_1.getColumnHeaders(['Metric', 'You', 'All Contributors']);
+        dashboardContent += Util_1.getColumnHeaders(["Metric", "You", "All Contributors"]);
         summary = {
             activity: yield userYesterdaysChangeStatsP,
             contributorActivity: yield contributorsYesterdaysChangeStatsP,
         };
-        dashboardContent += getRowNumberData(summary, 'Commits', 'commitCount');
+        dashboardContent += getRowNumberData(summary, "Commits", "commitCount");
         // files changed
-        dashboardContent += getRowNumberData(summary, 'Files changed', 'fileCount');
+        dashboardContent += getRowNumberData(summary, "Files changed", "fileCount");
         // insertions
-        dashboardContent += getRowNumberData(summary, 'Insertions', 'insertions');
+        dashboardContent += getRowNumberData(summary, "Insertions", "insertions");
         // deletions
-        dashboardContent += getRowNumberData(summary, 'Deletions', 'deletions');
-        dashboardContent += '\n';
+        dashboardContent += getRowNumberData(summary, "Deletions", "deletions");
+        dashboardContent += "\n";
         // THIS WEEK
-        projectDate = moment.unix(now).format('MMM Do, YYYY');
-        startDate = moment.unix(now).startOf('week').format('MMM Do, YYYY');
+        projectDate = moment.unix(now).format("MMM Do, YYYY");
+        startDate = moment.unix(now).startOf("week").format("MMM Do, YYYY");
         dashboardContent += Util_1.getRightAlignedTableHeader(`This week (${startDate} to ${projectDate})`);
-        dashboardContent += Util_1.getColumnHeaders(['Metric', 'You', 'All Contributors']);
+        dashboardContent += Util_1.getColumnHeaders(["Metric", "You", "All Contributors"]);
         summary = {
             activity: yield userWeeksChangeStatsP,
             contributorActivity: yield contributorsWeeksChangeStatsP,
         };
-        dashboardContent += getRowNumberData(summary, 'Commits', 'commitCount');
+        dashboardContent += getRowNumberData(summary, "Commits", "commitCount");
         // files changed
-        dashboardContent += getRowNumberData(summary, 'Files changed', 'fileCount');
+        dashboardContent += getRowNumberData(summary, "Files changed", "fileCount");
         // insertions
-        dashboardContent += getRowNumberData(summary, 'Insertions', 'insertions');
+        dashboardContent += getRowNumberData(summary, "Insertions", "insertions");
         // deletions
-        dashboardContent += getRowNumberData(summary, 'Deletions', 'deletions');
-        dashboardContent += '\n';
+        dashboardContent += getRowNumberData(summary, "Deletions", "deletions");
+        dashboardContent += "\n";
         const file = Util_1.getProjectContributorCodeSummaryFile();
         fs.writeFileSync(file, dashboardContent, (err) => {
             if (err) {
@@ -579,8 +579,8 @@ function writeProjectContributorCommitDashboard(identifier) {
     return __awaiter(this, void 0, void 0, function* () {
         const qryStr = `?identifier=${encodeURIComponent(identifier)}`;
         const api = `/projects/contributorSummary${qryStr}`;
-        const result = yield HttpClient_1.softwareGet(api, Util_1.getItem('jwt'));
-        let dashboardContent = '';
+        const result = yield HttpClient_1.softwareGet(api, Util_1.getItem("jwt"));
+        let dashboardContent = "";
         // [{timestamp, activity, contributorActivity},...]
         // the activity and contributorActivity will have the following structure
         // [{projectId, name, identifier, commits, files_changed, insertions, deletions, hours,
@@ -589,33 +589,33 @@ function writeProjectContributorCommitDashboard(identifier) {
             const data = result.data;
             // create the title
             const now = moment().unix();
-            const formattedDate = moment.unix(now).format('ddd, MMM Do h:mma');
-            dashboardContent = Util_1.getTableHeader('PROJECT SUMMARY', ` (Last updated on ${formattedDate})`);
-            dashboardContent += '\n\n';
+            const formattedDate = moment.unix(now).format("ddd, MMM Do h:mma");
+            dashboardContent = Util_1.getTableHeader("PROJECT SUMMARY", ` (Last updated on ${formattedDate})`);
+            dashboardContent += "\n\n";
             dashboardContent += `Project: ${identifier}`;
-            dashboardContent += '\n\n';
+            dashboardContent += "\n\n";
             for (let i = 0; i < data.length; i++) {
                 const summary = data[i];
-                let projectDate = moment.unix(now).format('MMM Do, YYYY');
+                let projectDate = moment.unix(now).format("MMM Do, YYYY");
                 if (i === 0) {
                     projectDate = `Today (${projectDate})`;
                 }
                 else if (i === 1) {
-                    let startDate = moment.unix(now).startOf('week').format('MMM Do, YYYY');
+                    let startDate = moment.unix(now).startOf("week").format("MMM Do, YYYY");
                     projectDate = `This week (${startDate} to ${projectDate})`;
                 }
                 else {
                     let startDate = moment
                         .unix(now)
-                        .startOf('month')
-                        .format('MMM Do, YYYY');
+                        .startOf("month")
+                        .format("MMM Do, YYYY");
                     projectDate = `This month (${startDate} to ${projectDate})`;
                 }
                 dashboardContent += Util_1.getRightAlignedTableHeader(projectDate);
                 dashboardContent += Util_1.getColumnHeaders([
-                    'Metric',
-                    'You',
-                    'All Contributors',
+                    "Metric",
+                    "You",
+                    "All Contributors",
                 ]);
                 // show the metrics now
                 // const userHours = summary.activity.session_seconds
@@ -632,16 +632,16 @@ function writeProjectContributorCommitDashboard(identifier) {
                 //     contribHours
                 // ]);
                 // commits
-                dashboardContent += getRowNumberData(summary, 'Commits', 'commits');
+                dashboardContent += getRowNumberData(summary, "Commits", "commits");
                 // files changed
-                dashboardContent += getRowNumberData(summary, 'Files changed', 'files_changed');
+                dashboardContent += getRowNumberData(summary, "Files changed", "files_changed");
                 // insertions
-                dashboardContent += getRowNumberData(summary, 'Insertions', 'insertions');
+                dashboardContent += getRowNumberData(summary, "Insertions", "insertions");
                 // deletions
-                dashboardContent += getRowNumberData(summary, 'Deletions', 'deletions');
-                dashboardContent += '\n';
+                dashboardContent += getRowNumberData(summary, "Deletions", "deletions");
+                dashboardContent += "\n";
             }
-            dashboardContent += '\n';
+            dashboardContent += "\n";
         }
         const file = Util_1.getProjectContributorCodeSummaryFile();
         fs.writeFileSync(file, dashboardContent, (err) => {
@@ -665,29 +665,29 @@ function getRowNumberData(summary, title, attribute) {
 // start and end should be local_start and local_end
 function createStartEndRangeByTimestamps(start, end) {
     return {
-        rangeStart: moment.unix(start).utc().format('MMM Do, YYYY'),
-        rangeEnd: moment.unix(end).utc().format('MMM Do, YYYY'),
+        rangeStart: moment.unix(start).utc().format("MMM Do, YYYY"),
+        rangeEnd: moment.unix(end).utc().format("MMM Do, YYYY"),
     };
 }
-function createStartEndRangeByType(type = 'lastWeek') {
+function createStartEndRangeByType(type = "lastWeek") {
     // default to "lastWeek"
-    let startOf = moment().startOf('week').subtract(1, 'week');
-    let endOf = moment().startOf('week').subtract(1, 'week').endOf('week');
-    if (type === 'yesterday') {
-        startOf = moment().subtract(1, 'day').startOf('day');
-        endOf = moment().subtract(1, 'day').endOf('day');
+    let startOf = moment().startOf("week").subtract(1, "week");
+    let endOf = moment().startOf("week").subtract(1, "week").endOf("week");
+    if (type === "yesterday") {
+        startOf = moment().subtract(1, "day").startOf("day");
+        endOf = moment().subtract(1, "day").endOf("day");
     }
-    else if (type === 'currentWeek') {
-        startOf = moment().startOf('week');
+    else if (type === "currentWeek") {
+        startOf = moment().startOf("week");
         endOf = moment();
     }
-    else if (type === 'lastMonth') {
-        startOf = moment().subtract(1, 'month').startOf('month');
-        endOf = moment().subtract(1, 'month').endOf('month');
+    else if (type === "lastMonth") {
+        startOf = moment().subtract(1, "month").startOf("month");
+        endOf = moment().subtract(1, "month").endOf("month");
     }
     return {
-        rangeStart: startOf.format('MMM Do, YYYY'),
-        rangeEnd: endOf.format('MMM Do, YYYY'),
+        rangeStart: startOf.format("MMM Do, YYYY"),
+        rangeEnd: endOf.format("MMM Do, YYYY"),
     };
 }
 function writeCodeTimeMetricsDashboard() {
@@ -696,13 +696,13 @@ function writeCodeTimeMetricsDashboard() {
         const serverIsOnline = yield HttpClient_1.serverIsAvailable();
         // write the code time metrics summary to the summaryInfo file
         if (serverIsOnline) {
-            let showGitMetrics = vscode_1.workspace.getConfiguration().get('showGitMetrics');
+            let showGitMetrics = vscode_1.workspace.getConfiguration().get("showGitMetrics");
             let api = `/dashboard?showMusic=false&showGit=${showGitMetrics}&showRank=false&linux=${Util_1.isLinux()}&showToday=false`;
-            const result = yield HttpClient_1.softwareGet(api, Util_1.getItem('jwt'));
+            const result = yield HttpClient_1.softwareGet(api, Util_1.getItem("jwt"));
             if (HttpClient_1.isResponseOk(result)) {
                 // get the string content out
                 const content = result.data;
-                console.log('Write Code Time Metrics');
+                console.log("Write Code Time Metrics");
                 console.log(content);
                 fs.writeFileSync(summaryInfoFile, content, (err) => {
                     if (err) {
@@ -712,11 +712,11 @@ function writeCodeTimeMetricsDashboard() {
             }
         }
         // create the header
-        let dashboardContent = '';
-        const formattedDate = moment().format('ddd, MMM Do h:mma');
+        let dashboardContent = "";
+        const formattedDate = moment().format("ddd, MMM Do h:mma");
         dashboardContent = `CODE TIME          (Last updated on ${formattedDate})`;
-        dashboardContent += '\n\n';
-        const todayStr = moment().format('ddd, MMM Do');
+        dashboardContent += "\n\n";
+        const todayStr = moment().format("ddd, MMM Do");
         dashboardContent += Util_1.getSectionHeader(`Today (${todayStr})`);
         const codeTimeSummary = TimeSummaryData_1.getCodeTimeSummary();
         // get the top section of the dashboard content (today's data)
@@ -730,13 +730,13 @@ function writeCodeTimeMetricsDashboard() {
             if (sessionSummary.liveshareMinutes) {
                 liveshareTimeStr = Util_1.humanizeMinutes(sessionSummary.liveshareMinutes);
             }
-            dashboardContent += Util_1.getDashboardRow('Code time today', codeTimeToday);
-            dashboardContent += Util_1.getDashboardRow('Active code time today', activeCodeTimeToday);
-            dashboardContent += Util_1.getDashboardRow('90-day avg', averageTimeStr);
+            dashboardContent += Util_1.getDashboardRow("Code time today", codeTimeToday);
+            dashboardContent += Util_1.getDashboardRow("Active code time today", activeCodeTimeToday);
+            dashboardContent += Util_1.getDashboardRow("90-day avg", averageTimeStr);
             if (liveshareTimeStr) {
-                dashboardContent += Util_1.getDashboardRow('Live Share', liveshareTimeStr);
+                dashboardContent += Util_1.getDashboardRow("Live Share", liveshareTimeStr);
             }
-            dashboardContent += '\n';
+            dashboardContent += "\n";
         }
         // get the summary info we just made a call for and add it to the dashboard content
         if (fs.existsSync(summaryInfoFile)) {

@@ -34,8 +34,8 @@ class TeamDataProvider {
         this.onDidChangeTreeData = this
             ._onDidChangeTreeData.event;
         this.data = [
-            new TeamItem('🛡 Create your Team'),
-            new TeamItem('🔰 Join team'),
+            new TeamItem("🛡 Create your Team"),
+            new TeamItem("🔰 Join team"),
         ];
     }
     /**
@@ -46,19 +46,19 @@ class TeamDataProvider {
         const cachedTeamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
         const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-        if (cachedTeamId === undefined || cachedTeamId === '') {
+        if (cachedTeamId === undefined || cachedTeamId === "") {
             this.data = [
-                new TeamItem('🛡 Create your Team'),
-                new TeamItem('🔰 Join team'),
+                new TeamItem("🛡 Create your Team"),
+                new TeamItem("🔰 Join team"),
             ];
         }
         else {
             this.data = [
-                new TeamItem('🛡 Welcome back to your Team'),
-                new TeamItem('📋 View team leaderboard'),
-                new TeamItem('Get Team Info', [
-                    new TeamItem('TeamName', [new TeamItem(teamName + '')]),
-                    new TeamItem('teamId', [new TeamItem(teamId + '')]),
+                new TeamItem("🛡 Welcome back to your Team"),
+                new TeamItem("📋 View team leaderboard"),
+                new TeamItem("Get Team Info", [
+                    new TeamItem("TeamName", [new TeamItem(teamName + "")]),
+                    new TeamItem("teamId", [new TeamItem(teamId + "")]),
                 ]),
             ];
         }
@@ -123,36 +123,36 @@ exports.connectCloud9TeamInfoTreeView = (view) => {
  * @param item
  */
 exports.handleTeamInfoChangeSelection = (view, item) => {
-    if (item.label === '🛡 Create your Team') {
-        vscode_1.commands.executeCommand('cloud9.createTeam');
+    if (item.label === "🛡 Create your Team") {
+        vscode_1.commands.executeCommand("cloud9.createTeam");
     }
-    else if (item.label === '🔰 Join team') {
-        vscode_1.commands.executeCommand('cloud9.joinTeam');
+    else if (item.label === "🔰 Join team") {
+        vscode_1.commands.executeCommand("cloud9.joinTeam");
     }
-    else if (item.label === '📋 View team leaderboard') {
-        vscode_1.commands.executeCommand('cloud9.teamLeaderboard');
+    else if (item.label === "📋 View team leaderboard") {
+        vscode_1.commands.executeCommand("cloud9.teamLeaderboard");
     }
-    else if (item.label === 'Get Team Info') {
+    else if (item.label === "Get Team Info") {
         const ctx = Authentication_1.getExtensionContext();
         const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
-        if (teamId == undefined || teamId == '') {
+        if (teamId == undefined || teamId == "") {
             item.children = [
-                new TeamItem('TeamName', [
-                    new TeamItem('Empty (Please join a team first)'),
+                new TeamItem("TeamName", [
+                    new TeamItem("Empty (Please join a team first)"),
                 ]),
-                new TeamItem('teamId', [
-                    new TeamItem('Empty (Please join a team first)'),
+                new TeamItem("teamId", [
+                    new TeamItem("Empty (Please join a team first)"),
                 ]),
             ];
         }
         else {
             item.children = [
-                new TeamItem('TeamName', [new TeamItem(teamName + '')]),
-                new TeamItem('teamId', [new TeamItem(teamId + '')]),
+                new TeamItem("TeamName", [new TeamItem(teamName + "")]),
+                new TeamItem("teamId", [new TeamItem(teamId + "")]),
             ];
         }
-        vscode_1.commands.executeCommand('TeamMenuView.refreshEntry');
+        vscode_1.commands.executeCommand("TeamMenuView.refreshEntry");
     }
 };
 //# sourceMappingURL=TeamDataProvider.js.map

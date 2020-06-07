@@ -1,13 +1,12 @@
 "use strict";
 /**
- * Summary. (use period)
+ * Filename: Utility.ts
  *
- * Description. (use period)
+ * Contain cloud9 extenion utility function
  *
  * @link   URL
- * @file   This files defines the MyClass class.
+ * @file   This files contains utility function.
  * @author AuthorName.
- * @since  x.x.x
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateRandomEmail = exports.getRandomInt = exports.generateRandomName = void 0;
@@ -35,12 +34,12 @@ exports.getRandomInt = getRandomInt;
  */
 function generateRandomEmail() {
     const EMAIL_LEN = 28;
-    const CHAR_SET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let email = '';
+    const CHAR_SET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let email = "";
     while (email.length < EMAIL_LEN) {
         email += CHAR_SET[getRandomInt(CHAR_SET.length)];
     }
-    return email + '@cloud9.com';
+    return email + "@cloud9.com";
 }
 exports.generateRandomEmail = generateRandomEmail;
 //# sourceMappingURL=Utility.js.map

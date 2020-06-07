@@ -10,18 +10,13 @@
 
 import {
   window,
-  ExtensionContext,
-  StatusBarAlignment,
   commands,
-  Command,
   TreeDataProvider,
   TreeItemCollapsibleState,
   ProviderResult,
   TreeItem,
   Event,
   EventEmitter,
-  TreeView,
-  Disposable,
 } from "vscode";
 
 import {getExtensionContext} from "./Authentication";

@@ -13,7 +13,7 @@ exports.storeCurrentPayload = exports.getCurrentPayloadFile = exports.sendBatchP
 const HttpClient_1 = require("../http/HttpClient");
 const Util_1 = require("../Util");
 const TimeSummaryData_1 = require("../storage/TimeSummaryData");
-const fs = require('fs');
+const fs = require("fs");
 // batch offline payloads in 8. sqs has a 256k body limit
 const batch_limit = 8;
 let latestPayload = null;
@@ -26,7 +26,7 @@ exports.clearLastSavedKeystrokeStats = clearLastSavedKeystrokeStats;
  */
 function sendOfflineTimeData() {
     return __awaiter(this, void 0, void 0, function* () {
-        batchSendArrayData('/data/time', TimeSummaryData_1.getTimeDataSummaryFile());
+        batchSendArrayData("/data/time", TimeSummaryData_1.getTimeDataSummaryFile());
         // clear time data data. this will also clear the
         // code time and active code time numbers
         TimeSummaryData_1.clearTimeDataSummary();
@@ -38,7 +38,7 @@ exports.sendOfflineTimeData = sendOfflineTimeData;
  */
 function sendOfflineEvents() {
     return __awaiter(this, void 0, void 0, function* () {
-        batchSendData('/data/event', Util_1.getPluginEventsFile());
+        batchSendData("/data/event", Util_1.getPluginEventsFile());
     });
 }
 exports.sendOfflineEvents = sendOfflineEvents;
@@ -47,7 +47,7 @@ exports.sendOfflineEvents = sendOfflineEvents;
  */
 function sendOfflineData(isNewDay = false) {
     return __awaiter(this, void 0, void 0, function* () {
-        batchSendData('/data/batch', Util_1.getSoftwareDataStoreFile());
+        batchSendData("/data/batch", Util_1.getSoftwareDataStoreFile());
     });
 }
 exports.sendOfflineData = sendOfflineData;
@@ -152,7 +152,7 @@ exports.batchSendPayloadData = batchSendPayloadData;
 function sendBatchPayload(api, batch) {
     // console.log("SEND BATCH LOOK HERE");
     // console.log(batch);
-    return HttpClient_1.softwarePost(api, batch, Util_1.getItem('jwt')).catch((e) => {
+    return HttpClient_1.softwarePost(api, batch, Util_1.getItem("jwt")).catch((e) => {
         Util_1.logIt(`Unable to send plugin data batch, error: ${e.message}`);
     });
 }
@@ -160,10 +160,10 @@ exports.sendBatchPayload = sendBatchPayload;
 function getCurrentPayloadFile() {
     let file = Util_1.getSoftwareDir();
     if (Util_1.isWindows()) {
-        file += '\\latestKeystrokes.json';
+        file += "\\latestKeystrokes.json";
     }
     else {
-        file += '/latestKeystrokes.json';
+        file += "/latestKeystrokes.json";
     }
     return file;
 }

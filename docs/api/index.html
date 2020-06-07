@@ -1,0 +1,551 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>cloud9</title>
+	<meta name="description" content="Documentation for cloud9">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">cloud9</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>cloud9</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<br />
+				<h1 align="center">
+					<p>  Cloud9
+					<br /></p>
+				</h1>
+				<br />
+				<p align="center">Cloud 9 is an open source plugin for tracking developers'
+					productivity by displaying metric scores on leaderboard. Cloud 9 is build
+					on top of the open source <a href="https://www.software.com/cloud9">Code time</a> vscode extension.
+				</p>
+				<br />
+				<a href="#developer-guide" id="developer-guide" style="color: inherit; text-decoration: none;">
+					<h1>Developer guide</h1>
+				</a>
+				<a href="#things-to-remember" id="things-to-remember" style="color: inherit; text-decoration: none;">
+					<h3>Things to remember:</h3>
+				</a>
+				<ul>
+					<li><p><strong>Create your own feature branch based off <code>dev</code></strong> (if the code you are writing is only dependent on the code in <code>dev</code>)<br/> </p>
+						<ul>
+							<li>And make a pull request for <strong>your branch to be merged into <code>dev</code></strong>.</li>
+							<li><code>Master</code> is not updated until a major version is done, such as MVP done</li>
+						</ul>
+					</li>
+					<li><p>Create small and specific branches.</p>
+					</li>
+					<li><p>Constantly pull your branch&#39;s base branch (e.g. your branch&#39;s base branch might in most cases be <code>dev</code>) to stay up to date with other
+						people&#39;s changes.</p>
+						<ul>
+							<li><p>You can do this by:</p>
+								<ol>
+									<li><p>Checking out your branch&#39;s base branch: <br/>
+										<code>git checkout [your branch&#39;s base branch]</code></p>
+									</li>
+									<li><p>Pulling any new changes from the remote: <br/> <code>git pull</code></p>
+									</li>
+									<li><p>Returning to your branch (checkout your branch again): <br/>
+										<code>git checkout [your branch]</code></p>
+									</li>
+									<li><p>Merging your branch&#39;s base branch <em>into</em> your branch: <br/>
+										<code>git merge [your branch&#39;s base branch]</code></p>
+									</li>
+								</ol>
+							</li>
+						</ul>
+					</li>
+					<li><p>Test your code on the <code>dev</code> branch before creating a pull request to merge
+						your code into your branch&#39;s base branch.</p>
+						<ul>
+							<li><code>dev</code> is the main branch that we collectively work on during development phase.</li>
+							<li>Once you have tested your code on the <code>dev</code> branch, create a pull request
+								(PR) to merge your branch into its base branch.<ul>
+									<li>Who and how many people you send it to should depend on the significance
+									of your code.</li>
+									<li>Write a short (1-4 sentences) description of your PR.</li>
+									<li>You can send your PRs to other people through Slack.</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<hr>
+				<a href="#branches" id="branches" style="color: inherit; text-decoration: none;">
+					<h3>Branches:</h3>
+				</a>
+				<ul>
+					<li>What is a branch in git?<ul>
+							<li>A branch is <em>like</em> a copy of the repository from a specific moment in time
+							(a specific commit).</li>
+							<li>Learn more: <a href="https://git-scm.com/book/en/v1/Git-Branching-What-a-Branch-Is">https://git-scm.com/book/en/v1/Git-Branching-What-a-Branch-Is</a></li>
+						</ul>
+					</li>
+					<li>What is the purpose of a branch?<ul>
+							<li>Branches make collaboration organized and simple. By using branches,
+							multiple people can work independently on related code.</li>
+							<li>Branches allow us to easily keep track of changes that we make.</li>
+						</ul>
+					</li>
+					<li>When should I create a branch?<ul>
+							<li>Create a branch for any change that you want to make.</li>
+							<li>Create branches that will have a short lifespan that are used for a single
+								particular feature or specific focus.<ul>
+									<li>Small and specific branches are much easier to maintain, easier to merge,
+									and easier to review.</li>
+									<li>Learn more:
+										<a href="https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows">https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows</a><ul>
+											<li>Read the &quot;Topic Branches&quot; section.</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<a href="#development-workflow-and-branch-lifecycle" id="development-workflow-and-branch-lifecycle" style="color: inherit; text-decoration: none;">
+					<h3>Development workflow and branch lifecycle:</h3>
+				</a>
+				<ol>
+					<li>You want to make a change to the codebase.</li>
+					<li>Decide which branch you want to contribute to. This branch is going to be the
+						base branch of the branch that you are about to create.<ul>
+							<li>The base branch is the branch that you want to create your branch off of.</li>
+							<li>The base branch is the branch that you will later merge (or create a PR to
+							merge) your branch into.</li>
+							<li>If the code you are writing is only dependent on the code in <code>dev</code>, then
+								<code>dev</code> is your base branch. Otherwise, if the code you are writing is
+								dependent on code that is not in <code>dev</code>, then your branch&#39;s base branch
+								is going to be the branch that contains the code that your branch depends
+							on.</li>
+						</ul>
+					</li>
+					<li>Create a new branch off of the base branch.</li>
+					<li>Make changes to your branch.</li>
+					<li>Finish making changes to your branch.</li>
+					<li>If possible, merge your branch into <code>dev</code> and ensure that everything works.<ul>
+							<li>You do not need to create a PR to do this.</li>
+							<li>If you run into merge conflicts, <em>carefully</em> resolve them. If you are
+								unsure how to resolve them, ask someone else for help. Do not resolve merge
+								conflicts if you do not understand how to resolve merge conflicts or if you
+							do not understand the code that you are deleting.</li>
+						</ul>
+					</li>
+					<li>Merge your branch into your branch&#39;s base branch.<ul>
+							<li>Depending on what your branch&#39;s base branch is, you may or may not need to
+								create a PR to merge your branch into its base branch.<ul>
+									<li>If you want to merge your branch into <code>dev</code> (or <code>master</code> in the future when MVP is done, etc), you must create a PR to
+									do this.</li>
+								</ul>
+							</li>
+							<li>Make sure that you merge your branch <em>into</em> its base branch:<ul>
+									<li>Merge &lt;your branch&gt; into &lt;your branch&#39;s base branch&gt; <br/> Merge &lt;your
+									branch&gt; → &lt;your branch&#39;s base branch&gt;</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>Your branch has served its purpose and it has been merged into another
+						branch. Your branch should not be used anymore.<ul>
+							<li>To enforce this, after branches are merged, they are deleted from the
+							remote repository.</li>
+						</ul>
+					</li>
+				</ol>
+				<hr>
+				<a href="#git-commands" id="git-commands" style="color: inherit; text-decoration: none;">
+					<h3>Git commands:</h3>
+				</a>
+				<table>
+					<thead>
+						<tr>
+							<th>Command</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td><code>git status</code></td>
+							<td>Check status</td>
+						</tr>
+						<tr>
+							<td><code>git add [file-name.txt]</code></td>
+							<td>Add a file to the staging area</td>
+						</tr>
+						<tr>
+							<td><code>git add -A</code></td>
+							<td>Add all new and changed files to the staging area</td>
+						</tr>
+						<tr>
+							<td><code>git commit</code></td>
+							<td>Commit changes - must enter message in prompt</td>
+						</tr>
+						<tr>
+							<td><code>git commit -m &quot;[commit message]&quot;</code></td>
+							<td>Commit changes with inline message</td>
+						</tr>
+						<tr>
+							<td><code>git rm -r [file-name.txt]</code></td>
+							<td>Remove a file (or folder)</td>
+						</tr>
+						<tr>
+							<td><code>git branch</code></td>
+							<td>List branches (the asterisk denotes the current branch)</td>
+						</tr>
+						<tr>
+							<td><code>git branch -a</code></td>
+							<td>List all branches (local and remote)</td>
+						</tr>
+						<tr>
+							<td><code>git branch [branch name]</code></td>
+							<td>Create a new branch</td>
+						</tr>
+						<tr>
+							<td><code>git branch -d [branch name]</code></td>
+							<td>Delete a branch</td>
+						</tr>
+						<tr>
+							<td><code>git checkout -b [branch name]</code></td>
+							<td>Create a new branch and switch to it</td>
+						</tr>
+						<tr>
+							<td><code>git checkout [branch name]</code></td>
+							<td>Checkout a branch (local or remote branch)</td>
+						</tr>
+						<tr>
+							<td><code>git checkout -b [branch name] origin/[branch name]</code></td>
+							<td>Clone a remote branch and switch to it</td>
+						</tr>
+						<tr>
+							<td><code>git checkout [branch name]</code></td>
+							<td>Switch to a branch</td>
+						</tr>
+						<tr>
+							<td><code>git merge [branch name]</code></td>
+							<td>Merge a branch into the active branch</td>
+						</tr>
+						<tr>
+							<td><code>git merge [source branch] [target branch]</code></td>
+							<td>Merge a branch into a target branch</td>
+						</tr>
+						<tr>
+							<td><code>git stash</code></td>
+							<td>Stash changes in a dirty working directory</td>
+						</tr>
+						<tr>
+							<td><code>git push</code></td>
+							<td>Push changes to remote repository</td>
+						</tr>
+						<tr>
+							<td><code>git pull</code></td>
+							<td>Update local repository to the newest commit</td>
+						</tr>
+						<tr>
+							<td><code>git log</code></td>
+							<td>View commit history</td>
+						</tr>
+						<tr>
+							<td><code>git log --summary</code></td>
+							<td>View detailed commit history</td>
+						</tr>
+						<tr>
+							<td><code>git diff [source branch] [target branch]</code></td>
+							<td>Show diff of two branches</td>
+						</tr>
+				</tbody></table>
+				<a href="#features" id="features" style="color: inherit; text-decoration: none;">
+					<h2>Features</h2>
+				</a>
+				<p>Describe specific features of your extension including screenshots of your
+				extension in action. Image paths are relative to this README file.</p>
+				<p>For example if there is an image subfolder under your extension project
+				workspace:</p>
+				<p>![feature X](images/feature-x.png)</p>
+				<blockquote>
+					<p>Tip: Many popular extensions utilize animations. This is an excellent way to
+						show off your extension! We recommend short, focused animations that are easy
+					to follow.</p>
+				</blockquote>
+				<a href="#requirements" id="requirements" style="color: inherit; text-decoration: none;">
+					<h2>Requirements</h2>
+				</a>
+				<p>If you have any requirements or dependencies, add a section describing those and
+				how to install and configure them.</p>
+				<a href="#extension-settings" id="extension-settings" style="color: inherit; text-decoration: none;">
+					<h2>Extension Settings</h2>
+				</a>
+				<p>Include if your extension adds any VS Code settings through the
+				<code>contributes.configuration</code> extension point.</p>
+				<p>For example:</p>
+				<p>This extension contributes the following settings:</p>
+				<ul>
+					<li><code>myExtension.enable</code>: enable/disable this extension</li>
+					<li><code>myExtension.thing</code>: set to <code>blah</code> to do something</li>
+				</ul>
+				<a href="#known-issues" id="known-issues" style="color: inherit; text-decoration: none;">
+					<h2>Known Issues</h2>
+				</a>
+				<p>Calling out known issues can help limit users opening duplicate issues against
+				your extension.</p>
+				<a href="#release-notes" id="release-notes" style="color: inherit; text-decoration: none;">
+					<h2>Release Notes</h2>
+				</a>
+				<p>Users appreciate release notes as you update your extension.</p>
+				<a href="#100" id="100" style="color: inherit; text-decoration: none;">
+					<h3>1.0.0</h3>
+				</a>
+				<p>Initial release of ...</p>
+				<a href="#101" id="101" style="color: inherit; text-decoration: none;">
+					<h3>1.0.1</h3>
+				</a>
+				<p>Fixed issue #.</p>
+				<a href="#110" id="110" style="color: inherit; text-decoration: none;">
+					<h3>1.1.0</h3>
+				</a>
+				<p>Added features X, Y, and Z.</p>
+				<hr>
+				<a href="#working-with-markdown" id="working-with-markdown" style="color: inherit; text-decoration: none;">
+					<h2>Working with Markdown</h2>
+				</a>
+				<p><strong>Note:</strong> You can author your README using Visual Studio Code. Here are some
+				useful editor keyboard shortcuts:</p>
+				<ul>
+					<li>Split the editor (<code>Cmd+\</code> on macOS or <code>Ctrl+\</code> on Windows and Linux)</li>
+					<li>Toggle preview (<code>Shift+CMD+V</code> on macOS or <code>Shift+Ctrl+V</code> on Windows and Linux)</li>
+					<li>Press <code>Ctrl+Space</code> (Windows, Linux) or <code>Cmd+Space</code> (macOS) to see a list of
+					Markdown snippets</li>
+				</ul>
+				<a href="#for-more-information" id="for-more-information" style="color: inherit; text-decoration: none;">
+					<h3>For more information</h3>
+				</a>
+				<ul>
+					<li><a href="http://code.visualstudio.com/docs/languages/markdown">Visual Studio Code&#39;s Markdown Support</a></li>
+					<li><a href="https://help.github.com/articles/markdown-basics/">Markdown Syntax Reference</a></li>
+				</ul>
+				<p><strong>Enjoy!</strong></p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Internals</span>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_util_authentication_.html">&quot;src/util/<wbr>Authentication&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_util_constants_.html">&quot;src/util/<wbr>Constants&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_util_dailymetricdataprovider_.html">&quot;src/util/<wbr>Daily<wbr>Metric<wbr>Data<wbr>Provider&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_util_leaderdataprovider_.html">&quot;src/util/<wbr>Leader<wbr>Data<wbr>Provider&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_util_leaderboard_.html">&quot;src/util/<wbr>Leaderboard&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_util_menudataprovider_.html">&quot;src/util/<wbr>Menu<wbr>Data<wbr>Provider&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_util_metric_.html">&quot;src/util/<wbr>Metric&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_util_personalstats_.html">&quot;src/util/<wbr>Personal<wbr>Stats&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_util_team_.html">&quot;src/util/<wbr>Team&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_util_teamdataprovider_.html">&quot;src/util/<wbr>Team<wbr>Data<wbr>Provider&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_src_util_utility_.html">&quot;src/util/<wbr>Utility&quot;</a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Externals</span>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_extension_.html">&quot;extension&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_constants_.html">&quot;lib/<wbr>Constants&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_datacontroller_.html">&quot;lib/<wbr>Data<wbr>Controller&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_livesharemanager_.html">&quot;lib/<wbr>Liveshare<wbr>Manager&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_util_.html">&quot;lib/<wbr>Util&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_cache_cachemanager_.html">&quot;lib/cache/<wbr>Cache<wbr>Manager&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_command_helper_.html">&quot;lib/command-<wbr>helper&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_http_httpclient_.html">&quot;lib/http/<wbr>Http<wbr>Client&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_http_jiraclient_.html">&quot;lib/http/<wbr>Jira<wbr>Client&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_managers_eventmanager_.html">&quot;lib/managers/<wbr>Event<wbr>Manager&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_managers_filemanager_.html">&quot;lib/managers/<wbr>File<wbr>Manager&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_managers_kpmmanager_.html">&quot;lib/managers/<wbr>Kpm<wbr>Manager&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_managers_payloadmanager_.html">&quot;lib/managers/<wbr>Payload<wbr>Manager&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_managers_summarymanager_.html">&quot;lib/managers/<wbr>Summary<wbr>Manager&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_managers_wallclockmanager_.html">&quot;lib/managers/<wbr>Wall<wbr>Clock<wbr>Manager&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_menu_menumanager_.html">&quot;lib/menu/<wbr>Menu<wbr>Manager&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_model_codetimesummary_.html">&quot;lib/model/<wbr>Code<wbr>Time<wbr>Summary&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_model_keystrokestats_.html">&quot;lib/model/<wbr>Keystroke<wbr>Stats&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_model_project_.html">&quot;lib/model/<wbr>Project&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_model_repocontributorinfo_.html">&quot;lib/model/<wbr>Repo<wbr>Contributor<wbr>Info&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_model_teammember_.html">&quot;lib/model/<wbr>Team<wbr>Member&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_model_timedata_.html">&quot;lib/model/<wbr>Time<wbr>Data&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_model_models_.html">&quot;lib/model/models&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_repo_gitutil_.html">&quot;lib/repo/<wbr>Git<wbr>Util&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_repo_kpmrepomanager_.html">&quot;lib/repo/<wbr>Kpm<wbr>Repo<wbr>Manager&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_storage_filechangeinfosummarydata_.html">&quot;lib/storage/<wbr>File<wbr>Change<wbr>Info<wbr>Summary<wbr>Data&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_storage_sessionsummarydata_.html">&quot;lib/storage/<wbr>Session<wbr>Summary<wbr>Data&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_storage_timesummarydata_.html">&quot;lib/storage/<wbr>Time<wbr>Summary<wbr>Data&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_lib_user_onboardmanager_.html">&quot;lib/user/<wbr>Onboard<wbr>Manager&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_node_modules_vsls_vscode_.html">&quot;node_<wbr>modules/vsls/vscode&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_src_util_firestore_.html">&quot;src/util/<wbr>Firestore&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

@@ -12,8 +12,7 @@
 import {workspace, window, ViewColumn} from "vscode";
 import {getSoftwareDir, isWindows} from "../../lib/Util";
 import {retrieveAllUserStats, retrieveTeamMemberStats} from "./Firestore";
-import {scoreCalculation} from "./Metric";
-import {stat} from "fs";
+
 import {
   getExtensionContext,
   checkIfCachedUserIdExistsAndPrompt,
