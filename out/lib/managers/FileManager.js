@@ -116,7 +116,6 @@ function batchSendPayloadData(api, file, payloads) {
     return __awaiter(this, void 0, void 0, function* () {
         // send the batch
         if (payloads && payloads.length > 0) {
-            Util_1.logEvent(`sending batch payloads: ${JSON.stringify(payloads)}`);
             // send batch_limit at a time
             let batch = [];
             for (let i = 0; i < payloads.length; i++) {

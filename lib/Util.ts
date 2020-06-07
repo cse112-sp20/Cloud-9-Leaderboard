@@ -616,12 +616,6 @@ export function getExtensionName() {
   return extensionName;
 }
 
-export function logEvent(message) {
-  const logEvents = getToggleFileEventLoggingState();
-  if (logEvents) {
-    console.log(`${getExtensionName()}: ${message}`);
-  }
-}
 
 //export function logIt(message) {}
 

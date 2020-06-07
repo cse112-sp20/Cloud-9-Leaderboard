@@ -6,7 +6,6 @@ import {
 import {
   getSoftwareDataStoreFile,
   deleteFile,
-  logEvent,
   getPluginEventsFile,
   getFileDataPayloadsAsJson,
   getFileDataArray,
@@ -113,7 +112,6 @@ export async function getLastSavedKeystrokesStats() {
 export async function batchSendPayloadData(api, file, payloads) {
   // send the batch
   if (payloads && payloads.length > 0) {
-    logEvent(`sending batch payloads: ${JSON.stringify(payloads)}`);
 
     // send batch_limit at a time
     let batch = [];

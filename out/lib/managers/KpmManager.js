@@ -88,7 +88,6 @@ class KpmManager {
             const rootObj = _keystrokeMap[rootPath];
             this.updateStaticValues(rootObj, staticInfo);
             rootObj.source[staticInfo.filename].close += 1;
-            Util_1.logEvent(`File closed`);
         });
     }
     /**
@@ -115,7 +114,6 @@ class KpmManager {
             const rootObj = _keystrokeMap[rootPath];
             this.updateStaticValues(rootObj, staticInfo);
             rootObj.source[staticInfo.filename].open += 1;
-            Util_1.logEvent(`File opened`);
         });
     }
     /**
@@ -206,18 +204,15 @@ class KpmManager {
                 // it's a copy and paste event
                 //
                 sourceObj.paste += 1;
-                Util_1.logEvent("Copy+Paste Incremented");
             }
             else if (textChangeLen < 0) {
                 sourceObj.delete += 1;
                 // update the overall count
-                Util_1.logEvent("Delete Incremented");
             }
             else if (hasNonNewLineData) {
                 // update the data for this fileInfo keys count
                 sourceObj.add += 1;
                 // update the overall count
-                Util_1.logEvent("KPM incremented");
             }
             // increment keystrokes by 1
             rootObj.keystrokes += 1;
@@ -225,11 +220,9 @@ class KpmManager {
             sourceObj.netkeys = sourceObj.add - sourceObj.delete;
             sourceObj.lines = currLineCount;
             if (linesDeleted > 0) {
-                Util_1.logEvent(`Removed ${linesDeleted} lines`);
                 sourceObj.linesRemoved += linesDeleted;
             }
             else if (linesAdded > 0) {
-                Util_1.logEvent(`Added ${linesAdded} lines`);
                 sourceObj.linesAdded += linesAdded;
             }
             // console.log("KPM MANAGER ROOTOBJ");
