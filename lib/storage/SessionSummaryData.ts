@@ -56,10 +56,6 @@ function coalesceMissingAttributes(data): SessionSummary {
   return data;
 }
 
-export function sessionSummaryExists(): boolean {
-  const file = getSessionSummaryFile();
-  return fs.existsSync(file);
-}
 
 export function getSessionSummaryFileAsJson(): SessionSummary {
   const file = getSessionSummaryFile();
@@ -83,12 +79,6 @@ export function saveSessionSummaryToDisk(sessionSummaryData) {
   }
 }
 
-export function setSessionSummaryLiveshareMinutes(minutes) {
-  let sessionSummaryData = getSessionSummaryData();
-  sessionSummaryData.liveshareMinutes = minutes;
-
-  saveSessionSummaryToDisk(sessionSummaryData);
-}
 
 /**
  * Return {elapsedSeconds, sessionMinutes}
