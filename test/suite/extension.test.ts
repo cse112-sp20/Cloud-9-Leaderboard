@@ -180,10 +180,6 @@ suite('firestore.ts', () => {
     );
     await addNewUserDocToDb('testEmail', 'testPassword').then(() => {
       expect(spy.calledOnce);
-      /*expect(spy.args[0]).to.equal({
-        name: generateRandomName(),
-        ...DEFAULT_USER_DOC_TOP,
-      })*/
     });
   });
 
