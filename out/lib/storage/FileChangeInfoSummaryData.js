@@ -42,8 +42,7 @@ function saveFileChangeInfoToDisk(fileChangeInfoData) {
     if (fileChangeInfoData) {
         try {
             const content = JSON.stringify(fileChangeInfoData, null, 4);
-            fs.writeFileSync(file, content, (err) => {
-            });
+            fs.writeFileSync(file, content, (err) => { });
             // update the cache
             if (fileChangeInfoData) {
                 cacheMgr.set("fileChangeSummary", fileChangeInfoData);

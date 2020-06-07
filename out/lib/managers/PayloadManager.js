@@ -184,8 +184,7 @@ function storePayload(payload, sessionMinutes) {
         // write the fileChangeInfoMap
         FileChangeInfoSummaryData_1.saveFileChangeInfoToDisk(fileChangeInfoMap);
         // store the payload into the data.json file
-        fs.appendFileSync(Util_1.getSoftwareDataStoreFile(), JSON.stringify(payload) + os.EOL, (err) => {
-        });
+        fs.appendFileSync(Util_1.getSoftwareDataStoreFile(), JSON.stringify(payload) + os.EOL, (err) => { });
         // update the status and tree
     });
 }

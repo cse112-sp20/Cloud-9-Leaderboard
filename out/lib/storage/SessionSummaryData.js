@@ -73,8 +73,7 @@ function saveSessionSummaryToDisk(sessionSummaryData) {
     try {
         // JSON.stringify(data, replacer, number of spaces)
         const content = JSON.stringify(sessionSummaryData, null, 4);
-        fs.writeFileSync(file, content, (err) => {
-        });
+        fs.writeFileSync(file, content, (err) => { });
     }
     catch (e) {
         //

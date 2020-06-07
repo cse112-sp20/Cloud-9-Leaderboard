@@ -59,8 +59,7 @@ function batchSendArrayData(api, file) {
                 batchSendPayloadData(api, file, payloads);
             }
         }
-        catch (e) {
-        }
+        catch (e) { }
     });
 }
 exports.batchSendArrayData = batchSendArrayData;
@@ -76,8 +75,7 @@ function batchSendData(api, file) {
                 batchSendPayloadData(api, file, payloads);
             }
         }
-        catch (e) {
-        }
+        catch (e) { }
     });
 }
 exports.batchSendData = batchSendData;
@@ -96,8 +94,7 @@ function getLastSavedKeystrokesStats() {
                 }
             }
         }
-        catch (e) {
-        }
+        catch (e) { }
         // returns one in memory if not found in file
         return latestPayload;
     });
@@ -139,16 +136,14 @@ exports.batchSendPayloadData = batchSendPayloadData;
 function sendBatchPayload(api, batch) {
     // console.log("SEND BATCH LOOK HERE");
     // console.log(batch);
-    return HttpClient_1.softwarePost(api, batch, Util_1.getItem("jwt")).catch((e) => {
-    });
+    return HttpClient_1.softwarePost(api, batch, Util_1.getItem("jwt")).catch((e) => { });
 }
 exports.sendBatchPayload = sendBatchPayload;
 function storeCurrentPayload(payload) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const content = JSON.stringify(payload, null, 4);
-            fs.writeFileSync(this.getCurrentPayloadFile(), content, (err) => {
-            });
+            fs.writeFileSync(this.getCurrentPayloadFile(), content, (err) => { });
         }
         catch (e) {
             //
