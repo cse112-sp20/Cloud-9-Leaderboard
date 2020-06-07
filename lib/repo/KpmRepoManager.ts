@@ -1,4 +1,4 @@
-import {isResponseOk, softwareGet, softwarePost} from '../http/HttpClient';
+import {isResponseOk, softwareGet, softwarePost} from "../http/HttpClient";
 import {
   wrapExecPromise,
   getItem,
@@ -7,12 +7,12 @@ import {
   getFileType,
   findFirstActiveDirectoryOrWorkspaceDirectory,
   isGitProject,
-} from '../Util';
-import {serverIsAvailable} from '../http/HttpClient';
-import {getCommandResult} from './GitUtil';
-import RepoContributorInfo from '../model/RepoContributorInfo';
-import TeamMember from '../model/TeamMember';
-import {CacheManager} from '../cache/CacheManager';
+} from "../Util";
+import {serverIsAvailable} from "../http/HttpClient";
+import {getCommandResult} from "./GitUtil";
+import RepoContributorInfo from "../model/RepoContributorInfo";
+import TeamMember from "../model/TeamMember";
+import {CacheManager} from "../cache/CacheManager";
 
 let myRepoInfo = [];
 
@@ -49,10 +49,10 @@ export async function getMyRepoInfo() {
     return myRepoInfo;
   }
   const serverAvailable = await serverIsAvailable();
-  const jwt = getItem('jwt');
+  const jwt = getItem("jwt");
   if (serverAvailable && jwt) {
     // list of [{identifier, tag, branch}]
-    const resp = await softwareGet('/repo/info', jwt);
+    const resp = await softwareGet("/repo/info", jwt);
     if (isResponseOk(resp)) {
       myRepoInfo = resp.data;
     }
@@ -63,7 +63,7 @@ export async function getMyRepoInfo() {
 export async function getFileContributorCount(fileName) {
   let fileType = getFileType(fileName);
 
-  if (fileType === 'git') {
+  if (fileType === "git") {
     return 0;
   }
 
@@ -116,14 +116,14 @@ export async function getRepoFileCount(fileName) {
 }
 
 export async function getRepoContributors(
-  fileName: string = '',
+  fileName: string = "",
   filterOutNonEmails: boolean = true,
 ): Promise<TeamMember[]> {
   if (!fileName) {
     fileName = findFirstActiveDirectoryOrWorkspaceDirectory();
   }
 
-  const noSpacesFileName = fileName.replace(/^\s+/g, '');
+  const noSpacesFileName = fileName.replace(/^\s+/g, "");
   const cacheId = `file-repo-contributors-info-${noSpacesFileName}`;
 
   let teamMembers: TeamMember[] = cacheMgr.get(cacheId);
@@ -156,7 +156,7 @@ export async function getRepoContributorInfo(
     return null;
   }
 
-  const noSpacesProjDir = projectDir.replace(/^\s+/g, '');
+  const noSpacesProjDir = projectDir.replace(/^\s+/g, "");
   const cacheId = `project-repo-contributor-info-${noSpacesProjDir}`;
 
   let repoContributorInfo: RepoContributorInfo = cacheMgr.get(cacheId);
@@ -187,7 +187,7 @@ export async function getRepoContributorInfo(
     if (resultList && resultList.length > 0) {
       // count name email
       resultList.forEach((listInfo) => {
-        const devInfo = listInfo.split(',');
+        const devInfo = listInfo.split(",");
         const name = devInfo[0];
         const email = normalizeGithubEmail(devInfo[1], filterOutNonEmails);
         if (email && !map[email]) {
@@ -218,7 +218,7 @@ export async function getResourceInfo(projectDir) {
     return {};
   }
 
-  const noSpacesProjDir = projectDir.replace(/^\s+/g, '');
+  const noSpacesProjDir = projectDir.replace(/^\s+/g, "");
   const cacheId = `resource-info-${noSpacesProjDir}`;
 
   let resourceInfo = cacheMgr.get(cacheId);
@@ -230,15 +230,15 @@ export async function getResourceInfo(projectDir) {
   resourceInfo = {};
 
   const branch = await wrapExecPromise(
-    'git symbolic-ref --short HEAD',
+    "git symbolic-ref --short HEAD",
     projectDir,
   );
   const identifier = await wrapExecPromise(
-    'git config --get remote.origin.url',
+    "git config --get remote.origin.url",
     projectDir,
   );
-  let email = await wrapExecPromise('git config user.email', projectDir);
-  const tag = await wrapExecPromise('git describe --all', projectDir);
+  let email = await wrapExecPromise("git config user.email", projectDir);
+  const tag = await wrapExecPromise("git describe --all", projectDir);
 
   // both should be valid to return the resource info
   if (branch && identifier) {
@@ -266,7 +266,7 @@ export async function postRepoContributors(fileName) {
 
   if (repoContributorInfo) {
     // send this to the backend
-    softwarePost('/repo/contributors', repoContributorInfo, getItem('jwt'));
+    softwarePost("/repo/contributors", repoContributorInfo, getItem("jwt"));
   }
 }
 
@@ -293,7 +293,7 @@ async function getLastCommit() {
     // call the app
     commit = await softwareGet(
       `/commits/latest?identifier=${encodedIdentifier}&tag=${encodedTag}&branch=${encodedBranch}`,
-      getItem('jwt'),
+      getItem("jwt"),
     ).then((resp) => {
       if (isResponseOk(resp)) {
         // will get a single commit object back with the following attributes
@@ -328,13 +328,13 @@ export async function getHistoricalCommits(isonline) {
 
     const latestCommit = await getLastCommit();
 
-    let sinceOption = '';
+    let sinceOption = "";
     if (latestCommit) {
       // add a second
       const newTimestamp = parseInt(latestCommit.timestamp, 10) + 1;
       sinceOption = ` --since=${newTimestamp}`;
     } else {
-      sinceOption = ' --max-count=100';
+      sinceOption = " --max-count=100";
     }
 
     const cmd = `git log --stat --pretty="COMMIT:%H,%ct,%cI,%s" --author=${resourceInfo.email}${sinceOption}`;
@@ -352,14 +352,14 @@ export async function getHistoricalCommits(isonline) {
     for (let i = 0; i < resultList.length; i++) {
       let line = resultList[i].trim();
       if (line && line.length > 0) {
-        if (line.indexOf('COMMIT:') === 0) {
-          line = line.substring('COMMIT:'.length);
+        if (line.indexOf("COMMIT:") === 0) {
+          line = line.substring("COMMIT:".length);
           if (commit) {
             // add it to the commits
             commits.push(commit);
           }
           // split by comma
-          let commitInfos = line.split(',');
+          let commitInfos = line.split(",");
           if (commitInfos && commitInfos.length > 3) {
             let commitId = commitInfos[0].trim();
             if (latestCommit && commitId === latestCommit.commitId) {
@@ -378,22 +378,22 @@ export async function getHistoricalCommits(isonline) {
               changes: {},
             };
           }
-        } else if (commit && line.indexOf('|') !== -1) {
+        } else if (commit && line.indexOf("|") !== -1) {
           // get the file and changes
           // i.e. backend/app.js                | 20 +++++++++-----------
-          line = line.replace(/ +/g, ' ');
+          line = line.replace(/ +/g, " ");
           // split by the pipe
-          let lineInfos = line.split('|');
+          let lineInfos = line.split("|");
           if (lineInfos && lineInfos.length > 1) {
             let file = lineInfos[0].trim();
             let metricsLine = lineInfos[1].trim();
-            let metricsInfos = metricsLine.split(' ');
+            let metricsInfos = metricsLine.split(" ");
             if (metricsInfos && metricsInfos.length > 1) {
               let addAndDeletes = metricsInfos[1].trim();
               // count the number of plus signs and negative signs to find
               // out how many additions and deletions per file
               let len = addAndDeletes.length;
-              let lastPlusIdx = addAndDeletes.lastIndexOf('+');
+              let lastPlusIdx = addAndDeletes.lastIndexOf("+");
               let insertions = 0;
               let deletions = 0;
               if (lastPlusIdx !== -1) {
@@ -466,6 +466,6 @@ export async function getHistoricalCommits(isonline) {
 
   function sendCommits(commitData) {
     // send this to the backend
-    softwarePost('/commits', commitData, getItem('jwt'));
+    softwarePost("/commits", commitData, getItem("jwt"));
   }
 }

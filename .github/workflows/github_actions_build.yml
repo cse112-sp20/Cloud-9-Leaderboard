@@ -1,18 +1,25 @@
-name: Deployment workflow
+  
+name: Building workflow
 
 on:
   push:
     branches:
-      - master
-name: Deploy Extension
+      - 'master'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: npm install
-      - uses: lannonbr/vsce-action@master
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          args: "publish -p $VSCE_TOKEN"
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: npm ci
         env:
-          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+          CI: 'true'
+      - run: sudo apt-get install xvfb
+      - run: npm run deploy
+        env:
+          vscode_token: ${{ secrets.VSCE_TOKEN }}

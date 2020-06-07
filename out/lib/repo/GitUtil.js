@@ -14,7 +14,7 @@ const models_1 = require("../model/models");
 const Util_1 = require("../Util");
 const KpmRepoManager_1 = require("./KpmRepoManager");
 const CacheManager_1 = require("../cache/CacheManager");
-const moment = require('moment-timezone');
+const moment = require("moment-timezone");
 const ONE_HOUR_IN_SEC = 60 * 60;
 const ONE_DAY_SEC = ONE_HOUR_IN_SEC * 24;
 const ONE_WEEK_SEC = ONE_DAY_SEC * 7;
@@ -29,11 +29,11 @@ function getCommandResult(cmd, projectDir) {
         }
         result = result.trim();
         let resultList = result
-            .replace(/\r\n/g, '\r')
-            .replace(/\n/g, '\r')
-            .replace(/^\s+/g, ' ')
-            .replace(/</g, '')
-            .replace(/>/g, '')
+            .replace(/\r\n/g, "\r")
+            .replace(/\n/g, "\r")
+            .replace(/^\s+/g, " ")
+            .replace(/</g, "")
+            .replace(/>/g, "")
             .split(/\r/);
         return resultList;
     });
@@ -48,9 +48,9 @@ function getCommandResultString(cmd, projectDir) {
         }
         result = result.trim();
         result = result
-            .replace(/\r\n/g, '\r')
-            .replace(/\n/g, '\r')
-            .replace(/^\s+/g, ' ');
+            .replace(/\r\n/g, "\r")
+            .replace(/\n/g, "\r")
+            .replace(/^\s+/g, " ");
         return result;
     });
 }
@@ -66,23 +66,23 @@ function accumulateStatChanges(results) {
         for (let i = 0; i < results.length; i++) {
             const line = results[i].trim();
             // look for the line with "insertion" and "deletion"
-            if (line.includes('changed') &&
-                (line.includes('insertion') || line.includes('deletion'))) {
+            if (line.includes("changed") &&
+                (line.includes("insertion") || line.includes("deletion"))) {
                 // split by space, then the number before the keyword is our value
-                const parts = line.split(' ');
+                const parts = line.split(" ");
                 // the very first element is the number of files changed
                 const fileCount = parseInt(parts[0], 10);
                 stats.fileCount += fileCount;
                 stats.commitCount += 1;
                 for (let x = 1; x < parts.length; x++) {
                     const part = parts[x];
-                    if (part.includes('insertion')) {
+                    if (part.includes("insertion")) {
                         const insertions = parseInt(parts[x - 1], 10);
                         if (insertions) {
                             stats.insertions += insertions;
                         }
                     }
-                    else if (part.includes('deletion')) {
+                    else if (part.includes("deletion")) {
                         const deletions = parseInt(parts[x - 1], 10);
                         if (deletions) {
                             stats.deletions += deletions;
@@ -125,7 +125,7 @@ function getUncommitedChanges(projectDir) {
         if (!projectDir || !Util_1.isGitProject(projectDir)) {
             new models_1.CommitChangeStats();
         }
-        const noSpacesProjDir = projectDir.replace(/^\s+/g, '');
+        const noSpacesProjDir = projectDir.replace(/^\s+/g, "");
         const cacheId = `uncommitted-changes-${noSpacesProjDir}`;
         let commitChanges = cacheMgr.get(cacheId);
         // return from cache if we have it
@@ -146,7 +146,7 @@ function getTodaysCommits(projectDir, useAuthor = true) {
         if (!projectDir || !Util_1.isGitProject(projectDir)) {
             new models_1.CommitChangeStats();
         }
-        const noSpacesProjDir = projectDir.replace(/^\s+/g, '');
+        const noSpacesProjDir = projectDir.replace(/^\s+/g, "");
         const cacheId = `todays-commits-${noSpacesProjDir}`;
         let commitChanges = cacheMgr.get(cacheId);
         // return from cache if we have it
@@ -167,7 +167,7 @@ function getYesterdaysCommits(projectDir, useAuthor = true) {
         if (!projectDir || !Util_1.isGitProject(projectDir)) {
             new models_1.CommitChangeStats();
         }
-        const noSpacesProjDir = projectDir.replace(/^\s+/g, '');
+        const noSpacesProjDir = projectDir.replace(/^\s+/g, "");
         const cacheId = `yesterdays-commits-${noSpacesProjDir}`;
         let commitChanges = cacheMgr.get(cacheId);
         // return from cache if we have it
@@ -188,7 +188,7 @@ function getThisWeeksCommits(projectDir, useAuthor = true) {
         if (!projectDir || !Util_1.isGitProject(projectDir)) {
             new models_1.CommitChangeStats();
         }
-        const noSpacesProjDir = projectDir.replace(/^\s+/g, '');
+        const noSpacesProjDir = projectDir.replace(/^\s+/g, "");
         const cacheId = `this-weeks-commits-${noSpacesProjDir}`;
         let commitChanges = cacheMgr.get(cacheId);
         // return from cache if we have it
@@ -209,7 +209,7 @@ function getCommitsInUtcRange(projectDir, start, end, useAuthor = true) {
         if (!projectDir || !Util_1.isGitProject(projectDir)) {
             new models_1.CommitChangeStats();
         }
-        const noSpacesProjDir = projectDir.replace(/^\s+/g, '');
+        const noSpacesProjDir = projectDir.replace(/^\s+/g, "");
         const cacheId = `commits-in-range-${noSpacesProjDir}`;
         let commitChanges = cacheMgr.get(cacheId);
         // return from cache if we have it
@@ -250,7 +250,7 @@ function getLastCommitId(projectDir, email) {
         if (!projectDir || !Util_1.isGitProject(projectDir)) {
             return {};
         }
-        const noSpacesProjDir = projectDir.replace(/^\s+/g, '');
+        const noSpacesProjDir = projectDir.replace(/^\s+/g, "");
         const cacheId = `last-commit-id-${noSpacesProjDir}`;
         let lastCommitIdInfo = cacheMgr.get(cacheId);
         // return from cache if we have it
@@ -258,11 +258,11 @@ function getLastCommitId(projectDir, email) {
             return lastCommitIdInfo;
         }
         lastCommitIdInfo = {};
-        const authorOption = email ? ` --author=${email}` : '';
+        const authorOption = email ? ` --author=${email}` : "";
         const cmd = `git log --pretty="%H,%s"${authorOption} --max-count=1`;
         const list = yield getCommandResult(cmd, projectDir);
         if (list && list.length) {
-            const parts = list[0].split(',');
+            const parts = list[0].split(",");
             if (parts && parts.length === 2) {
                 lastCommitIdInfo = {
                     commitId: parts[0],
@@ -279,7 +279,7 @@ exports.getLastCommitId = getLastCommitId;
 function getRepoConfigUserEmail(projectDir) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!projectDir || !Util_1.isGitProject(projectDir)) {
-            return '';
+            return "";
         }
         const cmd = `git config user.email`;
         return yield getCommandResultString(cmd, projectDir);
@@ -289,9 +289,9 @@ exports.getRepoConfigUserEmail = getRepoConfigUserEmail;
 function getRepoUrlLink(projectDir) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!projectDir || !Util_1.isGitProject(projectDir)) {
-            return '';
+            return "";
         }
-        const noSpacesProjDir = projectDir.replace(/^\s+/g, '');
+        const noSpacesProjDir = projectDir.replace(/^\s+/g, "");
         const cacheId = `repo-link-url-${noSpacesProjDir}`;
         let repoUrlLink = cacheMgr.get(cacheId);
         // return from cache if we have it
@@ -300,8 +300,8 @@ function getRepoUrlLink(projectDir) {
         }
         const cmd = `git config --get remote.origin.url`;
         repoUrlLink = yield getCommandResultString(cmd, projectDir);
-        if (repoUrlLink && repoUrlLink.endsWith('.git')) {
-            repoUrlLink = repoUrlLink.substring(0, repoUrlLink.lastIndexOf('.git'));
+        if (repoUrlLink && repoUrlLink.endsWith(".git")) {
+            repoUrlLink = repoUrlLink.substring(0, repoUrlLink.lastIndexOf(".git"));
         }
         if (repoUrlLink) {
             // cache it
@@ -316,7 +316,7 @@ exports.getRepoUrlLink = getRepoUrlLink;
  * @param {Object} user
  */
 function getToday() {
-    const start = moment().startOf('day').unix();
+    const start = moment().startOf("day").unix();
     const end = start + ONE_DAY_SEC;
     return { start, end };
 }
@@ -325,7 +325,7 @@ exports.getToday = getToday;
  * Returns the user's yesterday start and end in UTC time
  */
 function getYesterday() {
-    const start = moment().subtract(1, 'day').startOf('day').unix();
+    const start = moment().subtract(1, "day").startOf("day").unix();
     const end = start + ONE_DAY_SEC;
     return { start, end };
 }
@@ -334,7 +334,7 @@ exports.getYesterday = getYesterday;
  * Returns the user's this week's start and end in UTC time
  */
 function getThisWeek() {
-    const start = moment().startOf('week').unix();
+    const start = moment().startOf("week").unix();
     const end = start + ONE_WEEK_SEC;
     return { start, end };
 }

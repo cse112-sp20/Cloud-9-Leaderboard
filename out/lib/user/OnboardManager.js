@@ -20,7 +20,7 @@ let retry_counter = 0;
 const one_min_millis = 1000 * 60;
 let atlassianOauthFetchTimeout = null;
 function onboardInit(ctx, callback) {
-    const jwt = Util_1.getItem('jwt');
+    const jwt = Util_1.getItem("jwt");
     if (jwt) {
         // we have the jwt, call the callback that anon was not created
         return callback(ctx, false /*anonCreated*/);
@@ -96,24 +96,24 @@ function createAnonymousUser(serverIsOnline) {
     return __awaiter(this, void 0, void 0, function* () {
         let appJwt = yield DataController_1.getAppJwt(serverIsOnline);
         if (appJwt && serverIsOnline) {
-            const jwt = Util_1.getItem('jwt');
+            const jwt = Util_1.getItem("jwt");
             // check one more time before creating the anon user
             if (!jwt) {
-                const creation_annotation = 'NO_SESSION_FILE';
+                const creation_annotation = "NO_SESSION_FILE";
                 const username = yield Util_1.getOsUsername();
                 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 const hostname = yield Util_1.getHostname();
                 const workspace_name = Util_1.getWorkspaceName();
                 const eventType = `createanon-${workspace_name}`;
-                EventManager_1.EventManager.getInstance().createCodeTimeEvent(eventType, 'anon_creation', 'anon creation');
-                const resp = yield HttpClient_1.softwarePost('/data/onboard', {
+                EventManager_1.EventManager.getInstance().createCodeTimeEvent(eventType, "anon_creation", "anon creation");
+                const resp = yield HttpClient_1.softwarePost("/data/onboard", {
                     timezone,
                     username,
                     creation_annotation,
                     hostname,
                 }, appJwt);
                 if (HttpClient_1.isResponseOk(resp) && resp.data && resp.data.jwt) {
-                    Util_1.setItem('jwt', resp.data.jwt);
+                    Util_1.setItem("jwt", resp.data.jwt);
                     return resp.data.jwt;
                 }
             }
@@ -144,21 +144,21 @@ function refetchAtlassianOauthFetchHandler(tryCountUntilFoundUser) {
             }
         }
         else {
-            const message = 'Successfully connected to Atlassian';
+            const message = "Successfully connected to Atlassian";
             vscode_1.window.showInformationMessage(message);
         }
     });
 }
 function getAtlassianOauth(serverIsOnline) {
     return __awaiter(this, void 0, void 0, function* () {
-        let jwt = Util_1.getItem('jwt');
+        let jwt = Util_1.getItem("jwt");
         if (serverIsOnline && jwt) {
             let user = yield DataController_1.getUser(serverIsOnline, jwt);
             if (user && user.auths) {
                 // get the one that is "slack"
                 for (let i = 0; i < user.auths.length; i++) {
                     const oauthInfo = user.auths[i];
-                    if (oauthInfo.type === 'atlassian') {
+                    if (oauthInfo.type === "atlassian") {
                         updateAtlassianAccessInfo(oauthInfo);
                         return oauthInfo;
                     }
@@ -175,10 +175,10 @@ function updateAtlassianAccessInfo(oauth) {
          * {access_token, refresh_token}
          */
         if (oauth) {
-            Util_1.setItem('atlassian_access_token', oauth.access_token);
+            Util_1.setItem("atlassian_access_token", oauth.access_token);
         }
         else {
-            Util_1.setItem('atlassian_access_token', null);
+            Util_1.setItem("atlassian_access_token", null);
         }
     });
 }

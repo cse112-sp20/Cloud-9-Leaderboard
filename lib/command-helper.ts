@@ -1,36 +1,36 @@
-import {commands, Disposable, workspace, window, TreeView} from 'vscode';
+import {commands, Disposable, workspace, window, TreeView} from "vscode";
 import {
   handleKpmClickedEvent,
   updatePreferences,
   sendTeamInvite,
-} from './DataController';
+} from "./DataController";
 import {
   TeamDataProvider,
   TeamItem,
   connectCloud9TeamInfoTreeView,
-} from '../src/util/TeamDataProvider';
+} from "../src/util/TeamDataProvider";
 
-import {KpmManager} from './managers/KpmManager';
+import {KpmManager} from "./managers/KpmManager";
 
 import {
   displayLeaderboard,
   displayTeamLeaderboard,
-} from '../src/util/Leaderboard';
+} from "../src/util/Leaderboard";
 
-import {logOut} from '../src/util/Authentication';
-import {createAndJoinTeam, getTeamInfo, joinTeam} from '../src/util/Team';
-import {displayPersonalStats} from '../src/util/PersonalStats';
+import {logOut} from "../src/util/Authentication";
+import {createAndJoinTeam, getTeamInfo, joinTeam} from "../src/util/Team";
+import {displayPersonalStats} from "../src/util/PersonalStats";
 
 import {
   MenuDataProvider,
   MenuItem,
   connectCloud9MenuTreeView,
-} from '../src/util/MenuDataProvider';
+} from "../src/util/MenuDataProvider";
 import {
   LeaderDataProvider,
   LeaderItem,
   connectCloud9LeaderTreeView,
-} from '../src/util/LeaderDataProvider';
+} from "../src/util/LeaderDataProvider";
 
 export function createCommands(
   kpmController: KpmManager,
@@ -47,7 +47,7 @@ export function createCommands(
   const cloud9LeaderTreeProvider = new LeaderDataProvider();
 
   const cloud9LeaderTreeView: TreeView<LeaderItem> = window.createTreeView(
-    'LeaderView',
+    "LeaderView",
     {
       treeDataProvider: cloud9LeaderTreeProvider,
       showCollapseAll: false,
@@ -58,13 +58,13 @@ export function createCommands(
   cloud9LeaderTreeProvider.bindView(cloud9LeaderTreeView);
 
   cmds.push(
-    commands.registerCommand('LeaderView.refreshEntry', () =>
+    commands.registerCommand("LeaderView.refreshEntry", () =>
       cloud9LeaderTreeProvider.refresh(),
     ),
   );
 
   const cloud9MenuTreeView: TreeView<MenuItem> = window.createTreeView(
-    'MenuView',
+    "MenuView",
     {
       treeDataProvider: cloud9MenuTreeProvider,
       showCollapseAll: false,
@@ -76,13 +76,13 @@ export function createCommands(
   cmds.push(connectCloud9MenuTreeView(cloud9MenuTreeView));
 
   cmds.push(
-    commands.registerCommand('MenuView.refreshEntry', () =>
+    commands.registerCommand("MenuView.refreshEntry", () =>
       cloud9MenuTreeProvider.refresh(),
     ),
   );
 
   const cloud9TeamTreeView: TreeView<TeamItem> = window.createTreeView(
-    'TeamMenuView',
+    "TeamMenuView",
     {
       treeDataProvider: cloud9TeamTreeProvider,
       showCollapseAll: false,
@@ -93,7 +93,7 @@ export function createCommands(
   cmds.push(connectCloud9TeamInfoTreeView(cloud9TeamTreeView));
 
   cmds.push(
-    commands.registerCommand('TeamMenuView.refreshEntry', () =>
+    commands.registerCommand("TeamMenuView.refreshEntry", () =>
       cloud9TeamTreeProvider.refresh(),
     ),
   );
@@ -102,35 +102,35 @@ export function createCommands(
    * CLOUD 9 LEADERBOARD COMMAND
    */
   cmds.push(
-    commands.registerCommand('cloud9.leaderboard', () => {
+    commands.registerCommand("cloud9.leaderboard", () => {
       displayLeaderboard();
     }),
   );
 
   // Cloud9: command used to see personal stats by date
   cmds.push(
-    commands.registerCommand('cloud9.personalStats', () => {
+    commands.registerCommand("cloud9.personalStats", () => {
       displayPersonalStats();
     }),
   );
 
   // Cloud9: command used to view private team leaderboard
   cmds.push(
-    commands.registerCommand('cloud9.teamLeaderboard', () => {
+    commands.registerCommand("cloud9.teamLeaderboard", () => {
       displayTeamLeaderboard();
     }),
   );
 
   // Cloud9: command used to create a new team
   cmds.push(
-    commands.registerCommand('cloud9.createTeam', () => {
+    commands.registerCommand("cloud9.createTeam", () => {
       createAndJoinTeam();
     }),
   );
 
   // Cloud9: command used to retrieve team code
   cmds.push(
-    commands.registerCommand('cloud9.getTeamInfo', () => {
+    commands.registerCommand("cloud9.getTeamInfo", () => {
       getTeamInfo();
     }),
   );
@@ -152,8 +152,8 @@ export function createCommands(
 
   // Cloud9: command used to join a new team
   cmds.push(
-    commands.registerCommand('cloud9.joinTeam', () => {
-      console.log('Cloud9: JOIN A TEAM');
+    commands.registerCommand("cloud9.joinTeam", () => {
+      console.log("Cloud9: JOIN A TEAM");
       joinTeam();
     }),
   );
@@ -161,8 +161,8 @@ export function createCommands(
   // Cloud9: command used to clear the cached id (for debugging and testing only)
   // ***can be used to sign the user out***
   cmds.push(
-    commands.registerCommand('cloud9.logOut', () => {
-      console.log('Cloud9: LOG OUT FROM CLOUD9');
+    commands.registerCommand("cloud9.logOut", () => {
+      console.log("Cloud9: LOG OUT FROM CLOUD9");
       logOut();
     }),
   );

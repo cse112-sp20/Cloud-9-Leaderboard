@@ -1,6 +1,6 @@
-import {workspace, Disposable, window} from 'vscode';
-import KeystrokeStats from '../model/KeystrokeStats';
-import {UNTITLED, NO_PROJ_NAME, DEFAULT_DURATION_MILLIS} from '../Constants';
+import {workspace, Disposable, window} from "vscode";
+import KeystrokeStats from "../model/KeystrokeStats";
+import {UNTITLED, NO_PROJ_NAME, DEFAULT_DURATION_MILLIS} from "../Constants";
 import {
   getRootPathForFile,
   isEmptyObj,
@@ -10,12 +10,12 @@ import {
   getFileAgeInDays,
   getFileType,
   showInformationMessage,
-} from '../Util';
-import {getResourceInfo} from '../repo/KpmRepoManager';
-import {FileChangeInfo} from '../model/models';
-import {JiraClient} from '../http/JiraClient';
-import {storeCurrentPayload} from './FileManager';
-import Project from '../model/Project';
+} from "../Util";
+import {getResourceInfo} from "../repo/KpmRepoManager";
+import {FileChangeInfo} from "../model/models";
+import {JiraClient} from "../http/JiraClient";
+import {storeCurrentPayload} from "./FileManager";
+import Project from "../model/Project";
 
 let _keystrokeMap = {};
 let _staticInfoMap = {};
@@ -190,7 +190,7 @@ export class KpmManager {
     let hasNonNewLineData = false;
     let textChangeLen = 0;
     let rangeChangeLen = 0;
-    let contentText = '';
+    let contentText = "";
     let isCharDelete = false;
     if (event.contentChanges && event.contentChanges.length) {
       for (let i = 0; i < event.contentChanges.length; i++) {
@@ -204,7 +204,7 @@ export class KpmManager {
           if (contentText) {
             textChangeLen += contentText.length;
           }
-          contentText = '';
+          contentText = "";
         } else if (contentText.length > 0) {
           // has text changes
           hasNonNewLineData = true;
@@ -215,7 +215,7 @@ export class KpmManager {
           } else {
             linesDeleted = 1;
           }
-        } else if (rangeChangeLen && rangeChangeLen > 0 && contentText === '') {
+        } else if (rangeChangeLen && rangeChangeLen > 0 && contentText === "") {
           isCharDelete = true;
         }
       }
@@ -242,16 +242,16 @@ export class KpmManager {
       // it's a copy and paste event
       //
       sourceObj.paste += 1;
-      logEvent('Copy+Paste Incremented');
+      logEvent("Copy+Paste Incremented");
     } else if (textChangeLen < 0) {
       sourceObj.delete += 1;
       // update the overall count
-      logEvent('Delete Incremented');
+      logEvent("Delete Incremented");
     } else if (hasNonNewLineData) {
       // update the data for this fileInfo keys count
       sourceObj.add += 1;
       // update the overall count
-      logEvent('KPM incremented');
+      logEvent("KPM incremented");
     }
     // increment keystrokes by 1
     rootObj.keystrokes += 1;
@@ -281,7 +281,7 @@ export class KpmManager {
       this._currentPayloadTimeout = null;
     }
     this._currentPayloadTimeout = setTimeout(() => {
-      console.log('Update Lazily Payload');
+      console.log("Update Lazily Payload");
       console.log(payload);
       this.updateLatestPayload(payload);
     }, 2000);
@@ -313,7 +313,7 @@ export class KpmManager {
   }
 
   private getFileName(event) {
-    let filename = '';
+    let filename = "";
     if (event.fileName) {
       filename = event.fileName;
     } else if (event.document && event.document.fileName) {
@@ -323,7 +323,7 @@ export class KpmManager {
   }
 
   private async getStaticEventInfo(event, filename) {
-    let languageId = '';
+    let languageId = "";
     let length = 0;
     let lineCount = 0;
 
@@ -361,7 +361,7 @@ export class KpmManager {
     const fileAgeDays = getFileAgeInDays(filename);
 
     // if the languageId is not assigned, use the file type
-    if (!languageId && filename.indexOf('.') !== -1) {
+    if (!languageId && filename.indexOf(".") !== -1) {
       let fileType = getFileType(filename);
       if (fileType) {
         languageId = fileType;
@@ -389,7 +389,7 @@ export class KpmManager {
       showInformationMessage(`Selected the following text: ${text}`);
       const issues = await JiraClient.getInstance().fetchIssues();
     } else {
-      showInformationMessage('Please select text to copy to your Jira project');
+      showInformationMessage("Please select text to copy to your Jira project");
     }
   }
 
@@ -405,7 +405,7 @@ export class KpmManager {
     // if it's the dashboard file or a liveshare tmp file then
     // skip event tracking
 
-    let scheme = '';
+    let scheme = "";
     if (event.uri && event.uri.scheme) {
       scheme = event.uri.scheme;
     } else if (
@@ -424,7 +424,7 @@ export class KpmManager {
     );
 
     // other scheme types I know of "vscode-userdata", "git"
-    if (scheme !== 'file' && scheme !== 'untitled') {
+    if (scheme !== "file" && scheme !== "untitled") {
       return false;
     } else if (isLiveshareTmpFile || isInternalFile) {
       return false;
@@ -443,7 +443,7 @@ export class KpmManager {
       // project.directory is used as an object key, must be string
       directory: rootPath,
       name,
-      identifier: '',
+      identifier: "",
       resource: {},
     });
     keystrokeStats.keystrokes = 1;

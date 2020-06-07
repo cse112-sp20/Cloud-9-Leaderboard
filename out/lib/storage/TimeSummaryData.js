@@ -16,15 +16,15 @@ const Constants_1 = require("../Constants");
 const CodeTimeSummary_1 = require("../model/CodeTimeSummary");
 const Project_1 = require("../model/Project");
 const TimeData_1 = require("../model/TimeData");
-const fs = require('fs');
-const moment = require('moment-timezone');
+const fs = require("fs");
+const moment = require("moment-timezone");
 function getTimeDataSummaryFile() {
     let file = Util_1.getSoftwareDir();
     if (Util_1.isWindows()) {
-        file += '\\projectTimeData.json';
+        file += "\\projectTimeData.json";
     }
     else {
-        file += '/projectTimeData.json';
+        file += "/projectTimeData.json";
     }
     return file;
 }

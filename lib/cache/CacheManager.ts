@@ -1,4 +1,4 @@
-const NodeCache = require('node-cache');
+const NodeCache = require("node-cache");
 
 export class CacheManager {
   private static instance: CacheManager;

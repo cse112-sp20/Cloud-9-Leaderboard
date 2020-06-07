@@ -23,53 +23,82 @@ const vscode_1 = require("vscode");
 const Constants_1 = require("./Constants");
 const Authentication_1 = require("./Authentication");
 const Authentication_2 = require("./Authentication");
-const path = require('path');
-const resourcePath = path.join(__filename, '..', '..', '..', 'resources');
+/**
+ * Menu data provider
+ */
 class MenuDataProvider {
+    /**
+     * Creates an instance of menu data provider.
+     */
     constructor() {
         this._onDidChangeTreeData = new vscode_1.EventEmitter();
         this.onDidChangeTreeData = this
             ._onDidChangeTreeData.event;
         this.data = [
-            new MenuItem('Sign in / Create Account'),
-            new MenuItem('📊 View personal stats'),
-            new MenuItem('🌐 Leaderboard'),
+            new MenuItem("Sign in / Create Account"),
+            new MenuItem("📊 View personal stats"),
+            new MenuItem("🌐 Leaderboard"),
         ];
     }
+    /**
+     * Refreshs menu data provider
+     */
     refresh() {
         const ctx = Authentication_2.getExtensionContext();
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID) !== undefined) {
             this.data = [
                 new MenuItem(`Welcome, ${ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME)}!`),
-                new MenuItem('📊 View personal stats'),
-                new MenuItem('🌐 Leaderboard'),
-                new MenuItem('💻 Log out account'),
+                new MenuItem("📊 View personal stats"),
+                new MenuItem("🌐 Leaderboard"),
+                new MenuItem("💻 Log out account"),
             ];
         }
         else {
             this.data = [
-                new MenuItem('Sign in / Create Account'),
-                new MenuItem('📊 View personal stats'),
-                new MenuItem('🌐 Leaderboard'),
+                new MenuItem("Sign in / Create Account"),
+                new MenuItem("📊 View personal stats"),
+                new MenuItem("🌐 Leaderboard"),
             ];
         }
         this._onDidChangeTreeData.fire(null);
     }
+    /**
+     * Binds view
+     * @param menuTreeView
+     */
     bindView(menuTreeView) {
         this.view = menuTreeView;
     }
+    /**
+     * Gets children
+     * @param [task]
+     * @returns children
+     */
     getChildren(task) {
         if (task === undefined) {
             return this.data;
         }
         return task.children;
     }
+    /**
+     * Gets tree item
+     * @param task
+     * @returns tree item
+     */
     getTreeItem(task) {
         return task;
     }
 }
 exports.MenuDataProvider = MenuDataProvider;
+/**
+ * Menu item
+ */
 class MenuItem extends vscode_1.TreeItem {
+    /**
+     * Creates an instance of menu item.
+     * @param label
+     * @param [children]
+     */
     constructor(label, children) {
         super(label, children === undefined
             ? vscode_1.TreeItemCollapsibleState.None
@@ -78,6 +107,10 @@ class MenuItem extends vscode_1.TreeItem {
     }
 }
 exports.MenuItem = MenuItem;
+/**
+ * Connect menu data provider treeview with change selectioin.
+ * @param view
+ */
 exports.connectCloud9MenuTreeView = (view) => {
     return vscode_1.Disposable.from(view.onDidChangeSelection((e) => __awaiter(void 0, void 0, void 0, function* () {
         if (!e.selection || e.selection.length === 0) {
@@ -87,18 +120,23 @@ exports.connectCloud9MenuTreeView = (view) => {
         exports.handleMenuChangeSelection(view, item);
     })));
 };
+/**
+ * Handles for menu treeview item selections
+ * @param view
+ * @param item
+ */
 exports.handleMenuChangeSelection = (view, item) => {
-    if (item.label === 'Sign in / Create Account') {
+    if (item.label === "Sign in / Create Account") {
         Authentication_1.signInOrSignUpUserWithUserInput();
     }
-    else if (item.label === '📊 View personal stats') {
-        vscode_1.commands.executeCommand('cloud9.personalStats');
+    else if (item.label === "📊 View personal stats") {
+        vscode_1.commands.executeCommand("cloud9.personalStats");
     }
-    else if (item.label === '🌐 Leaderboard') {
-        vscode_1.commands.executeCommand('cloud9.leaderboard');
+    else if (item.label === "🌐 Leaderboard") {
+        vscode_1.commands.executeCommand("cloud9.leaderboard");
     }
-    else if (item.label === '💻 Log out account') {
-        vscode_1.commands.executeCommand('cloud9.logOut');
+    else if (item.label === "💻 Log out account") {
+        vscode_1.commands.executeCommand("cloud9.logOut");
     }
 };
 //# sourceMappingURL=MenuDataProvider.js.map

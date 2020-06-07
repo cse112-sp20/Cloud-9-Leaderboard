@@ -20,14 +20,14 @@ class WallClockManager {
     }
     initTimer() {
         const kpmMgr = KpmManager_1.KpmManager.getInstance();
-        this._wctime = Util_1.getItem('wctime') || 0;
+        this._wctime = Util_1.getItem("wctime") || 0;
         setInterval(() => {
             // If the window is focused
             if (vscode_1.window.state.focused || kpmMgr.hasKeystrokeData()) {
                 // set the wctime (deprecated, remove one day when all plugins use time data info)
-                this._wctime = Util_1.getItem('wctime') || 0;
+                this._wctime = Util_1.getItem("wctime") || 0;
                 this._wctime += SECONDS_INTERVAL;
-                Util_1.setItem('wctime', this._wctime);
+                Util_1.setItem("wctime", this._wctime);
                 // update the file info file
                 TimeSummaryData_1.incrementEditorSeconds(SECONDS_INTERVAL);
             }

@@ -1,4 +1,4 @@
-import {window} from 'vscode';
+import {window} from "vscode";
 
 export class ProjectNoteManager {
   private static instance: ProjectNoteManager;
@@ -17,10 +17,10 @@ export class ProjectNoteManager {
 
   addNote() {
     window.showInputBox({
-      value: '',
-      placeHolder: 'Enter a note',
+      value: "",
+      placeHolder: "Enter a note",
       validateInput: (text) => {
-        return !text ? 'Please enter a non-empty note to continue.' : null;
+        return !text ? "Please enter a non-empty note to continue." : null;
       },
     });
   }

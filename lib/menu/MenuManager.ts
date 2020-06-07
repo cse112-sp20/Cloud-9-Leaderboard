@@ -4,22 +4,22 @@ import {
   QuickPickOptions,
   ViewColumn,
   commands,
-} from 'vscode';
+} from "vscode";
 import {
   launchWebUrl,
   getDashboardFile,
   getCommitSummaryFile,
   launchLogin,
   isStatusBarTextVisible,
-} from '../Util';
+} from "../Util";
 import {
   writeCommitSummaryData,
   writeCodeTimeMetricsDashboard,
   isLoggedIn,
-} from '../DataController';
-import {serverIsAvailable} from '../http/HttpClient';
-import {launch_url, LOGIN_LABEL} from '../Constants';
-import {EventManager} from '../managers/EventManager';
+} from "../DataController";
+import {serverIsAvailable} from "../http/HttpClient";
+import {launch_url, LOGIN_LABEL} from "../Constants";
+import {EventManager} from "../managers/EventManager";
 
 /**
  * Pass in the following array of objects
@@ -27,20 +27,20 @@ import {EventManager} from '../managers/EventManager';
  */
 
 export function showQuickPick(pickOptions): any {
-  if (!pickOptions || !pickOptions['items']) {
+  if (!pickOptions || !pickOptions["items"]) {
     return;
   }
   let options: QuickPickOptions = {
     matchOnDescription: false,
     matchOnDetail: false,
-    placeHolder: pickOptions.placeholder || '',
+    placeHolder: pickOptions.placeholder || "",
   };
 
   return window.showQuickPick(pickOptions.items, options).then(async (item) => {
     if (item) {
-      let url = item['url'];
-      let cb = item['cb'];
-      let command = item['command'];
+      let url = item["url"];
+      let cb = item["cb"];
+      let command = item["command"];
       if (url) {
         launchWebUrl(url);
       } else if (cb) {
@@ -49,11 +49,11 @@ export function showQuickPick(pickOptions): any {
         commands.executeCommand(command);
       }
 
-      if (item['eventDescription']) {
+      if (item["eventDescription"]) {
         EventManager.getInstance().createCodeTimeEvent(
-          'mouse',
-          'click',
-          item['eventDescription'],
+          "mouse",
+          "click",
+          item["eventDescription"],
         );
       }
     }
@@ -69,9 +69,9 @@ export async function showMenuOptions() {
   const serverIsOnline = await serverIsAvailable();
 
   EventManager.getInstance().createCodeTimeEvent(
-    'mouse',
-    'click',
-    'ShowPaletteMenu',
+    "mouse",
+    "click",
+    "ShowPaletteMenu",
   );
 
   const loggedIn: boolean = await isLoggedIn();
@@ -82,18 +82,18 @@ export async function showMenuOptions() {
   };
 
   kpmMenuOptions.items.push({
-    label: 'Generate dashboard',
-    detail: 'View your latest coding metrics right here in your editor',
+    label: "Generate dashboard",
+    detail: "View your latest coding metrics right here in your editor",
     url: null,
     cb: displayCodeTimeMetricsDashboard,
-    eventDescription: 'PaletteMenuLaunchDashboard',
+    eventDescription: "PaletteMenuLaunchDashboard",
   });
 
   let loginMsgDetail =
-    'Finish creating your account and see rich data visualizations.';
+    "Finish creating your account and see rich data visualizations.";
   if (!serverIsOnline) {
     loginMsgDetail =
-      'Our service is temporarily unavailable. Please try again later.';
+      "Our service is temporarily unavailable. Please try again later.";
   }
   if (!loggedIn) {
     kpmMenuOptions.items.push({
@@ -101,43 +101,43 @@ export async function showMenuOptions() {
       detail: loginMsgDetail,
       url: null,
       cb: launchLogin,
-      eventDescription: 'PaletteMenuLogin',
+      eventDescription: "PaletteMenuLogin",
     });
   }
 
-  let toggleStatusBarTextLabel = 'Hide status bar metrics';
+  let toggleStatusBarTextLabel = "Hide status bar metrics";
   if (!isStatusBarTextVisible()) {
-    toggleStatusBarTextLabel = 'Show status bar metrics';
+    toggleStatusBarTextLabel = "Show status bar metrics";
   }
   kpmMenuOptions.items.push({
     label: toggleStatusBarTextLabel,
-    detail: 'Toggle the Code Time status bar metrics text',
+    detail: "Toggle the Code Time status bar metrics text",
     url: null,
     cb: null,
-    command: 'codetime.toggleStatusBar',
+    command: "codetime.toggleStatusBar",
   });
 
   kpmMenuOptions.items.push({
-    label: 'Submit an issue on GitHub',
-    detail: 'Encounter a bug? Submit an issue on our GitHub page',
-    url: 'https://github.com/swdotcom/cloud9/issues',
+    label: "Submit an issue on GitHub",
+    detail: "Encounter a bug? Submit an issue on our GitHub page",
+    url: "https://github.com/swdotcom/cloud9/issues",
     cb: null,
   });
 
   kpmMenuOptions.items.push({
-    label: 'Submit feedback',
-    detail: 'Send us an email at cody@software.com',
+    label: "Submit feedback",
+    detail: "Send us an email at cody@software.com",
     cb: null,
-    command: 'codetime.sendFeedback',
+    command: "codetime.sendFeedback",
   });
 
   if (loggedIn) {
     kpmMenuOptions.items.push({
-      label: 'Web dashboard',
-      detail: 'See rich data visualizations in the web app',
+      label: "Web dashboard",
+      detail: "See rich data visualizations in the web app",
       url: null,
       cb: launchWebDashboardView,
-      eventDescription: 'PaletteMenuLaunchWebDashboard',
+      eventDescription: "PaletteMenuLaunchWebDashboard",
     });
   }
 
