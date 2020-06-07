@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.storeCurrentPayload = exports.getCurrentPayloadFile = exports.sendBatchPayload = exports.batchSendPayloadData = exports.getLastSavedKeystrokesStats = exports.batchSendData = exports.batchSendArrayData = exports.sendOfflineData = exports.sendOfflineEvents = exports.sendOfflineTimeData = exports.clearLastSavedKeystrokeStats = void 0;
+exports.storeCurrentPayload = exports.sendBatchPayload = exports.batchSendPayloadData = exports.getLastSavedKeystrokesStats = exports.batchSendData = exports.batchSendArrayData = exports.sendOfflineData = exports.sendOfflineTimeData = exports.clearLastSavedKeystrokeStats = void 0;
 const HttpClient_1 = require("../http/HttpClient");
 const Util_1 = require("../Util");
 const TimeSummaryData_1 = require("../storage/TimeSummaryData");
@@ -33,15 +33,6 @@ function sendOfflineTimeData() {
     });
 }
 exports.sendOfflineTimeData = sendOfflineTimeData;
-/**
- * send the offline Event payloads
- */
-function sendOfflineEvents() {
-    return __awaiter(this, void 0, void 0, function* () {
-        batchSendData("/data/event", Util_1.getPluginEventsFile());
-    });
-}
-exports.sendOfflineEvents = sendOfflineEvents;
 /**
  * send the offline data.
  */
@@ -152,17 +143,6 @@ function sendBatchPayload(api, batch) {
     });
 }
 exports.sendBatchPayload = sendBatchPayload;
-function getCurrentPayloadFile() {
-    let file = Util_1.getSoftwareDir();
-    if (Util_1.isWindows()) {
-        file += "\\latestKeystrokes.json";
-    }
-    else {
-        file += "/latestKeystrokes.json";
-    }
-    return file;
-}
-exports.getCurrentPayloadFile = getCurrentPayloadFile;
 function storeCurrentPayload(payload) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

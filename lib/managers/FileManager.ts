@@ -6,12 +6,9 @@ import {
 import {
   getSoftwareDataStoreFile,
   deleteFile,
-  getPluginEventsFile,
   getFileDataPayloadsAsJson,
   getFileDataArray,
   getItem,
-  getSoftwareDir,
-  isWindows,
 } from "../Util";
 import {
   getTimeDataSummaryFile,
@@ -41,12 +38,6 @@ export async function sendOfflineTimeData() {
   clearTimeDataSummary();
 }
 
-/**
- * send the offline Event payloads
- */
-export async function sendOfflineEvents() {
-  batchSendData("/data/event", getPluginEventsFile());
-}
 
 /**
  * send the offline data.
@@ -113,6 +104,7 @@ export async function batchSendPayloadData(api, file, payloads) {
   // send the batch
   if (payloads && payloads.length > 0) {
 
+
     // send batch_limit at a time
     let batch = [];
     for (let i = 0; i < payloads.length; i++) {
@@ -149,15 +141,6 @@ export function sendBatchPayload(api, batch) {
   });
 }
 
-export function getCurrentPayloadFile() {
-  let file = getSoftwareDir();
-  if (isWindows()) {
-    file += "\\latestKeystrokes.json";
-  } else {
-    file += "/latestKeystrokes.json";
-  }
-  return file;
-}
 
 export async function storeCurrentPayload(payload) {
   try {
