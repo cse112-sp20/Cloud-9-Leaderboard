@@ -1,4 +1,3 @@
-import {getStatusBarItem} from "../extension";
 import {
   workspace,
   extensions,
@@ -299,7 +298,7 @@ export function showStatus(fullMsg, tooltip) {
 }
 
 export function handleCodeTimeStatusToggle() {
-  toggleStatusBar();
+  //toggleStatusBar();
 }
 
 function updateStatusBar(msg, tooltip) {
@@ -316,15 +315,7 @@ function updateStatusBar(msg, tooltip) {
     // add the message to the tooltip
     tooltip = msg + " | " + tooltip;
   }
-  if (!getStatusBarItem()) {
-    return;
-  }
-  getStatusBarItem().tooltip = `${tooltip}${userInfo}`;
-  if (!showStatusBarText) {
-    getStatusBarItem().text = "$(clock)";
-  } else {
-    getStatusBarItem().text = msg;
-  }
+  
 }
 
 export function toggleStatusBar() {

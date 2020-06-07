@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.intializePlugin = exports.activate = exports.deactivate = exports.getStatusBarItem = exports.isTelemetryOn = void 0;
+exports.intializePlugin = exports.activate = exports.deactivate = void 0;
 /**
  * Summary. (use period)
  *
@@ -32,7 +32,6 @@ const WallClockManager_1 = require("./lib/managers/WallClockManager");
 const EventManager_1 = require("./lib/managers/EventManager");
 const FileManager_1 = require("./lib/managers/FileManager");
 const Authentication_1 = require("./src/util/Authentication");
-let TELEMETRY_ON = true;
 let statusBarItem = null;
 let _ls = null;
 let fifteen_minute_interval = null;
@@ -48,14 +47,6 @@ const one_hour_millis = one_min_millis * 60;
 // will then listen for text document changes.
 //
 const kpmController = KpmManager_1.KpmManager.getInstance();
-function isTelemetryOn() {
-    return TELEMETRY_ON;
-}
-exports.isTelemetryOn = isTelemetryOn;
-function getStatusBarItem() {
-    return statusBarItem;
-}
-exports.getStatusBarItem = getStatusBarItem;
 function deactivate(ctx) {
     // store the deactivate event
     EventManager_1.EventManager.getInstance().createCodeTimeEvent("resource", "unload", "EditorDeactivate");
@@ -67,7 +58,6 @@ function deactivate(ctx) {
         // close the session on our end
         _ls["end"] = nowSec;
         _ls["local_end"] = localNow;
-        //manageLiveshareSession(_ls);
         _ls = null;
     }
     // dispose the new day timer
@@ -77,17 +67,6 @@ function deactivate(ctx) {
     clearInterval(thirty_minute_interval);
     clearInterval(hourly_interval);
     clearInterval(liveshare_update_interval);
-    // softwareDelete(`/integrations/${PLUGIN_ID}`, getItem("jwt")).then(resp => {
-    //     if (isResponseOk(resp)) {
-    //         if (resp.data) {
-    //             console.log(`Uninstalled plugin`);
-    //         } else {
-    //             console.log(
-    //                 "Failed to update Code Time about the uninstall event"
-    //             );
-    //         }
-    //     }
-    // });
 }
 exports.deactivate = deactivate;
 //export var extensionContext;
