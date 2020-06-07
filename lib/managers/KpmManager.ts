@@ -13,7 +13,6 @@ import {
 } from "../Util";
 import {getResourceInfo} from "../repo/KpmRepoManager";
 import {FileChangeInfo} from "../model/models";
-import {JiraClient} from "../http/JiraClient";
 import {storeCurrentPayload} from "./FileManager";
 import Project from "../model/Project";
 
@@ -381,17 +380,6 @@ export class KpmManager {
     return staticInfo;
   }
 
-  async processSelectedTextForJira() {
-    const editor = window.activeTextEditor;
-    const text = editor.document.getText(editor.selection);
-    if (text) {
-      // start the process
-      showInformationMessage(`Selected the following text: ${text}`);
-      const issues = await JiraClient.getInstance().fetchIssues();
-    } else {
-      showInformationMessage("Please select text to copy to your Jira project");
-    }
-  }
 
   /**
    * This will return true if it's a true file. we don't

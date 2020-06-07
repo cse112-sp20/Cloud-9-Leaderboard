@@ -10,7 +10,6 @@ const beApi = axios.create({
   baseURL: `${api_endpoint}`,
 });
 
-const spotifyApi = axios.create({});
 
 const cacheMgr: CacheManager = CacheManager.getInstance();
 
@@ -28,17 +27,6 @@ export async function serverIsAvailable() {
     cacheMgr.set("serverAvailable", isAvail, 60);
   }
   return isAvail;
-}
-
-export async function spotifyApiPut(api, payload, accessToken) {
-  if (api.indexOf("https://api.spotify.com") === -1) {
-    api = "https://api.spotify.com" + api;
-  }
-  spotifyApi.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-  return await spotifyApi.put(api, payload).catch((err) => {
-    logIt(`error posting data for ${api}, message: ${err.message}`);
-    return err;
-  });
 }
 
 /**
@@ -89,22 +77,6 @@ export async function softwarePost(api, payload, jwt) {
     })
     .catch((err) => {
       logIt(`error posting data for ${api}, message: ${err.message}`);
-      return err;
-    });
-}
-
-/**
- * perform a delete request
- */
-export async function softwareDelete(api, jwt) {
-  beApi.defaults.headers.common["Authorization"] = jwt;
-  return beApi
-    .delete(api)
-    .then((resp) => {
-      return resp;
-    })
-    .catch((err) => {
-      logIt(`error with delete request for ${api}, message: ${err.message}`);
       return err;
     });
 }

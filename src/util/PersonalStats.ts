@@ -294,7 +294,7 @@ async function writePersonalStatsFile(dates) {
     "\n";
 
   content += "\n" + SECTION_BAR;
-  content += "                                        Achievemnts\n";
+  content += "                                        Achievements\n";
   content += SECTION_BAR + "\n";
 
   content += "These are personal achievements/milestones that you can earn\n\n";

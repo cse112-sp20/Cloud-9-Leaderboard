@@ -15,7 +15,6 @@ const KeystrokeStats_1 = require("../model/KeystrokeStats");
 const Constants_1 = require("../Constants");
 const Util_1 = require("../Util");
 const models_1 = require("../model/models");
-const JiraClient_1 = require("../http/JiraClient");
 const FileManager_1 = require("./FileManager");
 const Project_1 = require("../model/Project");
 let _keystrokeMap = {};
@@ -331,20 +330,6 @@ class KpmManager {
             };
             _staticInfoMap[filename] = staticInfo;
             return staticInfo;
-        });
-    }
-    processSelectedTextForJira() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const editor = vscode_1.window.activeTextEditor;
-            const text = editor.document.getText(editor.selection);
-            if (text) {
-                // start the process
-                Util_1.showInformationMessage(`Selected the following text: ${text}`);
-                const issues = yield JiraClient_1.JiraClient.getInstance().fetchIssues();
-            }
-            else {
-                Util_1.showInformationMessage("Please select text to copy to your Jira project");
-            }
         });
     }
     /**

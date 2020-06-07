@@ -267,7 +267,7 @@ function writePersonalStatsFile(dates) {
                 statsObj["lpm"].toFixed(3) +
                 "\n";
         content += "\n" + Constants_1.SECTION_BAR;
-        content += "                                        Achievemnts\n";
+        content += "                                        Achievements\n";
         content += Constants_1.SECTION_BAR + "\n";
         content += "These are personal achievements/milestones that you can earn\n\n";
         content +=
