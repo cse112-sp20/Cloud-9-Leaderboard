@@ -25,7 +25,6 @@ import {
 } from "./lib/Util";
 import {serverIsAvailable} from "./lib/http/HttpClient";
 import {getHistoricalCommits} from "./lib/repo/KpmRepoManager";
-import {manageLiveshareSession} from "./lib/LiveshareManager";
 import * as vsls from "vsls/vscode";
 import {createCommands} from "./lib/command-helper";
 import {KpmManager} from "./lib/managers/KpmManager";
@@ -90,7 +89,7 @@ export function deactivate(ctx: ExtensionContext) {
     // close the session on our end
     _ls["end"] = nowSec;
     _ls["local_end"] = localNow;
-    manageLiveshareSession(_ls);
+    //manageLiveshareSession(_ls);
     _ls = null;
   }
 

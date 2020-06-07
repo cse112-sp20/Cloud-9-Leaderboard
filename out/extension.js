@@ -25,7 +25,6 @@ const OnboardManager_1 = require("./lib/user/OnboardManager");
 const Util_1 = require("./lib/Util");
 const HttpClient_1 = require("./lib/http/HttpClient");
 const KpmRepoManager_1 = require("./lib/repo/KpmRepoManager");
-const LiveshareManager_1 = require("./lib/LiveshareManager");
 const command_helper_1 = require("./lib/command-helper");
 const KpmManager_1 = require("./lib/managers/KpmManager");
 const SummaryManager_1 = require("./lib/managers/SummaryManager");
@@ -68,7 +67,7 @@ function deactivate(ctx) {
         // close the session on our end
         _ls["end"] = nowSec;
         _ls["local_end"] = localNow;
-        LiveshareManager_1.manageLiveshareSession(_ls);
+        //manageLiveshareSession(_ls);
         _ls = null;
     }
     // dispose the new day timer

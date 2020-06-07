@@ -9,11 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.writeCodeTimeMetricsDashboard = exports.writeProjectContributorCommitDashboard = exports.writeProjectContributorCommitDashboardFromGitLogs = exports.writeProjectCommitDashboard = exports.writeProjectCommitDashboardByRangeType = exports.writeProjectCommitDashboardByStartEnd = exports.writeDailyReportDashboard = exports.writeCommitSummaryData = exports.handleKpmClickedEvent = exports.sendHeartbeat = exports.refetchSlackConnectStatusLazily = exports.refetchUserStatusLazily = exports.updatePreferences = exports.initializePreferences = exports.getUser = exports.getSlackOauth = exports.isLoggedIn = exports.getUserRegistrationState = exports.getAppJwt = exports.sendTeamInvite = exports.getRegisteredTeamMembers = exports.getToggleFileEventLoggingState = void 0;
+exports.writeCodeTimeMetricsDashboard = exports.writeProjectContributorCommitDashboard = exports.writeProjectContributorCommitDashboardFromGitLogs = exports.writeProjectCommitDashboard = exports.writeProjectCommitDashboardByRangeType = exports.writeProjectCommitDashboardByStartEnd = exports.writeDailyReportDashboard = exports.writeCommitSummaryData = exports.sendHeartbeat = exports.refetchSlackConnectStatusLazily = exports.refetchUserStatusLazily = exports.updatePreferences = exports.initializePreferences = exports.getUser = exports.getSlackOauth = exports.isLoggedIn = exports.getUserRegistrationState = exports.getAppJwt = exports.sendTeamInvite = exports.getRegisteredTeamMembers = exports.getToggleFileEventLoggingState = void 0;
 const vscode_1 = require("vscode");
 const HttpClient_1 = require("./http/HttpClient");
 const Util_1 = require("./Util");
-const MenuManager_1 = require("./menu/MenuManager");
 const Constants_1 = require("./Constants");
 const SessionSummaryData_1 = require("./storage/SessionSummaryData");
 const GitUtil_1 = require("./repo/GitUtil");
@@ -353,26 +352,6 @@ function sendHeartbeat(reason, serverIsOnline) {
     });
 }
 exports.sendHeartbeat = sendHeartbeat;
-function handleKpmClickedEvent() {
-    return __awaiter(this, void 0, void 0, function* () {
-        let serverIsOnline = yield HttpClient_1.serverIsAvailable();
-        // {loggedIn: true|false}
-        let loggedIn = yield isLoggedIn();
-        let webUrl = yield MenuManager_1.buildWebDashboardUrl();
-        if (!loggedIn) {
-            webUrl = yield Util_1.buildLoginUrl(serverIsOnline);
-            refetchUserStatusLazily();
-        }
-        else {
-            // add the token=jwt
-            const jwt = Util_1.getItem("jwt");
-            const encodedJwt = encodeURIComponent(jwt);
-            webUrl = `${webUrl}?token=${encodedJwt}`;
-        }
-        Util_1.launchWebUrl(webUrl);
-    });
-}
-exports.handleKpmClickedEvent = handleKpmClickedEvent;
 function writeCommitSummaryData() {
     return __awaiter(this, void 0, void 0, function* () {
         const filePath = Util_1.getCommitSummaryFile();
