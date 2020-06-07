@@ -9,10 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getHistoricalCommits = exports.postRepoContributors = exports.processRepoUsersForWorkspace = exports.getResourceInfo = exports.getRepoContributorInfo = exports.getRepoContributors = exports.getRepoFileCount = exports.getFileContributorCount = exports.getMyRepoInfo = void 0;
+exports.getHistoricalCommits = exports.getResourceInfo = exports.getRepoContributorInfo = exports.getRepoFileCount = exports.getFileContributorCount = void 0;
 const HttpClient_1 = require("../http/HttpClient");
 const Util_1 = require("../Util");
-const HttpClient_2 = require("../http/HttpClient");
 const GitUtil_1 = require("./GitUtil");
 const RepoContributorInfo_1 = require("../model/RepoContributorInfo");
 const TeamMember_1 = require("../model/TeamMember");
@@ -41,24 +40,6 @@ function getProjectDir(fileName = null) {
     }
     return null;
 }
-function getMyRepoInfo() {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (myRepoInfo.length > 0) {
-            return myRepoInfo;
-        }
-        const serverAvailable = yield HttpClient_2.serverIsAvailable();
-        const jwt = Util_1.getItem("jwt");
-        if (serverAvailable && jwt) {
-            // list of [{identifier, tag, branch}]
-            const resp = yield HttpClient_1.softwareGet("/repo/info", jwt);
-            if (HttpClient_1.isResponseOk(resp)) {
-                myRepoInfo = resp.data;
-            }
-        }
-        return myRepoInfo;
-    });
-}
-exports.getMyRepoInfo = getMyRepoInfo;
 function getFileContributorCount(fileName) {
     return __awaiter(this, void 0, void 0, function* () {
         let fileType = Util_1.getFileType(fileName);
@@ -110,28 +91,6 @@ function getRepoFileCount(fileName) {
     });
 }
 exports.getRepoFileCount = getRepoFileCount;
-function getRepoContributors(fileName = "", filterOutNonEmails = true) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!fileName) {
-            fileName = Util_1.findFirstActiveDirectoryOrWorkspaceDirectory();
-        }
-        const noSpacesFileName = fileName.replace(/^\s+/g, "");
-        const cacheId = `file-repo-contributors-info-${noSpacesFileName}`;
-        let teamMembers = cacheMgr.get(cacheId);
-        // return from cache if we have it
-        if (teamMembers) {
-            return teamMembers;
-        }
-        teamMembers = [];
-        const repoContributorInfo = yield getRepoContributorInfo(fileName, filterOutNonEmails);
-        if (repoContributorInfo && repoContributorInfo.members) {
-            teamMembers = repoContributorInfo.members;
-            cacheMgr.set(cacheId, teamMembers, cacheTimeoutSeconds);
-        }
-        return teamMembers;
-    });
-}
-exports.getRepoContributors = getRepoContributors;
 function getRepoContributorInfo(fileName, filterOutNonEmails = true) {
     return __awaiter(this, void 0, void 0, function* () {
         const projectDir = getProjectDir(fileName);
@@ -216,28 +175,6 @@ function getResourceInfo(projectDir) {
     });
 }
 exports.getResourceInfo = getResourceInfo;
-function processRepoUsersForWorkspace() {
-    return __awaiter(this, void 0, void 0, function* () {
-        let activeWorkspaceDir = Util_1.findFirstActiveDirectoryOrWorkspaceDirectory();
-        if (activeWorkspaceDir) {
-            postRepoContributors(activeWorkspaceDir);
-        }
-    });
-}
-exports.processRepoUsersForWorkspace = processRepoUsersForWorkspace;
-/**
- * get the git repo users
- */
-function postRepoContributors(fileName) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const repoContributorInfo = yield getRepoContributorInfo(fileName);
-        if (repoContributorInfo) {
-            // send this to the backend
-            HttpClient_1.softwarePost("/repo/contributors", repoContributorInfo, Util_1.getItem("jwt"));
-        }
-    });
-}
-exports.postRepoContributors = postRepoContributors;
 /**
  * get the last git commit from the app server
  */

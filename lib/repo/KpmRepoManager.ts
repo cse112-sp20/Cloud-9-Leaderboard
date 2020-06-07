@@ -5,10 +5,8 @@ import {
   getWorkspaceFolders,
   normalizeGithubEmail,
   getFileType,
-  findFirstActiveDirectoryOrWorkspaceDirectory,
   isGitProject,
 } from "../Util";
-import {serverIsAvailable} from "../http/HttpClient";
 import {getCommandResult} from "./GitUtil";
 import RepoContributorInfo from "../model/RepoContributorInfo";
 import TeamMember from "../model/TeamMember";
@@ -44,21 +42,6 @@ function getProjectDir(fileName = null) {
   return null;
 }
 
-export async function getMyRepoInfo() {
-  if (myRepoInfo.length > 0) {
-    return myRepoInfo;
-  }
-  const serverAvailable = await serverIsAvailable();
-  const jwt = getItem("jwt");
-  if (serverAvailable && jwt) {
-    // list of [{identifier, tag, branch}]
-    const resp = await softwareGet("/repo/info", jwt);
-    if (isResponseOk(resp)) {
-      myRepoInfo = resp.data;
-    }
-  }
-  return myRepoInfo;
-}
 
 export async function getFileContributorCount(fileName) {
   let fileType = getFileType(fileName);
@@ -115,37 +98,6 @@ export async function getRepoFileCount(fileName) {
   return resultList.length;
 }
 
-export async function getRepoContributors(
-  fileName: string = "",
-  filterOutNonEmails: boolean = true,
-): Promise<TeamMember[]> {
-  if (!fileName) {
-    fileName = findFirstActiveDirectoryOrWorkspaceDirectory();
-  }
-
-  const noSpacesFileName = fileName.replace(/^\s+/g, "");
-  const cacheId = `file-repo-contributors-info-${noSpacesFileName}`;
-
-  let teamMembers: TeamMember[] = cacheMgr.get(cacheId);
-  // return from cache if we have it
-  if (teamMembers) {
-    return teamMembers;
-  }
-
-  teamMembers = [];
-
-  const repoContributorInfo: RepoContributorInfo = await getRepoContributorInfo(
-    fileName,
-    filterOutNonEmails,
-  );
-
-  if (repoContributorInfo && repoContributorInfo.members) {
-    teamMembers = repoContributorInfo.members;
-    cacheMgr.set(cacheId, teamMembers, cacheTimeoutSeconds);
-  }
-
-  return teamMembers;
-}
 
 export async function getRepoContributorInfo(
   fileName: string,
@@ -249,26 +201,6 @@ export async function getResourceInfo(projectDir) {
   return resourceInfo;
 }
 
-export async function processRepoUsersForWorkspace() {
-  let activeWorkspaceDir: string = findFirstActiveDirectoryOrWorkspaceDirectory();
-  if (activeWorkspaceDir) {
-    postRepoContributors(activeWorkspaceDir);
-  }
-}
-
-/**
- * get the git repo users
- */
-export async function postRepoContributors(fileName) {
-  const repoContributorInfo: RepoContributorInfo = await getRepoContributorInfo(
-    fileName,
-  );
-
-  if (repoContributorInfo) {
-    // send this to the backend
-    softwarePost("/repo/contributors", repoContributorInfo, getItem("jwt"));
-  }
-}
 
 /**
  * get the last git commit from the app server
