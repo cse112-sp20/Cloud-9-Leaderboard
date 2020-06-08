@@ -1,8 +1,4 @@
-import {
-  generateRandomName,
-  getRandomInt,
-  generateRandomEmail,
-} from "../../src/util/Utility";
+import {generateRandomName} from "../../src/util/Utility";
 import {
   getExtensionContext,
   authenticateUser,
@@ -80,18 +76,6 @@ suite("utilities.ts", () => {
   test("generating random name", () => {
     const result = generateRandomName();
     assert.typeOf(result, "string");
-  });
-
-  test("generating random int", () => {
-    assert.equal(getRandomInt(1), 0);
-
-    assert.equal(getRandomInt(0), 0);
-
-    assert.equal(getRandomInt(100) <= 100, true);
-  });
-
-  test("generating random email", () => {
-    assert.equal(generateRandomEmail().includes("@"), true);
   });
 });
 

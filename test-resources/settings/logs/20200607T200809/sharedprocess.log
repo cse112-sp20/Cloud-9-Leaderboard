@@ -1,0 +1,2 @@
+[2020-06-07 20:08:13.533] [sharedprocess] [info] main {"machineId":"a2499f3b8477467dae97ad9dd1b830079ea2338b4288c598670d4253334293fa","windowId":2}
+[2020-06-07 20:08:13.635] [sharedprocess] [error] [File Watcher (node.js)] Error: ENOENT: no such file or directory, stat 'd:\Documents\UCSD v2\UCSD\Homework\CSE 112\project\Cloud-9-Leaderboard\test-resources\settings\User\snippets'

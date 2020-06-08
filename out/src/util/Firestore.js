@@ -377,7 +377,7 @@ exports.createNewUserInFirebase = createNewUserInFirebase;
  */
 function addNewUserDocToDb(userId, email) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('Adding doc to db for new user...');
+        console.log("Adding doc to db for new user...");
         if (userId === undefined) {
             console.log("userId undefined.");
             return;

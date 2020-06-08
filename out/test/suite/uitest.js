@@ -18,7 +18,7 @@ describe('Cloud 9 UI Tests', () => {
     });
     it('End to End Test', function () {
         return __awaiter(this, void 0, void 0, function* () {
-            this.timeout(10000);
+            this.timeout(100000);
             this.retries();
             const activityBar = new vscode_extension_tester_1.ActivityBar();
             const control = yield activityBar.getViewControl('Cloud9');
@@ -59,6 +59,8 @@ describe('Cloud 9 UI Tests', () => {
             console.log('7');
             assert.equal((yield globalStats.getTitle()) == "", false); // check actual text
             console.log('8');
+            const editor = new vscode_extension_tester_1.TextEditor();
+            yield editor.typeText(1, 3, ' absolutely');
             //console.log(await globalStats.getText()); */
             pauseForSeconds(2);
             //Load up team
@@ -75,10 +77,10 @@ describe('Cloud 9 UI Tests', () => {
             const dailyMetric = yield sidebar.getContent().getSection('Daily Metric');
             console.log(13);
             // Check that daily metric
-            assert.equal((yield (yield (yield dailyMetric.findItem('Keystrokes')).findChildItem("🚀 Today: 0 (No data yet)"))) == undefined, true);
-            assert.equal((yield (yield (yield dailyMetric.findItem('Lines Changed')).findChildItem("🚀 Today: 0 (No data yet)"))) == undefined, true);
-            assert.equal((yield (yield (yield dailyMetric.findItem('Time Interval')).findChildItem("🚀 Today: 0 (No data yet)"))) == undefined, true);
-            assert.equal((yield (yield (yield dailyMetric.findItem('Total Points')).findChildItem("🚀 Today: 0 (No data yet)"))) == undefined, true);
+            assert.equal(yield (yield (yield dailyMetric.findItem('Keystrokes')).hasChildren()), true);
+            assert.equal(yield (yield (yield dailyMetric.findItem('Lines Changed')).hasChildren()), true);
+            assert.equal(yield (yield (yield dailyMetric.findItem('Time Interval')).hasChildren()), true);
+            assert.equal(yield (yield (yield dailyMetric.findItem('Total Points')).hasChildren()), true);
         });
     });
 });
