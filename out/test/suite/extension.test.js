@@ -69,12 +69,12 @@ suite("metric.ts", () => {
         userStats["keystrokes"] = 0;
         userStats["linesChanged"] = 0;
         var score = Metric_1.scoreCalculation(userStats);
-        assert.equal(score, 10);
+        assert.equal(score, 0);
         userStats["timeInterval"] = -1;
         userStats["keystrokes"] = -1;
         userStats["linesChanged"] = -1;
         score = Metric_1.scoreCalculation(userStats);
-        assert.equal(score, 7.99);
+        assert.equal(score, -11.01);
     });
     test("score calculations with large metrics", () => {
         const userStats = {};
@@ -82,12 +82,12 @@ suite("metric.ts", () => {
         userStats["keystrokes"] = 100000;
         userStats["linesChanged"] = 100000;
         var score = Metric_1.scoreCalculation(userStats);
-        assert.equal(score, 201010);
+        assert.equal(score, 1101000);
         userStats["timeInterval"] = 100000;
         userStats["keystrokes"] = 100000;
         userStats["linesChanged"] = -100000;
         score = Metric_1.scoreCalculation(userStats);
-        assert.equal(score, 1010);
+        assert.equal(score, -899000);
     });
     //process metric test needed (don't know what payload looks like yet)
 });
