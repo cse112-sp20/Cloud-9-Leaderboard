@@ -3,9 +3,7 @@
 // Please refer to their documentation on https://mochajs.org/ for help.
 //
 
-import {
-  generateRandomName,
-} from "../../src/util/Utility";
+import {generateRandomName} from "../../src/util/Utility";
 import {getExtensionContext} from "../../src/util/Authentication";
 import {Leaderboard} from "../../src/util/Leaderboard";
 
