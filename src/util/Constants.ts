@@ -1,10 +1,10 @@
 /**
- * Summary. (use period)
+ * File: Constants.ts
  *
- * Description. (use period)
+ * Contains constants value used throughout cloud9
  *
  * @link   URL
- * @file   This files defines the MyClass class.
+ * @file   This files defines constants
  * @author AuthorName.
  */
 

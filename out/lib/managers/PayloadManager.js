@@ -162,12 +162,10 @@ function processPayload(payload, sendNow = false) {
         if (sendNow) {
             // send the payload now (only called when getting installed)
             FileManager_1.sendBatchPayload("/data/batch", [payload]);
-            Util_1.logIt(`sending kpm metrics`);
         }
         else {
             // store to send the batch later
             storePayload(payload, sessionMinutes);
-            Util_1.logIt(`storing kpm metrics`);
         }
         // Update the latestPayloadTimestampEndUtc. It's used to determine session time and elapsed_seconds
         Util_1.setItem("latestPayloadTimestampEndUtc", nowTimes.now_in_sec);
@@ -186,10 +184,7 @@ function storePayload(payload, sessionMinutes) {
         // write the fileChangeInfoMap
         FileChangeInfoSummaryData_1.saveFileChangeInfoToDisk(fileChangeInfoMap);
         // store the payload into the data.json file
-        fs.appendFileSync(Util_1.getSoftwareDataStoreFile(), JSON.stringify(payload) + os.EOL, (err) => {
-            if (err)
-                Util_1.logIt(`Error appending to the Software data store file: ${err.message}`);
-        });
+        fs.appendFileSync(Util_1.getSoftwareDataStoreFile(), JSON.stringify(payload) + os.EOL, (err) => { });
         // update the status and tree
     });
 }

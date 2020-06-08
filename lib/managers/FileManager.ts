@@ -6,14 +6,9 @@ import {
 import {
   getSoftwareDataStoreFile,
   deleteFile,
-  logEvent,
-  getPluginEventsFile,
-  logIt,
   getFileDataPayloadsAsJson,
   getFileDataArray,
   getItem,
-  getSoftwareDir,
-  isWindows,
 } from "../Util";
 import {
   getTimeDataSummaryFile,
@@ -44,13 +39,6 @@ export async function sendOfflineTimeData() {
 }
 
 /**
- * send the offline Event payloads
- */
-export async function sendOfflineEvents() {
-  batchSendData("/data/event", getPluginEventsFile());
-}
-
-/**
  * send the offline data.
  */
 export async function sendOfflineData(isNewDay = false) {
@@ -72,9 +60,7 @@ export async function batchSendArrayData(api, file) {
       const payloads = getFileDataArray(file);
       batchSendPayloadData(api, file, payloads);
     }
-  } catch (e) {
-    logIt(`Error batch sending payloads: ${e.message}`);
-  }
+  } catch (e) {}
 }
 
 export async function batchSendData(api, file) {
@@ -87,9 +73,7 @@ export async function batchSendData(api, file) {
       const payloads = getFileDataPayloadsAsJson(file);
       batchSendPayloadData(api, file, payloads);
     }
-  } catch (e) {
-    logIt(`Error batch sending payloads: ${e.message}`);
-  }
+  } catch (e) {}
 }
 
 export async function getLastSavedKeystrokesStats() {
@@ -107,9 +91,7 @@ export async function getLastSavedKeystrokesStats() {
         latestPayload = currentPayloads[0];
       }
     }
-  } catch (e) {
-    logIt(`Error fetching last payload: ${e.message}`);
-  }
+  } catch (e) {}
   // returns one in memory if not found in file
   return latestPayload;
 }
@@ -117,8 +99,6 @@ export async function getLastSavedKeystrokesStats() {
 export async function batchSendPayloadData(api, file, payloads) {
   // send the batch
   if (payloads && payloads.length > 0) {
-    logEvent(`sending batch payloads: ${JSON.stringify(payloads)}`);
-
     // send batch_limit at a time
     let batch = [];
     for (let i = 0; i < payloads.length; i++) {
@@ -151,27 +131,13 @@ export async function batchSendPayloadData(api, file, payloads) {
 export function sendBatchPayload(api, batch) {
   // console.log("SEND BATCH LOOK HERE");
   // console.log(batch);
-  return softwarePost(api, batch, getItem("jwt")).catch((e) => {
-    logIt(`Unable to send plugin data batch, error: ${e.message}`);
-  });
-}
-
-export function getCurrentPayloadFile() {
-  let file = getSoftwareDir();
-  if (isWindows()) {
-    file += "\\latestKeystrokes.json";
-  } else {
-    file += "/latestKeystrokes.json";
-  }
-  return file;
+  return softwarePost(api, batch, getItem("jwt")).catch((e) => {});
 }
 
 export async function storeCurrentPayload(payload) {
   try {
     const content = JSON.stringify(payload, null, 4);
-    fs.writeFileSync(this.getCurrentPayloadFile(), content, (err) => {
-      if (err) logIt(`Deployer: Error writing time data: ${err.message}`);
-    });
+    fs.writeFileSync(this.getCurrentPayloadFile(), content, (err) => {});
   } catch (e) {
     //
   }

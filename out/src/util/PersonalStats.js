@@ -156,38 +156,9 @@ function writePersonalStatsFile(dates) {
             "Each keystroke:                                      +    1 points per keystroke\n";
         content +=
             "Each modified line:                                  +   10 points per line \n\n";
-        // content += PERSONAL_STATISTIC_ROW_1;
-        // content += PERSONAL_STATISTIC_ROW_2;
-        // content += PERSONAL_STATISTIC_ROW_3;
-        // content += PERSONAL_STATISTIC_ROW_4;
-        // content += PERSONAL_STATISTIC_ROW_5;
         content += Constants_1.SECTION_BAR;
         content += "                                           Record\n";
         content += Constants_1.SECTION_BAR + "\n";
-        // content +=
-        //   'Dates'.padEnd(FIELD_LENGTH, ' ') +
-        //   '\t' +
-        //   'Keystrokes'.padEnd(FIELD_LENGTH, ' ') +
-        //   '\t' +
-        //   'LinesChanged'.padEnd(FIELD_LENGTH, ' ') +
-        //   '\t' +
-        //   'TimeInterval'.padEnd(FIELD_LENGTH, ' ') +
-        //   '\t' +
-        //   'Points'.padEnd(FIELD_LENGTH, ' ') +
-        //   '\n';
-        // scoreMap.map((obj, i) => {
-        //   content +=
-        //     obj['dateStr'].toString().padEnd(FIELD_LENGTH, ' ') +
-        //     '\t' +
-        //     obj['keystrokes'].toString().padEnd(FIELD_LENGTH, ' ') +
-        //     '\t' +
-        //     obj['linesChanged'].toString().padEnd(FIELD_LENGTH, ' ') +
-        //     '\t' +
-        //     obj['timeInterval'].toString().padEnd(FIELD_LENGTH, ' ') +
-        //     '\t' +
-        //     obj['points'].toString().padEnd(FIELD_LENGTH, ' ') +
-        //     '\n';
-        // });
         let previousScore = -1;
         let currentScore = 0;
         let counter = 1;
@@ -218,7 +189,7 @@ function writePersonalStatsFile(dates) {
                     "\t" +
                     "|".padEnd(Constants_1.FIELD_LENGTH, " ") +
                     "\t" +
-                    obj["points"] +
+                    +obj["keystrokes"] * 1 +
                     " points\n";
             content +=
                 "      Lines of code added :".padEnd(40, " ") +
@@ -226,7 +197,7 @@ function writePersonalStatsFile(dates) {
                     "\t" +
                     "|".padEnd(Constants_1.FIELD_LENGTH, " ") +
                     "\t" +
-                    obj["points"] +
+                    +(+obj["linesChanged"] * 10) +
                     " points\n";
             content +=
                 "         Active code time :".padEnd(40, " ") +
@@ -234,7 +205,7 @@ function writePersonalStatsFile(dates) {
                     "\t" +
                     "|".padEnd(Constants_1.FIELD_LENGTH, " ") +
                     "\t" +
-                    obj["points"] +
+                    (+obj["timeInterval"] * 0.01).toFixed(3) +
                     " points\n";
             content += "\n";
         });
@@ -267,7 +238,7 @@ function writePersonalStatsFile(dates) {
                 statsObj["lpm"].toFixed(3) +
                 "\n";
         content += "\n" + Constants_1.SECTION_BAR;
-        content += "                                        Achievemnts\n";
+        content += "                                        Achievements\n";
         content += Constants_1.SECTION_BAR + "\n";
         content += "These are personal achievements/milestones that you can earn\n\n";
         content +=

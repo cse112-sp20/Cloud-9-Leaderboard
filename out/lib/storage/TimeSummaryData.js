@@ -59,10 +59,7 @@ function clearTimeDataSummary() {
         let payloads = [];
         try {
             const content = JSON.stringify(payloads, null, 4);
-            fs.writeFileSync(file, content, (err) => {
-                if (err)
-                    Util_1.logIt(`Deployer: Error writing time data: ${err.message}`);
-            });
+            fs.writeFileSync(file, content, (err) => { });
         }
         catch (e) {
             //
@@ -246,10 +243,7 @@ function saveTimeDataSummaryToDisk(data) {
     }
     try {
         const content = JSON.stringify(payloads, null, 4);
-        fs.writeFileSync(file, content, (err) => {
-            if (err)
-                Util_1.logIt(`Deployer: Error writing time data: ${err.message}`);
-        });
+        fs.writeFileSync(file, content, (err) => { });
     }
     catch (e) {
         //

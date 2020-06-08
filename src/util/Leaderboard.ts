@@ -375,30 +375,30 @@ async function writeToFile(users, isTeam) {
   leaderBoardContent += SECTION_BAR + "\n";
   console.log(scoreMap);
   leaderBoardContent +=
-    String.fromCodePoint(0x1f947).padEnd(BADGE_LENGTH, " ") + "- rank first \n";
+    String.fromCodePoint(0x1f947).padEnd(BADGE_LENGTH, " ") + "- Rank first \n";
   leaderBoardContent +=
     String.fromCodePoint(0x1f948).padEnd(BADGE_LENGTH, " ") +
-    "- rank second \n";
+    "- Rank second \n";
   leaderBoardContent +=
-    String.fromCodePoint(0x1f949).padEnd(BADGE_LENGTH, " ") + "- rank third \n";
+    String.fromCodePoint(0x1f949).padEnd(BADGE_LENGTH, " ") + "- Rank third \n";
   leaderBoardContent +=
     String.fromCodePoint(0x1f48e).padEnd(BADGE_LENGTH, " ") +
-    "- reach 5000 total keystrokes \n";
+    "- Reach 5000 total keystrokes \n";
   leaderBoardContent +=
     String.fromCodePoint(0x1f50e).padEnd(BADGE_LENGTH, " ") +
-    "- reach 2000 total lines changed \n";
+    "- Reach 2000 total lines changed \n";
   leaderBoardContent +=
     String.fromCodePoint(0x1f525).padEnd(BADGE_LENGTH, " ") +
-    "- spend total of 200 hours coding \n";
+    "- Spend total of 200 hours coding \n";
   leaderBoardContent +=
     String.fromCodePoint(0x1f4aa).padEnd(BADGE_LENGTH, " ") +
-    "- reach 500 keystrokes today\n";
+    "- Reach 500 keystrokes today\n";
   leaderBoardContent +=
     String.fromCodePoint(0x1f94a).padEnd(BADGE_LENGTH, " ") +
-    "- reach 200 lines changed today \n";
+    "- Reach 200 lines changed today \n";
   leaderBoardContent +=
     String.fromCodePoint(0x1f388).padEnd(BADGE_LENGTH, " ") +
-    "- spend 6 hours coding today \n";
+    "- Spend 6 hours coding today \n";
 
   fs.writeFileSync(leaderboardFile, leaderBoardContent, (err) => {
     if (err) {

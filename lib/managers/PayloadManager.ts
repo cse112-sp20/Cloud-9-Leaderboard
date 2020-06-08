@@ -1,6 +1,5 @@
 import {
   getSoftwareDataStoreFile,
-  logIt,
   getNowTimes,
   setItem,
   isNewDay,
@@ -30,11 +29,9 @@ import {
 import KeystrokeStats from "../model/KeystrokeStats";
 import {SummaryManager} from "./SummaryManager";
 import {sendBatchPayload, getLastSavedKeystrokesStats} from "./FileManager";
-import {WallClockManager} from "./WallClockManager";
 import {WorkspaceFolder} from "vscode";
 import Project from "../model/Project";
 import {updateStats} from "../../src/util/FireStore";
-import {processMetric} from "../../src/util/Metric";
 
 const os = require("os");
 const fs = require("fs");
@@ -204,11 +201,9 @@ export async function processPayload(payload: KeystrokeStats, sendNow = false) {
   if (sendNow) {
     // send the payload now (only called when getting installed)
     sendBatchPayload("/data/batch", [payload]);
-    logIt(`sending kpm metrics`);
   } else {
     // store to send the batch later
     storePayload(payload, sessionMinutes);
-    logIt(`storing kpm metrics`);
   }
 
   // Update the latestPayloadTimestampEndUtc. It's used to determine session time and elapsed_seconds
@@ -234,12 +229,7 @@ export async function storePayload(
   fs.appendFileSync(
     getSoftwareDataStoreFile(),
     JSON.stringify(payload) + os.EOL,
-    (err) => {
-      if (err)
-        logIt(
-          `Error appending to the Software data store file: ${err.message}`,
-        );
-    },
+    (err) => {},
   );
 
   // update the status and tree
