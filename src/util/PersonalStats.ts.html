@@ -1,0 +1,1028 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for ..\..\src\util\PersonalStats.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">all files</a> / <a href="index.html">../../src/util/</a> PersonalStats.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">17.29% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>23/133</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">12.5% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>2/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">42.86% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">17.29% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>23/133</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * File that contains personal stats class which displays user's
+ * personal statistics.
+ *
+ * Contain constants string to display personal stats.
+ *
+ *
+ * @file   This files defines the personalstats class.
+ * @author AuthorName.
+ * @since  0.0.1
+ */
+&nbsp;
+import {workspace, window, ViewColumn} from "vscode";
+import {getSoftwareDir, isWindows} from "../../lib/Util";
+import {retrieveUserStats} from "./Firestore";
+import {calculateStats} from "./Metric";
+&nbsp;
+import {
+  getExtensionContext,
+  checkIfCachedUserIdExistsAndPrompt,
+} from "./Authentication";
+import {
+  AUTH_NOT_LOGGED_IN,
+  SECTION_BAR,
+  STAT_LENGTH,
+  FIELD_LENGTH,
+  WECOME_TO_CLOUD9_ROW_1,
+  WECOME_TO_CLOUD9_ROW_2,
+  WECOME_TO_CLOUD9_ROW_3,
+  WECOME_TO_CLOUD9_ROW_4,
+  WECOME_TO_CLOUD9_ROW_5,
+} from "./Constants";
+const fs = require("fs");
+&nbsp;
+/**
+ * Personal Stats class for storing all information about
+ * the current user. All daily metric is stored using this class.
+ */
+export class PersonalStats {
+  private static dates: Array&lt;Object&gt;;
+&nbsp;
+<span class="fstat-no" title="function not covered" >  constructor() {</span>}
+&nbsp;
+  /**
+   * Add statistics of a day to the class of this current user.
+   * @param date date of the statistics
+   * @param statsObj statistics values
+   */
+  public static addDayStats(date, statsObj) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (!PersonalStats.dates) {
+      PersonalStats.dates = [];
+    }
+    let dateObj = new Object();
+    dateObj["date"] = date;
+    for (let key in statsObj) {
+      dateObj[key] = statsObj;
+    }
+    PersonalStats.dates.push(dateObj);
+  }
+&nbsp;
+  /**
+   * Getter for user statistics
+   */
+  public static getUsers() {
+    return PersonalStats.dates;
+  }
+}
+&nbsp;
+/**
+ * Finding the file path of the personal stats txt file
+ */
+export function getPersonalStatsFile() {
+  let filePath = getSoftwareDir();
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (isWindows()) {
+    filePath += "\\personal_statistics.txt";
+  } else {
+<span class="cstat-no" title="statement not covered" >    filePath += "/personal_statistics.txt";</span>
+  }
+  return filePath;
+}
+&nbsp;
+/**
+ * Display personal statistics text file in the vscode window
+ */
+<span class="fstat-no" title="function not covered" >export async function displayPersonalStats(</span>) {
+  // 1st write the code time metrics dashboard file
+  // await writeLeaderboard();
+  //ID check
+<span class="cstat-no" title="statement not covered" >  await checkIfCachedUserIdExistsAndPrompt().then((loggedIn) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!loggedIn) {</span>
+<span class="cstat-no" title="statement not covered" >      window.showErrorMessage(AUTH_NOT_LOGGED_IN);</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+  });
+<span class="cstat-no" title="statement not covered" >  await retrieveUserStats(writePersonalStatsFile);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  let filePath = getPersonalStatsFile();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    if (!fs.existsSync(filePath)) {</span>
+<span class="cstat-no" title="statement not covered" >      console.log("File not exist");</span>
+<span class="cstat-no" title="statement not covered" >      fs.writeFileSync(filePath, "", (err) =&gt; {</span>
+        // throws an error, you could also catch it here
+<span class="cstat-no" title="statement not covered" >        if (err) {</span>
+<span class="cstat-no" title="statement not covered" >          console.log("Error writing intially");</span>
+<span class="cstat-no" title="statement not covered" >          throw err;</span>
+        }
+        // success case, the file was saved
+<span class="cstat-no" title="statement not covered" >        console.log("Written empty string");</span>
+      });
+    } else {
+<span class="cstat-no" title="statement not covered" >      console.log("File exist");</span>
+    }
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    console.error(err);</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  workspace.openTextDocument(filePath).then((doc) =&gt; {</span>
+    // only focus if it's not already open
+<span class="cstat-no" title="statement not covered" >    window.showTextDocument(doc, ViewColumn.One, false).then((e) =&gt; {</span>
+      // done
+    });
+  });
+}
+&nbsp;
+/**
+ * Write to personal statistics text file
+ * @param dates the objects to be parsed and written on to the text file
+ */
+<span class="fstat-no" title="function not covered" >async function writePersonalStatsFile(dates)</span> {
+<span class="cstat-no" title="statement not covered" >  let personalStatsFile = getPersonalStatsFile();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const ctx = getExtensionContext();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  let scoreMap = [];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  dates.map((date) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    let obj = {};</span>
+<span class="cstat-no" title="statement not covered" >    obj["dateStr"] = date.date;</span>
+<span class="cstat-no" title="statement not covered" >    obj["keystrokes"] = date["keystrokes"];</span>
+<span class="cstat-no" title="statement not covered" >    obj["points"] = parseFloat(date["points"]).toFixed(3);</span>
+<span class="cstat-no" title="statement not covered" >    obj["linesChanged"] = date["linesChanged"];</span>
+<span class="cstat-no" title="statement not covered" >    obj["timeInterval"] = date["timeInterval"];</span>
+<span class="cstat-no" title="statement not covered" >    obj["date"] = new Date(date.date);</span>
+<span class="cstat-no" title="statement not covered" >    scoreMap.push(obj);</span>
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  scoreMap.sort(<span class="fstat-no" title="function not covered" >function (a, b)</span> {</span>
+<span class="cstat-no" title="statement not covered" >    return b.date - a.date;</span>
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  console.log(scoreMap);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  let content = "";</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  content += WECOME_TO_CLOUD9_ROW_1;</span>
+<span class="cstat-no" title="statement not covered" >  content += WECOME_TO_CLOUD9_ROW_2;</span>
+<span class="cstat-no" title="statement not covered" >  content += WECOME_TO_CLOUD9_ROW_3;</span>
+<span class="cstat-no" title="statement not covered" >  content += WECOME_TO_CLOUD9_ROW_4;</span>
+<span class="cstat-no" title="statement not covered" >  content += WECOME_TO_CLOUD9_ROW_5;</span>
+<span class="cstat-no" title="statement not covered" >  content += "\n";</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  content += SECTION_BAR;</span>
+<span class="cstat-no" title="statement not covered" >  content += "                                     How to gain points \n";</span>
+<span class="cstat-no" title="statement not covered" >  content += SECTION_BAR + "\n";</span>
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "Each second spent coding:                            + 0.01 points per second \n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "Each keystroke:                                      +    1 points per keystroke\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "Each modified line:                                  +   10 points per line \n\n";
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  content += SECTION_BAR;</span>
+<span class="cstat-no" title="statement not covered" >  content += "                                           Record\n";</span>
+<span class="cstat-no" title="statement not covered" >  content += SECTION_BAR + "\n";</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  let previousScore: number = -1;</span>
+<span class="cstat-no" title="statement not covered" >  let currentScore: number = 0;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  let counter = 1;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  let mapSize = scoreMap.length;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  console.log(mapSize);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  scoreMap.map((obj, i) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (i + 1 &gt;= mapSize) {</span>
+<span class="cstat-no" title="statement not covered" >      currentScore = +obj["points"];</span>
+<span class="cstat-no" title="statement not covered" >      previousScore = 0;</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      currentScore = +obj["points"];</span>
+<span class="cstat-no" title="statement not covered" >      previousScore = +scoreMap[i + 1]["points"];</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    let scoreDifference = currentScore - previousScore;</span>
+<span class="cstat-no" title="statement not covered" >    if (scoreDifference &gt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >      content += obj["dateStr"] + " 🟩🟩🟩🟩🟩🟩" + "\n";</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      content += obj["dateStr"] + " 🟥🟥🟥🟥🟥🟥" + "\n";</span>
+<span class="cstat-no" title="statement not covered" >      counter = 1;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    content +=</span>
+      "___________________________________________________________________________________________\n";
+<span class="cstat-no" title="statement not covered" >    content +=</span>
+      "    Keystrokes per minute :".padEnd(40, " ") +
+      obj["keystrokes"].toString().padEnd(FIELD_LENGTH, " ") +
+      "\t" +
+      "|".padEnd(FIELD_LENGTH, " ") +
+      "\t" +
+      +obj["keystrokes"] * 1 +
+      " points\n";
+<span class="cstat-no" title="statement not covered" >    content +=</span>
+      "      Lines of code added :".padEnd(40, " ") +
+      obj["linesChanged"].toString().padEnd(FIELD_LENGTH, " ") +
+      "\t" +
+      "|".padEnd(FIELD_LENGTH, " ") +
+      "\t" +
+      +(+obj["linesChanged"] * 10) +
+      " points\n";
+<span class="cstat-no" title="statement not covered" >    content +=</span>
+      "         Active code time :".padEnd(40, " ") +
+      obj["timeInterval"].toString().padEnd(FIELD_LENGTH, " ") +
+      "\t" +
+      "|".padEnd(FIELD_LENGTH, " ") +
+      "\t" +
+      (+obj["timeInterval"] * 0.01).toFixed(3) +
+      " points\n";
+<span class="cstat-no" title="statement not covered" >    content += "\n";</span>
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  content += "\n" + SECTION_BAR;</span>
+<span class="cstat-no" title="statement not covered" >  content += "                                         Statistics\n";</span>
+<span class="cstat-no" title="statement not covered" >  content += SECTION_BAR + "\n";</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  let statsObj = calculateStats(scoreMap);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "Daily Average Keystrokes:".padEnd(STAT_LENGTH, " ") +
+    statsObj["kpd"].toFixed(3) +
+    "\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "Daily Average Lines Changed:".padEnd(STAT_LENGTH, " ") +
+    statsObj["lcpd"].toFixed(3) +
+    "\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "Daily Average Time Spent:".padEnd(STAT_LENGTH, " ") +
+    statsObj["tspd"].toFixed(3) +
+    "\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "Daily Average Points:".padEnd(STAT_LENGTH, " ") +
+    statsObj["ppd"].toFixed(3) +
+    "\n";
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "Keystrokes per minute:".padEnd(STAT_LENGTH, " ") +
+    statsObj["kpm"].toFixed(3) +
+    "\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "Lines per minute:".padEnd(STAT_LENGTH, " ") +
+    statsObj["lpm"].toFixed(3) +
+    "\n";
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  content += "\n" + SECTION_BAR;</span>
+<span class="cstat-no" title="statement not covered" >  content += "                                        Achievements\n";</span>
+<span class="cstat-no" title="statement not covered" >  content += SECTION_BAR + "\n";</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  content += "These are personal achievements/milestones that you can earn\n\n";</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "__________________________________________________________________________________________\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                                                              |                          |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                           ACHIEVEMENTS                       |           BADGE          |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|______________________________________________________________|__________________________|\n";
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                                                              |                          |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                   Reach 5000 total keystrokes                |             💎           |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|______________________________________________________________|__________________________|\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                                                              |                          |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                  Reach 2000 total lines changed              |             🔎           |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|______________________________________________________________|__________________________|\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                                                              |                          |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                  Spend total of 200 hours coding             |             🔥           |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|______________________________________________________________|__________________________|\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                                                              |                          |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                   Reach 500 total keystrokes daily           |             💪           |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|______________________________________________________________|__________________________|\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                                                              |                          |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                 Reach 200 total lines changed daily          |             🥊           |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|______________________________________________________________|__________________________|\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                                                              |                          |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|                 Spend total of 6 hours coding daily          |             🎈           |\n";
+<span class="cstat-no" title="statement not covered" >  content +=</span>
+    "|______________________________________________________________|__________________________|\n";
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  fs.writeFileSync(personalStatsFile, content, (err) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (err) {</span>
+<span class="cstat-no" title="statement not covered" >      console.error("Error writing leaderboard");</span>
+    }
+  });
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Jun 07 2020 21:42:50 GMT-0700 (Pacific Daylight Time)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>
