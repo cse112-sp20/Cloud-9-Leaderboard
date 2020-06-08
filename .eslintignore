@@ -7,3 +7,6 @@ vsc-extension-quickstart.md
 docs/assets/*
 docs/*
 initializer.js
+
+test/*
+test-resources/*
