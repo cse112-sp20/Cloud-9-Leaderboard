@@ -1,7 +1,7 @@
 "use strict";
 /**
- * This file contains functions that interact with firebase collections and documents.
- *
+ * This file contains functions that interact with firebase
+ * collections and documents.
  *
  *
  * @file   Firestore.ts
@@ -758,7 +758,8 @@ function retrieveUserUpdateDailyMetric() {
 }
 exports.retrieveUserUpdateDailyMetric = retrieveUserUpdateDailyMetric;
 /**
- * returns true if a document associated with the passed in ID exists in firebase
+ * returns true if a document associated with the passed in ID exists in
+ * firebase
  * @param userId the uid to check
  */
 function userDocExists(userId) {

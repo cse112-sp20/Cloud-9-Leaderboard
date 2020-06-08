@@ -12,42 +12,25 @@ import {window, ExtensionContext} from "vscode";
 import {sendHeartbeat, initializePreferences} from "./lib/DataController";
 import {onboardInit} from "./lib/user/OnboardManager";
 import {
-  showStatus,
   nowInSecs,
   getOffsetSeconds,
-  getVersion,
-  logIt,
-  getPluginName,
   getItem,
-  displayReadmeIfNotExists,
   setItem,
   getWorkspaceName,
 } from "./lib/Util";
 import {serverIsAvailable} from "./lib/http/HttpClient";
 import {getHistoricalCommits} from "./lib/repo/KpmRepoManager";
-import {manageLiveshareSession} from "./lib/LiveshareManager";
-import * as vsls from "vsls/vscode";
 import {createCommands} from "./lib/command-helper";
 import {KpmManager} from "./lib/managers/KpmManager";
 import {SummaryManager} from "./lib/managers/SummaryManager";
-import {
-  setSessionSummaryLiveshareMinutes,
-  updateStatusBarWithSummaryData,
-} from "./lib/storage/SessionSummaryData";
-import {WallClockManager} from "./lib/managers/WallClockManager";
 import {EventManager} from "./lib/managers/EventManager";
-import {
-  sendOfflineEvents,
-  getLastSavedKeystrokesStats,
-} from "./lib/managers/FileManager";
+import {getLastSavedKeystrokesStats} from "./lib/managers/FileManager";
 
 import {
   storeExtensionContext,
   authenticateUser,
 } from "./src/util/Authentication";
 
-let TELEMETRY_ON = true;
-let statusBarItem = null;
 let _ls = null;
 
 let fifteen_minute_interval = null;
@@ -66,14 +49,6 @@ const one_hour_millis = one_min_millis * 60;
 //
 const kpmController: KpmManager = KpmManager.getInstance();
 
-export function isTelemetryOn() {
-  return TELEMETRY_ON;
-}
-
-export function getStatusBarItem() {
-  return statusBarItem;
-}
-
 export function deactivate(ctx: ExtensionContext) {
   // store the deactivate event
   EventManager.getInstance().createCodeTimeEvent(
@@ -90,7 +65,6 @@ export function deactivate(ctx: ExtensionContext) {
     // close the session on our end
     _ls["end"] = nowSec;
     _ls["local_end"] = localNow;
-    manageLiveshareSession(_ls);
     _ls = null;
   }
 
@@ -102,18 +76,6 @@ export function deactivate(ctx: ExtensionContext) {
   clearInterval(thirty_minute_interval);
   clearInterval(hourly_interval);
   clearInterval(liveshare_update_interval);
-
-  // softwareDelete(`/integrations/${PLUGIN_ID}`, getItem("jwt")).then(resp => {
-  //     if (isResponseOk(resp)) {
-  //         if (resp.data) {
-  //             console.log(`Uninstalled plugin`);
-  //         } else {
-  //             console.log(
-  //                 "Failed to update Code Time about the uninstall event"
-  //             );
-  //         }
-  //     }
-  // });
 }
 
 //export var extensionContext;
@@ -171,17 +133,12 @@ export async function intializePlugin(
   ctx: ExtensionContext,
   createdAnonUser: boolean,
 ) {
-  logIt(`Loaded ${getPluginName()} v${getVersion()}`);
-
   // store the activate event
   EventManager.getInstance().createCodeTimeEvent(
     "resource",
     "load",
     "EditorActivate",
   );
-
-  // initialize the wall clock timer
-  WallClockManager.getInstance();
 
   // load the last payload into memory
   getLastSavedKeystrokesStats();

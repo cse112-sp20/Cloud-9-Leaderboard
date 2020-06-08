@@ -4,16 +4,11 @@ import {UNTITLED, NO_PROJ_NAME, DEFAULT_DURATION_MILLIS} from "../Constants";
 import {
   getRootPathForFile,
   isEmptyObj,
-  getProjectFolder,
   getNowTimes,
-  logEvent,
   getFileAgeInDays,
   getFileType,
-  showInformationMessage,
 } from "../Util";
-import {getResourceInfo} from "../repo/KpmRepoManager";
 import {FileChangeInfo} from "../model/models";
-import {JiraClient} from "../http/JiraClient";
 import {storeCurrentPayload} from "./FileManager";
 import Project from "../model/Project";
 
@@ -108,7 +103,6 @@ export class KpmManager {
     this.updateStaticValues(rootObj, staticInfo);
 
     rootObj.source[staticInfo.filename].close += 1;
-    logEvent(`File closed`);
   }
 
   /**
@@ -141,7 +135,6 @@ export class KpmManager {
     this.updateStaticValues(rootObj, staticInfo);
 
     rootObj.source[staticInfo.filename].open += 1;
-    logEvent(`File opened`);
   }
 
   /**
@@ -242,16 +235,13 @@ export class KpmManager {
       // it's a copy and paste event
       //
       sourceObj.paste += 1;
-      logEvent("Copy+Paste Incremented");
     } else if (textChangeLen < 0) {
       sourceObj.delete += 1;
       // update the overall count
-      logEvent("Delete Incremented");
     } else if (hasNonNewLineData) {
       // update the data for this fileInfo keys count
       sourceObj.add += 1;
       // update the overall count
-      logEvent("KPM incremented");
     }
     // increment keystrokes by 1
     rootObj.keystrokes += 1;
@@ -261,10 +251,8 @@ export class KpmManager {
     sourceObj.lines = currLineCount;
 
     if (linesDeleted > 0) {
-      logEvent(`Removed ${linesDeleted} lines`);
       sourceObj.linesRemoved += linesDeleted;
     } else if (linesAdded > 0) {
-      logEvent(`Added ${linesAdded} lines`);
       sourceObj.linesAdded += linesAdded;
     }
 
@@ -379,18 +367,6 @@ export class KpmManager {
     _staticInfoMap[filename] = staticInfo;
 
     return staticInfo;
-  }
-
-  async processSelectedTextForJira() {
-    const editor = window.activeTextEditor;
-    const text = editor.document.getText(editor.selection);
-    if (text) {
-      // start the process
-      showInformationMessage(`Selected the following text: ${text}`);
-      const issues = await JiraClient.getInstance().fetchIssues();
-    } else {
-      showInformationMessage("Please select text to copy to your Jira project");
-    }
   }
 
   /**

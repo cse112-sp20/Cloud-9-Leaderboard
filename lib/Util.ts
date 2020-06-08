@@ -1,13 +1,4 @@
-import {getStatusBarItem} from "../extension";
-import {
-  workspace,
-  extensions,
-  window,
-  Uri,
-  commands,
-  ViewColumn,
-  WorkspaceFolder,
-} from "vscode";
+import {workspace, extensions, window, WorkspaceFolder} from "vscode";
 import {
   CODE_TIME_EXT_ID,
   launch_url,
@@ -16,12 +7,7 @@ import {
   CODE_TIME_TYPE,
   api_endpoint,
 } from "./Constants";
-import {
-  refetchUserStatusLazily,
-  getToggleFileEventLoggingState,
-  getAppJwt,
-} from "./DataController";
-import {updateStatusBarWithSummaryData} from "./storage/SessionSummaryData";
+import {getAppJwt} from "./DataController";
 import {EventManager} from "./managers/EventManager";
 import {serverIsAvailable} from "./http/HttpClient";
 import {refetchAtlassianOauthLazily} from "./user/OnboardManager";
@@ -46,7 +32,6 @@ const NUMBER_IN_EMAIL_REGEX = new RegExp("^\\d+\\+");
 const dayFormat = "YYYY-MM-DD";
 const dayTimeFormat = "LLLL";
 
-let showStatusBarText = true;
 let extensionName = null;
 let extensionDisplayName = null; // Code Time or Music Time
 let workspace_name = null;
@@ -62,10 +47,6 @@ export function getPluginId() {
   return CODE_TIME_PLUGIN_ID;
 }
 
-export function getPluginName() {
-  return CODE_TIME_EXT_ID;
-}
-
 export function getPluginType() {
   return CODE_TIME_TYPE;
 }
@@ -73,19 +54,6 @@ export function getPluginType() {
 export function getVersion() {
   const extension = extensions.getExtension(CODE_TIME_EXT_ID);
   return extension.packageJSON.version;
-}
-
-export function isCodeTimeMetricsFile(fileName) {
-  fileName = fileName || "";
-  if (fileName.includes(".software") && fileName.includes("CodeTime")) {
-    return true;
-  }
-  return false;
-}
-
-export function codeTimeExtInstalled() {
-  const codeTimeExt = extensions.getExtension(CODE_TIME_EXT_ID);
-  return codeTimeExt ? true : false;
 }
 
 export function getSessionFileCreateTime() {
@@ -197,36 +165,10 @@ export function getNumberOfTextDocumentsOpen() {
   return workspace.textDocuments ? workspace.textDocuments.length : 0;
 }
 
-export function isFileOpen(fileName) {
-  if (getNumberOfTextDocumentsOpen() > 0) {
-    // check if the .software/CodeTime has already been opened
-    for (let i = 0; i < workspace.textDocuments.length; i++) {
-      let docObj = workspace.textDocuments[i];
-      if (docObj.fileName && docObj.fileName === fileName) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
 export function getRootPathForFile(fileName) {
   let folder = getProjectFolder(fileName);
   if (folder) {
     return folder.uri.fsPath;
-  }
-  return null;
-}
-
-export function getWorkspaceFolderByPath(path): WorkspaceFolder {
-  let liveshareFolder = null;
-  if (workspace.workspaceFolders && workspace.workspaceFolders.length > 0) {
-    for (let i = 0; i < workspace.workspaceFolders.length; i++) {
-      let workspaceFolder: WorkspaceFolder = workspace.workspaceFolders[i];
-      if (path.includes(workspaceFolder.uri.fsPath)) {
-        return workspaceFolder;
-      }
-    }
   }
   return null;
 }
@@ -260,11 +202,6 @@ export function getProjectFolder(fileName): WorkspaceFolder {
   return null;
 }
 
-export function validateEmail(email) {
-  let re = /\S+@\S+\.\S+/;
-  return re.test(email);
-}
-
 export function setItem(key, value) {
   // now save it on file
   const jsonObj = getSoftwareSessionAsJson();
@@ -284,56 +221,6 @@ export function getItem(key) {
   const jsonObj = getSoftwareSessionAsJson();
   const val = jsonObj[key] || null;
   return val;
-}
-
-export function showLoading() {
-  let loadingMsg = "⏳ code time metrics";
-  updateStatusBar(loadingMsg, "");
-}
-
-export function showStatus(fullMsg, tooltip) {
-  if (!tooltip) {
-    tooltip = "Active code time today. Click to see more from Code Time.";
-  }
-  updateStatusBar(fullMsg, tooltip);
-}
-
-export function handleCodeTimeStatusToggle() {
-  toggleStatusBar();
-}
-
-function updateStatusBar(msg, tooltip) {
-  let loggedInName = getItem("name");
-  let userInfo = "";
-  if (loggedInName && loggedInName !== "") {
-    userInfo = ` Connected as ${loggedInName}`;
-  }
-  if (!tooltip) {
-    tooltip = `Click to see more from Code Time`;
-  }
-
-  if (!showStatusBarText) {
-    // add the message to the tooltip
-    tooltip = msg + " | " + tooltip;
-  }
-  if (!getStatusBarItem()) {
-    return;
-  }
-  getStatusBarItem().tooltip = `${tooltip}${userInfo}`;
-  if (!showStatusBarText) {
-    getStatusBarItem().text = "$(clock)";
-  } else {
-    getStatusBarItem().text = msg;
-  }
-}
-
-export function toggleStatusBar() {
-  showStatusBarText = !showStatusBarText;
-  updateStatusBarWithSummaryData();
-}
-
-export function isStatusBarTextVisible() {
-  return showStatusBarText;
 }
 
 export function isEmptyObj(obj) {
@@ -415,66 +302,6 @@ export async function getOsUsername() {
   return username;
 }
 
-export function getDashboardFile() {
-  let file = getSoftwareDir();
-  if (isWindows()) {
-    file += "\\CodeTime.txt";
-  } else {
-    file += "/CodeTime.txt";
-  }
-  return file;
-}
-
-export function getCommitSummaryFile() {
-  let file = getSoftwareDir();
-  if (isWindows()) {
-    file += "\\CommitSummary.txt";
-  } else {
-    file += "/CommitSummary.txt";
-  }
-  return file;
-}
-
-export function getSummaryInfoFile() {
-  let file = getSoftwareDir();
-  if (isWindows()) {
-    file += "\\SummaryInfo.txt";
-  } else {
-    file += "/SummaryInfo.txt";
-  }
-  return file;
-}
-
-export function getProjectCodeSummaryFile() {
-  let file = getSoftwareDir();
-  if (isWindows()) {
-    file += "\\ProjectCodeSummary.txt";
-  } else {
-    file += "/ProjectCodeSummary.txt";
-  }
-  return file;
-}
-
-export function getProjectContributorCodeSummaryFile() {
-  let file = getSoftwareDir();
-  if (isWindows()) {
-    file += "\\ProjectContributorCodeSummary.txt";
-  } else {
-    file += "/ProjectContributorCodeSummary.txt";
-  }
-  return file;
-}
-
-export function getDailyReportSummaryFile() {
-  let file = getSoftwareDir();
-  if (isWindows()) {
-    file += "\\DailyReportSummary.txt";
-  } else {
-    file += "/DailyReportSummary.txt";
-  }
-  return file;
-}
-
 export function getSoftwareDir(autoCreate = true) {
   const homedir = os.homedir();
   let softwareDataDir = homedir;
@@ -489,19 +316,6 @@ export function getSoftwareDir(autoCreate = true) {
   }
 
   return softwareDataDir;
-}
-
-export function softwareSessionFileExists() {
-  // don't auto create the file
-  const file = getSoftwareSessionFile();
-  // check if it exists
-  const sessionFileExists = fs.existsSync(file);
-  return sessionFileExists;
-}
-
-export function jwtExists() {
-  let jwt = getItem("jwt");
-  return !jwt ? false : true;
 }
 
 export function getSoftwareSessionFile() {
@@ -532,36 +346,6 @@ export function getPluginEventsFile() {
     file += "/events.json";
   }
   return file;
-}
-
-export function getLocalREADMEFile() {
-  let file = __dirname;
-  if (isWindows()) {
-    file += "\\README.md";
-  } else {
-    file += "/README.md";
-  }
-  return file;
-}
-
-export function getImagesDir() {
-  let dir = __dirname;
-  if (isWindows()) {
-    dir += "\\images";
-  } else {
-    dir += "/images";
-  }
-  return dir;
-}
-
-export function displayReadmeIfNotExists(override = false) {
-  const displayedReadme = getItem("vscode_CtReadme");
-  if (!displayedReadme || override) {
-    const readmeUri = Uri.file(getLocalREADMEFile());
-
-    commands.executeCommand("markdown.showPreview", readmeUri, ViewColumn.One);
-    setItem("vscode_CtReadme", true);
-  }
 }
 
 export function openFileInEditor(file) {
@@ -641,14 +425,7 @@ export function getExtensionName() {
   return extensionName;
 }
 
-export function logEvent(message) {
-  const logEvents = getToggleFileEventLoggingState();
-  if (logEvents) {
-    console.log(`${getExtensionName()}: ${message}`);
-  }
-}
-
-export function logIt(message) {}
+//export function logIt(message) {}
 
 export function getSoftwareSessionAsJson() {
   let data = null;
@@ -888,7 +665,7 @@ export async function launchLogin(loginType = "software") {
   setItem("authType", loginType);
   launchWebUrl(loginUrl);
   // use the defaults
-  refetchUserStatusLazily();
+  //refetchUserStatusLazily();
 }
 
 /**
@@ -909,7 +686,7 @@ export async function showLoginPrompt(serverIsOnline) {
   if (selection === LOGIN_LABEL) {
     let loginUrl = await buildLoginUrl(serverIsOnline);
     launchWebUrl(loginUrl);
-    refetchUserStatusLazily();
+    //refetchUserStatusLazily();
     eventName = "click";
     eventType = "mouse";
   } else {

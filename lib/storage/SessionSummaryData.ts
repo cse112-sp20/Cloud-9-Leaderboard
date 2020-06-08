@@ -2,10 +2,8 @@ import {SessionSummary, KeystrokeAggregate} from "../model/models";
 import {
   isWindows,
   getSoftwareDir,
-  logIt,
   getNowTimes,
   getItem,
-  showStatus,
   getFileDataAsJson,
   humanizeMinutes,
 } from "../Util";
@@ -58,11 +56,6 @@ function coalesceMissingAttributes(data): SessionSummary {
   return data;
 }
 
-export function sessionSummaryExists(): boolean {
-  const file = getSessionSummaryFile();
-  return fs.existsSync(file);
-}
-
 export function getSessionSummaryFileAsJson(): SessionSummary {
   const file = getSessionSummaryFile();
   let sessionSummary = getFileDataAsJson(file);
@@ -78,20 +71,10 @@ export function saveSessionSummaryToDisk(sessionSummaryData) {
   try {
     // JSON.stringify(data, replacer, number of spaces)
     const content = JSON.stringify(sessionSummaryData, null, 4);
-    fs.writeFileSync(file, content, (err) => {
-      if (err)
-        logIt(`Deployer: Error writing session summary data: ${err.message}`);
-    });
+    fs.writeFileSync(file, content, (err) => {});
   } catch (e) {
     //
   }
-}
-
-export function setSessionSummaryLiveshareMinutes(minutes) {
-  let sessionSummaryData = getSessionSummaryData();
-  sessionSummaryData.liveshareMinutes = minutes;
-
-  saveSessionSummaryToDisk(sessionSummaryData);
 }
 
 /**
@@ -158,5 +141,4 @@ export function updateStatusBarWithSummaryData() {
   const minutesStr = humanizeMinutes(codeTimeSummary.activeCodeTimeMinutes);
 
   const msg = `${inFlowIcon} ${minutesStr}`;
-  showStatus(msg, null);
 }
