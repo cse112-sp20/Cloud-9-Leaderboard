@@ -11,7 +11,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Testing workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Testing%20workflow/badge.svg)
 ![Eslint Analysis workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Eslint%20Analysis%20workflow/badge.svg)
-![Building workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Building%20workflow/badge.svg)
+![Deploying workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Deploying%20workflow/badge.svg)
 ![Code Style](https://img.shields.io/badge/code%20style-airbnb-green)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -20,6 +20,7 @@
   <a href="#Installation">Installation</a> •
   <a href="#getting-started">Getting Started</a> •
   <a href="#Features">Features</a> •
+  <a href="#Team">Team</a> •
   <a href="#documentationstructure">Documentation/Structure</a> •
     <a href="#FAQ">FAQs</a> •
       <a href="#Support">Support</a> •
