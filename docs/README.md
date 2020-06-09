@@ -132,7 +132,9 @@ OR
 | <a href="http://github.com/fvcproductions" target="_blank">`github.com/fvcproductions`</a> | <a href="http://github.com/fvcproductions" target="_blank">`github.com/fvcproduction`</a> | <a href="http://github.com/fvcproductions" target="_blank">`github.com/fvcproduction`</a>
 
 ### Co-Leads
+
 **Justin Sherfey** - a Computer science student with interests in history and psychology. Runs on the UCSD track and cross team, surfs, games on his PC, and reads a cool book every now and then. 
+
 **Leo Ku** - a 4th year computer science student interested in solving challenging engineering problems. He is also interested in managing software teams and solve interpersonal challenges within engineering teams.  Casual basketball player, gamer, and interested in motorsports.
 ### Code Team
 **Tina Hsieh** - a 4th-year Math-CS major. Interested in traveling and baking.
@@ -183,7 +185,7 @@ OR
 
 Reach out to us!
 
-- Github issues at <a href="https://github.com/cse112-sp20/Cloud-9-Leaderboard/issues" target="_blank">`ithub.com/cse112-sp20/Cloud-9-Leaderboard/issues`</a>
+- Github issues at <a href="https://github.com/cse112-sp20/Cloud-9-Leaderboard/issues" target="_blank">`github.com/cse112-sp20/Cloud-9-Leaderboard/issues`</a>
 
 ---
 
