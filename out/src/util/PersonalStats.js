@@ -150,14 +150,9 @@ function writePersonalStatsFile(dates) {
         content += Constants_1.SECTION_BAR;
         content += "                                     How to gain points \n";
         content += Constants_1.SECTION_BAR + "\n";
-        content +=
-            "Each second spent coding:                            + 0.01 points per second \n";
-        content +=
-            "Each keystroke:                                      +    1 points per keystroke\n";
-        content +=
-            "Each modified line:                                  +   10 points per line \n\n";
+        content += Constants_1.METRIC_STRING;
         content += Constants_1.SECTION_BAR;
-        content += "                                           Record\n";
+        content += Constants_1.RECORD_TITLE;
         content += Constants_1.SECTION_BAR + "\n";
         let previousScore = -1;
         let currentScore = 0;
@@ -181,8 +176,7 @@ function writePersonalStatsFile(dates) {
                 content += obj["dateStr"] + " 🟥🟥🟥🟥🟥🟥" + "\n";
                 counter = 1;
             }
-            content +=
-                "___________________________________________________________________________________________\n";
+            content += Constants_1.LINE_BAR;
             content +=
                 "    Keystrokes per minute :".padEnd(40, " ") +
                     obj["keystrokes"].toString().padEnd(Constants_1.FIELD_LENGTH, " ") +
@@ -210,7 +204,7 @@ function writePersonalStatsFile(dates) {
             content += "\n";
         });
         content += "\n" + Constants_1.SECTION_BAR;
-        content += "                                         Statistics\n";
+        content += Constants_1.STATISTICS_TITLE;
         content += Constants_1.SECTION_BAR + "\n";
         let statsObj = Metric_1.calculateStats(scoreMap);
         content +=
@@ -238,53 +232,9 @@ function writePersonalStatsFile(dates) {
                 statsObj["lpm"].toFixed(3) +
                 "\n";
         content += "\n" + Constants_1.SECTION_BAR;
-        content += "                                        Achievements\n";
+        content += Constants_1.ACHIEVEMENTS_TITLE;
         content += Constants_1.SECTION_BAR + "\n";
-        content += "These are personal achievements/milestones that you can earn\n\n";
-        content +=
-            "__________________________________________________________________________________________\n";
-        content +=
-            "|                                                              |                          |\n";
-        content +=
-            "|                           ACHIEVEMENTS                       |           BADGE          |\n";
-        content +=
-            "|______________________________________________________________|__________________________|\n";
-        content +=
-            "|                                                              |                          |\n";
-        content +=
-            "|                   Reach 5000 total keystrokes                |             💎           |\n";
-        content +=
-            "|______________________________________________________________|__________________________|\n";
-        content +=
-            "|                                                              |                          |\n";
-        content +=
-            "|                  Reach 2000 total lines changed              |             🔎           |\n";
-        content +=
-            "|______________________________________________________________|__________________________|\n";
-        content +=
-            "|                                                              |                          |\n";
-        content +=
-            "|                  Spend total of 200 hours coding             |             🔥           |\n";
-        content +=
-            "|______________________________________________________________|__________________________|\n";
-        content +=
-            "|                                                              |                          |\n";
-        content +=
-            "|                   Reach 500 total keystrokes daily           |             💪           |\n";
-        content +=
-            "|______________________________________________________________|__________________________|\n";
-        content +=
-            "|                                                              |                          |\n";
-        content +=
-            "|                 Reach 200 total lines changed daily          |             🥊           |\n";
-        content +=
-            "|______________________________________________________________|__________________________|\n";
-        content +=
-            "|                                                              |                          |\n";
-        content +=
-            "|                 Spend total of 6 hours coding daily          |             🎈           |\n";
-        content +=
-            "|______________________________________________________________|__________________________|\n";
+        content += Constants_1.LEADERBOARD_ACHIEVEMENTS;
         fs.writeFileSync(personalStatsFile, content, (err) => {
             if (err) {
                 console.error("Error writing leaderboard");

@@ -9,7 +9,7 @@
  * @author AuthorName.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LEADERBOARD_ROW_5 = exports.LEADERBOARD_ROW_4 = exports.LEADERBOARD_ROW_3 = exports.LEADERBOARD_ROW_2 = exports.LEADERBOARD_ROW_1 = exports.WECOME_TO_CLOUD9_ROW_5 = exports.WECOME_TO_CLOUD9_ROW_4 = exports.WECOME_TO_CLOUD9_ROW_3 = exports.WECOME_TO_CLOUD9_ROW_2 = exports.WECOME_TO_CLOUD9_ROW_1 = exports.FIELD_LENGTH = exports.STAT_LENGTH = exports.SECTION_BAR = exports.MAX_RANK_LENGTH = exports.MAX_USERNAME_LENGTH = exports.AUTH_ERR_CODE_INVALID_EMAIL = exports.AUTH_ERR_CODE_USER_NOT_FOUND = exports.AUTH_ERR_CODE_WEAK_PASSWORD = exports.AUTH_ERR_CODE_WRONG_PASSWORD = exports.AUTH_ERR_CODE_EMAIL_USED = exports.AUTH_NOT_LOGGED_IN = exports.AUTH_CREATE_ACCOUNT = exports.AUTH_SIGN_IN = exports.GLOBAL_STATE_USER_TEAM_MEMBERS = exports.GLOBAL_STATE_USER_IS_TEAM_LEADER = exports.GLOBAL_STATE_USER_TEAM_ID = exports.GLOBAL_STATE_USER_TEAM_NAME = exports.GLOBAL_STATE_USER_PASSWORD = exports.GLOBAL_STATE_USER_EMAIL = exports.GLOBAL_STATE_USER_NICKNAME = exports.GLOBAL_STATE_USER_ID = exports.FIELD_ID_TEAM_LEAD_USER_ID = exports.COLLECTION_ID_TEAM_MEMBERS = exports.COLLECTION_ID_TEAMS = exports.COLLECTION_ID_USERS = exports.DEFAULT_TEAM_DOC = exports.DEFAULT_USER_DOC_TOP = exports.DEFAULT_USER_DOC = exports.DEFAULT_PASSWORD = exports.firebaseConfig = void 0;
+exports.LINE_BAR = exports.METRIC_STRING = exports.RECORD_TITLE = exports.STATISTICS_TITLE = exports.ACHIEVEMENTS_TITLE = exports.LEADERBOARD_ACHIEVEMENTS = exports.LEADERBOARD_ROW_5 = exports.LEADERBOARD_ROW_4 = exports.LEADERBOARD_ROW_3 = exports.LEADERBOARD_ROW_2 = exports.LEADERBOARD_ROW_1 = exports.WECOME_TO_CLOUD9_ROW_5 = exports.WECOME_TO_CLOUD9_ROW_4 = exports.WECOME_TO_CLOUD9_ROW_3 = exports.WECOME_TO_CLOUD9_ROW_2 = exports.WECOME_TO_CLOUD9_ROW_1 = exports.FIELD_LENGTH = exports.STAT_LENGTH = exports.SECTION_BAR = exports.MAX_RANK_LENGTH = exports.MAX_USERNAME_LENGTH = exports.AUTH_ERR_CODE_INVALID_EMAIL = exports.AUTH_ERR_CODE_USER_NOT_FOUND = exports.AUTH_ERR_CODE_WEAK_PASSWORD = exports.AUTH_ERR_CODE_WRONG_PASSWORD = exports.AUTH_ERR_CODE_EMAIL_USED = exports.AUTH_NOT_LOGGED_IN = exports.AUTH_CREATE_ACCOUNT = exports.AUTH_SIGN_IN = exports.GLOBAL_STATE_USER_TEAM_MEMBERS = exports.GLOBAL_STATE_USER_IS_TEAM_LEADER = exports.GLOBAL_STATE_USER_TEAM_ID = exports.GLOBAL_STATE_USER_TEAM_NAME = exports.GLOBAL_STATE_USER_PASSWORD = exports.GLOBAL_STATE_USER_EMAIL = exports.GLOBAL_STATE_USER_NICKNAME = exports.GLOBAL_STATE_USER_ID = exports.FIELD_ID_TEAM_LEAD_USER_ID = exports.COLLECTION_ID_TEAM_MEMBERS = exports.COLLECTION_ID_TEAMS = exports.COLLECTION_ID_USERS = exports.DEFAULT_TEAM_DOC = exports.DEFAULT_USER_DOC_TOP = exports.DEFAULT_USER_DOC = exports.DEFAULT_PASSWORD = exports.firebaseConfig = void 0;
 exports.firebaseConfig = {
     apiKey: "AIzaSyAk7NlFSVbRfiwJvWLt7KBQArDTJpcmnO8",
     authDomain: "cloud-9-4cd71.firebaseapp.com",
@@ -81,4 +81,34 @@ exports.LEADERBOARD_ROW_2 = "               | |    ___  __ _  __| | ___ _ __| |_
 exports.LEADERBOARD_ROW_3 = "               | |   / _ \\/ _` |/ _` |/ _ \\ '__| '_ \\ / _ \\ / _` | '__/ _` |\n";
 exports.LEADERBOARD_ROW_4 = "               | |__|  __/ (_| | (_| |  __/ |  | |_) | (_) | (_| | | | (_| |\n";
 exports.LEADERBOARD_ROW_5 = "               |_____\\___|\\__,_|\\__,_|\\___|_|  |_.__/ \\___/ \\__,_|_|  \\__,_|\n";
+exports.LEADERBOARD_ACHIEVEMENTS = "These are personal achievements/milestones that you can earn\n\n" +
+    "__________________________________________________________________________________________\n" +
+    "|                                                              |                          |\n" +
+    "|                           ACHIEVEMENTS                       |           BADGE          |\n" +
+    "|______________________________________________________________|__________________________|\n" +
+    "|                                                              |                          |\n" +
+    "|                   Reach 5000 total keystrokes                |             💎           |\n" +
+    "|______________________________________________________________|__________________________|\n" +
+    "|                                                              |                          |\n" +
+    "|                  Reach 2000 total lines changed              |             🔎           |\n" +
+    "|______________________________________________________________|__________________________|\n" +
+    "|                                                              |                          |\n" +
+    "|                  Spend total of 200 hours coding             |             🔥           |\n" +
+    "|______________________________________________________________|__________________________|\n" +
+    "|                                                              |                          |\n" +
+    "|                   Reach 500 total keystrokes daily           |             💪           |\n" +
+    "|______________________________________________________________|__________________________|\n" +
+    "|                                                              |                          |\n" +
+    "|                 Reach 200 total lines changed daily          |             🥊           |\n" +
+    "|______________________________________________________________|__________________________|\n" +
+    "|                                                              |                          |\n" +
+    "|                 Spend total of 6 hours coding daily          |             🎈           |\n" +
+    "|______________________________________________________________|__________________________|\n";
+exports.ACHIEVEMENTS_TITLE = "                                        Achievements\n";
+exports.STATISTICS_TITLE = "                                         Statistics\n";
+exports.RECORD_TITLE = "                                           Record\n";
+exports.METRIC_STRING = "Each second spent coding:                            + 0.01 points per second \n";
++"Each keystroke:                                      +    1 points per keystroke\n";
++"Each modified line:                                  +   10 points per line \n\n";
+exports.LINE_BAR = "___________________________________________________________________________________________\n";
 //# sourceMappingURL=Constants.js.map

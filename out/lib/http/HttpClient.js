@@ -21,6 +21,7 @@ const cacheMgr = CacheManager_1.CacheManager.getInstance();
 function serverIsAvailable() {
     return __awaiter(this, void 0, void 0, function* () {
         let isAvail = cacheMgr.get("serverAvailable");
+        console.log("server available IS USED");
         if (isAvail === undefined || isAvail === null) {
             isAvail = yield softwareGet("/ping", null)
                 .then((result) => {
@@ -43,6 +44,7 @@ exports.serverIsAvailable = serverIsAvailable;
  */
 function softwareGet(api, jwt) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log("software get THIS IS USED");
         if (jwt) {
             beApi.defaults.headers.common["Authorization"] = jwt;
         }
@@ -57,6 +59,7 @@ exports.softwareGet = softwareGet;
  */
 function softwarePut(api, payload, jwt) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log("THIS IS USED");
         // PUT the kpm to the PluginManager
         beApi.defaults.headers.common["Authorization"] = jwt;
         return yield beApi
@@ -75,6 +78,7 @@ exports.softwarePut = softwarePut;
  */
 function softwarePost(api, payload, jwt) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(" software post THIS IS USED");
         // POST the kpm to the PluginManager
         beApi.defaults.headers.common["Authorization"] = jwt;
         return beApi
@@ -96,6 +100,7 @@ function hasTokenExpired(resp) {
     // when a token expires, we'll get the following error data
     // err.response.status === 401
     // err.response.statusText = "Unauthorized"
+    console.log("has token expired this is used");
     if (resp &&
         resp.response &&
         resp.response.status &&
@@ -121,6 +126,7 @@ exports.hasTokenExpired = hasTokenExpired;
  */
 function isResponseOk(resp) {
     let status = getResponseStatus(resp);
+    console.log("THIS IS USED RES OKJ");
     if (status && resp && status < 300) {
         return true;
     }
@@ -134,6 +140,7 @@ exports.isResponseOk = isResponseOk;
  * statusText:"OK"
  */
 function getResponseStatus(resp) {
+    console.log("THIS IS USED GET RES STATUS");
     let status = null;
     if (resp && resp.status) {
         status = resp.status;

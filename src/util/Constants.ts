@@ -100,3 +100,41 @@ export const LEADERBOARD_ROW_4 =
   "               | |__|  __/ (_| | (_| |  __/ |  | |_) | (_) | (_| | | | (_| |\n";
 export const LEADERBOARD_ROW_5 =
   "               |_____\\___|\\__,_|\\__,_|\\___|_|  |_.__/ \\___/ \\__,_|_|  \\__,_|\n";
+
+export const LEADERBOARD_ACHIEVEMENTS =
+  "These are personal achievements/milestones that you can earn\n\n" +
+  "__________________________________________________________________________________________\n" +
+  "|                                                              |                          |\n" +
+  "|                           ACHIEVEMENTS                       |           BADGE          |\n" +
+  "|______________________________________________________________|__________________________|\n" +
+  "|                                                              |                          |\n" +
+  "|                   Reach 5000 total keystrokes                |             💎           |\n" +
+  "|______________________________________________________________|__________________________|\n" +
+  "|                                                              |                          |\n" +
+  "|                  Reach 2000 total lines changed              |             🔎           |\n" +
+  "|______________________________________________________________|__________________________|\n" +
+  "|                                                              |                          |\n" +
+  "|                  Spend total of 200 hours coding             |             🔥           |\n" +
+  "|______________________________________________________________|__________________________|\n" +
+  "|                                                              |                          |\n" +
+  "|                   Reach 500 total keystrokes daily           |             💪           |\n" +
+  "|______________________________________________________________|__________________________|\n" +
+  "|                                                              |                          |\n" +
+  "|                 Reach 200 total lines changed daily          |             🥊           |\n" +
+  "|______________________________________________________________|__________________________|\n" +
+  "|                                                              |                          |\n" +
+  "|                 Spend total of 6 hours coding daily          |             🎈           |\n" +
+  "|______________________________________________________________|__________________________|\n";
+
+export const ACHIEVEMENTS_TITLE =
+  "                                        Achievements\n";
+export const STATISTICS_TITLE =
+  "                                         Statistics\n";
+export const RECORD_TITLE =
+  "                                           Record\n";
+export const METRIC_STRING =
+  "Each second spent coding:                            + 0.01 points per second \n";
++"Each keystroke:                                      +    1 points per keystroke\n";
++"Each modified line:                                  +   10 points per line \n\n";
+export const LINE_BAR =
+  "___________________________________________________________________________________________\n";
