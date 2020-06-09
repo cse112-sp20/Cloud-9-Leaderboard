@@ -105,7 +105,7 @@ OR
   - Leaders also have the option of managing their team through appointing new leaders or removing members.
   - They can also set personal tasks(ex. Finishing a File) that can give additional points to users.
 
-<a href="https://imgur.com/HIq0nKd"><img src="https://i.imgur.com/HIq0nKd.png" title="source: imgur.com" /></a>
+![](https://i.imgur.com/BOvx0qu.png)
 
 ### Badges and Achievements
 
@@ -114,6 +114,12 @@ OR
 
 <a href="https://imgur.com/uVB4hK0"><img src="https://i.imgur.com/uVB4hK0.png" title="source: imgur.com" /></a>
 
+### Team Management
+
+- Create or join Team to view statistics of your team members.
+- Join team by simply entering team code shared by the team leader.
+- Manage your team members through team management if you are the leader of the team.
+![](https://i.imgur.com/FnbDWad.png)
 
 ---
 
@@ -125,7 +131,7 @@ OR
 | :---: |:---:|:---:|
 |<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/e2396daf-27b9-4a5b-9fb6-c13f023d3385/Untitled.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200609%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200609T080521Z&X-Amz-Expires=86400&X-Amz-Signature=873c82fe0579f497587d5ffa15f23b0b79c95546cc655607e0865fadc1f2bb0a&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.jpeg%22" title="source: imgur.com" width="200px" />  | <img src="https://scontent.fsan1-1.fna.fbcdn.net/v/t1.0-9/22814311_10204065231946681_3037197008220701962_n.jpg?_nc_cat=110&_nc_sid=09cbfe&_nc_ohc=_dO8PkLWSxoAX8LELkX&_nc_ht=scontent.fsan1-1.fna&oh=6cd9a9f914f4556645d1875f305fee8d&oe=5F048B32" title="source: imgur.com" width="200px" /> | <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fa8d1e79-940e-4b02-8a2c-787b8e8e2ea1/100.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200609%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200609T080434Z&X-Amz-Expires=86400&X-Amz-Signature=5ab5158c27c5be31fdcf307c0ce2410c6e817265fcc47f7cc40989cab1fe4a9c&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22100.png%22" title="source: imgur.com" width="100px" />
 | <a href="https://github.com/Justin-Sherfey" target="_blank">`github.com/Justin-Sherfey`</a> | <a href="https://github.com/liontomic" target="_blank">`github.com/liontomic`</a> | <a href="https://github.com/aiiitingx" target="_blank">`github.com/aiiitingx`</a>
-| <a href="" target="_blank">**Huo-An Lin**</a> | <a href="" target="_blank">**Madeline Lee**</a> | <a href="" target="_blank">**Ethan Yuan**</a>
+| <a href="" target="_blank">**Huo-An Lin**</a> | <a href="https://www.linkedin.com/in/maddie578" target="_blank">**Madeline Lee**</a> | <a href="https://www.linkedin.com/in/yuanethan/" target="_blank">**Ethan Yuan**</a>
 <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/4b1905f9-3c76-4354-b369-ab6c527e05f8/prof_photo.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200609%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200609T080405Z&X-Amz-Expires=86400&X-Amz-Signature=6e11bd564ddd3671963c0719f03b8bc9e5a70256d467cd0534b84a6cf902694d&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22prof_photo.jpg%22" title="source: imgur.com" width="100px" /> | <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/a75b5677-a44c-46fd-84b6-b2c22b6bf216/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200609%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200609T080349Z&X-Amz-Expires=86400&X-Amz-Signature=35c560fc678907a1dc19c6cd8b5919a69b7dc848cbf61a0c67b57ed05a15dd44&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" title="source: imgur.com" width="200px" /> | <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/7c3ee8d6-1a72-4abd-9d83-74bb35a046cd/EthanYuan.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200609%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200609T080332Z&X-Amz-Expires=86400&X-Amz-Signature=7c9c68361d3d4f09d212fd7276e6e1d437ec2f005260c342f34adee3a645a5a9&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22EthanYuan.jpg%22" title="source: imgur.com" width="200px" />
 | <a href="https://github.com/houan880201" target="_blank">github.com/houan880201</a> | <a href="http://github.com/yil578" target="_blank">`github.com/yil578`</a> | <a href="http://https://github.com/YuanEthan" target="_blank">`https://github.com/YuanEthan`</a>
 |<a href="" target="_blank">**David Alexander**</a> | <a href="" target="_blank">**Mitchell Zhang**</a> | <a href="" target="_blank">**Daniel Tan**</a>
