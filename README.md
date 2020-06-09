@@ -1,205 +1,148 @@
-<br />
-
 <h1 align="center">
- 
-  Cloud9
-  <br />
-
+  <br>
+  <a href="https://i.imgur.com/rRGVjYh.png"><img src="https://i.imgur.com/rRGVjYh.png" title="source: imgur.com" width= "100%"/></a>
+  <br>
+  Cloud9 Leaderboard
+  <br>
 </h1>
 
-<br />
+<h4 align="center">A leaderboard application built on top of <a href="https://www.software.com/code-time">Code Time</a>.</h4>
 
-<p align="center">Cloud 9 is an open source plugin for tracking developers'
-productivity by displaying metric scores on leaderboard. Cloud 9 is build
-on top of the open source <a href="https://www.software.com/cloud9">Code time</a> vscode extension. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Testing workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Testing%20workflow/badge.svg)
+![Eslint Analysis workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Eslint%20Analysis%20workflow/badge.svg)
+![Building workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Building%20workflow/badge.svg)
+![Code Style](https://img.shields.io/badge/code%20style-airbnb-green)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+<p align="center">
+  <a href="#About">About</a> •
+  <a href="#Installation">Installation</a> •
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#Features">Features</a> •
+  <a href="#documentationstructure">Documentation/Structure</a> •
+    <a href="#FAQ">FAQs</a> •
+      <a href="#Support">Support</a> •
+  <a href="#Credits">Credits</a>
 </p>
 
-<br />
+---
 
-# Developer guide
+## About
 
-### Things to remember:
+Remote work presents many challenges to both teams and individuals. The lack of a stable
+working environment with peers often reduces communication between team members, productivity
+and motivation. We attempt to address and mitigate some of these common problems for software teams
+specifically with our VSCode extension leader-board. In it we use gamification techniques to help connect
+and motivate teammates in a fun and engaging way.
 
-- **Create your own feature branch based off `dev`** (if the code you are writing is only dependent on the code in `dev`)<br/> 
-  - And make a pull request for **your branch to be merged into `dev`**.
-  - `Master` is not updated until a major version is done, such as MVP done
-
-- Create small and specific branches.
-- Constantly pull your branch's base branch (e.g. your branch's base branch might in most cases be `dev`) to stay up to date with other
-  people's changes.
-  - You can do this by:
-    1. Checking out your branch's base branch: <br/>
-       `git checkout [your branch's base branch]`
-
-    2. Pulling any new changes from the remote: <br/> `git pull`
-    3. Returning to your branch (checkout your branch again): <br/>
-       `git checkout [your branch]`
-    4. Merging your branch's base branch _into_ your branch: <br/>
-       `git merge [your branch's base branch]`
-
-- Test your code on the `dev` branch before creating a pull request to merge
-  your code into your branch's base branch.
-  - `dev` is the main branch that we collectively work on during development phase.
-  - Once you have tested your code on the `dev` branch, create a pull request
-    (PR) to merge your branch into its base branch.
-    - Who and how many people you send it to should depend on the significance
-      of your code.
-    - Write a short (1-4 sentences) description of your PR.
-    - You can send your PRs to other people through Slack.
+Built off the Code Time VSCode extention. Cloud 9 Leaderboard is an extention that tracks personal statitics
+of the user based off the different actions performed in VSCode and displays and ranks your own stats versus your
+team on a group leaderboard.
 
 ---
 
-### Branches:
+## Installation
 
-- What is a branch in git?
-  - A branch is _like_ a copy of the repository from a specific moment in time
-    (a specific commit).
-  - Learn more: https://git-scm.com/book/en/v1/Git-Branching-What-a-Branch-Is
-- What is the purpose of a branch?
-  - Branches make collaboration organized and simple. By using branches,
-    multiple people can work independently on related code.
-  - Branches allow us to easily keep track of changes that we make.
-- When should I create a branch?
-  - Create a branch for any change that you want to make.
-  - Create branches that will have a short lifespan that are used for a single
-    particular feature or specific focus.
-    - Small and specific branches are much easier to maintain, easier to merge,
-      and easier to review.
-    - Learn more:
-      https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows
-      - Read the "Topic Branches" section.
+<a href="https://imgur.com/pgemzR9"><img src="https://i.imgur.com/pgemzR9.gif" title="source: imgur.com" /></a>
 
-### Development workflow and branch lifecycle:
+### Installation Options
+1. Navigate to the Extention Tab of VSCode and type in 
+```
+Cloud9
+```
+OR
+<br>
 
-1. You want to make a change to the codebase.
-2. Decide which branch you want to contribute to. This branch is going to be the
-   base branch of the branch that you are about to create.
-   - The base branch is the branch that you want to create your branch off of.
-   - The base branch is the branch that you will later merge (or create a PR to
-     merge) your branch into.
-   - If the code you are writing is only dependent on the code in `dev`, then
-     `dev` is your base branch. Otherwise, if the code you are writing is
-     dependent on code that is not in `dev`, then your branch's base branch
-     is going to be the branch that contains the code that your branch depends
-     on.
-3. Create a new branch off of the base branch.
-4. Make changes to your branch.
-5. Finish making changes to your branch.
-6. If possible, merge your branch into `dev` and ensure that everything works.
-   - You do not need to create a PR to do this.
-   - If you run into merge conflicts, _carefully_ resolve them. If you are
-     unsure how to resolve them, ask someone else for help. Do not resolve merge
-     conflicts if you do not understand how to resolve merge conflicts or if you
-     do not understand the code that you are deleting.
-7. Merge your branch into your branch's base branch.
-   - Depending on what your branch's base branch is, you may or may not need to
-     create a PR to merge your branch into its base branch.
-     - If you want to merge your branch into `dev` (or `master` in the future when MVP is done, etc), you must create a PR to
-       do this.
-   - Make sure that you merge your branch _into_ its base branch:
-     - Merge \<your branch> into \<your branch's base branch> <br/> Merge \<your
-       branch> → \<your branch's base branch>
-8. Your branch has served its purpose and it has been merged into another
-   branch. Your branch should not be used anymore.
-   - To enforce this, after branches are merged, they are deleted from the
-     remote repository.
+2. Download from the VSCode Marketplace:<br>
+```
+ https://marketplace.visualstudio.com/items?itemName=CSE112.cloud9
+```
 
 ---
 
-### Git commands:
+## Getting Started
 
-| Command                                              | Description                                             |
-| ---------------------------------------------------- | ------------------------------------------------------- |
-| `git status`                                         | Check status                                            |
-| `git add [file-name.txt]`                            | Add a file to the staging area                          |
-| `git add -A`                                         | Add all new and changed files to the staging area       |
-| `git commit`                                         | Commit changes - must enter message in prompt           |
-| `git commit -m "[commit message]"`                   | Commit changes with inline message                      |
-| `git rm -r [file-name.txt]`                          | Remove a file (or folder)                               |
-| `git branch`                                         | List branches (the asterisk denotes the current branch) |
-| `git branch -a`                                      | List all branches (local and remote)                    |
-| `git branch [branch name]`                           | Create a new branch                                     |
-| `git branch -d [branch name]`                        | Delete a branch                                         |
-| `git checkout -b [branch name]`                      | Create a new branch and switch to it                    |
-| `git checkout [branch name]`                         | Checkout a branch (local or remote branch)              |
-| `git checkout -b [branch name] origin/[branch name]` | Clone a remote branch and switch to it                  |
-| `git checkout [branch name]`                         | Switch to a branch                                      |
-| `git merge [branch name]`                            | Merge a branch into the active branch                   |
-| `git merge [source branch] [target branch]`          | Merge a branch into a target branch                     |
-| `git stash`                                          | Stash changes in a dirty working directory              |
-| `git push`                                           | Push changes to remote repository                       |
-| `git pull`                                           | Update local repository to the newest commit            |
-| `git log`                                            | View commit history                                     |
-| `git log --summary`                                  | View detailed commit history                            |
-| `git diff [source branch] [target branch]`           | Show diff of two branches                               |
+### How to Create An Account
+1. Navigate to the Cloud 9 Icon in the VSCode Activity Bar
+2. Click on the Sign In/Create Account Menu Item
+3. Click on the Create Account Button from the Popup
+4. Input your preferred email and password
+
+<a href="https://imgur.com/00RuCBM"><img src="https://i.imgur.com/00RuCBM.gif" title="source: imgur.com" /></a>
+<br>
+
+:tada: Congrats you are now logged into Cloud 9 Leaderboard! :tada:
+
+--- 
 
 ## Features
 
-Describe specific features of your extension including screenshots of your
-extension in action. Image paths are relative to this README file.
+<img src="https://i.imgur.com/xp9BzSF.png" alt="drawing"/>
 
-For example if there is an image subfolder under your extension project
-workspace:
+### Personal Statistics
 
-\!\[feature X\]\(images/feature-x.png\)
+- Our extention tracks various statistics for many different types of actions performed within the VSCode editor through the help of Code-Time API.
+- Appears as a stylized text file for readability and ease of access
+- Tracks:
+  - Time spent in the editor
+  - Number of keystrokes typed
+  - Number of lines added or removed
+  - Personal score determined by the above stats
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to
-> show off your extension! We recommend short, focused animations that are easy
-> to follow.
+<a href="https://imgur.com/6SvWQgD"><img src="https://i.imgur.com/6SvWQgD.png" title="source: imgur.com" /></a>
 
-## Requirements
+### 
+Leaderboard
 
-If you have any requirements or dependencies, add a section describing those and
-how to install and configure them.
+- Able to join a team leaderboard to track statistics of other members and see how you rank against them
+- Similar to the personal statistics, the team leaderboard is stylized as a text file
+- Aspects:
+  - Displays your ranking compared to others in your team
+  - Displays team statistics and team score
+  - Anonymous names to keep the scoring friendly and competitive
+- Team Leaders are able to create and share a team to be joined
+  - Leaders also have the option of managing their team through appointing new leaders or removing members.
+  - They can also set personal tasks(ex. Finishing a File) that can give additional points to users.
 
-## Extension Settings
+![](https://i.imgur.com/BOvx0qu.png)
 
-Include if your extension adds any VS Code settings through the
-`contributes.configuration` extension point.
+### Badges and Achievements
 
-For example:
+- Earn special badges that showcase progress on your coding!
+- Get achievements that help contribute to your personal score!
 
-This extension contributes the following settings:
+<a href="https://imgur.com/uVB4hK0"><img src="https://i.imgur.com/uVB4hK0.png" title="source: imgur.com" /></a>
 
-- `myExtension.enable`: enable/disable this extension
-- `myExtension.thing`: set to `blah` to do something
+### Team Management
 
-## Known Issues
+- Create or join Team to view statistics of your team members.
+- Join team by simply entering team code shared by the team leader.
+- Manage your team members through team management if you are the leader of the team.
+![](https://i.imgur.com/FnbDWad.png)
 
-Calling out known issues can help limit users opening duplicate issues against
-your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
 
 ---
 
-## Working with Markdown
 
-**Note:** You can author your README using Visual Studio Code. Here are some
-useful editor keyboard shortcuts:
+## FAQ
 
-- Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-- Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-- Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of
-  Markdown snippets
+- **How do I do start tracking productivity metrics?**
+    - It will be started right away when you logged in!
 
-### For more information
+---
 
-- [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-- [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+## Support
 
-**Enjoy!**
+Reach out to us!
+
+- Github issues at <a href="https://github.com/cse112-sp20/Cloud-9-Leaderboard/issues" target="_blank">`github.com/cse112-sp20/Cloud-9-Leaderboard/issues`</a>
+
+---
+
+## Credits
+This application uses the following open source tools and software:
+
+- [Node.js](https://nodejs.org/)
+- [Code Time](https://www.software.com/code-time)
+- [Firebase](https://firebase.google.com/)
