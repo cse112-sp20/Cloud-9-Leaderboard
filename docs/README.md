@@ -80,6 +80,8 @@ OR
   - Number of lines added or removed
   - Personal score determined by the above stats
 
+<a href="https://imgur.com/6SvWQgD"><img src="https://i.imgur.com/6SvWQgD.png" title="source: imgur.com" /></a>
+
 ### Team Leaderboard
 
 - Able to join a team leaderboard to track statistics of other members and see how you rank against them
@@ -92,10 +94,14 @@ OR
   - Leaders also have the option of managing their team through appointing new leaders or removing members.
   - They can also set personal tasks(ex. Finishing a File) that can give additional points to users.
 
+<a href="https://imgur.com/HIq0nKd"><img src="https://i.imgur.com/HIq0nKd.png" title="source: imgur.com" /></a>
+
 ### Badges and Achievements
 
 - Earn special badges that showcase progress on your coding!
 - Get achievements that help contribute to your personal score!
+
+<a href="https://imgur.com/uVB4hK0"><img src="https://i.imgur.com/uVB4hK0.png" title="source: imgur.com" /></a>
 
 ## Team
 
