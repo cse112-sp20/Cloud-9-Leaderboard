@@ -37,7 +37,7 @@ class LeaderDataProvider {
         const ctx = Authentication_1.getExtensionContext();
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
             let childLeaderItem = new LeaderItem("");
-            let topLeaderItem = new LeaderItem("Remove Team members", undefined, [
+            let topLeaderItem = new LeaderItem(Constants_1.TEAM_MANAGEMENT_REMOVE_TEAM_MEMBER, undefined, [
                 childLeaderItem,
             ]);
             childLeaderItem.parent = topLeaderItem;
@@ -50,12 +50,12 @@ class LeaderDataProvider {
             const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
             if (teamId == undefined || teamId == "") {
                 this.data = [
-                    new LeaderItem("No permission: Not in a team yet", undefined, undefined, this),
+                    new LeaderItem(Constants_1.TEAM_MANAGEMENT_NO_PERMISSION_NOT_IN_TEAM, undefined, undefined, this),
                 ];
             }
             else {
                 this.data = [
-                    new LeaderItem("No permission: Not team leader", undefined, undefined, this),
+                    new LeaderItem(Constants_1.TEAM_MANAGEMENT_NO_PERMISSION_NOT_TEAM_LEADER, undefined, undefined, this),
                 ];
             }
         }
@@ -70,12 +70,12 @@ class LeaderDataProvider {
             const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
             if (teamId == undefined || teamId == "") {
                 this.data = [
-                    new LeaderItem("No permission: Not in a team yet", undefined, undefined, this),
+                    new LeaderItem(Constants_1.TEAM_MANAGEMENT_NO_PERMISSION_NOT_IN_TEAM, undefined, undefined, this),
                 ];
             }
             else {
                 this.data = [
-                    new LeaderItem("No permission: Not team leader", undefined, undefined, this),
+                    new LeaderItem(Constants_1.TEAM_MANAGEMENT_NO_PERMISSION_NOT_TEAM_LEADER, undefined, undefined, this),
                 ];
             }
         }
@@ -89,7 +89,7 @@ class LeaderDataProvider {
                 }
             }
             if (memberFetchLists.length === 0) {
-                memberFetchLists.push(new LeaderItem("Empty: No team member yet"));
+                memberFetchLists.push(new LeaderItem(Constants_1.TEAM_MANAGEMENT_EMPTY_NO_TEAM_MEMBER));
             }
             let removeMemberFetchLists = [];
             let childLeaderItem = new LeaderItem("");
@@ -100,9 +100,9 @@ class LeaderDataProvider {
                 }
             }
             if (removeMemberFetchLists.length === 0) {
-                removeMemberFetchLists.push(new LeaderItem("Empty: No team member yet"));
+                removeMemberFetchLists.push(new LeaderItem(Constants_1.TEAM_MANAGEMENT_EMPTY_NO_TEAM_MEMBER));
             }
-            let topLeaderItem = new LeaderItem("Remove Team members", undefined, removeMemberFetchLists);
+            let topLeaderItem = new LeaderItem(Constants_1.TEAM_MANAGEMENT_REMOVE_TEAM_MEMBER, undefined, removeMemberFetchLists);
             for (var val of removeMemberFetchLists) {
                 val.parent = topLeaderItem;
             }
@@ -187,7 +187,7 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
     if (item.label.startsWith("No permission:")) {
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
             let childItem = new LeaderItem("");
-            let topItem = new LeaderItem("Remove Team members", undefined, [
+            let topItem = new LeaderItem(Constants_1.TEAM_MANAGEMENT_REMOVE_TEAM_MEMBER, undefined, [
                 childItem,
             ]);
             childItem.parent = topItem;
@@ -207,7 +207,7 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
                 ]));
             }
             if (item.children.length === 0) {
-                item.children.push(new LeaderItem("Empty: No team member yet", item));
+                item.children.push(new LeaderItem(Constants_1.TEAM_MANAGEMENT_EMPTY_NO_TEAM_MEMBER, item));
             }
             vscode_1.commands.executeCommand("LeaderView.refreshEntry");
         }
@@ -221,14 +221,14 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
             vscode_1.commands.executeCommand("LeaderView.refreshEntry");
         }
     }
-    else if (item.label === "Remove Team members") {
+    else if (item.label === Constants_1.TEAM_MANAGEMENT_REMOVE_TEAM_MEMBER) {
         if (memberMaps !== undefined) {
             item.children = [];
             for (let [key, value] of Object.entries(memberMaps)) {
                 item.children.push(new LeaderItem("Remove member: " + key, item));
             }
             if (item.children.length === 0) {
-                item.children.push(new LeaderItem("Empty: No team member yet", item));
+                item.children.push(new LeaderItem(Constants_1.TEAM_MANAGEMENT_EMPTY_NO_TEAM_MEMBER, item));
             }
             vscode_1.commands.executeCommand("LeaderView.refreshEntry");
         }

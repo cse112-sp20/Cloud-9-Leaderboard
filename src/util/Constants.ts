@@ -138,3 +138,46 @@ export const METRIC_STRING =
 +"Each modified line:                                  +   10 points per line \n\n";
 export const LINE_BAR =
   "___________________________________________________________________________________________\n";
+
+// TreeItem header for TeamDataProvider
+export const TEAM_INFO_WELCOME_BACK_TO_TEAM_TREEVIEW =
+  "🛡 Welcome back to your Team";
+export const TEAM_INFO_GET_TEAM_INFO_TREEVIEW = "Get Team Info";
+export const TEAM_INFO_VIEW_TEAM_LEADERBOARD_TREEVIEW =
+  "📋 View Team leaderboard";
+export const TEAM_INFO_CREATE_TEAM_TREEVIEW = "🛡 Create your Team";
+export const TEAM_INFO_JOIN_TEAM_TREEVIEW = "🔰 Join Team";
+export const TEAM_INFO_TEAM_NAME_TREEVIEW = "TeamName";
+export const TEAM_INFO_TEAM_ID_TREEVIEW = "TeamID";
+
+// TreeItem header for LeaderDataProvider
+export const TEAM_MANAGEMENT_NO_PERMISSION_NOT_IN_TEAM =
+  "No permission: Not in a Team yet";
+export const TEAM_MANAGEMENT_NO_PERMISSION_NOT_TEAM_LEADER =
+  "No permission: Not Team leader";
+export const TEAM_MANAGEMENT_EMPTY_NO_TEAM_MEMBER = "Empty: No Team member yet";
+export const TEAM_MANAGEMENT_REMOVE_TEAM_MEMBER = "Remove Team members";
+
+//TreeItem header for MenuDataProvider
+export const MENU_VIEW_PERSONAL_STATS_TREEVIEW = "📊 View personal stats";
+export const MENU_VIEW_LEADERBOARD_TREEVIEW = "🌐 View Leaderboard";
+export const MENU_LOG_OUT_ACCOUNT_TREEVIEW = "💻 Log out account";
+export const MENU_SIGN_IN_CREATE_ACCOUNT_TREEVIEW = "Sign in / Create Account";
+
+//TreeItem header for DailyMetricDataProvider
+export const DAILY_METRIC_NO_DATA_YET_TREEVIEW = " (No data yet)";
+
+export const DAILY_METRIC_KEYSTROKES_TREEVIEW = "Keystrokes";
+
+export const DAILY_METRIC_LINES_CHANGED_TREEVIEW = "Lines Changed";
+
+export const DAILY_METRIC_TIME_INTERVAL_TREEVIEW = "Time Interval";
+
+export const DAILY_METRIC_POINTS_TREEVIEW = "Points";
+
+export const DAILY_METRIC_DISPLAY_HEADER_MAP_TREEVIEW = {
+  keystrokes: "Keystrokes",
+  linesChanged: "Lines Changed",
+  timeInterval: "Time Interval",
+  points: "Total Points",
+};

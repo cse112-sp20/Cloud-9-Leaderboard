@@ -77,7 +77,7 @@ exports.handleMenuChangeSelection = (view, item) => {
         console.log("View team leaderboard");
         vscode_1.commands.executeCommand('cloud9.teamLeaderboard');
     }
-    else if (item.label === "Get Team Info") {
+    else if (item.label === TEAM_INFO_GET_TEAM_INFO_TREEVIEW) {
         console.log("view team id");
         item.label = "hello";
     }

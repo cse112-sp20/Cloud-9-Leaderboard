@@ -382,7 +382,7 @@ class KpmProviderManager {
             label: `Global average (${dayStr}): ${globalKeystrokes}`,
             icon: "global-grey.svg",
         });
-        items.push(this.buildActivityComparisonNodes("Keystrokes", "", values));
+        items.push(this.buildActivityComparisonNodes(DAILY_METRIC_KEYSTROKES_TREEVIEW, "", values));
         return items;
     }
     buildMetricItem(label, value, tooltip = "", icon = null) {

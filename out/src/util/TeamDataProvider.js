@@ -34,8 +34,8 @@ class TeamDataProvider {
         this.onDidChangeTreeData = this
             ._onDidChangeTreeData.event;
         this.data = [
-            new TeamItem("🛡 Create your Team"),
-            new TeamItem("🔰 Join team"),
+            new TeamItem(Constants_1.TEAM_INFO_CREATE_TEAM_TREEVIEW),
+            new TeamItem(Constants_1.TEAM_INFO_JOIN_TEAM_TREEVIEW),
         ];
     }
     /**
@@ -48,17 +48,17 @@ class TeamDataProvider {
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
         if (cachedTeamId === undefined || cachedTeamId === "") {
             this.data = [
-                new TeamItem("🛡 Create your Team"),
-                new TeamItem("🔰 Join team"),
+                new TeamItem(Constants_1.TEAM_INFO_CREATE_TEAM_TREEVIEW),
+                new TeamItem(Constants_1.TEAM_INFO_JOIN_TEAM_TREEVIEW),
             ];
         }
         else {
             this.data = [
-                new TeamItem("🛡 Welcome back to your Team"),
-                new TeamItem("📋 View team leaderboard"),
-                new TeamItem("Get Team Info", [
-                    new TeamItem("TeamName", [new TeamItem(teamName + "")]),
-                    new TeamItem("TeamID", [new TeamItem(teamId + "")]),
+                new TeamItem(Constants_1.TEAM_INFO_WELCOME_BACK_TO_TEAM_TREEVIEW),
+                new TeamItem(Constants_1.TEAM_INFO_VIEW_TEAM_LEADERBOARD_TREEVIEW),
+                new TeamItem(Constants_1.TEAM_INFO_GET_TEAM_INFO_TREEVIEW, [
+                    new TeamItem(Constants_1.TEAM_INFO_TEAM_NAME_TREEVIEW, [new TeamItem(teamName + "")]),
+                    new TeamItem(Constants_1.TEAM_INFO_TEAM_ID_TREEVIEW, [new TeamItem(teamId + "")]),
                 ]),
             ];
         }
@@ -123,33 +123,33 @@ exports.connectCloud9TeamInfoTreeView = (view) => {
  * @param item
  */
 exports.handleTeamInfoChangeSelection = (view, item) => {
-    if (item.label === "🛡 Create your Team") {
+    if (item.label === Constants_1.TEAM_INFO_CREATE_TEAM_TREEVIEW) {
         vscode_1.commands.executeCommand("cloud9.createTeam");
     }
-    else if (item.label === "🔰 Join team") {
+    else if (item.label === Constants_1.TEAM_INFO_JOIN_TEAM_TREEVIEW) {
         vscode_1.commands.executeCommand("cloud9.joinTeam");
     }
-    else if (item.label === "📋 View team leaderboard") {
+    else if (item.label === Constants_1.TEAM_INFO_VIEW_TEAM_LEADERBOARD_TREEVIEW) {
         vscode_1.commands.executeCommand("cloud9.teamLeaderboard");
     }
-    else if (item.label === "Get Team Info") {
+    else if (item.label === Constants_1.TEAM_INFO_GET_TEAM_INFO_TREEVIEW) {
         const ctx = Authentication_1.getExtensionContext();
         const teamName = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_NAME);
         const teamId = ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_TEAM_ID);
         if (teamId == undefined || teamId == "") {
             item.children = [
-                new TeamItem("TeamName", [
+                new TeamItem(Constants_1.TEAM_INFO_TEAM_NAME_TREEVIEW, [
                     new TeamItem("Empty (Please join a team first)"),
                 ]),
-                new TeamItem("TeamID", [
+                new TeamItem(Constants_1.TEAM_INFO_TEAM_ID_TREEVIEW, [
                     new TeamItem("Empty (Please join a team first)"),
                 ]),
             ];
         }
         else {
             item.children = [
-                new TeamItem("TeamName", [new TeamItem(teamName + "")]),
-                new TeamItem("TeamID", [new TeamItem(teamId + "")]),
+                new TeamItem(Constants_1.TEAM_INFO_TEAM_NAME_TREEVIEW, [new TeamItem(teamName + "")]),
+                new TeamItem(Constants_1.TEAM_INFO_TEAM_ID_TREEVIEW, [new TeamItem(teamId + "")]),
             ];
         }
         vscode_1.commands.executeCommand("TeamMenuView.refreshEntry");
