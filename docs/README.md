@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://imgur.com/I8N2I8s"><img src="https://i.imgur.com/I8N2I8s.png" title="source: imgur.com" width= "200px"/></a>
+  <a href="https://imgur.com/LKUA2bW"><img src="https://imgur.com/LKUA2bW" title="source: imgur.com" width= "200px"/></a>
   <br>
   Cloud 9 Leaderboard
   <br>
