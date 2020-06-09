@@ -79,6 +79,7 @@ export const SECTION_BAR = "\n".padStart(92, "=");
 export const STAT_LENGTH = 30;
 export const FIELD_LENGTH = 12;
 
+// ASCII art of WELCOME TO CLOUD9
 export const WECOME_TO_CLOUD9_ROW_1 =
   "__        __   _                            _____        ____ _                 _    ___\n";
 export const WECOME_TO_CLOUD9_ROW_2 =
@@ -90,6 +91,7 @@ export const WECOME_TO_CLOUD9_ROW_4 =
 export const WECOME_TO_CLOUD9_ROW_5 =
   "   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/   \\____|_|\\___/ \\__,_|\\__,_|    /_/ \n";
 
+// ASCII art of LEADERBOARD
 export const LEADERBOARD_ROW_1 =
   "                _                   _           _                         _\n";
 export const LEADERBOARD_ROW_2 =
@@ -166,15 +168,10 @@ export const MENU_SIGN_IN_CREATE_ACCOUNT_TREEVIEW = "Sign in / Create Account";
 
 //TreeItem header for DailyMetricDataProvider
 export const DAILY_METRIC_NO_DATA_YET_TREEVIEW = " (No data yet)";
-
 export const DAILY_METRIC_KEYSTROKES_TREEVIEW = "Keystrokes";
-
 export const DAILY_METRIC_LINES_CHANGED_TREEVIEW = "Lines Changed";
-
 export const DAILY_METRIC_TIME_INTERVAL_TREEVIEW = "Time Interval";
-
 export const DAILY_METRIC_POINTS_TREEVIEW = "Points";
-
 export const DAILY_METRIC_DISPLAY_HEADER_MAP_TREEVIEW = {
   keystrokes: "Keystrokes",
   linesChanged: "Lines Changed",
