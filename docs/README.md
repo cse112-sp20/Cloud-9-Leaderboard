@@ -181,6 +181,9 @@ OR
 
 ---
 ## Documentation/Structure
+- New to the Project?
+  - Read our Onboarding Guide [here](https://docs.google.com/document/d/1eo04utRI_SBL23AygBqBkpJeFohFo1nMQaY5pf2w0qc/edit?usp=sharing) to get acquainted with the project!
+  - This guide contains all the documentation and guides in order to work on this project yourself.
 
 ---
 
