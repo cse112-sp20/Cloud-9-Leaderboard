@@ -20,19 +20,11 @@ import {
   Disposable,
 } from "vscode";
 
-import {
-  getExtensionContext,
-  checkIfCachedUserIdExistsAndPrompt,
-} from "./Authentication";
-
-import {getTeamInfo} from "./Team";
+import {getExtensionContext} from "./Authentication";
 
 import {
   GLOBAL_STATE_USER_TEAM_NAME,
   GLOBAL_STATE_USER_TEAM_ID,
-  GLOBAL_STATE_USER_IS_TEAM_LEADER,
-  GLOBAL_STATE_USER_ID,
-  AUTH_NOT_LOGGED_IN,
   TEAM_INFO_WELCOME_BACK_TO_TEAM_TREEVIEW,
   TEAM_INFO_GET_TEAM_INFO_TREEVIEW,
   TEAM_INFO_VIEW_TEAM_LEADERBOARD_TREEVIEW,

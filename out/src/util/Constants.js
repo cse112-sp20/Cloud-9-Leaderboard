@@ -71,11 +71,13 @@ exports.MAX_RANK_LENGTH = 6;
 exports.SECTION_BAR = "\n".padStart(92, "=");
 exports.STAT_LENGTH = 30;
 exports.FIELD_LENGTH = 12;
+// ASCII art of WELCOME TO CLOUD9
 exports.WECOME_TO_CLOUD9_ROW_1 = "__        __   _                            _____        ____ _                 _    ___\n";
 exports.WECOME_TO_CLOUD9_ROW_2 = "\\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__    / ___| | ___  _   _  __| |  / _ \\ \n";
 exports.WECOME_TO_CLOUD9_ROW_3 = " \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\  | |   | |/ _ \\| | | |/ _` | | (_) |\n";
 exports.WECOME_TO_CLOUD9_ROW_4 = "  \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) | | |___| | (_) | |_| | (_| |  \\__, |\n";
 exports.WECOME_TO_CLOUD9_ROW_5 = "   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/   \\____|_|\\___/ \\__,_|\\__,_|    /_/ \n";
+// ASCII art of LEADERBOARD
 exports.LEADERBOARD_ROW_1 = "                _                   _           _                         _\n";
 exports.LEADERBOARD_ROW_2 = "               | |    ___  __ _  __| | ___ _ __| |__   ___   __ _ _ __ __| |\n";
 exports.LEADERBOARD_ROW_3 = "               | |   / _ \\/ _` |/ _` |/ _ \\ '__| '_ \\ / _ \\ / _` | '__/ _` |\n";
@@ -125,9 +127,9 @@ exports.TEAM_MANAGEMENT_NO_PERMISSION_NOT_TEAM_LEADER = "No permission: Not Team
 exports.TEAM_MANAGEMENT_EMPTY_NO_TEAM_MEMBER = "Empty: No Team member yet";
 exports.TEAM_MANAGEMENT_REMOVE_TEAM_MEMBER = "Remove Team members";
 //TreeItem header for MenuDataProvider
-exports.MENU_VIEW_PERSONAL_STATS_TREEVIEW = "📊 View personal stats";
+exports.MENU_VIEW_PERSONAL_STATS_TREEVIEW = "📊 View Personal Stats";
 exports.MENU_VIEW_LEADERBOARD_TREEVIEW = "🌐 View Leaderboard";
-exports.MENU_LOG_OUT_ACCOUNT_TREEVIEW = "💻 Log out account";
+exports.MENU_LOG_OUT_ACCOUNT_TREEVIEW = "💻 Log out Account";
 exports.MENU_SIGN_IN_CREATE_ACCOUNT_TREEVIEW = "Sign in / Create Account";
 //TreeItem header for DailyMetricDataProvider
 exports.DAILY_METRIC_NO_DATA_YET_TREEVIEW = " (No data yet)";

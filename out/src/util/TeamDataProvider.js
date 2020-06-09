@@ -57,7 +57,9 @@ class TeamDataProvider {
                 new TeamItem(Constants_1.TEAM_INFO_WELCOME_BACK_TO_TEAM_TREEVIEW),
                 new TeamItem(Constants_1.TEAM_INFO_VIEW_TEAM_LEADERBOARD_TREEVIEW),
                 new TeamItem(Constants_1.TEAM_INFO_GET_TEAM_INFO_TREEVIEW, [
-                    new TeamItem(Constants_1.TEAM_INFO_TEAM_NAME_TREEVIEW, [new TeamItem(teamName + "")]),
+                    new TeamItem(Constants_1.TEAM_INFO_TEAM_NAME_TREEVIEW, [
+                        new TeamItem(teamName + ""),
+                    ]),
                     new TeamItem(Constants_1.TEAM_INFO_TEAM_ID_TREEVIEW, [new TeamItem(teamId + "")]),
                 ]),
             ];
@@ -148,7 +150,9 @@ exports.handleTeamInfoChangeSelection = (view, item) => {
         }
         else {
             item.children = [
-                new TeamItem(Constants_1.TEAM_INFO_TEAM_NAME_TREEVIEW, [new TeamItem(teamName + "")]),
+                new TeamItem(Constants_1.TEAM_INFO_TEAM_NAME_TREEVIEW, [
+                    new TeamItem(teamName + ""),
+                ]),
                 new TeamItem(Constants_1.TEAM_INFO_TEAM_ID_TREEVIEW, [new TeamItem(teamId + "")]),
             ];
         }

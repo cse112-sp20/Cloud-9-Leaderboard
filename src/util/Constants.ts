@@ -161,9 +161,9 @@ export const TEAM_MANAGEMENT_EMPTY_NO_TEAM_MEMBER = "Empty: No Team member yet";
 export const TEAM_MANAGEMENT_REMOVE_TEAM_MEMBER = "Remove Team members";
 
 //TreeItem header for MenuDataProvider
-export const MENU_VIEW_PERSONAL_STATS_TREEVIEW = "📊 View personal stats";
+export const MENU_VIEW_PERSONAL_STATS_TREEVIEW = "📊 View Personal Stats";
 export const MENU_VIEW_LEADERBOARD_TREEVIEW = "🌐 View Leaderboard";
-export const MENU_LOG_OUT_ACCOUNT_TREEVIEW = "💻 Log out account";
+export const MENU_LOG_OUT_ACCOUNT_TREEVIEW = "💻 Log out Account";
 export const MENU_SIGN_IN_CREATE_ACCOUNT_TREEVIEW = "Sign in / Create Account";
 
 //TreeItem header for DailyMetricDataProvider

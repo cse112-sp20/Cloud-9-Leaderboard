@@ -37,9 +37,7 @@ class LeaderDataProvider {
         const ctx = Authentication_1.getExtensionContext();
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
             let childLeaderItem = new LeaderItem("");
-            let topLeaderItem = new LeaderItem(Constants_1.TEAM_MANAGEMENT_REMOVE_TEAM_MEMBER, undefined, [
-                childLeaderItem,
-            ]);
+            let topLeaderItem = new LeaderItem(Constants_1.TEAM_MANAGEMENT_REMOVE_TEAM_MEMBER, undefined, [childLeaderItem]);
             childLeaderItem.parent = topLeaderItem;
             this.data = [
                 new LeaderItem("Team members", undefined, [new LeaderItem("")]),
@@ -187,9 +185,7 @@ exports.handleLeaderInfoChangeSelection = (view, item) => {
     if (item.label.startsWith("No permission:")) {
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER)) {
             let childItem = new LeaderItem("");
-            let topItem = new LeaderItem(Constants_1.TEAM_MANAGEMENT_REMOVE_TEAM_MEMBER, undefined, [
-                childItem,
-            ]);
+            let topItem = new LeaderItem(Constants_1.TEAM_MANAGEMENT_REMOVE_TEAM_MEMBER, undefined, [childItem]);
             childItem.parent = topItem;
             item.upperClass.data = [
                 new LeaderItem("Team members", undefined, [new LeaderItem("")]),
