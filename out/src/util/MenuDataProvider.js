@@ -35,9 +35,9 @@ class MenuDataProvider {
         this.onDidChangeTreeData = this
             ._onDidChangeTreeData.event;
         this.data = [
-            new MenuItem("Sign in / Create Account"),
-            new MenuItem("📊 View personal stats"),
-            new MenuItem("🌐 Leaderboard"),
+            new MenuItem(Constants_1.MENU_SIGN_IN_CREATE_ACCOUNT_TREEVIEW),
+            new MenuItem(Constants_1.MENU_VIEW_PERSONAL_STATS_TREEVIEW),
+            new MenuItem(Constants_1.MENU_VIEW_LEADERBOARD_TREEVIEW),
         ];
     }
     /**
@@ -48,16 +48,16 @@ class MenuDataProvider {
         if (ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_ID) !== undefined) {
             this.data = [
                 new MenuItem(`Welcome, ${ctx.globalState.get(Constants_1.GLOBAL_STATE_USER_NICKNAME)}!`),
-                new MenuItem("📊 View personal stats"),
-                new MenuItem("🌐 Leaderboard"),
-                new MenuItem("💻 Log out account"),
+                new MenuItem(Constants_1.MENU_VIEW_PERSONAL_STATS_TREEVIEW),
+                new MenuItem(Constants_1.MENU_VIEW_LEADERBOARD_TREEVIEW),
+                new MenuItem(Constants_1.MENU_LOG_OUT_ACCOUNT_TREEVIEW),
             ];
         }
         else {
             this.data = [
-                new MenuItem("Sign in / Create Account"),
-                new MenuItem("📊 View personal stats"),
-                new MenuItem("🌐 Leaderboard"),
+                new MenuItem(Constants_1.MENU_SIGN_IN_CREATE_ACCOUNT_TREEVIEW),
+                new MenuItem(Constants_1.MENU_VIEW_PERSONAL_STATS_TREEVIEW),
+                new MenuItem(Constants_1.MENU_VIEW_LEADERBOARD_TREEVIEW),
             ];
         }
         this._onDidChangeTreeData.fire(null);
@@ -126,16 +126,16 @@ exports.connectCloud9MenuTreeView = (view) => {
  * @param item
  */
 exports.handleMenuChangeSelection = (view, item) => {
-    if (item.label === "Sign in / Create Account") {
+    if (item.label === Constants_1.MENU_SIGN_IN_CREATE_ACCOUNT_TREEVIEW) {
         Authentication_1.signInOrSignUpUserWithUserInput();
     }
-    else if (item.label === "📊 View personal stats") {
+    else if (item.label === Constants_1.MENU_VIEW_PERSONAL_STATS_TREEVIEW) {
         vscode_1.commands.executeCommand("cloud9.personalStats");
     }
-    else if (item.label === "🌐 Leaderboard") {
+    else if (item.label === Constants_1.MENU_VIEW_LEADERBOARD_TREEVIEW) {
         vscode_1.commands.executeCommand("cloud9.leaderboard");
     }
-    else if (item.label === "💻 Log out account") {
+    else if (item.label === Constants_1.MENU_LOG_OUT_ACCOUNT_TREEVIEW) {
         vscode_1.commands.executeCommand("cloud9.logOut");
     }
 };

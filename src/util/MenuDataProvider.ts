@@ -20,7 +20,14 @@ import {
   Disposable,
 } from "vscode";
 
-import {GLOBAL_STATE_USER_ID, GLOBAL_STATE_USER_NICKNAME} from "./Constants";
+import {
+  GLOBAL_STATE_USER_ID,
+  GLOBAL_STATE_USER_NICKNAME,
+  MENU_VIEW_PERSONAL_STATS_TREEVIEW,
+  MENU_VIEW_LEADERBOARD_TREEVIEW,
+  MENU_LOG_OUT_ACCOUNT_TREEVIEW,
+  MENU_SIGN_IN_CREATE_ACCOUNT_TREEVIEW,
+} from "./Constants";
 
 import {signInOrSignUpUserWithUserInput} from "./Authentication";
 
@@ -47,15 +54,15 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
         new MenuItem(
           `Welcome, ${ctx.globalState.get(GLOBAL_STATE_USER_NICKNAME)}!`,
         ),
-        new MenuItem("📊 View personal stats"),
-        new MenuItem("🌐 Leaderboard"),
-        new MenuItem("💻 Log out account"),
+        new MenuItem(MENU_VIEW_PERSONAL_STATS_TREEVIEW),
+        new MenuItem(MENU_VIEW_LEADERBOARD_TREEVIEW),
+        new MenuItem(MENU_LOG_OUT_ACCOUNT_TREEVIEW),
       ];
     } else {
       this.data = [
-        new MenuItem("Sign in / Create Account"),
-        new MenuItem("📊 View personal stats"),
-        new MenuItem("🌐 Leaderboard"),
+        new MenuItem(MENU_SIGN_IN_CREATE_ACCOUNT_TREEVIEW),
+        new MenuItem(MENU_VIEW_PERSONAL_STATS_TREEVIEW),
+        new MenuItem(MENU_VIEW_LEADERBOARD_TREEVIEW),
       ];
     }
 
@@ -70,9 +77,9 @@ export class MenuDataProvider implements TreeDataProvider<MenuItem> {
    */
   constructor() {
     this.data = [
-      new MenuItem("Sign in / Create Account"),
-      new MenuItem("📊 View personal stats"),
-      new MenuItem("🌐 Leaderboard"),
+      new MenuItem(MENU_SIGN_IN_CREATE_ACCOUNT_TREEVIEW),
+      new MenuItem(MENU_VIEW_PERSONAL_STATS_TREEVIEW),
+      new MenuItem(MENU_VIEW_LEADERBOARD_TREEVIEW),
     ];
   }
 
@@ -155,13 +162,13 @@ export const handleMenuChangeSelection = (
   view: TreeView<MenuItem>,
   item: MenuItem,
 ) => {
-  if (item.label === "Sign in / Create Account") {
+  if (item.label === MENU_SIGN_IN_CREATE_ACCOUNT_TREEVIEW) {
     signInOrSignUpUserWithUserInput();
-  } else if (item.label === "📊 View personal stats") {
+  } else if (item.label === MENU_VIEW_PERSONAL_STATS_TREEVIEW) {
     commands.executeCommand("cloud9.personalStats");
-  } else if (item.label === "🌐 Leaderboard") {
+  } else if (item.label === MENU_VIEW_LEADERBOARD_TREEVIEW) {
     commands.executeCommand("cloud9.leaderboard");
-  } else if (item.label === "💻 Log out account") {
+  } else if (item.label === MENU_LOG_OUT_ACCOUNT_TREEVIEW) {
     commands.executeCommand("cloud9.logOut");
   }
 };
