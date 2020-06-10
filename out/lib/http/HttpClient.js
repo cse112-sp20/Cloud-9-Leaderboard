@@ -9,16 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isResponseOk = exports.hasTokenExpired = exports.softwareDelete = exports.softwarePost = exports.softwarePut = exports.softwareGet = exports.spotifyApiPut = exports.serverIsAvailable = void 0;
+exports.isResponseOk = exports.hasTokenExpired = exports.softwarePost = exports.softwarePut = exports.softwareGet = exports.serverIsAvailable = void 0;
 const axios_1 = require("axios");
 const Constants_1 = require("../Constants");
-const Util_1 = require("../Util");
 const CacheManager_1 = require("../cache/CacheManager");
 // build the axios api base url
 const beApi = axios_1.default.create({
     baseURL: `${Constants_1.api_endpoint}`,
 });
-const spotifyApi = axios_1.default.create({});
 const cacheMgr = CacheManager_1.CacheManager.getInstance();
 function serverIsAvailable() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -37,19 +35,6 @@ function serverIsAvailable() {
     });
 }
 exports.serverIsAvailable = serverIsAvailable;
-function spotifyApiPut(api, payload, accessToken) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (api.indexOf("https://api.spotify.com") === -1) {
-            api = "https://api.spotify.com" + api;
-        }
-        spotifyApi.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-        return yield spotifyApi.put(api, payload).catch((err) => {
-            Util_1.logIt(`error posting data for ${api}, message: ${err.message}`);
-            return err;
-        });
-    });
-}
-exports.spotifyApiPut = spotifyApiPut;
 /**
  * Response returns a paylod with the following...
  * data: <payload>, status: 200, statusText: "OK", config: Object
@@ -62,7 +47,6 @@ function softwareGet(api, jwt) {
             beApi.defaults.headers.common["Authorization"] = jwt;
         }
         return yield beApi.get(api).catch((err) => {
-            Util_1.logIt(`error fetching data for ${api}, message: ${err.message}`);
             return err;
         });
     });
@@ -81,7 +65,6 @@ function softwarePut(api, payload, jwt) {
             return resp;
         })
             .catch((err) => {
-            Util_1.logIt(`error posting data for ${api}, message: ${err.message}`);
             return err;
         });
     });
@@ -100,30 +83,11 @@ function softwarePost(api, payload, jwt) {
             return resp;
         })
             .catch((err) => {
-            Util_1.logIt(`error posting data for ${api}, message: ${err.message}`);
             return err;
         });
     });
 }
 exports.softwarePost = softwarePost;
-/**
- * perform a delete request
- */
-function softwareDelete(api, jwt) {
-    return __awaiter(this, void 0, void 0, function* () {
-        beApi.defaults.headers.common["Authorization"] = jwt;
-        return beApi
-            .delete(api)
-            .then((resp) => {
-            return resp;
-        })
-            .catch((err) => {
-            Util_1.logIt(`error with delete request for ${api}, message: ${err.message}`);
-            return err;
-        });
-    });
-}
-exports.softwareDelete = softwareDelete;
 /**
  * Check if the spotify response has an expired token
  * {"error": {"status": 401, "message": "The access token expired"}}

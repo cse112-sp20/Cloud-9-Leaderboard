@@ -20,16 +20,17 @@ import {
 } from "vscode";
 
 import {getExtensionContext} from "./Authentication";
-import {GLOBAL_STATE_USER_ID} from "./Constants";
+import {
+  GLOBAL_STATE_USER_ID,
+  DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+  DAILY_METRIC_KEYSTROKES_TREEVIEW,
+  DAILY_METRIC_LINES_CHANGED_TREEVIEW,
+  DAILY_METRIC_TIME_INTERVAL_TREEVIEW,
+  DAILY_METRIC_POINTS_TREEVIEW,
+  DAILY_METRIC_DISPLAY_HEADER_MAP_TREEVIEW,
+} from "./Constants";
 
 import {retrieveUserUpdateDailyMetric} from "./Firestore";
-
-const displayHeaderMap = {
-  keystrokes: "Keystrokes",
-  linesChanged: "Lines Changed",
-  timeInterval: "Time Interval",
-  points: "Total Points",
-};
 
 /**
  * Daily metric data provider
@@ -51,48 +52,88 @@ export class DailyMetricDataProvider
 
     if (ctx.globalState.get(GLOBAL_STATE_USER_ID) === undefined) {
       this.data = [
-        new DailyMetricItem("Keystrokes", [
-          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
+        new DailyMetricItem(DAILY_METRIC_KEYSTROKES_TREEVIEW, [
+          new DailyMetricItem(
+            "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+          ),
         ]),
-        new DailyMetricItem("Lines Changed", [
-          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
+        new DailyMetricItem(DAILY_METRIC_LINES_CHANGED_TREEVIEW, [
+          new DailyMetricItem(
+            "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+          ),
         ]),
-        new DailyMetricItem("Time Interval", [
-          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
+        new DailyMetricItem(DAILY_METRIC_TIME_INTERVAL_TREEVIEW, [
+          new DailyMetricItem(
+            "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+          ),
         ]),
-        new DailyMetricItem("Points", [
-          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
+        new DailyMetricItem(DAILY_METRIC_POINTS_TREEVIEW, [
+          new DailyMetricItem(
+            "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+          ),
         ]),
       ];
       return;
     } else {
       retrieveUserUpdateDailyMetric().then((userDocument) => {
-        var today = new Date();
-
-        var time =
-          today.getHours() +
-          ":" +
-          today.getMinutes() +
-          ":" +
-          today.getSeconds();
-        this.data = [];
-
-        let tempList = [];
-        for (let key in userDocument) {
-          if (key === "teamId") {
-            continue;
-          }
-
-          tempList.push(
-            new DailyMetricItem(displayHeaderMap[key], [
+        if (userDocument === undefined) {
+          this.data = [
+            new DailyMetricItem(DAILY_METRIC_KEYSTROKES_TREEVIEW, [
               new DailyMetricItem(
-                "🚀 Today: " + userDocument[key] + " (Updated: " + time + ")",
+                "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
               ),
             ]),
-          );
-        }
+            new DailyMetricItem(DAILY_METRIC_LINES_CHANGED_TREEVIEW, [
+              new DailyMetricItem(
+                "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+              ),
+            ]),
+            new DailyMetricItem(DAILY_METRIC_TIME_INTERVAL_TREEVIEW, [
+              new DailyMetricItem(
+                "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+              ),
+            ]),
+            new DailyMetricItem(DAILY_METRIC_POINTS_TREEVIEW, [
+              new DailyMetricItem(
+                "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+              ),
+            ]),
+          ];
+        } else {
+          var today = new Date();
 
-        this.data = tempList;
+          var time =
+            today.getHours() +
+            ":" +
+            today.getMinutes() +
+            ":" +
+            today.getSeconds();
+          this.data = [];
+
+          let tempList = [];
+          for (let key in userDocument) {
+            if (key === "teamId") {
+              continue;
+            }
+
+            tempList.push(
+              new DailyMetricItem(
+                DAILY_METRIC_DISPLAY_HEADER_MAP_TREEVIEW[key],
+                [
+                  new DailyMetricItem(
+                    "🚀 Today: " +
+                      +userDocument[key].toFixed(3) +
+                      " (Updated: " +
+                      time +
+                      ")",
+                  ),
+                ],
+              ),
+            );
+          }
+
+          this.data = tempList;
+        }
       });
     }
 
@@ -108,17 +149,25 @@ export class DailyMetricDataProvider
   constructor(d) {
     if (d == undefined) {
       this.data = [
-        new DailyMetricItem("Keystrokes", [
-          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
+        new DailyMetricItem(DAILY_METRIC_KEYSTROKES_TREEVIEW, [
+          new DailyMetricItem(
+            "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+          ),
         ]),
-        new DailyMetricItem("Lines Changed", [
-          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
+        new DailyMetricItem(DAILY_METRIC_LINES_CHANGED_TREEVIEW, [
+          new DailyMetricItem(
+            "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+          ),
         ]),
-        new DailyMetricItem("Time Interval", [
-          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
+        new DailyMetricItem(DAILY_METRIC_TIME_INTERVAL_TREEVIEW, [
+          new DailyMetricItem(
+            "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+          ),
         ]),
-        new DailyMetricItem("Points", [
-          new DailyMetricItem("🚀 Today: " + "0" + " (No data yet)"),
+        new DailyMetricItem(DAILY_METRIC_POINTS_TREEVIEW, [
+          new DailyMetricItem(
+            "🚀 Today: " + "0" + DAILY_METRIC_NO_DATA_YET_TREEVIEW,
+          ),
         ]),
       ];
     } else {
@@ -136,9 +185,9 @@ export class DailyMetricDataProvider
         }
 
         tempList.push(
-          new DailyMetricItem(displayHeaderMap[key], [
+          new DailyMetricItem(DAILY_METRIC_DISPLAY_HEADER_MAP_TREEVIEW[key], [
             new DailyMetricItem(
-              "🚀 Today: " + d[key] + " (Updated: " + time + ")",
+              "🚀 Today: " + +d[key].toFixed(3) + " (Updated: " + time + ")",
             ),
           ]),
         );

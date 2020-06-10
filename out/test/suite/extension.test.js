@@ -12,10 +12,6 @@ suite("Extension Test Suite", () => {
     test("utilities.js", () => {
         const result = Utility_1.generateRandomName();
         assert.typeOf(result, "string");
-        assert.equal(Utility_1.getRandomInt(1), 0);
-        assert.equal(Utility_1.getRandomInt(0), 0);
-        assert.equal(Utility_1.getRandomInt(100) <= 100, true);
-        assert.equal(Utility_1.generateRandomEmail().includes("@"), true);
     });
     test("authentication.ts", () => {
         console.log(Leaderboard_1.Leaderboard);

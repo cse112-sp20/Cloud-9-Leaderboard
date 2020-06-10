@@ -13,7 +13,6 @@ export class CacheManager {
     if (!CacheManager.instance) {
       CacheManager.instance = new CacheManager();
     }
-
     return CacheManager.instance;
   }
 

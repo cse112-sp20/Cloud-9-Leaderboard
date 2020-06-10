@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateStatusBarWithSummaryData = exports.incrementSessionSummaryData = exports.getTimeBetweenLastPayload = exports.setSessionSummaryLiveshareMinutes = exports.saveSessionSummaryToDisk = exports.getSessionSummaryFileAsJson = exports.sessionSummaryExists = exports.getSessionSummaryData = exports.getSessionSummaryFile = exports.clearSessionSummaryData = exports.getSessionThresholdSeconds = void 0;
+exports.updateStatusBarWithSummaryData = exports.incrementSessionSummaryData = exports.getTimeBetweenLastPayload = exports.saveSessionSummaryToDisk = exports.getSessionSummaryFileAsJson = exports.getSessionSummaryData = exports.getSessionSummaryFile = exports.clearSessionSummaryData = exports.getSessionThresholdSeconds = void 0;
 const models_1 = require("../model/models");
 const Util_1 = require("../Util");
 const Constants_1 = require("../Constants");
@@ -58,11 +58,6 @@ function coalesceMissingAttributes(data) {
     });
     return data;
 }
-function sessionSummaryExists() {
-    const file = getSessionSummaryFile();
-    return fs.existsSync(file);
-}
-exports.sessionSummaryExists = sessionSummaryExists;
 function getSessionSummaryFileAsJson() {
     const file = getSessionSummaryFile();
     let sessionSummary = Util_1.getFileDataAsJson(file);
@@ -78,22 +73,13 @@ function saveSessionSummaryToDisk(sessionSummaryData) {
     try {
         // JSON.stringify(data, replacer, number of spaces)
         const content = JSON.stringify(sessionSummaryData, null, 4);
-        fs.writeFileSync(file, content, (err) => {
-            if (err)
-                Util_1.logIt(`Deployer: Error writing session summary data: ${err.message}`);
-        });
+        fs.writeFileSync(file, content, (err) => { });
     }
     catch (e) {
         //
     }
 }
 exports.saveSessionSummaryToDisk = saveSessionSummaryToDisk;
-function setSessionSummaryLiveshareMinutes(minutes) {
-    let sessionSummaryData = getSessionSummaryData();
-    sessionSummaryData.liveshareMinutes = minutes;
-    saveSessionSummaryToDisk(sessionSummaryData);
-}
-exports.setSessionSummaryLiveshareMinutes = setSessionSummaryLiveshareMinutes;
 /**
  * Return {elapsedSeconds, sessionMinutes}
  * The session minutes is based on a threshold of 15 minutes
@@ -147,7 +133,6 @@ function updateStatusBarWithSummaryData() {
         : "$(clock)";
     const minutesStr = Util_1.humanizeMinutes(codeTimeSummary.activeCodeTimeMinutes);
     const msg = `${inFlowIcon} ${minutesStr}`;
-    Util_1.showStatus(msg, null);
 }
 exports.updateStatusBarWithSummaryData = updateStatusBarWithSummaryData;
 //# sourceMappingURL=SessionSummaryData.js.map

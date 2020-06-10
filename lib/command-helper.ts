@@ -1,9 +1,5 @@
 import {commands, Disposable, workspace, window, TreeView} from "vscode";
-import {
-  handleKpmClickedEvent,
-  updatePreferences,
-  sendTeamInvite,
-} from "./DataController";
+import {updatePreferences} from "./DataController";
 import {
   TeamDataProvider,
   TeamItem,

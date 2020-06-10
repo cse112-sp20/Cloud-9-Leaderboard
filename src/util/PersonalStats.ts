@@ -29,6 +29,12 @@ import {
   WECOME_TO_CLOUD9_ROW_3,
   WECOME_TO_CLOUD9_ROW_4,
   WECOME_TO_CLOUD9_ROW_5,
+  LEADERBOARD_ACHIEVEMENTS,
+  ACHIEVEMENTS_TITLE,
+  STATISTICS_TITLE,
+  RECORD_TITLE,
+  METRIC_STRING,
+  LINE_BAR,
 } from "./Constants";
 const fs = require("fs");
 
@@ -163,48 +169,11 @@ async function writePersonalStatsFile(dates) {
   content += SECTION_BAR;
   content += "                                     How to gain points \n";
   content += SECTION_BAR + "\n";
-  content +=
-    "Each second spent coding:                            + 0.01 points per second \n";
-  content +=
-    "Each keystroke:                                      +    1 points per keystroke\n";
-  content +=
-    "Each modified line:                                  +   10 points per line \n\n";
-
-  // content += PERSONAL_STATISTIC_ROW_1;
-  // content += PERSONAL_STATISTIC_ROW_2;
-  // content += PERSONAL_STATISTIC_ROW_3;
-  // content += PERSONAL_STATISTIC_ROW_4;
-  // content += PERSONAL_STATISTIC_ROW_5;
+  content += METRIC_STRING;
 
   content += SECTION_BAR;
-  content += "                                           Record\n";
+  content += RECORD_TITLE;
   content += SECTION_BAR + "\n";
-
-  // content +=
-  //   'Dates'.padEnd(FIELD_LENGTH, ' ') +
-  //   '\t' +
-  //   'Keystrokes'.padEnd(FIELD_LENGTH, ' ') +
-  //   '\t' +
-  //   'LinesChanged'.padEnd(FIELD_LENGTH, ' ') +
-  //   '\t' +
-  //   'TimeInterval'.padEnd(FIELD_LENGTH, ' ') +
-  //   '\t' +
-  //   'Points'.padEnd(FIELD_LENGTH, ' ') +
-  //   '\n';
-
-  // scoreMap.map((obj, i) => {
-  //   content +=
-  //     obj['dateStr'].toString().padEnd(FIELD_LENGTH, ' ') +
-  //     '\t' +
-  //     obj['keystrokes'].toString().padEnd(FIELD_LENGTH, ' ') +
-  //     '\t' +
-  //     obj['linesChanged'].toString().padEnd(FIELD_LENGTH, ' ') +
-  //     '\t' +
-  //     obj['timeInterval'].toString().padEnd(FIELD_LENGTH, ' ') +
-  //     '\t' +
-  //     obj['points'].toString().padEnd(FIELD_LENGTH, ' ') +
-  //     '\n';
-  // });
 
   let previousScore: number = -1;
   let currentScore: number = 0;
@@ -232,15 +201,14 @@ async function writePersonalStatsFile(dates) {
       counter = 1;
     }
 
-    content +=
-      "___________________________________________________________________________________________\n";
+    content += LINE_BAR;
     content +=
       "    Keystrokes per minute :".padEnd(40, " ") +
       obj["keystrokes"].toString().padEnd(FIELD_LENGTH, " ") +
       "\t" +
       "|".padEnd(FIELD_LENGTH, " ") +
       "\t" +
-      obj["points"] +
+      +obj["keystrokes"] * 1 +
       " points\n";
     content +=
       "      Lines of code added :".padEnd(40, " ") +
@@ -248,7 +216,7 @@ async function writePersonalStatsFile(dates) {
       "\t" +
       "|".padEnd(FIELD_LENGTH, " ") +
       "\t" +
-      obj["points"] +
+      +(+obj["linesChanged"] * 10) +
       " points\n";
     content +=
       "         Active code time :".padEnd(40, " ") +
@@ -256,13 +224,13 @@ async function writePersonalStatsFile(dates) {
       "\t" +
       "|".padEnd(FIELD_LENGTH, " ") +
       "\t" +
-      obj["points"] +
+      (+obj["timeInterval"] * 0.01).toFixed(3) +
       " points\n";
     content += "\n";
   });
 
   content += "\n" + SECTION_BAR;
-  content += "                                         Statistics\n";
+  content += STATISTICS_TITLE;
   content += SECTION_BAR + "\n";
 
   let statsObj = calculateStats(scoreMap);
@@ -294,56 +262,10 @@ async function writePersonalStatsFile(dates) {
     "\n";
 
   content += "\n" + SECTION_BAR;
-  content += "                                        Achievemnts\n";
+  content += ACHIEVEMENTS_TITLE;
   content += SECTION_BAR + "\n";
 
-  content += "These are personal achievements/milestones that you can earn\n\n";
-
-  content +=
-    "__________________________________________________________________________________________\n";
-  content +=
-    "|                                                              |                          |\n";
-  content +=
-    "|                           ACHIEVEMENTS                       |           BADGE          |\n";
-  content +=
-    "|______________________________________________________________|__________________________|\n";
-
-  content +=
-    "|                                                              |                          |\n";
-  content +=
-    "|                   Reach 5000 total keystrokes                |             💎           |\n";
-  content +=
-    "|______________________________________________________________|__________________________|\n";
-  content +=
-    "|                                                              |                          |\n";
-  content +=
-    "|                  Reach 2000 total lines changed              |             🔎           |\n";
-  content +=
-    "|______________________________________________________________|__________________________|\n";
-  content +=
-    "|                                                              |                          |\n";
-  content +=
-    "|                  Spend total of 200 hours coding             |             🔥           |\n";
-  content +=
-    "|______________________________________________________________|__________________________|\n";
-  content +=
-    "|                                                              |                          |\n";
-  content +=
-    "|                   Reach 500 total keystrokes daily           |             💪           |\n";
-  content +=
-    "|______________________________________________________________|__________________________|\n";
-  content +=
-    "|                                                              |                          |\n";
-  content +=
-    "|                 Reach 200 total lines changed daily          |             🥊           |\n";
-  content +=
-    "|______________________________________________________________|__________________________|\n";
-  content +=
-    "|                                                              |                          |\n";
-  content +=
-    "|                 Spend total of 6 hours coding daily          |             🎈           |\n";
-  content +=
-    "|______________________________________________________________|__________________________|\n";
+  content += LEADERBOARD_ACHIEVEMENTS;
 
   fs.writeFileSync(personalStatsFile, content, (err) => {
     if (err) {
