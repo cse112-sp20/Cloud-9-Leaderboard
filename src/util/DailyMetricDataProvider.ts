@@ -220,11 +220,7 @@ export class DailyMetricDataProvider
     return task;
   }
 }
-
-/**
- * Daily metric item
- */
-class DailyMetricItem extends TreeItem {
+export class DailyMetricItem extends TreeItem {
   children: DailyMetricItem[] | undefined;
 
   constructor(label: string, children?: DailyMetricItem[]) {

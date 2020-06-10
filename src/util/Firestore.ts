@@ -357,6 +357,7 @@ export async function retrieveAllUserStats(callback) {
     .get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
+        //console.log(doc);
         Leaderboard.addUser(doc.id, doc.data());
         let currUser = {};
         currUser["id"] = doc.id;
@@ -428,7 +429,8 @@ export async function createNewUserInFirebase(email, password) {
  * @param userId
  * @returns nothing
  */
-async function addNewUserDocToDb(userId, email) {
+
+export async function addNewUserDocToDb(userId, email) {
   console.log("Adding doc to db for new user...");
 
   if (userId === undefined) {

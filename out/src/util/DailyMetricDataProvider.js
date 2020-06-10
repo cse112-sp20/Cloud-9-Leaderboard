@@ -9,7 +9,7 @@
  * @author AuthorName.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.constructDailyMetricData = exports.DailyMetricDataProvider = void 0;
+exports.constructDailyMetricData = exports.DailyMetricItem = exports.DailyMetricDataProvider = void 0;
 const vscode_1 = require("vscode");
 const Authentication_1 = require("./Authentication");
 const Constants_1 = require("./Constants");
@@ -147,9 +147,6 @@ class DailyMetricDataProvider {
     }
 }
 exports.DailyMetricDataProvider = DailyMetricDataProvider;
-/**
- * Daily metric item
- */
 class DailyMetricItem extends vscode_1.TreeItem {
     constructor(label, children) {
         super(label, children === undefined
@@ -158,6 +155,7 @@ class DailyMetricItem extends vscode_1.TreeItem {
         this.children = children;
     }
 }
+exports.DailyMetricItem = DailyMetricItem;
 /**
  * Constructs daily metric data
  * @param data

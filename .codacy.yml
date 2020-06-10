@@ -1,0 +1,7 @@
+exclude_paths:
+  - "test-resources/**"
+  - "coverage/**"
+  - "lib/**"
+  - "out/**"
+  - "README.md"
+  - "extension.js"
