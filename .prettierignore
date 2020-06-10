@@ -12,3 +12,4 @@ docs/assets/*
 _config.yml
 docs/*
 *.html
+*.md
