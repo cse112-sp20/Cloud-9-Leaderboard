@@ -1,9 +1,7 @@
 {
-	"extends": "../shared.tsconfig.json",
-	"compilerOptions": {
-		"outDir": "./out",
-	},
-	"include": [
-		"src/**/*"
-	]
+  "extends": "../shared.tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out"
+  },
+  "include": ["src/**/*"]
 }

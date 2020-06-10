@@ -11,7 +11,10 @@
     "vscode": "0.10.x"
   },
   "icon": "icons/html.png",
-  "activationEvents": ["onLanguage:html", "onLanguage:handlebars"],
+  "activationEvents": [
+    "onLanguage:html",
+    "onLanguage:handlebars"
+  ],
   "main": "./client/dist/htmlMain",
   "scripts": {
     "compile": "npx gulp compile-extension:html-language-features-client compile-extension:html-language-features-server",
@@ -19,7 +22,9 @@
     "postinstall": "cd server && yarn install",
     "install-client-next": "yarn add vscode-languageclient@next"
   },
-  "categories": ["Programming Languages"],
+  "categories": [
+    "Programming Languages"
+  ],
   "contributes": {
     "configuration": {
       "id": "html",
@@ -49,13 +54,19 @@
           "description": "%html.format.wrapLineLength.desc%"
         },
         "html.format.unformatted": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "scope": "resource",
           "default": "wbr",
           "markdownDescription": "%html.format.unformatted.desc%"
         },
         "html.format.contentUnformatted": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "scope": "resource",
           "default": "pre,code,textarea",
           "markdownDescription": "%html.format.contentUnformatted.desc%"
@@ -73,7 +84,10 @@
           "description": "%html.format.preserveNewLines.desc%"
         },
         "html.format.maxPreserveNewLines": {
-          "type": ["number", "null"],
+          "type": [
+            "number",
+            "null"
+          ],
           "scope": "resource",
           "default": null,
           "markdownDescription": "%html.format.maxPreserveNewLines.desc%"
@@ -91,7 +105,10 @@
           "description": "%html.format.endWithNewline.desc%"
         },
         "html.format.extraLiners": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "scope": "resource",
           "default": "head, body, /html",
           "markdownDescription": "%html.format.extraLiners.desc%"
@@ -100,8 +117,24 @@
           "type": "string",
           "scope": "resource",
           "default": "auto",
-          "enum": ["auto", "force", "force-aligned", "force-expand-multiline", "aligned-multiple", "preserve", "preserve-aligned"],
-          "enumDescriptions": ["%html.format.wrapAttributes.auto%", "%html.format.wrapAttributes.force%", "%html.format.wrapAttributes.forcealign%", "%html.format.wrapAttributes.forcemultiline%", "%html.format.wrapAttributes.alignedmultiple%", "%html.format.wrapAttributes.preserve%", "%html.format.wrapAttributes.preservealigned%"],
+          "enum": [
+            "auto",
+            "force",
+            "force-aligned",
+            "force-expand-multiline",
+            "aligned-multiple",
+            "preserve",
+            "preserve-aligned"
+          ],
+          "enumDescriptions": [
+            "%html.format.wrapAttributes.auto%",
+            "%html.format.wrapAttributes.force%",
+            "%html.format.wrapAttributes.forcealign%",
+            "%html.format.wrapAttributes.forcemultiline%",
+            "%html.format.wrapAttributes.alignedmultiple%",
+            "%html.format.wrapAttributes.preserve%",
+            "%html.format.wrapAttributes.preservealigned%"
+          ],
           "description": "%html.format.wrapAttributes.desc%"
         },
         "html.suggest.html5": {
@@ -138,7 +171,11 @@
         "html.trace.server": {
           "type": "string",
           "scope": "window",
-          "enum": ["off", "messages", "verbose"],
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
           "default": "off",
           "description": "%html.trace.server.desc%"
         }
@@ -152,13 +189,16 @@
         "editor.suggest.insertMode": "replace"
       }
     },
-    "jsonValidation": [{
-      "fileMatch": "*.html-data.json",
-      "url": "https://raw.githubusercontent.com/Microsoft/vscode-html-languageservice/master/docs/customData.schema.json"
-    }, {
-      "fileMatch": "package.json",
-      "url": "./schemas/package.schema.json"
-    }]
+    "jsonValidation": [
+      {
+        "fileMatch": "*.html-data.json",
+        "url": "https://raw.githubusercontent.com/Microsoft/vscode-html-languageservice/master/docs/customData.schema.json"
+      },
+      {
+        "fileMatch": "package.json",
+        "url": "./schemas/package.schema.json"
+      }
+    ]
   },
   "dependencies": {
     "vscode-extension-telemetry": "0.1.1",

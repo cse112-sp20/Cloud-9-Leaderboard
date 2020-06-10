@@ -7,7 +7,9 @@
   "engines": {
     "vscode": "^1.42.0"
   },
-  "categories": ["Other"],
+  "categories": [
+    "Other"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/microsoft/vscode-js-debug-companion.git"
@@ -18,10 +20,15 @@
     "url": "https://github.com/microsoft/vscode-js-debug-companion/issues"
   },
   "homepage": "https://github.com/microsoft/vscode-js-debug-companion#readme",
-  "activationEvents": ["onCommand:js-debug-companion.launchAndAttach", "onCommand:js-debug-companion.kill"],
+  "activationEvents": [
+    "onCommand:js-debug-companion.launchAndAttach",
+    "onCommand:js-debug-companion.kill"
+  ],
   "main": "./out/extension.js",
   "contributes": {},
-  "extensionKind": ["ui"],
+  "extensionKind": [
+    "ui"
+  ],
   "api": "none",
   "scripts": {
     "vscode:prepublish": "rimraf out && webpack",
