@@ -109,9 +109,9 @@ exports.LEADERBOARD_ACHIEVEMENTS = "These are personal achievements/milestones t
 exports.ACHIEVEMENTS_TITLE = "                                        Achievements\n";
 exports.STATISTICS_TITLE = "                                         Statistics\n";
 exports.RECORD_TITLE = "                                           Record\n";
-exports.METRIC_STRING = "Each second spent coding:                            + 0.01 points per second \n";
-+"Each keystroke:                                      +    1 points per keystroke\n";
-+"Each modified line:                                  +   10 points per line \n\n";
+exports.METRIC_STRING = "Each second spent coding:                            + 0.01 points per second \n"
+    + "Each keystroke:                                      +    1 points per keystroke\n"
+    + "Each modified line:                                  +   10 points per line \n\n";
 exports.LINE_BAR = "___________________________________________________________________________________________\n";
 // TreeItem header for TeamDataProvider
 exports.TEAM_INFO_WELCOME_BACK_TO_TEAM_TREEVIEW = "🛡 Welcome back to your Team";
