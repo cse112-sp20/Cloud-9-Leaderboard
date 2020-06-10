@@ -11,3 +11,4 @@ docs/assets/*
 *.js
 _config.yml
 docs/*
+*.html
