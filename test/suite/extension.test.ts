@@ -181,7 +181,6 @@ suite("firestore.ts", () => {
       .stub(firebase.auth(), "createUserWithEmailAndPassword")
       .withArgs(testId, "testPassword")
       .returns(Promise.resolve());
-
     var successful = await createNewUserInFirebase(testId, "testPassword");
     assert.equal(successful.created, true); // works!!
   });
@@ -207,80 +206,105 @@ suite("firestore.ts", () => {
   });
 
   test("joinTeamWithTeamId", async () => {
-    /*
+    sinon.restore();
     const ctx = getExtensionContext();
 
-    // arbitrary team id for testing
-    var teamId = '12345'
-    var dataa = {}
-    dataa["teamName"] = "jaggers";
+    sinon
+      .stub(ctx.globalState, "get")
+      .withArgs(GLOBAL_STATE_USER_ID)
+      .returns("");
 
-    sinon.stub(
-      firebase.firestore().collection(COLLECTION_ID_TEAMS).doc(teamId),
-      'get'
-    ).returns(dataa);
+    // arbitrary team id for testing
+    var teamId = "12345";
+    var dataa = <any>{};
+    Object.defineProperty(dataa, "teamName", {value: "jaggers"});
+
+    sinon
+      .stub(
+        firebase.firestore().collection(COLLECTION_ID_TEAMS).doc(teamId),
+        "get",
+      )
+      .callsFake(() => {
+        return Promise.resolve({
+          data: function () {
+            return dataa;
+          },
+        });
+      });
 
     // verify that we are able to join the team once by confirming we are set in the team members collection
     var spy = sinon.spy(
-      firebase.firestore().collection(COLLECTION_ID_TEAMS).doc(teamId).collection(COLLECTION_ID_TEAM_MEMBERS).doc(testId),
-      'set',
+      firebase
+        .firestore()
+        .collection(COLLECTION_ID_TEAMS)
+        .doc(teamId)
+        .collection(COLLECTION_ID_TEAM_MEMBERS)
+        .doc(testId),
+      "set",
     );
+
     await joinTeamWithTeamId(teamId, true).then(() => {
       expect(spy.calledOnce);
     });
-    */
+
+    sinon.restore();
   });
 
   test("leaveTeam", async () => {
-    /*
+    sinon.restore();
     const ctx = getExtensionContext();
+
     sinon
-      .stub(ctx.globalState, 'get')
+      .stub(ctx.globalState, "get")
       .withArgs(GLOBAL_STATE_USER_IS_TEAM_LEADER)
-      .returns(true);
+      .returns(false);
 
     var teamId = "team0";
     var teamDoc = {};
     teamDoc["test"] = "hi";
     var data = {};
-    data["teamLeadUserId"] = '1';
+    data["teamLeadUserId"] = "1";
 
-    var userId = '1';
+    var userId = "1";
     var userDoc = {};
     userDoc[userId] = "member";
 
     // team "team0" with lead id "leader"
-    var fakeTeamDoc = sinon
+    var getTeamLead = sinon
       .stub(
         firebase.firestore().collection(COLLECTION_ID_TEAMS).doc(teamId),
-        "get"
+        "get",
       )
       .resolves(data);
 
     // delete user with userId
-    var deleteUser = sinon
-      .stub(
-        firebase.firestore().collection(COLLECTION_ID_TEAMS).doc(teamId).collection(COLLECTION_ID_TEAM_MEMBERS).doc(userId),
-        'delete',
-      );
+    var deleteUser = sinon.stub(
+      firebase
+        .firestore()
+        .collection(COLLECTION_ID_TEAMS)
+        .doc(teamId)
+        .collection(COLLECTION_ID_TEAM_MEMBERS)
+        .doc(userId),
+      "delete",
+    );
 
     // userid "1" with name "member"
     var getUserDoc = sinon
       .stub(
         firebase.firestore().collection(COLLECTION_ID_USERS).doc(userId),
-        'get',
+        "get",
       )
       .returns(Promise.resolve(userDoc));
 
-    var output = await leaveTeam("1", "team0");
-    assert.isTrue(deleteUser.calledOnce);
-    assert.equal(false, false);
+    var output = await leaveTeam("1", "team0").then(() => {
+      expect(deleteUser.calledOnce);
+    });
 
     // clean up
-    //getTeamLead.restore();
+    getTeamLead.restore();
     deleteUser.restore();
     getUserDoc.restore();
-    */
+    sinon.restore();
   });
 
   test("checkIfInTeam", async () => {
