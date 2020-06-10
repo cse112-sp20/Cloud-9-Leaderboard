@@ -3,3 +3,5 @@ exclude_paths:
   - "coverage/**"
   - "lib/**"
   - "out/**"
+  - "README.md"
+  - "extension.js"
