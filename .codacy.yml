@@ -1,3 +1,5 @@
 exclude_paths:
   - "test-resources/**"
   - "coverage/**"
+  - "lib/**"
+  - "out/**"
