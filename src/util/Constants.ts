@@ -135,9 +135,10 @@ export const STATISTICS_TITLE =
 export const RECORD_TITLE =
   "                                           Record\n";
 export const METRIC_STRING =
-  "Each second spent coding:                            + 0.01 points per second \n";
-+"Each keystroke:                                      +    1 points per keystroke\n";
-+"Each modified line:                                  +   10 points per line \n\n";
+  "Each second spent coding:                            + 0.01 points per second \n" +
+  "Each keystroke:                                      +    1 points per keystroke\n" +
+  "Each modified line:                                  +   10 points per line \n\n";
+
 export const LINE_BAR =
   "___________________________________________________________________________________________\n";
 
