@@ -1,6 +1,3 @@
 exclude_paths:
   - "test-resources/**"
-  - "spec/**/*"
-  - "benchmarks/**/*"
-  - "**.min.js"
-  - "**/tests/**"
+  - "coverage/**"
