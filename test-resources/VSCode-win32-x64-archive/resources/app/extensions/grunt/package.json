@@ -9,7 +9,9 @@
   "engines": {
     "vscode": "*"
   },
-  "categories": ["Other"],
+  "categories": [
+    "Other"
+  ],
   "scripts": {
     "compile": "gulp compile-extension:grunt",
     "watch": "gulp watch-extension:grunt"
@@ -21,7 +23,9 @@
     "@types/node": "^12.11.7"
   },
   "main": "./dist/main",
-  "activationEvents": ["onCommand:workbench.action.tasks.runTask"],
+  "activationEvents": [
+    "onCommand:workbench.action.tasks.runTask"
+  ],
   "contributes": {
     "configuration": {
       "id": "grunt",
@@ -31,29 +35,36 @@
         "grunt.autoDetect": {
           "scope": "resource",
           "type": "string",
-          "enum": ["off", "on"],
+          "enum": [
+            "off",
+            "on"
+          ],
           "default": "on",
           "description": "%config.grunt.autoDetect%"
         }
       }
     },
-    "taskDefinitions": [{
-      "type": "grunt",
-      "required": ["task"],
-      "properties": {
-        "task": {
-          "type": "string",
-          "description": "%grunt.taskDefinition.type.description%"
-        },
-        "args": {
-          "type": "array",
-          "description": "%grunt.taskDefinition.args.description%"
-        },
-        "file": {
-          "type": "string",
-          "description": "%grunt.taskDefinition.file.description%"
+    "taskDefinitions": [
+      {
+        "type": "grunt",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "%grunt.taskDefinition.type.description%"
+          },
+          "args": {
+            "type": "array",
+            "description": "%grunt.taskDefinition.args.description%"
+          },
+          "file": {
+            "type": "string",
+            "description": "%grunt.taskDefinition.file.description%"
+          }
         }
       }
-    }]
+    ]
   }
 }

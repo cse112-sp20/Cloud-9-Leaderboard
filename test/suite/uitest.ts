@@ -1,99 +1,138 @@
-import { SideBarView, EditorView, InputBox, CustomTreeSection, ActivityBar, Workbench, Notification, WebDriver, VSBrowser, ViewControl, TextEditor } from 'vscode-extension-tester';
-const assert = require('chai').assert;
+import {
+  SideBarView,
+  EditorView,
+  InputBox,
+  CustomTreeSection,
+  ActivityBar,
+  Workbench,
+  Notification,
+  WebDriver,
+  VSBrowser,
+  ViewControl,
+  TextEditor,
+} from "vscode-extension-tester";
+const assert = require("chai").assert;
 
-describe('Cloud 9 UI Tests', () => {
-    let driver: WebDriver;
+describe("Cloud 9 UI Tests", () => {
+  let driver: WebDriver;
 
-    before(() => {
-        driver = VSBrowser.instance.driver;
-    });
+  before(() => {
+    driver = VSBrowser.instance.driver;
+  });
 
-    it('End to End Test', async function () {
-        this.timeout(100000);
-        this.retries();
-        const activityBar = new ActivityBar();
-        const control = await activityBar.getViewControl('Cloud9');
+  it("End to End Test", async function () {
+    this.timeout(100000);
+    this.retries();
+    const activityBar = new ActivityBar();
+    const control = await activityBar.getViewControl("Cloud9");
 
-        await control.openView();
-        pauseForSeconds(1);
-        
-        //Click sign in on tree view
-        const sidebar = new SideBarView();
-        const menuInfo = await sidebar.getContent().getSection('Menu') as CustomTreeSection;
-        await (await menuInfo.findItem('Sign in / Create Account')).click();
+    await control.openView();
+    pauseForSeconds(1);
 
-        //Click sign in on notfication
-        const signInNotif = (await new Workbench().getNotifications());
+    //Click sign in on tree view
+    const sidebar = new SideBarView();
+    const menuInfo = (await sidebar
+      .getContent()
+      .getSection("Menu")) as CustomTreeSection;
+    await (await menuInfo.findItem("Sign in / Create Account")).click();
 
-        //Get info from nofication
-        const message = await signInNotif[0].getMessage();
-        assert.equal(message, 'Please sign in or create a new account!');
+    //Click sign in on notfication
+    const signInNotif = await new Workbench().getNotifications();
 
-        //Click sign in and set email to be test@test.com
-        await signInNotif[0].takeAction((await signInNotif[0].getActions())[0].getTitle());
-        const input = await InputBox.create();
-        await input.setText('tester@test.com');
-        await input.confirm(); // press enter
-        await input.setText('password');
-        await input.confirm(); // press enter
-        assert.equal((await (await new Workbench().getNotifications())[0].getMessage()) == '', false);
+    //Get info from nofication
+    const message = await signInNotif[0].getMessage();
+    assert.equal(message, "Please sign in or create a new account!");
 
-        //View personal stats
-        console.log('1');
-        await (await menuInfo.findItem('📊 View personal stats')).click();
-        console.log('2');
-        const personalStats = new TextEditor()
-        console.log('3');
-        const personalStatsTitle = await personalStats.getTitle();
-        console.log('4');
-        assert(personalStatsTitle, "personal_statistics.txt");
+    //Click sign in and set email to be test@test.com
+    await signInNotif[0].takeAction(
+      (await signInNotif[0].getActions())[0].getTitle(),
+    );
+    const input = await InputBox.create();
+    await input.setText("tester@test.com");
+    await input.confirm(); // press enter
+    await input.setText("password");
+    await input.confirm(); // press enter
+    assert.equal(
+      (await (await new Workbench().getNotifications())[0].getMessage()) == "",
+      false,
+    );
 
-        //View global leaderboard
-        console.log('5');
-        pauseForSeconds(1);
-        await (await menuInfo.findItem('🌐 Leaderboard')).click();
-        console.log('6');
-        const globalStats = await new EditorView().openEditor('leaderboard.txt');
-        console.log('7');
-        assert.equal(await globalStats.getTitle() == "", false); // check actual text
-        console.log('8');
-        const editor = new TextEditor();
-        await editor.typeText(1, 3, ' absolutely');
+    //View personal stats
+    console.log("1");
+    await (await menuInfo.findItem("📊 View personal stats")).click();
+    console.log("2");
+    const personalStats = new TextEditor();
+    console.log("3");
+    const personalStatsTitle = await personalStats.getTitle();
+    console.log("4");
+    assert(personalStatsTitle, "personal_statistics.txt");
 
-        //console.log(await globalStats.getText()); */
+    //View global leaderboard
+    console.log("5");
+    pauseForSeconds(1);
+    await (await menuInfo.findItem("🌐 Leaderboard")).click();
+    console.log("6");
+    const globalStats = await new EditorView().openEditor("leaderboard.txt");
+    console.log("7");
+    assert.equal((await globalStats.getTitle()) == "", false); // check actual text
+    console.log("8");
+    const editor = new TextEditor();
+    await editor.typeText(1, 3, " absolutely");
 
-        pauseForSeconds(2);
+    //console.log(await globalStats.getText()); */
 
-        //Load up team
-        console.log('9');
-        const teamInfo = await sidebar.getContent().getSection('Team Info') as CustomTreeSection;
-        console.log('10');
+    pauseForSeconds(2);
 
-        //Check that testTeam is the team name
-        const getTeamInfo = await (await teamInfo.findItem('Get Team Info'));
-        await getTeamInfo.click();
-        console.log('11');
-        const childItem = await getTeamInfo.findChildItem("TeamName");
+    //Load up team
+    console.log("9");
+    const teamInfo = (await sidebar
+      .getContent()
+      .getSection("Team Info")) as CustomTreeSection;
+    console.log("10");
 
-        assert.equal(await (await (await teamInfo.findItem('Get Team Info')).findChildItem("TeamName")) == undefined, false);
+    //Check that testTeam is the team name
+    const getTeamInfo = await await teamInfo.findItem("Get Team Info");
+    await getTeamInfo.click();
+    console.log("11");
+    const childItem = await getTeamInfo.findChildItem("TeamName");
 
-        console.log(12);
-        const dailyMetric = await sidebar.getContent().getSection('Daily Metric') as CustomTreeSection;
-        console.log(13);
+    assert.equal(
+      (await await (await teamInfo.findItem("Get Team Info")).findChildItem(
+        "TeamName",
+      )) == undefined,
+      false,
+    );
 
-        // Check that daily metric
-        assert.equal(await (await (await dailyMetric.findItem('Keystrokes')).hasChildren()), true);
-        assert.equal(await (await (await dailyMetric.findItem('Lines Changed')).hasChildren()), true);
-        assert.equal(await (await (await dailyMetric.findItem('Time Interval')).hasChildren()), true);
-        assert.equal(await (await (await dailyMetric.findItem('Total Points')).hasChildren()), true);
-    });
+    console.log(12);
+    const dailyMetric = (await sidebar
+      .getContent()
+      .getSection("Daily Metric")) as CustomTreeSection;
+    console.log(13);
 
+    // Check that daily metric
+    assert.equal(
+      await await (await dailyMetric.findItem("Keystrokes")).hasChildren(),
+      true,
+    );
+    assert.equal(
+      await await (await dailyMetric.findItem("Lines Changed")).hasChildren(),
+      true,
+    );
+    assert.equal(
+      await await (await dailyMetric.findItem("Time Interval")).hasChildren(),
+      true,
+    );
+    assert.equal(
+      await await (await dailyMetric.findItem("Total Points")).hasChildren(),
+      true,
+    );
+  });
 });
 
 //Pause the program to wait for loading
 function pauseForSeconds(seconds) {
-    //Wait before clicking team
-    var currentTime = new Date().getTime();
+  //Wait before clicking team
+  var currentTime = new Date().getTime();
 
-    while (currentTime + (seconds * 1000) >= new Date().getTime()) { }
+  while (currentTime + seconds * 1000 >= new Date().getTime()) {}
 }

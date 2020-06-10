@@ -9,7 +9,9 @@
   "engines": {
     "vscode": "*"
   },
-  "categories": ["Other"],
+  "categories": [
+    "Other"
+  ],
   "scripts": {
     "compile": "gulp compile-extension:jake",
     "watch": "gulp watch-extension:jake"
@@ -21,7 +23,9 @@
     "@types/node": "^12.11.7"
   },
   "main": "./dist/main",
-  "activationEvents": ["onCommand:workbench.action.tasks.runTask"],
+  "activationEvents": [
+    "onCommand:workbench.action.tasks.runTask"
+  ],
   "contributes": {
     "configuration": {
       "id": "jake",
@@ -31,25 +35,32 @@
         "jake.autoDetect": {
           "scope": "resource",
           "type": "string",
-          "enum": ["off", "on"],
+          "enum": [
+            "off",
+            "on"
+          ],
           "default": "on",
           "description": "%config.jake.autoDetect%"
         }
       }
     },
-    "taskDefinitions": [{
-      "type": "jake",
-      "required": ["task"],
-      "properties": {
-        "task": {
-          "type": "string",
-          "description": "%jake.taskDefinition.type.description%"
-        },
-        "file": {
-          "type": "string",
-          "description": "%jake.taskDefinition.file.description%"
+    "taskDefinitions": [
+      {
+        "type": "jake",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "%jake.taskDefinition.type.description%"
+          },
+          "file": {
+            "type": "string",
+            "description": "%jake.taskDefinition.file.description%"
+          }
         }
       }
-    }]
+    ]
   }
 }

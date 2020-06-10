@@ -143,20 +143,30 @@ suite("firestore.ts", () => {
     test("joinTeamWithTeamId", () => __awaiter(void 0, void 0, void 0, function* () {
         sinon.restore();
         const ctx = Authentication_1.getExtensionContext();
-        sinon.stub(ctx.globalState, 'get')
+        sinon
+            .stub(ctx.globalState, "get")
             .withArgs(Constants_1.GLOBAL_STATE_USER_ID)
             .returns("");
         // arbitrary team id for testing
-        var teamId = '12345';
+        var teamId = "12345";
         var dataa = {};
-        Object.defineProperty(dataa, 'teamName', { value: "jaggers" });
-        sinon.stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamId), 'get').callsFake(() => {
+        Object.defineProperty(dataa, "teamName", { value: "jaggers" });
+        sinon
+            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamId), "get")
+            .callsFake(() => {
             return Promise.resolve({
-                data: function () { return dataa; }
+                data: function () {
+                    return dataa;
+                },
             });
         });
         // verify that we are able to join the team once by confirming we are set in the team members collection
-        var spy = sinon.spy(firebase.firestore().collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamId).collection(Constants_1.COLLECTION_ID_TEAM_MEMBERS).doc(testId), 'set');
+        var spy = sinon.spy(firebase
+            .firestore()
+            .collection(Constants_1.COLLECTION_ID_TEAMS)
+            .doc(teamId)
+            .collection(Constants_1.COLLECTION_ID_TEAM_MEMBERS)
+            .doc(testId), "set");
         yield FireStore_1.joinTeamWithTeamId(teamId, true).then(() => {
             chai_1.expect(spy.calledOnce);
         });
@@ -166,15 +176,15 @@ suite("firestore.ts", () => {
         sinon.restore();
         const ctx = Authentication_1.getExtensionContext();
         sinon
-            .stub(ctx.globalState, 'get')
+            .stub(ctx.globalState, "get")
             .withArgs(Constants_1.GLOBAL_STATE_USER_IS_TEAM_LEADER)
             .returns(false);
         var teamId = "team0";
         var teamDoc = {};
         teamDoc["test"] = "hi";
         var data = {};
-        data["teamLeadUserId"] = '1';
-        var userId = '1';
+        data["teamLeadUserId"] = "1";
+        var userId = "1";
         var userDoc = {};
         userDoc[userId] = "member";
         // team "team0" with lead id "leader"
@@ -182,11 +192,15 @@ suite("firestore.ts", () => {
             .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamId), "get")
             .resolves(data);
         // delete user with userId
-        var deleteUser = sinon
-            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_TEAMS).doc(teamId).collection(Constants_1.COLLECTION_ID_TEAM_MEMBERS).doc(userId), 'delete');
+        var deleteUser = sinon.stub(firebase
+            .firestore()
+            .collection(Constants_1.COLLECTION_ID_TEAMS)
+            .doc(teamId)
+            .collection(Constants_1.COLLECTION_ID_TEAM_MEMBERS)
+            .doc(userId), "delete");
         // userid "1" with name "member"
         var getUserDoc = sinon
-            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc(userId), 'get')
+            .stub(firebase.firestore().collection(Constants_1.COLLECTION_ID_USERS).doc(userId), "get")
             .returns(Promise.resolve(userDoc));
         var output = yield FireStore_1.leaveTeam("1", "team0").then(() => {
             chai_1.expect(deleteUser.calledOnce);
