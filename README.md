@@ -8,13 +8,6 @@
 
 <h4 align="center">A leaderboard application built on top of <a href="https://www.software.com/code-time">Code Time</a>.</h4>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Testing workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Testing%20workflow/badge.svg)
-![Eslint Analysis workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Eslint%20Analysis%20workflow/badge.svg)
-![Deploying workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Deploying%20workflow/badge.svg)
-![Code Style](https://img.shields.io/badge/code%20style-airbnb-green)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
 <p align="center">
   <a href="#About">About</a> •
   <a href="#Installation">Installation</a> •
