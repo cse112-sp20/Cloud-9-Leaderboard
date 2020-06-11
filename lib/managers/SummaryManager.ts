@@ -1,14 +1,14 @@
-import { getItem, setItem, getNowTimes, isNewDay } from "../Util";
-import { clearFileChangeInfoSummaryData } from "../storage/FileChangeInfoSummaryData";
+import {getItem, setItem, getNowTimes, isNewDay} from "../Util";
+import {clearFileChangeInfoSummaryData} from "../storage/FileChangeInfoSummaryData";
 import {
   clearSessionSummaryData,
   getSessionSummaryData,
   saveSessionSummaryToDisk,
   updateStatusBarWithSummaryData,
 } from "../storage/SessionSummaryData";
-import { updateSessionFromSummaryApi } from "../storage/TimeSummaryData";
-import { softwareGet, isResponseOk } from "../http/HttpClient";
-import { SessionSummary } from "../model/models";
+import {updateSessionFromSummaryApi} from "../storage/TimeSummaryData";
+import {softwareGet, isResponseOk} from "../http/HttpClient";
+import {SessionSummary} from "../model/models";
 import {
   sendOfflineData,
   sendOfflineTimeData,
@@ -103,8 +103,8 @@ export class SummaryManager {
     if (isResponseOk(result) && result.data) {
       const data = result.data;
 
-      console.log("Session DATA:");
-      console.log(data);
+      // console.log("Session DATA:");
+      // console.log(data);
 
       // update the session summary data
       const summary: SessionSummary = getSessionSummaryData();

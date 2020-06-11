@@ -1,0 +1,1 @@
+{"jsonMain":{"messages":["JSON: Schema Resolution Error","Unable to resolve schema.","Click to retry.","JSON Language Server","Unable to load {0}"],"keys":["json.resolveError","json.schemaResolutionErrorMessage","json.clickToRetry","jsonserver.name","untitled.schema"]}}

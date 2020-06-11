@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.manageLiveshareSession = void 0;
 const HttpClient_1 = require("./http/HttpClient");
 const Util_1 = require("./Util");
 function manageLiveshareSession(session) {
@@ -22,7 +23,7 @@ function manageLiveshareSession(session) {
                 Util_1.logIt(`unable to sync liveshare metrics: ${resp.message}`);
             }
         }))
-            .catch(err => {
+            .catch((err) => {
             Util_1.logIt(`unable to sync liveshare metrics: ${err.message}`);
         });
     });

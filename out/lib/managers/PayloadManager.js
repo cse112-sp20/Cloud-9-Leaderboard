@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateAggregateInfo = exports.storePayload = exports.processPayload = void 0;
 const Util_1 = require("../Util");
 const TimeSummaryData_1 = require("../storage/TimeSummaryData");
 const FileChangeInfoSummaryData_1 = require("../storage/FileChangeInfoSummaryData");
@@ -18,12 +19,11 @@ const SessionSummaryData_1 = require("../storage/SessionSummaryData");
 const KpmRepoManager_1 = require("../repo/KpmRepoManager");
 const SummaryManager_1 = require("./SummaryManager");
 const FileManager_1 = require("./FileManager");
-const WallClockManager_1 = require("./WallClockManager");
 const Project_1 = require("../model/Project");
 const FireStore_1 = require("../../src/util/FireStore");
-const os = require('os');
-const fs = require('fs');
-const path = require('path');
+const os = require("os");
+const fs = require("fs");
+const path = require("path");
 /**
  * This will update the cumulative editor and session seconds.
  * It will also provide any error details if any are encountered.
@@ -36,7 +36,7 @@ function validateAndUpdateCumulativeData(payload, sessionMinutes) {
         // This will find a time data object based on the current day
         let td = yield TimeSummaryData_1.incrementSessionAndFileSecondsAndFetch(payload.project, sessionMinutes);
         // default error to empty
-        payload.project_null_error = '';
+        payload.project_null_error = "";
         // get the latest payload (in-memory or on file)
         let lastPayload = yield FileManager_1.getLastSavedKeystrokesStats();
         // check to see if we're in a new day
@@ -113,7 +113,7 @@ function processPayload(payload, sendNow = false) {
         p.name = projName;
         p.resource = resourceInfo;
         p.identifier =
-            resourceInfo && resourceInfo.identifier ? resourceInfo.identifier : '';
+            resourceInfo && resourceInfo.identifier ? resourceInfo.identifier : "";
         payload.project = p;
         // validate the cumulative data
         yield validateAndUpdateCumulativeData(payload, sessionMinutes);
@@ -156,21 +156,19 @@ function processPayload(payload, sendNow = false) {
         }
         // set the timezone
         payload.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        console.log('From PayloadManager.ts');
+        console.log("From PayloadManager.ts");
         FireStore_1.updateStats(payload);
         // async for either
         if (sendNow) {
             // send the payload now (only called when getting installed)
-            FileManager_1.sendBatchPayload('/data/batch', [payload]);
-            Util_1.logIt(`sending kpm metrics`);
+            FileManager_1.sendBatchPayload("/data/batch", [payload]);
         }
         else {
             // store to send the batch later
             storePayload(payload, sessionMinutes);
-            Util_1.logIt(`storing kpm metrics`);
         }
         // Update the latestPayloadTimestampEndUtc. It's used to determine session time and elapsed_seconds
-        Util_1.setItem('latestPayloadTimestampEndUtc', nowTimes.now_in_sec);
+        Util_1.setItem("latestPayloadTimestampEndUtc", nowTimes.now_in_sec);
     });
 }
 exports.processPayload = processPayload;
@@ -186,12 +184,8 @@ function storePayload(payload, sessionMinutes) {
         // write the fileChangeInfoMap
         FileChangeInfoSummaryData_1.saveFileChangeInfoToDisk(fileChangeInfoMap);
         // store the payload into the data.json file
-        fs.appendFileSync(Util_1.getSoftwareDataStoreFile(), JSON.stringify(payload) + os.EOL, (err) => {
-            if (err)
-                Util_1.logIt(`Error appending to the Software data store file: ${err.message}`);
-        });
+        fs.appendFileSync(Util_1.getSoftwareDataStoreFile(), JSON.stringify(payload) + os.EOL, (err) => { });
         // update the status and tree
-        WallClockManager_1.WallClockManager.getInstance().dispatchStatusViewUpdate();
     });
 }
 exports.storePayload = storePayload;

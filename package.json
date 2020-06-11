@@ -1,31 +1,27 @@
 {
-  "name": "swdc-vscode",
-  "displayName": "Code Time",
-  "version": "2.2.3",
-  "publisher": "softwaredotcom",
-  "description": "Code Time is an open source plugin that provides programming metrics right in Visual Studio Code.",
+  "name": "cloud9",
+  "displayName": "Cloud9",
+  "version": "1.5.1",
+  "publisher": "CSE112",
+  "description": "Cloud9 is an open source vscode extenion that provides programming metrics right in Visual Studio Code.",
   "author": {
-    "name": "Software.com"
+    "name": "UCSDCSE112SP19Team9"
   },
-  "license": "SEE LICENSE IN LICENSE",
-  "icon": "images/app-icon-blue.png",
+  "icon": "images/app-icon-with-word.PNG",
   "galleryBanner": {
     "color": "#384356",
     "theme": "dark"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/swdotcom/swdc-vscode"
+    "url": "https://github.com/cse112-sp20/Cloud-9-Leaderboard"
   },
   "categories": [
     "Other"
   ],
   "keywords": [
-    "time tracking",
     "productivity",
-    "timer",
-    "git",
-    "spotify"
+    "timer"
   ],
   "activationEvents": [
     "*"
@@ -35,21 +31,21 @@
     "workspace"
   ],
   "engines": {
-    "vscode": "^1.35.0"
+    "vscode": "^1.45.0"
   },
   "main": "./out/extension",
   "scripts": {
-    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "lint": "tslint -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "test": "mocha ./out/test/runTest.js",
+    "coverage": "istanbul cover ./out/test/runTest.js",
+    "ui-test": "extest setup-and-run ./out/test/suite/uitest.js",
+    "deploy": "vsce publish -p $vscode_token",
+    "documentation": "typedoc --out ./docs/api ./src/util"
   },
   "contributes": {
     "commands": [
-      {
-        "command": "codetime.softwarePaletteMenu",
-        "title": "Code Time: Menu options"
-      },
       {
         "command": "cloud9.createTeam",
         "title": "Cloud9: Create a team"
@@ -60,29 +56,85 @@
       },
       {
         "command": "cloud9.debugClearUserId",
-        "title": "Cloud9: Debug clear User Id"
+        "title": "Cloud9 DEBUG: Clear User Id"
       },
       {
-        "command": "codetime.howardPush",
-        "title": "push me"
+        "command": "cloud9.logOut",
+        "title": "Cloud9: Log out from Cloud9"
       },
       {
-        "command": "codetime.codeTimeMetrics",
-        "title": "Code Time: View summary"
-      },
-      {
-        "command": "codetime.cloud9Leaderboard",
+        "command": "cloud9.leaderboard",
         "title": "Cloud9: Leaderboard"
       },
       {
-        "command": "codetime.softwareKpmDashboard",
-        "title": "Code Time: See advanced metrics"
+        "command": "cloud9.teamLeaderboard",
+        "title": "Cloud9: Team Leaderboard"
       },
       {
-        "command": "codetime.displayReadme",
-        "title": "Code Time: Learn more"
+        "command": "cloud9.getTeamInfo",
+        "title": "Cloud9: Get Team Info"
+      },
+      {
+        "command": "cloud9.personalStats",
+        "title": "Cloud9: See your most recent stats"
+      },
+      {
+        "command": "LeaderView.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      },
+      {
+        "command": "DailyMetric.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      },
+      {
+        "command": "MenuView.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      },
+      {
+        "command": "TeamMenuView.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "LeaderView.refreshEntry",
+          "when": "view == LeaderView",
+          "group": "navigation"
+        },
+        {
+          "command": "DailyMetric.refreshEntry",
+          "when": "view == DailyMetric",
+          "group": "navigation"
+        },
+        {
+          "command": "MenuView.refreshEntry",
+          "when": "view == MenuView",
+          "group": "navigation"
+        },
+        {
+          "command": "TeamMenuView.refreshEntry",
+          "when": "view == TeamMenuView",
+          "group": "navigation"
+        }
+      ]
+    },
     "configuration": {
       "type": "object",
       "title": "Code Time",
@@ -102,60 +154,84 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "code-time",
-          "title": "Code Time",
-          "icon": "resources/dark/paw-outlined.svg"
+          "id": "cloud9",
+          "title": "Cloud9",
+          "icon": "images/cloud9-vscode-icon.svg"
         }
       ]
     },
     "views": {
-      "code-time": [
+      "cloud9": [
         {
-          "id": "ct-menu-tree",
-          "name": "MENU"
+          "id": "MenuView",
+          "name": "Menu"
         },
         {
-          "id": "ct-metrics-tree",
-          "name": "DAILY METRICS"
+          "id": "DailyMetric",
+          "name": "Daily Metric"
         },
         {
-          "id": "ct-team-tree",
-          "name": "CONTRIBUTORS"
+          "id": "TeamMenuView",
+          "name": "Team Info"
+        },
+        {
+          "id": "LeaderView",
+          "name": "Team Management"
         }
       ]
     }
   },
   "devDependencies": {
-    "@types/mocha": "5.2.6",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^5.2.7",
     "@types/node": "^13.13.5",
-    "@types/vscode": "^1.35.0",
-    "eslint": "^7.0.0",
+    "@types/vscode": "^1.45.0",
+    "babel-eslint": "^10.1.0",
+    "chai": "^4.2.0",
+    "eslint": "^2.13.1",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
+    "glob": "^7.1.6",
     "husky": "^4.2.5",
-    "lint-staged": "^10.2.2",
+    "istanbul": "^0.4.5",
+    "lint-staged": "^10.2.7",
+    "mocha": "^7.2.0",
+    "nyc": "^15.1.0",
     "pre-commit": "^1.2.2",
     "prettier": "^2.0.5",
+    "remap-istanbul": "^0.11.1",
+    "source-map-support": "^0.5.19",
     "ts-loader": "^6.2.1",
-    "typescript": "^3.5.1",
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.2",
+    "typedoc": "^0.17.7",
+    "typescript": "^3.9.2",
+    "vsce": "^1.75.0",
+    "vscode-extension-tester": "^3.0.1",
+    "vscode-test": "^1.3.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
     "@slack/web-api": "^5.8.0",
+    "@types/glob": "^7.1.2",
     "aws-sdk": "^2.470.0",
     "axios": "^0.19.0",
     "clipboardy": "^2.1.0",
+    "decache": "^4.6.0",
     "firebase": "^7.14.3",
+    "firebase-admin": "^8.12.1",
     "moment-timezone": "^0.5.25",
     "node-cache": "^5.1.0",
     "numeral": "^2.0.6",
     "open": "^6.4.0",
     "require": "^2.4.20",
     "rxjs": "^6.5.5",
-    "vscode": "^1.1.37",
-    "vsls": "0.3.1291"
+    "sinon": "^9.0.2",
+    "unique-names-generator": "^4.2.0",
+    "vsls": "0.3.1291",
+    "yarn": "^1.22.4"
   },
   "husky": {
     "hooks": {

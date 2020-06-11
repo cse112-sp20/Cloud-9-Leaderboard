@@ -1,0 +1,631 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Developer Guide</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="81b5f1a5-29a9-4403-9861-8d7f09e746e0" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">👩‍💻</span></div><h1 class="page-title">Developer Guide</h1></header><div class="page-body"><p id="7b9ff323-5dc2-479d-badc-0946e284fd86" class="">This documentation will include Cloud9 developer guide when contributing to the repository. One must read the entire documentation to make sure that he or she understands what are the expected behaviors we are expecting when developers contribute to the code base. </p><h1 id="8fa06615-0f27-4da0-9e0d-5fc5185cea8a" class="">GitFlow</h1><hr id="86f9e307-bcff-417c-b119-9604a18d5663"/><p id="bc8b88ea-0413-4e2f-863e-453ed4d681d6" class="">Our development will be based off of branching model for GitFlow, created by Vincent Driessen, and adapted to our own development process.</p><p id="c27cf38a-5162-4559-b662-5bdd4757eb66" class="">
+</p><figure id="a9652344-aa28-48ae-bb92-c13ab44b2ac2" class="image"><a href="Developer%20Guide%2081b5f1a529a9440398618d7f09e746e0/Screen_Shot_2020-05-03_at_5.46.30_PM.png"><img style="width:1008px" src="Developer%20Guide%2081b5f1a529a9440398618d7f09e746e0/Screen_Shot_2020-05-03_at_5.46.30_PM.png"/></a></figure><h2 id="1f5831cc-0844-48e0-9f50-d1048c37924b" class="">Key Benefits of GitFlow</h2><h3 id="8a0d490d-c8cd-4645-ba5d-f837cd99234e" class="">Parallel Development</h3><p id="3510b7e4-00be-4b65-bb65-31a53f932646" class="">One of the great things about GitFlow is that it makes parallel development very easy, by isolating new development from finished work. New development (such as features and non-emergency bug fixes) is done in feature branches, and is only merged back into main body of code when the developer(s) is happy that the code is ready for release.</p><p id="707482a7-f00d-45c2-a87f-b04889cefc10" class="">Although interruptions are a BadThing(tm), if you are asked to switch from one task to another, all you need to do is commit your changes and then create a new feature branch for your new task. When that task is done, just checkout your original feature branch and you can continue where you left off.</p><h3 id="837b0dae-ab1a-4022-ac8c-022fcc12789c" class="">Collaboration</h3><p id="98edeb8a-d23e-4d38-8b1f-88a9ce6f47f5" class="">Feature branches also make it easier for two or more developers to collaborate on the same feature, because each feature branch is a sandbox where the only changes are the changes necessary to get the new feature working. That makes it very easy to see and follow what each collaborator is doing.</p><p id="541fe8ea-a00d-4c00-aba4-85bf8ad1cab1" class="">
+</p><h1 id="84b734e6-eefb-4c23-a32a-406ea0c3eb29" class="">Developer Guide</h1><hr id="f359c427-7fb5-45f0-b4fe-7d1aa10f7de8"/><h3 id="620edcba-4384-43b3-8c67-2c4b43783d86" class="">Things to remember</h3><ul id="e2de3da0-0383-435c-9edf-825cccc31a33" class="bulleted-list"><li>Feature branches are created from dev branch :)</li></ul><ul id="c80716c5-eac0-4063-994a-1391fc1132a2" class="bulleted-list"><li>Create small and specific branches.</li></ul><ul id="d8e2a175-6caf-4678-af91-134a6b8ad4dd" class="bulleted-list"><li>Constantly pull dev to stay up to date with other people&#x27;s changes.
+<ul id="c153e4d3-3b4d-43f1-be36-90ae0fe7b4ae" class="bulleted-list"><li>You can do this by:<ol id="eb7c7af0-7e6e-49e5-96d5-538b3a143306" class="numbered-list" start="1"><li>Checking out dev:<ul id="6b05d5b6-daa0-4474-ba94-abd788023462" class="bulleted-list"><li>git checkout dev</li></ul></li></ol><ol id="720989fd-818e-4a07-b731-4051f541f774" class="numbered-list" start="2"><li>Pulling any new changes from the remote:<ul id="34d303e0-758d-4240-8ba6-3a1afd8b25b8" class="bulleted-list"><li>git pull &lt;remote&gt;</li></ul></li></ol><ol id="e86f6666-c6e2-488a-bb65-7d579d78c7c8" class="numbered-list" start="3"><li>Returning to your branch (checkout your branch again):<ul id="ba14a666-dbd2-4e8d-9bac-16a5ac2a7c98" class="bulleted-list"><li>git checkout [your branch]</li></ul></li></ol><ol id="288bd293-e547-4cc0-9a4f-da9ea31e1d54" class="numbered-list" start="4"><li>Merging dev into your branch:<ul id="0b802a1f-dacf-4728-9287-002b2a34e20e" class="bulleted-list"><li>git fetch</li></ul><ul id="318a123f-32a8-4307-9ec1-71dabf703afa" class="bulleted-list"><li>git pull origin dev</li></ul></li></ol></li></ul></li></ul><p id="75187678-9b9e-4bb1-9be8-eb0cb5cc765f" class="">
+</p><ul id="f8fc663c-c9e1-4193-9817-1619169c2ddd" class="bulleted-list"><li>The dev branch will constantly be pulling from master, so testing your code on dev should prevent bugs from getting on master.<ul id="46f0b321-e141-49b5-92be-c16d593560bb" class="bulleted-list"><li>Once you have tested your code on the dev branch, create a pull request (PR) to merge your branch into dev.<ul id="6f0aaac6-3c2a-4e02-947b-e9edf1a78095" class="bulleted-list"><li>Who and how many people you send it to should depend on the significance of your code.</li></ul><ul id="53eda998-2d2e-49c0-9a1c-12127478e32e" class="bulleted-list"><li>Write a short (1-4 sentences) description of your PR.</li></ul><ul id="0120be92-a85c-4b73-8fa8-1c5bf4887156" class="bulleted-list"><li>You can send your PRs to other people through Slack.</li></ul></li></ul></li></ul><h3 id="77764095-5780-4bf7-8e0e-eb9900ba3dd9" class="">Branches</h3><ul id="8a681524-53f4-4483-a319-56ccd2406bbb" class="bulleted-list"><li>What is a branch in git?<ul id="5aabede3-c1a7-40ba-938c-dbd36c7e163d" class="bulleted-list"><li>A branch is <em>like</em> a copy of the repository from a specific moment in time (a specific commit).</li></ul><ul id="beb5bc8b-39d3-4177-ad43-591f6dbdce99" class="bulleted-list"><li>Learn more: <a href="https://git-scm.com/book/en/v1/Git-Branching-What-a-Branch-Is">https://git-scm.com/book/en/v1/Git-Branching-What-a-Branch-Is</a></li></ul></li></ul><ul id="17db067a-97ed-4729-b1f3-f5916a103771" class="bulleted-list"><li>What is the purpose of a branch?<ul id="43555742-4747-480f-89d0-e8726e118687" class="bulleted-list"><li>Branches make collaboration organized and simple. By using branches, multiple people can work independently on related code.</li></ul><ul id="0ca7af4a-3cc6-45d7-8e63-2cc63de42a2f" class="bulleted-list"><li>Branches allow us to easily keep track of changes that we make.</li></ul></li></ul><ul id="36228fd2-78dc-42a1-91ad-15bbe04dab46" class="bulleted-list"><li>When should I create a branch?<ul id="ce4c91b3-b09c-46cb-8499-68416f761946" class="bulleted-list"><li>Create a branch for any change that you want to make.</li></ul><ul id="755a60c8-46c3-4661-8544-05fac2a89be4" class="bulleted-list"><li>Create branches that will have a short lifespan that are used for a single particular feature or specific focus.<ul id="056184a8-13cf-4ba0-950f-024243a56fa8" class="bulleted-list"><li>Small and specific branches are much easier to maintain, easier to merge, and easier to review.</li></ul><ul id="d76bec99-935a-45cc-8859-5dcc4436f389" class="bulleted-list"><li>Learn more: <a href="https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows">https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows</a><ul id="d23e7552-1053-4b6f-9de7-85f7fac98caf" class="bulleted-list"><li>Read the &quot;Topic Branches&quot; section.</li></ul><p id="e67de749-9fd5-4f17-ae20-3de5ba2ba3c9" class="">
+</p></li></ul></li></ul></li></ul><h3 id="59edfdf2-a842-41b6-a7f1-7b1717ed3769" class="">Naming Branch</h3><ul id="252cec31-1e49-49fc-95c9-486d0b06d360" class="bulleted-list"><li>Feature branch: feature-*<ul id="2346716a-9490-412a-b9b7-318ef80c3da1" class="bulleted-list"><li>Ex: feature-migrate-firebase</li></ul></li></ul><ul id="b00681d0-615e-4cf0-bce9-cc6ce7eb27df" class="bulleted-list"><li>Fixes branch: bugfix-*<ul id="7491a92d-4ade-43cf-80a6-68c119f2c7d9" class="bulleted-list"><li>Ex: bugfix-package-dependencies</li></ul></li></ul><ul id="21ffbff6-b491-437d-baa7-443968eb07df" class="bulleted-list"><li>Testing branch: testing-*<ul id="becc8318-a330-415e-914a-21c3f94535c1" class="bulleted-list"><li>Ex: testing-firebase-authentication</li></ul></li></ul><ul id="a0c4dade-08a8-453a-9f89-9085e64cf3e3" class="bulleted-list"><li>Build process branch: build-*<ul id="1cc93dd1-e8f8-4b5c-b34f-595cdd87743e" class="bulleted-list"><li>Ex:build-add-testing-workflows</li></ul></li></ul><ul id="6fc1ce00-671d-49f5-b7e8-d3544a12ca45" class="bulleted-list"><li>Documentation branch: document-* <ul id="af73a829-fc1c-49ea-bed2-08799db7574c" class="bulleted-list"><li>Ex: document-add-readme</li></ul></li></ul><ul id="0f53e9c4-793c-404f-b27f-a2483d6016ff" class="bulleted-list"><li>Clean up / Refactor branch: cleanup-* <ul id="8f69cdd2-1fea-44cc-8b22-6ea961c3be57" class="bulleted-list"><li>Ex: cleanup-remove-unused-function</li></ul></li></ul><h2 id="9f1f52cc-2a64-4b53-a15c-548348e25ff3" class="">Development workflow and branch lifecycle:</h2><ol id="1f1d2753-dafb-4a3e-8079-e00a87197245" class="numbered-list" start="1"><li>You want to make a change to the codebase.</li></ol><ol id="0ea2e73c-5bf2-4187-b576-fe2ef90be293" class="numbered-list" start="2"><li>Decide which features you want to contribute to and name it with a descriptive branch name. </li></ol><ol id="b7fcf601-4c87-40dc-ac80-3e4383eb9145" class="numbered-list" start="3"><li>Create a new branch off of dev.</li></ol><ol id="3d921acc-6684-4522-a424-4b803bb915cc" class="numbered-list" start="4"><li>Make changes to your branch.</li></ol><ol id="43d09663-74f0-4a52-a117-3869d0da0e23" class="numbered-list" start="5"><li>Finish making changes to your branch.</li></ol><ol id="2b3ef58a-f21d-4fa0-a4cc-9096a8567153" class="numbered-list" start="6"><li>Merge your branch into dev and ensure that everything works.
+If you run into merge conflicts, carefully resolve them. If you are unsure how to resolve them, ask someone else for help. Do not resolve merge conflicts if you do not understand how to resolve merge conflicts or if you do not understand the code that you are deleting.</li></ol><ol id="4f6ee7a6-2403-49bf-b434-a87d18f91476" class="numbered-list" start="7"><li>Your branch has served its purpose and it has been merged into dev. Your branch should not be used anymore.
+To enforce this, after branches are merged, they are deleted from the remote repository.</li></ol><p id="4121a19e-4350-4e66-8bd4-24600dfd42da" class="">
+</p><h2 id="b32d4276-b293-4a58-b8b6-08d4e3d3558f" class="">Code Review</h2><p id="c5d55d32-0eaa-40e5-96d0-f44a612e3f4a" class="">Each sub-team should have at least one member from it to review pull request.</p><p id="ff05c399-8279-4aa0-91a3-078c85eb59a2" class="">We required at least 3 members to approve the pull request so please try to do the code review as often as you can.</p><ul id="4455a0f3-17d0-433f-b229-4dd305769990" class="bulleted-list"><li>Questions to think about when doing code reviews<ul id="82c5fc49-44de-4386-9dec-8a06e29a0966" class="bulleted-list"><li>Does this function does what I expect it to do?</li></ul><ul id="5f7619da-8d77-4565-af25-3b3346e9c13e" class="bulleted-list"><li>Do I understand the implementation?</li></ul><ul id="870f7c2b-cdd0-4136-9b74-6a9280942f3b" class="bulleted-list"><li>Does this code achieve the requirements?</li></ul><ul id="044c7171-6a0b-429c-9407-af295cb598b5" class="bulleted-list"><li>Is the coding style consistent with the requirements?</li></ul></li></ul><ul id="f189569a-36f7-4135-87ba-daf9dda6e559" class="bulleted-list"><li>Pull and Test it out, see if everything works as normal</li></ul><ul id="ad1cd46d-1721-4517-8396-99c44ea6478e" class="bulleted-list"><li>Don&#x27;t spend too much time going through everything single line</li></ul><ul id="476ca085-912b-4c6e-93a0-4a1868fecc5e" class="bulleted-list"><li>Give helpful feedback for improvements or what was done well</li></ul><ul id="e6eb5629-7416-4ad8-8467-9f0e1d84fada" class="bulleted-list"><li>Show respect when giving feedback</li></ul><h2 id="736ab51c-8deb-40fd-84c6-56d3e44b7c21" class="">JavaScript Coding Style</h2><p id="26ae2215-8069-40c5-8058-da5166f6296f" class="">Reference: Airbnb Coding Style <a href="https://github.com/airbnb/javascript">https://github.com/airbnb/javascript</a></p><p id="136e75d0-9b78-4af1-9497-b4752f715d2e" class=""><a href="https://www.notion.so/bba9adb2322e481080c1ec92287fb86c?v=86b50e34633f4a41bf1781043c63e8cb&amp;p=684acfdef2fa413a86431363b40315ca">https://www.notion.so/bba9adb2322e481080c1ec92287fb86c?v=86b50e34633f4a41bf1781043c63e8cb&amp;p=684acfdef2fa413a86431363b40315ca</a></p><p id="756eef3c-0df9-4374-910f-af7893c53bd4" class="">Helpful Plugins: </p><ul id="3eed41af-fbce-4bc5-9e7f-7959c41ef2a7" class="bulleted-list"><li>Prettier<ul id="45ebf707-5043-4349-8663-2e766c9bf214" class="bulleted-list"><li>Automatic formatter</li></ul><ul id="63f37539-de40-4e10-bcc6-d4e3068ad3e1" class="bulleted-list"><li>&quot;Format on Save&quot;</li></ul><ul id="972d4082-157b-458c-a6d2-5bca250ac8c3" class="bulleted-list"><li>Widely used by Javascript developers</li></ul></li></ul><ul id="7dc0486d-94ac-4f63-bb75-b58c90b8e706" class="bulleted-list"><li>GitLens - show recent changes, authors and commits on selected code</li></ul><ul id="c1930056-009f-4361-a95d-fbee634866ce" class="bulleted-list"><li>LiveServer - live reload on save</li></ul><ul id="bc934c92-700e-4955-8f49-5548bcd46864" class="bulleted-list"><li>npm intellisense - autocompletes npm modules</li></ul><ul id="ed88d406-b0c8-41ba-b817-2bc6a7937c58" class="bulleted-list"><li>JS Refactor - automated refactoring tools</li></ul><ul id="0e44f1f4-2929-4518-9a9e-14f6fda937a8" class="bulleted-list"><li>Comments in Typescript - create comments</li></ul><p id="d48dd197-463e-4b32-80d1-6c55812caea5" class="">
+</p></div></article></body></html>

@@ -1,0 +1,6 @@
+Looking for git in: C:\Program Files\Git\cmd\git.exe
+Using git 2.14.2.windows.2 from C:\Program Files\Git\cmd\git.exe
+> git rev-parse --show-toplevel
+fatal: Not a git repository (or any of the parent directories): .git
+> git rev-parse --show-toplevel
+fatal: Not a git repository (or any of the parent directories): .git

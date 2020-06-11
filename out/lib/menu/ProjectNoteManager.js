@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProjectNoteManager = void 0;
 const vscode_1 = require("vscode");
 class ProjectNoteManager {
     constructor() {
@@ -15,11 +16,9 @@ class ProjectNoteManager {
         vscode_1.window.showInputBox({
             value: "",
             placeHolder: "Enter a note",
-            validateInput: text => {
-                return !text
-                    ? "Please enter a non-empty note to continue."
-                    : null;
-            }
+            validateInput: (text) => {
+                return !text ? "Please enter a non-empty note to continue." : null;
+            },
         });
     }
 }

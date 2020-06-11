@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SummaryManager = void 0;
 const Util_1 = require("../Util");
 const FileChangeInfoSummaryData_1 = require("../storage/FileChangeInfoSummaryData");
 const SessionSummaryData_1 = require("../storage/SessionSummaryData");
@@ -84,8 +85,8 @@ class SummaryManager {
             const result = yield HttpClient_1.softwareGet(`/sessions/summary?refresh=true`, jwt);
             if (HttpClient_1.isResponseOk(result) && result.data) {
                 const data = result.data;
-                console.log("Session DATA:");
-                console.log(data);
+                // console.log("Session DATA:");
+                // console.log(data);
                 // update the session summary data
                 const summary = SessionSummaryData_1.getSessionSummaryData();
                 Object.keys(data).forEach((key) => {

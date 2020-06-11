@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.WallClockManager = void 0;
 const Util_1 = require("../Util");
 const vscode_1 = require("vscode");
-const SessionSummaryData_1 = require("../storage/SessionSummaryData");
 const TimeSummaryData_1 = require("../storage/TimeSummaryData");
 const KpmManager_1 = require("./KpmManager");
 const SECONDS_INTERVAL = 30;
@@ -31,15 +31,7 @@ class WallClockManager {
                 // update the file info file
                 TimeSummaryData_1.incrementEditorSeconds(SECONDS_INTERVAL);
             }
-            // dispatch to the various views (statusbar and treeview)
-            this.dispatchStatusViewUpdate();
         }, CLOCK_INTERVAL);
-    }
-    dispatchStatusViewUpdate() {
-        // update the status bar
-        SessionSummaryData_1.updateStatusBarWithSummaryData();
-        // update the code time metrics tree views
-        vscode_1.commands.executeCommand("codetime.refreshKpmTree");
     }
     getHumanizedWcTime() {
         return Util_1.humanizeMinutes(this._wctime / 60);

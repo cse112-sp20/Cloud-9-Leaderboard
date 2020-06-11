@@ -6,3 +6,7 @@ vsc-extension-quickstart.md
 **/jsconfig.json
 **/*.map
 **/.eslintrc.json
+
+test/*
+test-resources/*
+docs/*

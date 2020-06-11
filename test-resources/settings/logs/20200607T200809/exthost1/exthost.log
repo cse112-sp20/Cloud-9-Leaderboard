@@ -1,0 +1,38 @@
+[2020-06-07 20:08:13.902] [exthost] [info] extension host started
+[2020-06-07 20:08:13.955] [exthost] [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch {"startup":true,"extensionId":{"value":"vscode.debug-auto-launch","_lower":"vscode.debug-auto-launch"},"activationEvent":"*"}
+[2020-06-07 20:08:13.955] [exthost] [info] ExtensionService#loadCommonJSModule file:///d:/Documents/UCSD v2/UCSD/Homework/CSE 112/project/Cloud-9-Leaderboard/test-resources/VSCode-win32-x64-archive/resources/app/extensions/debug-auto-launch/dist/extension
+[2020-06-07 20:08:14.005] [exthost] [info] ExtensionService#_doActivateExtension vscode.emmet {"startup":true,"extensionId":{"value":"vscode.emmet","_lower":"vscode.emmet"},"activationEvent":"*"}
+[2020-06-07 20:08:14.005] [exthost] [info] ExtensionService#loadCommonJSModule file:///d:/Documents/UCSD v2/UCSD/Homework/CSE 112/project/Cloud-9-Leaderboard/test-resources/VSCode-win32-x64-archive/resources/app/extensions/emmet/dist/extension
+[2020-06-07 20:08:14.129] [exthost] [info] ExtensionService#_doActivateExtension vscode.git {"startup":true,"extensionId":{"value":"vscode.git","_lower":"vscode.git"},"activationEvent":"*"}
+[2020-06-07 20:08:14.129] [exthost] [info] ExtensionService#loadCommonJSModule file:///d:/Documents/UCSD v2/UCSD/Homework/CSE 112/project/Cloud-9-Leaderboard/test-resources/VSCode-win32-x64-archive/resources/app/extensions/git/dist/main
+[2020-06-07 20:08:14.236] [exthost] [info] ExtensionService#_doActivateExtension vscode.github-authentication {"startup":true,"extensionId":{"value":"vscode.github-authentication","_lower":"vscode.github-authentication"},"activationEvent":"*"}
+[2020-06-07 20:08:14.236] [exthost] [info] ExtensionService#loadCommonJSModule file:///d:/Documents/UCSD v2/UCSD/Homework/CSE 112/project/Cloud-9-Leaderboard/test-resources/VSCode-win32-x64-archive/resources/app/extensions/github-authentication/dist/extension.js
+[2020-06-07 20:08:14.306] [exthost] [info] ExtensionService#_doActivateExtension vscode.merge-conflict {"startup":true,"extensionId":{"value":"vscode.merge-conflict","_lower":"vscode.merge-conflict"},"activationEvent":"*"}
+[2020-06-07 20:08:14.306] [exthost] [info] ExtensionService#loadCommonJSModule file:///d:/Documents/UCSD v2/UCSD/Homework/CSE 112/project/Cloud-9-Leaderboard/test-resources/VSCode-win32-x64-archive/resources/app/extensions/merge-conflict/dist/extension
+[2020-06-07 20:08:14.335] [exthost] [info] ExtensionService#_doActivateExtension vscode.search-result {"startup":true,"extensionId":{"value":"vscode.search-result","_lower":"vscode.search-result"},"activationEvent":"*"}
+[2020-06-07 20:08:14.336] [exthost] [info] ExtensionService#loadCommonJSModule file:///d:/Documents/UCSD v2/UCSD/Homework/CSE 112/project/Cloud-9-Leaderboard/test-resources/VSCode-win32-x64-archive/resources/app/extensions/search-result/dist/extension.js
+[2020-06-07 20:08:14.349] [exthost] [info] ExtensionService#_doActivateExtension vscode.vscode-account {"startup":true,"extensionId":{"value":"vscode.vscode-account","_lower":"vscode.vscode-account"},"activationEvent":"*"}
+[2020-06-07 20:08:14.349] [exthost] [info] ExtensionService#loadCommonJSModule file:///d:/Documents/UCSD v2/UCSD/Homework/CSE 112/project/Cloud-9-Leaderboard/test-resources/VSCode-win32-x64-archive/resources/app/extensions/vscode-account/dist/extension.js
+[2020-06-07 20:08:14.407] [exthost] [info] ExtensionService#_doActivateExtension CSE112.cloud9 {"startup":true,"extensionId":{"value":"CSE112.cloud9","_lower":"cse112.cloud9"},"activationEvent":"*"}
+[2020-06-07 20:08:14.407] [exthost] [info] ExtensionService#loadCommonJSModule file:///c:/Users/Adris/.vscode/extensions/cse112.cloud9-1.4.0/out/extension
+[2020-06-07 20:08:16.294] [exthost] [info] ExtensionService#_doActivateExtension cse112team9.cloud9 {"startup":true,"extensionId":{"value":"cse112team9.cloud9","_lower":"cse112team9.cloud9"},"activationEvent":"*"}
+[2020-06-07 20:08:16.294] [exthost] [info] ExtensionService#loadCommonJSModule file:///c:/Users/Adris/.vscode/extensions/cse112team9.cloud9-0.0.1/out/extension
+[2020-06-07 20:08:16.651] [exthost] [info] ExtensionService#_doActivateExtension dbaeumer.vscode-eslint {"startup":true,"extensionId":{"value":"dbaeumer.vscode-eslint","_lower":"dbaeumer.vscode-eslint"},"activationEvent":"*"}
+[2020-06-07 20:08:16.651] [exthost] [info] ExtensionService#loadCommonJSModule file:///c:/Users/Adris/.vscode/extensions/dbaeumer.vscode-eslint-2.1.5/client/out/extension
+[2020-06-07 20:08:16.671] [exthost] [info] eager extensions activated
+[2020-06-07 20:08:16.923] [exthost] [error] Activating extension cse112team9.cloud9 failed due to an error:
+[2020-06-07 20:08:16.924] [exthost] [error] Error: command 'LeaderView.refreshEntry' already exists
+	at e.registerCommand (d:\Documents\UCSD v2\UCSD\Homework\CSE 112\project\Cloud-9-Leaderboard\test-resources\VSCode-win32-x64-archive\resources\app\out\vs\workbench\services\extensions\node\extensionHostProcess.js:626:665)
+	at Object.registerCommand (d:\Documents\UCSD v2\UCSD\Homework\CSE 112\project\Cloud-9-Leaderboard\test-resources\VSCode-win32-x64-archive\resources\app\out\vs\workbench\services\extensions\node\extensionHostProcess.js:897:64)
+	at Object.createCommands (c:\Users\Adris\.vscode\extensions\cse112team9.cloud9-0.0.1\out\lib\command-helper.js:26:33)
+	at c:\Users\Adris\.vscode\extensions\cse112team9.cloud9-0.0.1\out\extension.js:96:49
+	at Generator.next (<anonymous>)
+	at c:\Users\Adris\.vscode\extensions\cse112team9.cloud9-0.0.1\out\extension.js:9:71
+	at new Promise (<anonymous>)
+	at __awaiter (c:\Users\Adris\.vscode\extensions\cse112team9.cloud9-0.0.1\out\extension.js:5:12)
+	at activate (c:\Users\Adris\.vscode\extensions\cse112team9.cloud9-0.0.1\out\extension.js:90:12)
+	at Function._callActivateOptional (d:\Documents\UCSD v2\UCSD\Homework\CSE 112\project\Cloud-9-Leaderboard\test-resources\VSCode-win32-x64-archive\resources\app\out\vs\workbench\services\extensions\node\extensionHostProcess.js:824:355)
+	at Function._callActivate (d:\Documents\UCSD v2\UCSD\Homework\CSE 112\project\Cloud-9-Leaderboard\test-resources\VSCode-win32-x64-archive\resources\app\out\vs\workbench\services\extensions\node\extensionHostProcess.js:824:6)
+	at d:\Documents\UCSD v2\UCSD\Homework\CSE 112\project\Cloud-9-Leaderboard\test-resources\VSCode-win32-x64-archive\resources\app\out\vs\workbench\services\extensions\node\extensionHostProcess.js:822:960
+	at processTicksAndRejections (internal/process/task_queues.js:85:5)
+	at async Promise.all (index 8)

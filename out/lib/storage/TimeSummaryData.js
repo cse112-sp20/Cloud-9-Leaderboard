@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getTodayTimeDataSummary = exports.getCodeTimeSummary = exports.incrementSessionAndFileSecondsAndFetch = exports.updateSessionFromSummaryApi = exports.incrementEditorSeconds = exports.getCurrentTimeSummaryProject = exports.clearTimeDataSummary = exports.getTimeDataSummaryFile = void 0;
 const Util_1 = require("../Util");
 const KpmRepoManager_1 = require("../repo/KpmRepoManager");
 const Constants_1 = require("../Constants");
@@ -58,10 +59,7 @@ function clearTimeDataSummary() {
         let payloads = [];
         try {
             const content = JSON.stringify(payloads, null, 4);
-            fs.writeFileSync(file, content, (err) => {
-                if (err)
-                    Util_1.logIt(`Deployer: Error writing time data: ${err.message}`);
-            });
+            fs.writeFileSync(file, content, (err) => { });
         }
         catch (e) {
             //
@@ -231,8 +229,7 @@ function saveTimeDataSummaryToDisk(data) {
     let payloads = Util_1.getFileDataArray(file);
     if (payloads && payloads.length) {
         // find the one for this day
-        const idx = payloads.findIndex((n) => n.day === data.day &&
-            n.project.directory === data.project.directory);
+        const idx = payloads.findIndex((n) => n.day === data.day && n.project.directory === data.project.directory);
         if (idx !== -1) {
             payloads[idx] = data;
         }
@@ -246,10 +243,7 @@ function saveTimeDataSummaryToDisk(data) {
     }
     try {
         const content = JSON.stringify(payloads, null, 4);
-        fs.writeFileSync(file, content, (err) => {
-            if (err)
-                Util_1.logIt(`Deployer: Error writing time data: ${err.message}`);
-        });
+        fs.writeFileSync(file, content, (err) => { });
     }
     catch (e) {
         //

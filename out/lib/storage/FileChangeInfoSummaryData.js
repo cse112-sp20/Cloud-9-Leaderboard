@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.saveFileChangeInfoToDisk = exports.getFileChangeSummaryAsJson = exports.clearFileChangeInfoSummaryData = exports.getFileChangeSummaryFile = void 0;
 const Util_1 = require("../Util");
 const CacheManager_1 = require("../cache/CacheManager");
 const fs = require("fs");
@@ -41,10 +42,7 @@ function saveFileChangeInfoToDisk(fileChangeInfoData) {
     if (fileChangeInfoData) {
         try {
             const content = JSON.stringify(fileChangeInfoData, null, 4);
-            fs.writeFileSync(file, content, err => {
-                if (err)
-                    Util_1.logIt(`Deployer: Error writing session summary data: ${err.message}`);
-            });
+            fs.writeFileSync(file, content, (err) => { });
             // update the cache
             if (fileChangeInfoData) {
                 cacheMgr.set("fileChangeSummary", fileChangeInfoData);

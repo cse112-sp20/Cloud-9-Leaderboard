@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.EventManager = void 0;
 const models_1 = require("../model/models");
 const Util_1 = require("../Util");
 const fs = require("fs");
@@ -24,7 +25,6 @@ class EventManager {
     storeEvent(event) {
         fs.appendFile(Util_1.getPluginEventsFile(), JSON.stringify(event) + os.EOL, (err) => {
             if (err) {
-                Util_1.logIt(`Error appending to the events data file: ${err.message}`);
             }
         });
     }

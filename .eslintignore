@@ -4,3 +4,9 @@ CHANGELOG.md
 README.md
 jsconfig.json
 vsc-extension-quickstart.md
+docs/assets/*
+docs/*
+initializer.js
+coverage/*
+test/*
+test-resources/*

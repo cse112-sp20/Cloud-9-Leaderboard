@@ -1,15 +1,26 @@
-export function getRandomInt(ceil) {
-  return Math.floor(Math.random() * Math.floor(ceil));
-}
+/**
+ * Filename: Utility.ts
+ *
+ * Contain cloud9 extenion utility function
+ *
+ * @link   URL
+ * @file   This files contains utility function.
+ * @author AuthorName.
+ */
 
-export function generateRandomEmail() {
-  const EMAIL_LEN = 28;
-  const CHAR_SET =
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+import {
+  uniqueNamesGenerator,
+  adjectives,
+  colors,
+  animals,
+} from "unique-names-generator";
 
-  let email = "";
-  while (email.length < EMAIL_LEN) {
-    email += CHAR_SET[getRandomInt(CHAR_SET.length)];
-  }
-  return email + "@cloud9.com";
+/**
+ * Random anonymous name generator
+ */
+export function generateRandomName() {
+  const randomName: string = uniqueNamesGenerator({
+    dictionaries: [adjectives, colors, animals],
+  });
+  return randomName;
 }

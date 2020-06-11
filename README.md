@@ -1,358 +1,221 @@
-# cloud9 README
+<h1 align="center">
+  <br>
+  <a href="https://i.imgur.com/rRGVjYh.png"><img src="https://i.imgur.com/rRGVjYh.png" title="source: imgur.com" width= "100%"/></a>
+  <br>
+  Cloud9 Leaderboard
+  <br>
+</h1>
 
-This is the README for your extension "cloud9". After writing up a brief
-description, we recommend including the following sections.
+<h4 align="center">A leaderboard application built on top of <a href="https://www.software.com/code-time">Code Time</a>.</h4>
 
-# Developer guide
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Testing workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Testing%20workflow/badge.svg)
+![Eslint Analysis workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Eslint%20Analysis%20workflow/badge.svg)
+![Deploying workflow](https://github.com/cse112-sp20/Cloud-9-Leaderboard/workflows/Deploying%20workflow/badge.svg)
+![Code Style](https://img.shields.io/badge/code%20style-airbnb-green)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-### Things to remember:
-
-- **Never create a branch off of `dev`!** <br/> **Never merge `dev` into any
-  branch!**
-  - `dev` contains many changes that, in nearly all cases, do not belong on any
-    other branch.
-- Create small and specific branches.
-- Constantly pull your branch's base branch to stay up to date with other
-  people's changes.
-  - You can do this by:
-    1. Checking out your branch's base branch: <br/>
-       `git checkout [your branch's base branch]`
-    2. Pulling any new changes from the remote: <br/> `git pull`
-    3. Returning to your branch (checkout your branch again): <br/>
-       `git checkout [your branch]`
-    4. Merging your branch's base branch _into_ your branch: <br/>
-       `git merge [your branch's base branch]`
-- Test your code on the `dev` branch before creating a pull request to merge
-  your code into your branch's base branch.
-  - `dev` will constantly be pulling from `master`, so testing your code on
-    `dev` should prevent bugs from getting on `master`.
-  - Once you have tested your code on the `dev` branch, create a pull request
-    (PR) to merge your branch into its base branch.
-    - Who and how many people you send it to should depend on the significance
-      of your code.
-    - Write a short (1-4 sentences) description of your PR.
-    - You can send your PRs to other people through Slack.
+<p align="center">
+  <a href="#About">About</a> •
+  <a href="#Installation">Installation</a> •
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#Features">Features</a> •
+  <a href="#Team">Team</a> •
+  <a href="#documentationstructure">Documentation/Structure</a> •
+    <a href="#Releases">Releases</a> •
+    <a href="#FAQ">FAQs</a> •
+      <a href="#Support">Support</a> •
+  <a href="#Credits">Credits</a> 
+</p>
 
 ---
 
-### Branches:
+## About
 
-- What is a branch in git?
-  - A branch is _like_ a copy of the repository from a specific moment in time
-    (a specific commit).
-  - Learn more: https://git-scm.com/book/en/v1/Git-Branching-What-a-Branch-Is
-- What is the purpose of a branch?
-  - Branches make collaboration organized and simple. By using branches,
-    multiple people can work independently on related code.
-  - Branches allow us to easily keep track of changes that we make.
-- When should I create a branch?
-  - Create a branch for any change that you want to make.
-  - Create branches that will have a short lifespan that are used for a single
-    particular feature or specific focus.
-    - Small and specific branches are much easier to maintain, easier to merge,
-      and easier to review.
-    - Learn more:
-      https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows
-      - Read the "Topic Branches" section.
+Remote work presents many challenges to both teams and individuals. The lack of a stable
+working environment with peers often reduces communication between team members, productivity
+and motivation. We attempt to address and mitigate some of these common problems for software teams
+specifically with our VSCode extension leader-board. In it we use gamification techniques to help connect
+and motivate teammates in a fun and engaging way.
 
-### Development workflow and branch lifecycle:
-
-1. You want to make a change to the codebase.
-2. Decide which branch you want to contribute to. This branch is going to be the
-   base branch of the branch that you are about to create.
-   - The base branch is the branch that you want to create your branch off of.
-   - The base branch is the branch that you will later merge (or create a PR to
-     merge) your branch into.
-   - If the code you are writing is only dependent on the code in `master`, then
-     `master` is your base branch. Otherwise, if the code you are writing is
-     dependent on code that is not in `master`, then your branch's base branch
-     is going to be the branch that contains the code that your branch depends
-     on.
-   - `dev` should never be your base branch. `dev` contains many changes that,
-     in nearly all cases, do not belong on any other branch.
-3. Create a new branch off of the base branch.
-4. Make changes to your branch.
-5. Finish making changes to your branch.
-6. If possible, merge your branch into `dev` and ensure that everything works.
-   - You do not need to create a PR to do this.
-   - If you run into merge conflicts, _carefully_ resolve them. If you are
-     unsure how to resolve them, ask someone else for help. Do not resolve merge
-     conflicts if you do not understand how to resolve merge conflicts or if you
-     do not understand the code that you are deleting.
-7. Merge your branch into your branch's base branch.
-   - Depending on what your branch's base branch is, you may or may not need to
-     create a PR to merge your branch into its base branch.
-     - If you want to merge your branch into `master`, you must create a PR to
-       do this.
-   - Make sure that you merge your branch _into_ its base branch:
-     - Merge \<your branch> into \<your branch's base branch> <br/> Merge \<your
-       branch> → \<your branch's base branch>
-8. Your branch has served its purpose and it has been merged into another
-   branch. Your branch should not be used anymore.
-   - To enforce this, after branches are merged, they are deleted from the
-     remote repository.
+Built off the Code Time VSCode extention. Cloud 9 Leaderboard is an extention that tracks personal statitics
+of the user based off the different actions performed in VSCode and displays and ranks your own stats versus your
+team on a group leaderboard.
 
 ---
 
-### Git commands:
+## Installation
 
-| Command                                              | Description                                             |
-| ---------------------------------------------------- | ------------------------------------------------------- |
-| `git status`                                         | Check status                                            |
-| `git add [file-name.txt]`                            | Add a file to the staging area                          |
-| `git add -A`                                         | Add all new and changed files to the staging area       |
-| `git commit`                                         | Commit changes - must enter message in prompt           |
-| `git commit -m "[commit message]"`                   | Commit changes with inline message                      |
-| `git rm -r [file-name.txt]`                          | Remove a file (or folder)                               |
-| `git branch`                                         | List branches (the asterisk denotes the current branch) |
-| `git branch -a`                                      | List all branches (local and remote)                    |
-| `git branch [branch name]`                           | Create a new branch                                     |
-| `git branch -d [branch name]`                        | Delete a branch                                         |
-| `git checkout -b [branch name]`                      | Create a new branch and switch to it                    |
-| `git checkout [branch name]`                         | Checkout a branch (local or remote branch)              |
-| `git checkout -b [branch name] origin/[branch name]` | Clone a remote branch and switch to it                  |
-| `git checkout [branch name]`                         | Switch to a branch                                      |
-| `git merge [branch name]`                            | Merge a branch into the active branch                   |
-| `git merge [source branch] [target branch]`          | Merge a branch into a target branch                     |
-| `git stash`                                          | Stash changes in a dirty working directory              |
-| `git push`                                           | Push changes to remote repository                       |
-| `git pull`                                           | Update local repository to the newest commit            |
-| `git log`                                            | View commit history                                     |
-| `git log --summary`                                  | View detailed commit history                            |
-| `git diff [source branch] [target branch]`           | Show diff of two branches                               |
+<a href="https://imgur.com/pgemzR9"><img src="https://i.imgur.com/pgemzR9.gif" title="source: imgur.com" /></a>
+
+### Installation Options
+1. Navigate to the Extention Tab of VSCode and type in 
+```
+Cloud9
+```
+OR
+<br>
+
+2. Download from the VSCode Marketplace:<br>
+```
+ https://marketplace.visualstudio.com/items?itemName=CSE112.cloud9
+```
+
+---
+
+## Getting Started
+
+### How to Create An Account
+1. Navigate to the Cloud 9 Icon in the VSCode Activity Bar
+2. Click on the Sign In/Create Account Menu Item
+3. Click on the Create Account Button from the Popup
+4. Input your preferred email and password
+
+<a href="https://imgur.com/00RuCBM"><img src="https://i.imgur.com/00RuCBM.gif" title="source: imgur.com" /></a>
+<br>
+
+:tada: Congrats you are now logged into Cloud 9 Leaderboard! :tada:
+
+--- 
 
 ## Features
 
-Describe specific features of your extension including screenshots of your
-extension in action. Image paths are relative to this README file.
+<img src="https://i.imgur.com/xp9BzSF.png" alt="drawing"/>
 
-For example if there is an image subfolder under your extension project
-workspace:
+### Personal Statistics
 
-\!\[feature X\]\(images/feature-x.png\)
+- Our extention tracks various statistics for many different types of actions performed within the VSCode editor through the help of Code-Time API.
+- Appears as a stylized text file for readability and ease of access
+- Tracks:
+  - Time spent in the editor
+  - Number of keystrokes typed
+  - Number of lines added or removed
+  - Personal score determined by the above stats
+- Displays notable color display to signal improvement or digression.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to
-> show off your extension! We recommend short, focused animations that are easy
-> to follow.
+<a href="https://i.imgur.com/5RjQjdm.png"><img src="https://i.imgur.com/5RjQjdm.png" title="source: imgur.com" /></a>
 
-## Requirements
+### Team Leaderboard
 
-If you have any requirements or dependencies, add a section describing those and
-how to install and configure them.
+- Able to join a team leaderboard to track statistics of other members and see how you rank against them
+- Similar to the personal statistics, the team leaderboard is stylized as a text file
+- Aspects:
+  - Displays your ranking compared to others in your team
+  - Displays team statistics and team score
+  - Anonymous names to keep the scoring friendly and competitive
+- Team Leaders are able to create and share a team to be joined
+  - Leaders also have the option of managing their team through appointing new leaders or removing members.
+  - They can also set personal tasks(ex. Finishing a File) that can give additional points to users.
 
-## Extension Settings
+<a href="https://i.imgur.com/BOvx0qu.png"><img src="https://i.imgur.com/BOvx0qu.png" title="source: imgur.com" /></a>
 
-Include if your extension adds any VS Code settings through the
-`contributes.configuration` extension point.
+### Badges and Achievements
 
-For example:
+- Earn special badges that showcase progress on your coding!
+- Get achievements that help contribute to your personal score!
 
-This extension contributes the following settings:
+<a href="https://imgur.com/uVB4hK0"><img src="https://i.imgur.com/uVB4hK0.png" title="source: imgur.com" /></a>
 
-- `myExtension.enable`: enable/disable this extension
-- `myExtension.thing`: set to `blah` to do something
+### Team Management
 
-## Known Issues
+- Create or join Team to view statistics of your team members.
+- Join team by simply entering team code shared by the team leader.
+- Manage your team members through team management if you are the leader of the team.
 
-Calling out known issues can help limit users opening duplicate issues against
-your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+<a href="https://i.imgur.com/FnbDWad.png"><img src="https://i.imgur.com/FnbDWad.png" title="source: imgur.com" /></a>
 
 ---
 
-## Working with Markdown
+## Team
 
-**Note:** You can author your README using Visual Studio Code. Here are some
-useful editor keyboard shortcuts:
+> Cloud9 Team Members
 
-- Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-- Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-- Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of
-  Markdown snippets
+| <a href="https://www.linkedin.com/in/justinsherfey/" target="_blank">**Justn Sherfey**</a> | <a href="http://fvcproductions.com" target="_blank">**Leo Ku**</a> | <a href="https://www.linkedin.com/in/tina-ai-ting-hsieh/" target="_blank">**Tina Hsieh**</a>
+| :---: |:---:|:---:|
+|<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/e2396daf-27b9-4a5b-9fb6-c13f023d3385/Untitled.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200609%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200609T080521Z&X-Amz-Expires=86400&X-Amz-Signature=873c82fe0579f497587d5ffa15f23b0b79c95546cc655607e0865fadc1f2bb0a&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.jpeg%22" title="source: imgur.com" width="200px" />  | <img src="https://scontent.fsan1-1.fna.fbcdn.net/v/t1.0-9/22814311_10204065231946681_3037197008220701962_n.jpg?_nc_cat=110&_nc_sid=09cbfe&_nc_ohc=_dO8PkLWSxoAX8LELkX&_nc_ht=scontent.fsan1-1.fna&oh=6cd9a9f914f4556645d1875f305fee8d&oe=5F048B32" title="source: imgur.com" width="200px" /> | <img src="https://i.imgur.com/fxpjQ83.png" title="source: imgur.com" width="200px" />
+| <a href="https://github.com/Justin-Sherfey" target="_blank">`github.com/Justin-Sherfey`</a> | <a href="https://github.com/liontomic" target="_blank">`github.com/liontomic`</a> | <a href="https://github.com/aiiitingx" target="_blank">`github.com/aiiitingx`</a>
+| <a href="" target="_blank">**Huo-An Lin**</a> | <a href="https://www.linkedin.com/in/maddie578" target="_blank">**Madeline Lee**</a> | <a href="https://www.linkedin.com/in/yuanethan/" target="_blank">**Ethan Yuan**</a>
+<img src="https://i.imgur.com/SwavHxa.jpg" title="source: imgur.com" width="200px" /> | <img src="https://i.imgur.com/y5Bf7yE.png" title="source: imgur.com" width="200px" /> | <img src="https://i.imgur.com/g9kF3u5.jpg" title="source: imgur.com" width="200px" />
+| <a href="https://github.com/houan880201" target="_blank">github.com/houan880201</a> | <a href="http://github.com/yil578" target="_blank">`github.com/yil578`</a> | <a href="http://https://github.com/YuanEthan" target="_blank">`https://github.com/YuanEthan`</a>
+|<a href="" target="_blank">**David Alexander**</a> | <a href="" target="_blank">**Mitchell Zhang**</a> | <a href="" target="_blank">**Daniel Tan**</a>
+|<img src="https://i.imgur.com/d72MP8M.png" title="source: imgur.com" width="200px" />  | <img src="https://i.imgur.com/FQk7C5D.jpg" title="source: imgur.com" width="200px" /> | <img src="https://i.imgur.com/la7FZa1.png" title="source: imgur.com" width="200px" />
+| <a href="http://github.com/davidalexander3986" target="_blank">`github.com/davidalexander3986`</a> | <a href="http://github.com/miz134" target="_blank">`github.com/miz134`</a> | <a href="http://github.com/danielytan" target="_blank">`github.com/danielytan`</a>
+|<a href="" target="_blank">**Patrick Pajarillaga**</a> | <a href="" target="_blank">**Devin Junanto**</a> | <a href="" target="_blank">**Jiachen**</a>
+|<img src="https://i.imgur.com/JrU9EBF.png" title="source: imgur.com" width="200px" /> | <img src="https://i.imgur.com/PW77lgS.png" title="source: imgur.com" width="200px" style="filter:flipH"/>| <img src="https://i.imgur.com/n1cALTn.jpg" title="source: Notion.com" width="200px" /> 
+| <a href="http://github.com/Patrick-Pajarillaga" target="_blank">`github.com/Patrick-Pajarillaga`</a> | <a href="http://github.com/fvcproductions" target="_blank">`github.com/devinjunanto`</a> | <a href="http://github.com/devinjunanto" target="_blank">`github.com/chenjiachenallen`</a>
 
-### For more information
+### Co-Leads
 
-- [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-- [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+**Justin Sherfey** - a Computer science student with interests in history and psychology. Runs on the UCSD track and cross team, surfs, games on his PC, and reads a cool book every now and then. 
 
-**Enjoy!**
+**Leo Ku** - a 4th year computer science student interested in solving challenging engineering problems. He is also interested in managing software teams and solve interpersonal challenges within engineering teams.  Casual basketball player, gamer, and interested in motorsports.
+### Code Team
+**Tina Hsieh** - a 4th-year Math-CS major. Interested in traveling and baking.
 
-<br />
+**Hou-An Lin** - a 3rd year CS major at UCSD. Interested in playing basketball and cooking. 
 
-<h1 align="center">
-  <img src="https://swdc-vscode.s3-us-west-1.amazonaws.com/software-paw.png" width="30px" />
-  Code Time
-  <br />
-  &nbsp
-</h1>
+### Build Team
 
-<br />
 
-<p align="center"><a href="https://www.software.com/code-time">Code Time</a> is an open source plugin for automatic programming metrics and time tracking. 
-</p>
+**Madeline Lee** - a 4th computer science major at UCSD. Her hobbies include traveling and listening to music. 
 
-<br />
+**Ethan Yuan** - a 4th year computer science major from Taiwan. He is interested in learning about full stack development and distributed system concepts. In his free time, he likes to play basketball, listens to podcasts and music, photography and travel.
 
-<p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=softwaredotcom.swdc-vscode">
-    <img alt="Marketplace" src="https://vsmarketplacebadge.apphb.com/version-short/softwaredotcom.swdc-vscode.svg"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=softwaredotcom.swdc-vscode">
-    <img alt="Installs" src="https://vsmarketplacebadge.apphb.com/installs-short/softwaredotcom.swdc-vscode.svg"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=softwaredotcom.swdc-vscode">
-    <img alt="Rating" src="https://vsmarketplacebadge.apphb.com/rating-short/softwaredotcom.swdc-vscode.svg"></a>
-  <a href="https://aka.ms/vsls">
-    <img alt="Live Share enabled" src="https://aka.ms/vsls-badge"></a>
-</p>
+### R&D Team
 
-<br />
+**David Alexander** - a 4th year computer science major, likes algorithms and OS topics. He likes dogs, Netflix, long drives, hiking, and video games.  In his free time, he likes to workout, and cook. 
 
-<p align="center" style="margin: 0 0">
-  <img src="https://swdc-vscode.s3-us-west-1.amazonaws.com/code-time-features.png" alt="Code Time features" />
-</p>
+**Mitchell Zhang** - a 3rd year Computer Science Major double minoring in Economics and Psychology. He likes basketball, gaming, painting, and dogs. He also watches a lot of movies and TV shows - Mr. Robot being his favorite.</p>
 
-## Getting started
+### Testing Team
 
-**1. Create your web account**
+**Alexander Garza** - a 2nd-year Computer Science Major at UCSD who enjoys playing/developing video games and working on his car in his free time.
 
-<p align="center" style="margin: 0 10%">
-  <img src="https://swdc-vscode.s3-us-west-1.amazonaws.com/login-prompt.png" alt="Code Time for VS Code login prompt" />
-</p>
+**Daniel Tan** - a 4th year CS major at UCSD. He is interested in game development and likes playing piano in his spare time.
 
-The Code Time web app has data visualizations and settings you can customize,
-such as your work hours and rates per project for advanced time tracking. You
-can also connect Google Calendar to visualize your Code Time vs. meetings in a
-single calendar.
+### Wildcard Team
 
-You can connect multiple code editors on multiple devices using the same email
-account.
+**Patrick Pajarillaga** - a Patrick is a 3rd year computer sciences with interests in topics of machine learning and augmented reality. His hobbies include gaming on his PC or going to various concerts scattered around the city.
 
-**2. Track your progress during the day**
 
-<p align="center" style="margin: 0 10%">
-  <img src="https://swdc-vscode.s3-us-west-1.amazonaws.com/status-bar.png" alt="Code Time for VS Code status bar" />
-</p>
+**Devin Junanto** - Computer Science student who likes to read books and watch films. He is also interested in building websites and photography.
 
-Your status bar shows you in real-time how many hours and minutes you code each
-day. A rocket will appear if your active code time exceeds your daily average on
-this day of the week.
+**Jiachen Chen** - a 4th year CS major at UCSD. Interested in video games, soccer, manga and anime.
 
-**3. Check out your coding activity**
+---
+## Documentation/Structure
+- New to the Project?
+  - Read our Onboarding Guide [here](https://docs.google.com/document/d/1eo04utRI_SBL23AygBqBkpJeFohFo1nMQaY5pf2w0qc/edit?usp=sharing) to get acquainted with the project!
+  - This guide contains all the documentation and guides in order to work on this project yourself.
 
-To see an overview of your coding activity and project metrics, open the **Code
-Time panel** by clicking on the Code Time icon in your side bar.
+---
 
-<p align="center" style="margin: 0 10%">
-  <img src="https://swdc-vscode.s3-us-west-1.amazonaws.com/side-bar.png" alt="Code Time for VS Code side bar" />
-</p>
+## Releases
 
-In your **Daily Metrics**, your _code time_ is the total time you have spent in
-your editor today. Your _active code time_ is the total time you have been
-typing in your editor today. Each metric shows how you compare today to your
-average and the global average. Each average is calculated by day of week over
-the last 90 days (e.g. a Friday average is an average of all previous Fridays).
+### 2.0.0
 
-You can also see your top files today by KPM (keystrokes per minute),
-keystrokes, and code time.
+Initial release of Cloud9 Leaderboard extension.
 
-If you have a Git repository open, **Contributors** provides a breakdown of
-contributors to the current open project and their latest commits.
+---
 
-**4. Generate your Code Time summary**
+## FAQ
 
-At the end of your first day, open Code Time in your side bar and click _View
-summary_ to open your dashboard in a new editor tab. Your dashboard summarizes
-your coding data—such as your code time by project, lines of code, and
-keystrokes per minute—today, yesterday, last week, and over the last 90 days.
+- **How do I do start tracking productivity metrics?**
+    - It will be started right away when you logged in!
 
-<p align="center" style="margin: 0 10%">
-  <img src="https://swdc-vscode.s3-us-west-1.amazonaws.com/editor-dashboard.png" alt="Code Time for VS Code dashboard" />
-</p>
+---
 
-## Web app data visualizations
+## Support
 
-Click "See advanced metrics" in the Code Time side bar or visit
-[app.software.com](https://app.software.com/) to see more data visualizations.
-Here are a few examples of what you will see in your feed after your first week.
+Reach out to us!
 
-**Code Time heatmap**
+- Github issues at <a href="https://github.com/cse112-sp20/Cloud-9-Leaderboard/issues" target="_blank">`github.com/cse112-sp20/Cloud-9-Leaderboard/issues`</a>
 
-Code Time measures your coding activity per hour and summarizes your data in a
-weekly and 90-day average heatmap. Protect your best times on your heatmap from
-meetings and interrupts to help boost your productivity.
+---
 
-<p align="center" style="margin: 0 10%">
-  <img src="https://swdc-vscode.s3-us-west-1.amazonaws.com/weekly-heatmap.png" alt="Code Time for VS Code heatmap" />
-</p>
+## Credits
+This application uses the following open source tools and software:
 
-**Project-based reports**
-
-See how much time you spend per project per week. Code Time also lets you set a
-rate per project and export your data to a CSV.
-
-<p align="center" style="margin: 0 10%">
-  <img src="https://swdc-vscode.s3-us-west-1.amazonaws.com/top-projects.png" alt="Code Time for VS Code top projects" />
-</p>
-
-**Work-life balance**
-
-How much do you code after hours and weekends? Code Time helps you see your
-breakdown at work vs. outside work so you can find ways to improve your
-work-life balance.
-
-<p align="center" style="margin: 0 10%">
-  <img src="https://swdc-vscode.s3-us-west-1.amazonaws.com/work-life-balance.png" alt="Code Time for VS Code work life balance" />
-</p>
-
-**Commit velocity**
-
-Code Time integrates with Git, so you can see your speed, frequency, and top
-files across your commits.
-
-<p align="center" style="margin: 0 10%">
-  <img src="https://swdc-vscode.s3-us-west-1.amazonaws.com/commit-velocity.png" alt="Code Time for VS Code commit velocity" />
-</p>
-
-## It’s safe, secure, and free
-
-**We never access your code:** We do not process, send, or store your
-proprietary code. We only provide metrics about programming, and we make it easy
-to see the data we collect.
-
-**Your data is private:** We will never share your individually identifiable
-data with your boss. In the future, we will roll up data into groups and teams
-but we will keep your data anonymized.
-
-**Free for you, forever:** We provide 90 days of data history for free, forever.
-In the future, we will provide premium plans for advanced features and
-historical data access.
-
-Code Time also collects basic usage metrics to help us make informed decisions
-about our roadmap.
-
-## Get in touch
-
-Enjoying Code Time? Let us know how it’s going by tweeting or following us at
-[@software_hq](https://twitter.com/software_hq).
-
-We recently released a new beta plugin, Music Time for VS Code, which helps you
-find your most productive songs for coding. You can learn more
-[here](https://www.software.com/music-time).
-
-Have any questions? Please email us at
-[support@software.com](mailto:support@software.com) and we’ll get back to you as
-soon as we can.
+- [Node.js](https://nodejs.org/)
+- [Code Time](https://www.software.com/code-time)
+- [Firebase](https://firebase.google.com/)

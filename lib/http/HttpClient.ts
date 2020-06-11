@@ -1,46 +1,30 @@
 import axios from "axios";
 
-import { api_endpoint } from "../Constants";
+import {api_endpoint} from "../Constants";
 
-import { logIt } from "../Util";
-import { CacheManager } from "../cache/CacheManager";
+import {CacheManager} from "../cache/CacheManager";
 
 // build the axios api base url
 const beApi = axios.create({
-    baseURL: `${api_endpoint}`,
+  baseURL: `${api_endpoint}`,
 });
-
-const spotifyApi = axios.create({});
 
 const cacheMgr: CacheManager = CacheManager.getInstance();
 
 export async function serverIsAvailable() {
-    let isAvail = cacheMgr.get("serverAvailable");
+  let isAvail = cacheMgr.get("serverAvailable");
 
-    if (isAvail === undefined || isAvail === null) {
-        isAvail = await softwareGet("/ping", null)
-            .then((result) => {
-                return isResponseOk(result);
-            })
-            .catch((e) => {
-                return false;
-            });
-        cacheMgr.set("serverAvailable", isAvail, 60);
-    }
-    return isAvail;
-}
-
-export async function spotifyApiPut(api, payload, accessToken) {
-    if (api.indexOf("https://api.spotify.com") === -1) {
-        api = "https://api.spotify.com" + api;
-    }
-    spotifyApi.defaults.headers.common[
-        "Authorization"
-    ] = `Bearer ${accessToken}`;
-    return await spotifyApi.put(api, payload).catch((err) => {
-        logIt(`error posting data for ${api}, message: ${err.message}`);
-        return err;
-    });
+  if (isAvail === undefined || isAvail === null) {
+    isAvail = await softwareGet("/ping", null)
+      .then((result) => {
+        return isResponseOk(result);
+      })
+      .catch((e) => {
+        return false;
+      });
+    cacheMgr.set("serverAvailable", isAvail, 60);
+  }
+  return isAvail;
 }
 
 /**
@@ -50,67 +34,46 @@ export async function spotifyApiPut(api, payload, accessToken) {
  * @param jwt
  */
 export async function softwareGet(api, jwt) {
-    if (jwt) {
-        beApi.defaults.headers.common["Authorization"] = jwt;
-    }
+  if (jwt) {
+    beApi.defaults.headers.common["Authorization"] = jwt;
+  }
 
-    return await beApi.get(api).catch((err) => {
-        logIt(`error fetching data for ${api}, message: ${err.message}`);
-        return err;
-    });
+  return await beApi.get(api).catch((err) => {
+    return err;
+  });
 }
 
 /**
  * perform a put request
  */
 export async function softwarePut(api, payload, jwt) {
-    // PUT the kpm to the PluginManager
-    beApi.defaults.headers.common["Authorization"] = jwt;
+  // PUT the kpm to the PluginManager
+  beApi.defaults.headers.common["Authorization"] = jwt;
 
-    return await beApi
-        .put(api, payload)
-        .then((resp) => {
-            return resp;
-        })
-        .catch((err) => {
-            logIt(`error posting data for ${api}, message: ${err.message}`);
-            return err;
-        });
+  return await beApi
+    .put(api, payload)
+    .then((resp) => {
+      return resp;
+    })
+    .catch((err) => {
+      return err;
+    });
 }
 
 /**
  * perform a post request
  */
 export async function softwarePost(api, payload, jwt) {
-    // POST the kpm to the PluginManager
-    beApi.defaults.headers.common["Authorization"] = jwt;
-    return beApi
-        .post(api, payload)
-        .then((resp) => {
-            return resp;
-        })
-        .catch((err) => {
-            logIt(`error posting data for ${api}, message: ${err.message}`);
-            return err;
-        });
-}
-
-/**
- * perform a delete request
- */
-export async function softwareDelete(api, jwt) {
-    beApi.defaults.headers.common["Authorization"] = jwt;
-    return beApi
-        .delete(api)
-        .then((resp) => {
-            return resp;
-        })
-        .catch((err) => {
-            logIt(
-                `error with delete request for ${api}, message: ${err.message}`
-            );
-            return err;
-        });
+  // POST the kpm to the PluginManager
+  beApi.defaults.headers.common["Authorization"] = jwt;
+  return beApi
+    .post(api, payload)
+    .then((resp) => {
+      return resp;
+    })
+    .catch((err) => {
+      return err;
+    });
 }
 
 /**
@@ -118,18 +81,18 @@ export async function softwareDelete(api, jwt) {
  * {"error": {"status": 401, "message": "The access token expired"}}
  */
 export function hasTokenExpired(resp) {
-    // when a token expires, we'll get the following error data
-    // err.response.status === 401
-    // err.response.statusText = "Unauthorized"
-    if (
-        resp &&
-        resp.response &&
-        resp.response.status &&
-        resp.response.status === 401
-    ) {
-        return true;
-    }
-    return false;
+  // when a token expires, we'll get the following error data
+  // err.response.status === 401
+  // err.response.statusText = "Unauthorized"
+  if (
+    resp &&
+    resp.response &&
+    resp.response.status &&
+    resp.response.status === 401
+  ) {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -147,11 +110,11 @@ export function hasTokenExpired(resp) {
     port:443
  */
 export function isResponseOk(resp) {
-    let status = getResponseStatus(resp);
-    if (status && resp && status < 300) {
-        return true;
-    }
-    return false;
+  let status = getResponseStatus(resp);
+  if (status && resp && status < 300) {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -161,11 +124,11 @@ export function isResponseOk(resp) {
  * statusText:"OK"
  */
 function getResponseStatus(resp) {
-    let status = null;
-    if (resp && resp.status) {
-        status = resp.status;
-    } else if (resp && resp.response && resp.response.status) {
-        status = resp.response.status;
-    }
-    return status;
+  let status = null;
+  if (resp && resp.status) {
+    status = resp.status;
+  } else if (resp && resp.response && resp.response.status) {
+    status = resp.response.status;
+  }
+  return status;
 }
