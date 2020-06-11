@@ -1,7 +1,7 @@
 {
   "name": "cloud9",
   "displayName": "Cloud9",
-  "version": "1.5.1",
+  "version": "2.0.0",
   "publisher": "CSE112",
   "description": "Cloud9 is an open source vscode extenion that provides programming metrics right in Visual Studio Code.",
   "author": {
