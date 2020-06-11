@@ -22,10 +22,10 @@
   <a href="#Features">Features</a> •
   <a href="#Team">Team</a> •
   <a href="#documentationstructure">Documentation/Structure</a> •
+    <a href="#Releases">Releases</a> •
     <a href="#FAQ">FAQs</a> •
       <a href="#Support">Support</a> •
-  <a href="#Credits">Credits</a> •
-  <a href="#Releases">Releases</a>
+  <a href="#Credits">Credits</a> 
 </p>
 
 ---
@@ -191,8 +191,6 @@ OR
 ---
 
 ## Releases
-
-Users appreciate release notes as you update your extension.
 
 ### 2.0.0
 
