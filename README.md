@@ -24,8 +24,8 @@
   <a href="#documentationstructure">Documentation/Structure</a> •
     <a href="#FAQ">FAQs</a> •
       <a href="#Support">Support</a> •
-  <a href="#Credits">Credits</a>
-  <a href="#Release Notes">Release Notes</a>
+  <a href="#Credits">Credits</a> •
+  <a href="#Releases">Releases</a>
 </p>
 
 ---
@@ -190,7 +190,7 @@ OR
 
 ---
 
-## Release Notes
+## Releases
 
 Users appreciate release notes as you update your extension.
 
@@ -198,6 +198,7 @@ Users appreciate release notes as you update your extension.
 
 Initial release of Cloud9 Leaderboard extension.
 
+---
 
 ## FAQ
 

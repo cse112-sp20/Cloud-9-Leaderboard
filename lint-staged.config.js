@@ -1,6 +1,8 @@
-// Configuration for lint-staged
+// Configuration for lint-staged running tasks
 module.exports = {
   '*.+(js|md|ts|css|sass|less|graphql|scss|json|vue)': ['prettier --write',
-  //'npm run documentation'
+  // 'eslint --fix',
+  //'npm run documentation',
+  // 'npm test
 ],
 };
