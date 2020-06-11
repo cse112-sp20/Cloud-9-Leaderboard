@@ -25,6 +25,7 @@
     <a href="#FAQ">FAQs</a> •
       <a href="#Support">Support</a> •
   <a href="#Credits">Credits</a>
+  <a href="#Release Notes">Release Notes</a>
 </p>
 
 ---
@@ -137,7 +138,7 @@ OR
 <img src="https://i.imgur.com/SwavHxa.jpg" title="source: imgur.com" width="200px" /> | <img src="https://i.imgur.com/y5Bf7yE.png" title="source: imgur.com" width="200px" /> | <img src="https://i.imgur.com/g9kF3u5.jpg" title="source: imgur.com" width="200px" />
 | <a href="https://github.com/houan880201" target="_blank">github.com/houan880201</a> | <a href="http://github.com/yil578" target="_blank">`github.com/yil578`</a> | <a href="http://https://github.com/YuanEthan" target="_blank">`https://github.com/YuanEthan`</a>
 |<a href="" target="_blank">**David Alexander**</a> | <a href="" target="_blank">**Mitchell Zhang**</a> | <a href="" target="_blank">**Daniel Tan**</a>
-|<img src="https://i.imgur.com/d72MP8M.png" title="source: imgur.com" width="200px" />  | <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/79d06895-0fd9-4be2-9c0e-d6a1dd2284fc/44277881-0554-4B7F-8BD1-5B4136E94999.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200609%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200609T080242Z&X-Amz-Expires=86400&X-Amz-Signature=b8533e23d9b7b98fd52a7e55b196552e823b2b8f42efb928c5478bffbe6fa35d&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%2244277881-0554-4B7F-8BD1-5B4136E94999.jpeg%22" title="source: imgur.com" width="140px" /> | <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/46974209-867f-4145-9943-6df88dac9cea/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200609%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200609T080204Z&X-Amz-Expires=86400&X-Amz-Signature=0c8087ccc302a4e6799c2d7bad3b9fc208fc3bbf4cb3c74b097c6559a8d2a442&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" title="source: imgur.com" width="200px" />
+|<img src="https://i.imgur.com/d72MP8M.png" title="source: imgur.com" width="200px" />  | <img src="https://i.imgur.com/FQk7C5D.jpg" title="source: imgur.com" width="200px" /> | <img src="https://i.imgur.com/la7FZa1.png" title="source: imgur.com" width="200px" />
 | <a href="http://github.com/davidalexander3986" target="_blank">`github.com/davidalexander3986`</a> | <a href="http://github.com/miz134" target="_blank">`github.com/miz134`</a> | <a href="http://github.com/danielytan" target="_blank">`github.com/danielytan`</a>
 |<a href="" target="_blank">**Patrick Pajarillaga**</a> | <a href="" target="_blank">**Devin Junanto**</a> | <a href="" target="_blank">**Jiachen**</a>
 |<img src="https://i.imgur.com/JrU9EBF.png" title="source: imgur.com" width="200px" /> | <img src="https://i.imgur.com/PW77lgS.png" title="source: imgur.com" width="200px" style="filter:flipH"/>| <img src="https://i.imgur.com/n1cALTn.jpg" title="source: Notion.com" width="200px" /> 
@@ -188,6 +189,15 @@ OR
   - This guide contains all the documentation and guides in order to work on this project yourself.
 
 ---
+
+## Release Notes
+
+Users appreciate release notes as you update your extension.
+
+### 2.0.0
+
+Initial release of Cloud9 Leaderboard extension.
+
 
 ## FAQ
 
