@@ -2,6 +2,7 @@ exclude_paths:
   - "test-resources/**"
   - "coverage/**"
   - "lib/**"
+  - "docs/**"
   - "out/**"
   - "README.md"
   - "extension.js"
